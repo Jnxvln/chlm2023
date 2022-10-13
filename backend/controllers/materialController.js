@@ -19,7 +19,7 @@ const createMaterial = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update material
-// @route   PU /api/materials/:id
+// @route   PUT /api/materials/:id
 // @access  Private
 const updateMaterial = asyncHandler(async (req, res) => {
   res.status(200).send({ message: `UPDATE Material ${req.params.id}` });
