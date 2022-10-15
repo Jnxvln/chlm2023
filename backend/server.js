@@ -1,10 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
-const colors = require('colors')
-const connectDB = require("./config/db")
+const colors = require("colors");
+const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errorMiddleware");
 
-connectDB()
+connectDB();
 
 // VARS
 const PORT = process.env.PORT || 5000;
@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // ROUTES
 app.use("/api/materials", require("./routes/materialRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler);
