@@ -1,11 +1,11 @@
 const asyncHandler = require("express-async-handler");
-const Material = require("../models/materialModel")
+const Material = require("../models/materialModel");
 
 // @desc    Get materials
 // @route   GET /api/materials
 // @access  Private
 const getMaterials = asyncHandler(async (req, res) => {
-  const materials = await Material.find()
+  const materials = await Material.find();
 
   res.status(200).send(materials);
 });
@@ -20,8 +20,8 @@ const createMaterial = asyncHandler(async (req, res) => {
   }
 
   const material = await Material.create({
-    text: req.body.text
-  })
+    text: req.body.text,
+  });
 
   res.status(200).json(material);
 });
@@ -30,15 +30,18 @@ const createMaterial = asyncHandler(async (req, res) => {
 // @route   PUT /api/materials/:id
 // @access  Private
 const updateMaterial = asyncHandler(async (req, res) => {
-
-  const material = await Material.findById(req.params.id)
+  const material = await Material.findById(req.params.id);
 
   if (!material) {
-    res.status(400)
-    throw new Error("Material not found")
+    res.status(400);
+    throw new Error("Material not found");
   }
 
-  const updatedMaterial = await Material.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  const updatedMaterial = await Material.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
 
   res.status(200).json(updatedMaterial);
 });
@@ -47,15 +50,14 @@ const updateMaterial = asyncHandler(async (req, res) => {
 // @route   DELETE /api/materials/:id
 // @access  Private
 const deleteMaterial = asyncHandler(async (req, res) => {
-
-  const material = await Material.findById(req.params.id)
+  const material = await Material.findById(req.params.id);
 
   if (!material) {
-    res.status(400)
-    throw new Error("Material not found")
+    res.status(400);
+    throw new Error("Material not found");
   }
 
-  material.remove()
+  material.remove();
 
   res.status(200).json({ id: req.params.id });
 });
