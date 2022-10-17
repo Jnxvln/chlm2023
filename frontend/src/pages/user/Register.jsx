@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { register, reset } from "../../features/auth/authSlice";
+// UI COMPONENTS
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
+import Spinner from "../../components/layout/Spinner";
 import styles from "../../styles/user/Register.module.css";
 
 function Register() {
@@ -15,6 +21,13 @@ function Register() {
 
   const { firstName, lastName, email, password, confirmPassword } = formData;
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -24,7 +37,35 @@ function Register() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error("Invalid credentials");
+    } else {
+      const userData = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+      dispatch(register(userData));
+    }
   };
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/dashboard");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <section>
