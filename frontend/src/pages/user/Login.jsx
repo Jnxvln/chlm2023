@@ -19,9 +19,13 @@ function Login() {
     }));
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <section>
-      <form className={styles.registerForm}>
+      <form className={styles.registerForm} onSubmit={onSubmit}>
         <h1>User Login</h1>
 
         <div className="formgrid grid">

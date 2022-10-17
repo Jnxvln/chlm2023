@@ -22,9 +22,13 @@ function Register() {
     }));
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <section>
-      <form className={styles.registerForm}>
+      <form className={styles.registerForm} onSubmit={onSubmit}>
         <h1>Register User</h1>
 
         <div className="formgrid grid">
