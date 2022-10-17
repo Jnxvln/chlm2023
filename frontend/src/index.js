@@ -5,6 +5,10 @@ import { store } from "./app/store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import "primereact/resources/themes/mdc-light-indigo/theme.css"; //theme
+import "primereact/resources/primereact.min.css"; //core css
+import "primeicons/primeicons.css"; //icons
+import "../node_modules/primeflex/primeflex.css";
 
 const container = document.getElementById("root");
 const root = createRoot(container);

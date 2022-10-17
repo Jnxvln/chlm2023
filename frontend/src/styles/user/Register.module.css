@@ -1,0 +1,13 @@
+.registerForm {
+  width: 600px;
+  margin: 3em auto;
+  padding: 0 2em;
+}
+
+.passwordField {
+  width: 100%;
+}
+
+.passwordField input {
+  width: 100%;
+}
