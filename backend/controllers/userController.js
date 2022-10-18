@@ -14,7 +14,10 @@ const getMe = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  res.json({ message: "Register User" });
+  const { firstName, lastName, email, password } = req.body;
+
+  if (!firstName || !lastName || !email || !password)
+    res.json({ message: "Register User" });
 });
 
 // @desc    Authenticate a user
