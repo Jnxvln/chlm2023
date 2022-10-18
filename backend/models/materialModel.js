@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const materialSchema = mongoose.Schema(
   {
-    user: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "A user is required"],
       ref: "User",

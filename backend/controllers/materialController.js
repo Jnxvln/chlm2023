@@ -20,6 +20,7 @@ const createMaterial = asyncHandler(async (req, res) => {
   }
 
   const material = await Material.create({
+    createdBy: req.user.id,
     text: req.body.text,
   });
 
