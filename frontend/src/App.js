@@ -14,7 +14,7 @@ import Help from "./pages/Help";
 import Contact from "./pages/Contact";
 import Register from "./pages/user/Register";
 import Login from "./pages/user/Login";
-import Dashboard from "./pages/user/Dashboard";
+import Dashboard from "./pages/user/dashboard/Dashboard";
 
 function App() {
   return (
