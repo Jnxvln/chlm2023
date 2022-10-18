@@ -4,11 +4,42 @@ import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import { Menu } from "primereact/menu";
 
+import { useSelector, useDispatch } from "react-redux"
+import { logout, reset } from "../../features/auth/authSlice"
+
 function Header() {
   const navigate = useNavigate();
-  const menu = useRef(null);
+  const dispatch = useDispatch();
 
-  const userNavItems = [
+  const { user } = useSelector((state) => state.auth)
+
+  const loggedInMenu = useRef(null);
+  const loggedOutMenu = useRef(null);
+
+  const onLogout = () => {
+    dispatch(logout())
+    dispatch(reset())
+    navigate("/login")
+  }
+
+  const loggedInNavItems = [
+    {
+      items: [
+        {
+          label: "Dashboard",
+          icon: "pi pi-th-large",
+          command: () => navigate("/dashboard"),
+        },
+        {
+          label: "Logout",
+          icon: "pi pi-sign-out",
+          command: onLogout,
+        },
+      ],
+    },
+  ];
+
+  const loggedOutNavItems = [
     {
       items: [
         {
@@ -20,16 +51,6 @@ function Header() {
           label: "Login",
           icon: "pi pi-sign-in",
           command: () => navigate("/login"),
-        },
-        {
-          label: "Dashboard",
-          icon: "pi pi-th-large",
-          command: () => navigate("/dashboard"),
-        },
-        {
-          label: "Logout",
-          icon: "pi pi-sign-out",
-          command: () => navigate("/logout"),
         },
       ],
     },
@@ -76,11 +97,41 @@ function Header() {
       command: () => navigate("/contact"),
     },
   ];
+  
+
+  const userFunctions = () => {
+    return (
+      <>
+      { user ? (<Button
+        type="button"
+        icon="pi pi-bars"
+        label="Users"
+        className="p-button-outlined p-button-primary"
+        onClick={(event) => loggedInMenu.current.toggle(event)}
+      ></Button>) : (<Button
+        type="button"
+        icon="pi pi-bars"
+        label="Users"
+        className="p-button-outlined p-button-primary"
+        onClick={(event) => loggedOutMenu.current.toggle(event)}
+      ></Button>) }
+      </>
+    )
+  }
+
   return (
     <header className="header">
       <Menu
-        ref={menu}
-        model={userNavItems}
+        ref={loggedInMenu}
+        model={loggedInNavItems}
+        popup
+        viewportheight={220}
+        menuwidth={175}
+      ></Menu>
+
+<Menu
+        ref={loggedOutMenu}
+        model={loggedOutNavItems}
         popup
         viewportheight={220}
         menuwidth={175}
@@ -88,15 +139,7 @@ function Header() {
 
       <Menubar
         model={publicNav}
-        end={
-          <Button
-            type="button"
-            icon="pi pi-bars"
-            label="Users"
-            className="p-button-outlined p-button-primary"
-            onClick={(event) => menu.current.toggle(event)}
-          ></Button>
-        }
+        end={userFunctions}
       />
     </header>
   );

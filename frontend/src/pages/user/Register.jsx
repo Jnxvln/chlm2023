@@ -39,7 +39,7 @@ function Register() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error("Invalid credentials");
+      toast.error("Passwords do not match");
     } else {
       const userData = {
         firstName,
