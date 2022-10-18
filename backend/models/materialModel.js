@@ -7,9 +7,52 @@ const materialSchema = mongoose.Schema(
       required: [true, "A user is required"],
       ref: "User",
     },
-    text: {
+    name: {
       type: String,
-      required: [true, "Material `text` field required"],
+      required: [true, "Name field required"],
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "Category field required"],
+      ref: "MaterialCategory",
+    },
+    image: {
+      type: String,
+      required: false,
+    },
+    binNumber: {
+      type: String,
+      required: false,
+    },
+    size: {
+      type: String,
+      required: false,
+    },
+    stock: {
+      type: String,
+      enum: ["new", "in", "low", "out", "notavail"],
+      default: "in",
+      required: [true, "The `stock` field is required"],
+    },
+    notes: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
+    isFeatured: {
+      type: Boolean,
+      required: false,
+    },
+    isActive: {
+      type: Boolean,
+      required: false,
+    },
+    isTruckable: {
+      type: Boolean,
+      required: false,
     },
   },
   {

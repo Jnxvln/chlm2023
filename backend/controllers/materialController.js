@@ -3,7 +3,7 @@ const Material = require("../models/materialModel");
 
 // @desc    Get materials
 // @route   GET /api/materials
-// @access  Private
+// @access  Public
 const getMaterials = asyncHandler(async (req, res) => {
   const materials = await Material.find();
 
@@ -14,14 +14,29 @@ const getMaterials = asyncHandler(async (req, res) => {
 // @route   POST /api/materials
 // @access  Private
 const createMaterial = asyncHandler(async (req, res) => {
-  if (!req.body.text) {
+  if (
+    !req.body.createdBy ||
+    !req.body.name ||
+    !req.body.category ||
+    !req.body.stock
+  ) {
     res.status(400);
-    throw new Error("Please add a text field");
+    throw new Error("Please provide all required fields");
   }
 
   const material = await Material.create({
     createdBy: req.user.id,
-    text: req.body.text,
+    name: req.body.name,
+    category: req.body.category,
+    image: req.body.image,
+    binNumber: req.body.binNumber,
+    size: req.body.size,
+    stock: req.body.stock,
+    notes: req.body.notes,
+    description: req.body.description,
+    isFeatured: req.body.isFeatured,
+    isActive: req.body.isActive,
+    isTruckable: req.body.isTruckable,
   });
 
   res.status(200).json(material);

@@ -5,6 +5,6 @@ import materialReducer from "../features/materials/materialSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    material: materialReducer,
+    materials: materialReducer,
   },
 });
