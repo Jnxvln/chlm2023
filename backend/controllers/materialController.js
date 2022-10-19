@@ -5,7 +5,7 @@ const Material = require("../models/materialModel");
 // @route   GET /api/materials
 // @access  Public
 const getMaterials = asyncHandler(async (req, res) => {
-  const materials = await Material.find();
+  const materials = await Material.find({ isActive: true });
 
   res.status(200).send(materials);
 });
@@ -14,12 +14,7 @@ const getMaterials = asyncHandler(async (req, res) => {
 // @route   POST /api/materials
 // @access  Private
 const createMaterial = asyncHandler(async (req, res) => {
-  if (
-    !req.body.createdBy ||
-    !req.body.name ||
-    !req.body.category ||
-    !req.body.stock
-  ) {
+  if (!req.body.name || !req.body.category || !req.body.stock) {
     res.status(400);
     throw new Error("Please provide all required fields");
   }

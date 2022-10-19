@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { TabView, TabPanel } from 'primereact/tabview';
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { TabView, TabPanel } from "primereact/tabview";
 import HaulsDashboard from "./HaulsDashboard";
 import DeliveriesDashboard from "./DeliveriesDashboard";
 import FreightRoutesDashboard from "./FreightRoutesDashboard";
@@ -11,43 +11,46 @@ import CarportsDashboard from "./CarportsDashboard";
 import DriversDashboard from "./DriversDashboard";
 
 function Dashboard() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [tabsActiveIndex, setTabsActiveIndex] = useState(0);
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!user) {
-      navigate("/login")
+      navigate("/login");
     }
-  }, [user, navigate])
+  }, [user, navigate]);
 
   return (
-    <section>
+    <section style={{ padding: "2em" }}>
       <h1>Dashboard</h1>
-      <h4>Welcome, { user && user.firstName}</h4>
+      <h4>Welcome, {user && user.firstName}</h4>
 
-      <TabView activeIndex={tabsActiveIndex} onTabChange={(e) => setTabsActiveIndex(e.index)}>
+      <TabView
+        activeIndex={tabsActiveIndex}
+        onTabChange={(e) => setTabsActiveIndex(e.index)}
+      >
         <TabPanel header="Hauls">
-            <HaulsDashboard />
+          <HaulsDashboard />
         </TabPanel>
         <TabPanel header="Deliveries">
-            <DeliveriesDashboard />
+          <DeliveriesDashboard />
         </TabPanel>
         <TabPanel header="Freight Routes">
-            <FreightRoutesDashboard />
+          <FreightRoutesDashboard />
         </TabPanel>
         <TabPanel header="Vendors & Products">
-            <VendorsAndProductsDashboard />
+          <VendorsAndProductsDashboard />
         </TabPanel>
         <TabPanel header="Materials">
-            <MaterialsDashboard />
+          <MaterialsDashboard />
         </TabPanel>
         <TabPanel header="Carports">
-            <CarportsDashboard />
+          <CarportsDashboard />
         </TabPanel>
         <TabPanel header="Drivers">
-            <DriversDashboard />
+          <DriversDashboard />
         </TabPanel>
       </TabView>
     </section>

@@ -5,12 +5,13 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputTextarea } from "primereact/inputtextarea";
 
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import { createMaterial } from "../../../../features/materials/materialSlice";
+// import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updateMaterial } from "../../../../features/materials/materialSlice";
 
-function MaterialForm() {
+function EditMaterialForm({ material }) {
   const initialState = {
+    _id: "",
     category: "",
     name: "",
     image: "",
@@ -27,12 +28,13 @@ function MaterialForm() {
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
 
-  const { isError, isSuccess, message } = useSelector(
-    (state) => state.materials
-  );
+  // const { isError, isSuccess, message } = useSelector(
+  //   (state) => state.materials
+  // );
   const dispatch = useDispatch();
 
   const {
+    _id,
     category,
     name,
     image,
@@ -46,12 +48,12 @@ function MaterialForm() {
     isActive,
   } = formData;
 
-  const resetForm = () => {
-    setFormData(initialState);
-  };
+  //   const resetForm = () => {
+  //     setFormData(initialState);
+  //   };
 
   const onClose = () => {
-    resetForm();
+    // resetForm();
     setFormDialog(false);
   };
 
@@ -78,30 +80,52 @@ function MaterialForm() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createMaterial(formData));
+    dispatch(updateMaterial(formData));
     onClose();
   };
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    if (material) {
+      setFormData((prevState) => ({
+        ...prevState,
+        _id: material._id,
+        name: material.name,
+        category: material.category,
+        image: material.image,
+        binNumber: material.binNumber,
+        size: material.size,
+        stock: material.stock,
+        notes: material.notes,
+        description: material.description,
+        isFeatured: material.isFeatured,
+        isActive: material.isFeatured,
+        isTruckable: material.isTruckable,
+      }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    if (isSuccess) {
-      toast.success(message);
-    }
-  }, [isError, isSuccess, message]);
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error(message);
+  //   }
+
+  //   if (isSuccess) {
+  //     toast.success(message);
+  //   }
+  // }, [isError, isSuccess, message]);
 
   return (
     <section>
       <Button
-        label="New Material"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
+        icon="pi pi-pencil"
+        iconPos="left"
+        style={{ marginRight: "0.5em" }}
+        onClick={(e) => setFormDialog(true)}
       />
 
       <Dialog
-        header="Material Dialog"
+        header="Edit Material Dialog"
         visible={formDialog}
         style={{ width: "50vw" }}
         footer={renderFooter}
@@ -110,6 +134,25 @@ function MaterialForm() {
         <form onSubmit={onSubmit}>
           {/* NAME, CATEGORY, BIN NUMBER */}
           <div className="formgrid grid">
+            {/* ID */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="_id"
+                    name="_id"
+                    value={_id}
+                    placeholder="ID"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    readOnly
+                    required
+                  />
+                  <label htmlFor="_id">ID</label>
+                </span>
+              </div>
+            </div>
+
             {/* Name */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
@@ -318,4 +361,4 @@ function MaterialForm() {
   );
 }
 
-export default MaterialForm;
+export default EditMaterialForm;
