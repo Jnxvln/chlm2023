@@ -9,10 +9,7 @@ import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { classNames } from "primereact/utils";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getActiveMaterials,
-  deleteMaterial,
-} from "../../../features/materials/materialSlice";
+import { getActiveMaterials, deleteMaterial } from "../../../features/materials/materialSlice";
 import { getMaterialCategories } from "../../../features/materialCategory/materialCategorySlice";
 import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
 import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
@@ -52,10 +49,7 @@ function MaterialsDashboard() {
   // #region RESOURCE STATES & SELECT DATA
   // Resource states
   let materialsLoading, materialsError, materialsSuccess, materialsMessage;
-  let materialCategoriesLoading,
-    materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage;
+  let materialCategoriesLoading, materialCategoriesError, materialCategoriesSuccess, materialCategoriesMessage;
 
   // Select material data
   const { materials } = useSelector((state) => state.materials);
@@ -65,40 +59,20 @@ function MaterialsDashboard() {
   materialsMessage = useSelector((state) => state.materials).message;
 
   // Select materialCategory data
-  const { materialCategories } = useSelector(
-    (state) => state.materialCategories
-  );
-  materialCategoriesLoading = useSelector(
-    (state) => state.materialCategories
-  ).isLoading;
-  materialCategoriesError = useSelector(
-    (state) => state.materialCategories
-  ).isError;
-  materialCategoriesSuccess = useSelector(
-    (state) => state.materialCategories
-  ).isSuccess;
-  materialCategoriesMessage = useSelector(
-    (state) => state.materialCategories
-  ).message;
+  const { materialCategories } = useSelector((state) => state.materialCategories);
+  materialCategoriesLoading = useSelector((state) => state.materialCategories).isLoading;
+  materialCategoriesError = useSelector((state) => state.materialCategories).isError;
+  materialCategoriesSuccess = useSelector((state) => state.materialCategories).isSuccess;
+  materialCategoriesMessage = useSelector((state) => state.materialCategories).message;
   // #endregion
 
   // #region DATA TABLE TEMPLATES
   const imageBodyTemplate = (rowData) => {
-    return (
-      <img
-        src={`https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png`}
-        alt="Test alt"
-        className="product-image"
-      />
-    );
+    return <img src={`https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png`} alt="Test alt" className="product-image" />;
   };
 
   const stockTemplate = (rowData) => {
-    return (
-      <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>
-        {rowData.stock}
-      </span>
-    );
+    return <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>{rowData.stock}</span>;
   };
 
   const stockItemTemplate = (option) => {
@@ -120,21 +94,11 @@ function MaterialsDashboard() {
   };
 
   const binNumberTemplate = (rowData) => {
-    return (
-      <>
-        {rowData.binNumber ? (
-          <span>Bin #{rowData.binNumber}</span>
-        ) : (
-          <span></span>
-        )}
-      </>
-    );
+    return <>{rowData.binNumber ? <span>Bin #{rowData.binNumber}</span> : <span></span>}</>;
   };
 
   const categoryTemplate = (rowData) => {
-    const category = materialCategories.find(
-      (cat) => cat._id === rowData.category
-    );
+    const category = materialCategories.find((cat) => cat._id === rowData.category);
     return <>{category && <span>{category.name}</span>}</>;
   };
 
@@ -142,12 +106,7 @@ function MaterialsDashboard() {
     return (
       <div style={{ display: "flex" }}>
         <EditMaterialForm material={rowData} />
-        <Button
-          icon="pi pi-trash"
-          iconPos="left"
-          className="p-button-danger"
-          onClick={(e) => onDelete(e, rowData)}
-        />
+        <Button icon="pi pi-trash" iconPos="left" className="p-button-danger" onClick={(e) => onDelete(e, rowData)} />
       </div>
     );
   };
@@ -183,23 +142,11 @@ function MaterialsDashboard() {
   };
 
   const filterClearTemplate = (options) => {
-    return (
-      <Button
-        type="button"
-        icon="pi pi-times"
-        onClick={options.filterClearCallback}
-        className="p-button-secondary"
-      ></Button>
-    );
+    return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} className="p-button-secondary"></Button>;
   };
 
   const verifiedRowFilterTemplate = (options) => {
-    return (
-      <TriStateCheckbox
-        value={options.value}
-        onChange={(e) => options.filterApplyCallback(e.value)}
-      />
-    );
+    return <TriStateCheckbox value={options.value} onChange={(e) => options.filterApplyCallback(e.value)} />;
   };
   // #endregion
 
@@ -295,9 +242,7 @@ function MaterialsDashboard() {
       let materialsListCopy = [];
 
       for (let i = 0; i < materials.length; i++) {
-        let category = materialCategories.find(
-          (cat) => cat._id === materials[i].category
-        );
+        let category = materialCategories.find((cat) => cat._id === materials[i].category);
 
         let materialCopy = { ...materials[i] };
         if (category && category.name) {
@@ -328,20 +273,10 @@ function MaterialsDashboard() {
   const renderHeader1 = () => {
     return (
       <div className="flex justify-content-between">
-        <Button
-          type="button"
-          icon="pi pi-filter-slash"
-          label="Clear"
-          className="p-button-outlined"
-          onClick={() => {}}
-        />
+        <Button type="button" icon="pi pi-filter-slash" label="Clear" className="p-button-outlined" onClick={() => {}} />
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText
-            value={globalFilterValue1}
-            onChange={onGlobalFilterChange1}
-            placeholder="Keyword Search"
-          />
+          <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
         </span>
       </div>
     );
@@ -352,16 +287,14 @@ function MaterialsDashboard() {
       <div className="flex justify-content-end">
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText
-            value={globalFilterValue2}
-            onChange={onGlobalFilterChange2}
-            placeholder="Keyword Search"
-          />
+          <InputText value={globalFilterValue2} onChange={onGlobalFilterChange2} placeholder="Keyword Search" />
         </span>
       </div>
     );
   };
 
+  // Choose whichever you like (header2 puts filters on separate row)
+  // Also choose between filters (use filters1 with header1, filters2 with header2)
   const header1 = renderHeader1();
   const header2 = renderHeader2();
 
@@ -378,14 +311,7 @@ function MaterialsDashboard() {
           <DataTable
             value={stateMaterials}
             header={header2}
-            globalFilterFields={[
-              "name",
-              "category",
-              "stock",
-              "binNumber",
-              "isActive",
-              "isTruckable",
-            ]}
+            globalFilterFields={["name", "category", "stock", "binNumber", "isActive", "isTruckable"]}
             size="small"
             scrollable
             scrollHeight="flex"
@@ -403,24 +329,19 @@ function MaterialsDashboard() {
             emptyMessage="No materials found"
             stripedRows
           >
+            {/* IMAGE COLUMN */}
             <Column header="Image" body={imageBodyTemplate}></Column>
-            <Column
-              field="name"
-              header="Name"
-              filter
-              filterField="name"
-              filterClear={filterClearTemplate}
-              style={{ minWidth: "14rem" }}
-              sortable
-            ></Column>
-            <Column
-              header="Category"
-              filter
-              filterField="category"
-              body={categoryTemplate}
-              sortable
-            ></Column>
+
+            {/* NAME COLUMN */}
+            <Column field="name" header="Name" filter filterField="name" filterClear={filterClearTemplate} style={{ minWidth: "14rem" }} sortable></Column>
+
+            {/* CATEGORY COLUMN */}
+            <Column header="Category" body={categoryTemplate} sortable></Column>
+
+            {/* BIN NUMBER COLUMN */}
             <Column sortable header="Bin" body={binNumberTemplate}></Column>
+
+            {/* STOCK COLUMN */}
             <Column
               header="Stock"
               style={{ minWidth: "12rem" }}
@@ -432,7 +353,11 @@ function MaterialsDashboard() {
               body={stockTemplate}
               sortable
             ></Column>
+
+            {/* SIZE COLUMN */}
             <Column sortable field="size" header="Size"></Column>
+
+            {/* ISFEATURED COLUMN */}
             <Column
               header="Featured"
               dataType="boolean"
@@ -442,6 +367,8 @@ function MaterialsDashboard() {
               body={isFeaturedTemplate}
               sortable
             ></Column>
+
+            {/* ISACTIVE COLUMN */}
             <Column
               header="Active"
               dataType="boolean"
@@ -451,6 +378,8 @@ function MaterialsDashboard() {
               body={isActiveTemplate}
               sortable
             ></Column>
+
+            {/* ISTRUCKABLE COLUMN */}
             <Column
               header="Truckable"
               dataType="boolean"
@@ -461,21 +390,6 @@ function MaterialsDashboard() {
               sortable
             ></Column>
             <Column header="Actions" body={actionsTemplate}></Column>
-          </DataTable>
-        </div>
-      </div>
-
-      <br />
-      <br />
-      <br />
-
-      <h3>Material Categories</h3>
-      <div className="datatable-templating-demo">
-        <div className="card">
-          <DataTable value={materialCategories} responsiveLayout="scroll">
-            <Column sortable field="_id" header="ID"></Column>
-            <Column sortable field="name" header="Name"></Column>
-            <Column sortable field="isPublic" header="Public"></Column>
           </DataTable>
         </div>
       </div>
