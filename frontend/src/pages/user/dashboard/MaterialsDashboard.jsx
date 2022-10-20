@@ -72,7 +72,9 @@ function MaterialsDashboard() {
   const imageBodyTemplate = (rowData) => {
     return (
       <img
-        src={`https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png`}
+        src={`${rowData.image}`}
+        width="100"
+        height="100"
         alt="Test alt"
         className="product-image"
       />
