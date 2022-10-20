@@ -11,7 +11,7 @@ import { createMaterial } from "../../../../features/materials/materialSlice";
 
 function MaterialForm() {
   const initialState = {
-    category: "",
+    category: "634ee5789d74aca955c67e33",
     name: "",
     image: "",
     binNumber: "",

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { InputText } from "primereact/inputtext";
-import { Password } from "primereact/password";
-import { Button } from "primereact/button";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login, reset } from "../../features/auth/authSlice";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
+import { Button } from "primereact/button";
 import Spinner from "../../components/layout/Spinner";
+import { login, reset } from "../../features/auth/authSlice";
 import styles from "../../styles/user/Register.module.css";
 
 function Login() {
@@ -17,8 +17,8 @@ function Login() {
 
   const { email, password } = formData;
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -33,12 +33,13 @@ function Login() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     const userData = {
       email,
-      password
-    }
+      password,
+    };
 
-    dispatch(login(userData))
+    dispatch(login(userData));
   };
 
   useEffect(() => {

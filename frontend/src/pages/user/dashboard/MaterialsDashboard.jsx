@@ -3,6 +3,10 @@ import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { classNames } from "primereact/utils";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -19,8 +23,31 @@ import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup m
 
 function MaterialsDashboard() {
   const dispatch = useDispatch();
-
+  const stockStatuses = ["new", "in", "low", "out", "notavail"];
+  const [stateMaterials, setStateMaterials] = useState(null);
   const [globalFilterValue1, setGlobalFilterValue1] = useState("");
+  const [globalFilterValue2, setGlobalFilterValue2] = useState("");
+  const [materialRowSelected, setMaterialRowSelected] = useState(null);
+  const [filters1, setFilters1] = useState(null);
+  const [filters2, setFilters2] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    stock: { value: null, matchMode: FilterMatchMode.EQUALS },
+    category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    isFeatured: { value: null, matchMode: FilterMatchMode.EQUALS },
+    isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
+    isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
+  });
+
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: "Are you sure you want to delete?",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteMaterial(rowData._id)),
+      reject: () => null,
+    });
+  };
 
   // #region RESOURCE STATES & SELECT DATA
   // Resource states
@@ -74,6 +101,24 @@ function MaterialsDashboard() {
     );
   };
 
+  const stockItemTemplate = (option) => {
+    return <span className={`customer-badge status-${option}`}>{option}</span>;
+  };
+
+  const stockFilterTemplate = (options) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={stockStatuses}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+        itemTemplate={stockItemTemplate}
+        placeholder="Select current stock"
+        className="p-column-filter"
+        showClear
+      />
+    );
+  };
+
   const binNumberTemplate = (rowData) => {
     return (
       <>
@@ -90,7 +135,7 @@ function MaterialsDashboard() {
     const category = materialCategories.find(
       (cat) => cat._id === rowData.category
     );
-    return <>{category ? <span>{category.name}</span> : <span>No ID</span>}</>;
+    return <>{category && <span>{category.name}</span>}</>;
   };
 
   const actionsTemplate = (rowData) => {
@@ -106,22 +151,117 @@ function MaterialsDashboard() {
       </div>
     );
   };
-  // #endregion
 
-  const onDelete = (e, rowData) => {
-    confirmPopup({
-      target: e.target,
-      message: "Are you sure you want to delete?",
-      icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteMaterial(rowData._id)),
-      reject: () => null,
-    });
+  const isFeaturedTemplate = (rowData) => {
+    return (
+      <i
+        className={classNames("pi", {
+          "true-icon pi-check-circle": rowData.isFeatured,
+        })}
+      ></i>
+    );
   };
 
+  const isActiveTemplate = (rowData) => {
+    return (
+      <i
+        className={classNames("pi", {
+          "true-icon pi-check-circle": rowData.isActive,
+        })}
+      ></i>
+    );
+  };
+
+  const isTruckableTemplate = (rowData) => {
+    return (
+      <i
+        className={classNames("pi", {
+          "true-icon pi-check-circle": rowData.isTruckable,
+        })}
+      ></i>
+    );
+  };
+
+  const filterClearTemplate = (options) => {
+    return (
+      <Button
+        type="button"
+        icon="pi pi-times"
+        onClick={options.filterClearCallback}
+        className="p-button-secondary"
+      ></Button>
+    );
+  };
+
+  const verifiedRowFilterTemplate = (options) => {
+    return (
+      <TriStateCheckbox
+        value={options.value}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+      />
+    );
+  };
+  // #endregion
+
+  // #region FILTER HANDLERS
   const onModelFilterChange = (e) => {
     console.log(e);
     //implementation goes here
   };
+
+  const onGlobalFilterChange1 = (e) => {
+    const value = e.target.value;
+    let _filters1 = { ...filters1 };
+    _filters1["global"].value = value;
+
+    setFilters1(_filters1);
+    setGlobalFilterValue1(value);
+  };
+
+  const onGlobalFilterChange2 = (e) => {
+    const value = e.target.value;
+    let _filters2 = { ...filters2 };
+    _filters2["global"].value = value;
+
+    setFilters2(_filters2);
+    setGlobalFilterValue2(value);
+  };
+
+  const clearFilter1 = () => {
+    initFilters1();
+  };
+
+  const initFilters1 = () => {
+    // EXAMPLE ONLY:
+    // setFilters1({
+    //     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    //     'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    //     'country.name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+    //     'representative': { value: null, matchMode: FilterMatchMode.IN },
+    //     'date': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+    //     'balance': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+    //     'status': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+    //     'activity': { value: null, matchMode: FilterMatchMode.BETWEEN },
+    //     'verified': { value: null, matchMode: FilterMatchMode.EQUALS }
+    // });
+
+    setFilters1({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      // 'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+      name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      // 'category': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+      stock: {
+        operator: FilterOperator.OR,
+        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+      },
+      category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
+      isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
+    });
+
+    setGlobalFilterValue1("");
+  };
+  // #endregion
 
   // Fetch resources once (no dependencies)
   useEffect(() => {
@@ -132,6 +272,12 @@ function MaterialsDashboard() {
     if (materialCategories.length === 0) {
       dispatch(getMaterialCategories());
     }
+
+    if (stateMaterials) {
+      console.log(stateMaterials);
+    }
+
+    initFilters1();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -143,6 +289,23 @@ function MaterialsDashboard() {
 
     if (materialCategoriesError) {
       toast.error(materialCategoriesMessage);
+    }
+
+    if (materials.length > 0) {
+      let materialsListCopy = [];
+
+      for (let i = 0; i < materials.length; i++) {
+        let category = materialCategories.find(
+          (cat) => cat._id === materials[i].category
+        );
+
+        let materialCopy = { ...materials[i] };
+        if (category && category.name) {
+          materialCopy.categoryName = category.name;
+        }
+        materialsListCopy.push(materialCopy);
+      }
+      setStateMaterials(materialsListCopy);
     }
   }, [
     materials,
@@ -176,7 +339,7 @@ function MaterialsDashboard() {
           <i className="pi pi-search" />
           <InputText
             value={globalFilterValue1}
-            onChange={(e) => setGlobalFilterValue1(e.target.value)}
+            onChange={onGlobalFilterChange1}
             placeholder="Keyword Search"
           />
         </span>
@@ -184,13 +347,23 @@ function MaterialsDashboard() {
     );
   };
 
-  let modelFilter = (
-    <InputText
-      style={{ width: "100%" }}
-      className="ui-column-filter"
-      onChange={onModelFilterChange}
-    />
-  );
+  const renderHeader2 = () => {
+    return (
+      <div className="flex justify-content-end">
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue2}
+            onChange={onGlobalFilterChange2}
+            placeholder="Keyword Search"
+          />
+        </span>
+      </div>
+    );
+  };
+
+  const header1 = renderHeader1();
+  const header2 = renderHeader2();
 
   return (
     <section>
@@ -201,29 +374,92 @@ function MaterialsDashboard() {
       <MaterialForm />
 
       <div className="datatable-templating-demo">
-        <div className="card">
+        <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={materials}
-            header={renderHeader1}
+            value={stateMaterials}
+            header={header2}
+            globalFilterFields={[
+              "name",
+              "category",
+              "stock",
+              "binNumber",
+              "isActive",
+              "isTruckable",
+            ]}
+            size="small"
+            scrollable
+            scrollHeight="flex"
             sortMode="multiple"
             responsiveLayout="scroll"
+            selectionMode="single"
+            selection={materialRowSelected}
+            onSelectionChange={(e) => setMaterialRowSelected(e.value)}
+            dataKey="_id"
+            filters={filters2}
+            // filterDisplay="menu"
+            filterDisplay="row"
+            filter
+            filterField="name"
+            emptyMessage="No materials found"
+            stripedRows
           >
             <Column header="Image" body={imageBodyTemplate}></Column>
             <Column
               field="name"
               header="Name"
-              filterElement={modelFilter}
-              filterMatchMode="contains"
               filter
+              filterField="name"
+              filterClear={filterClearTemplate}
+              style={{ minWidth: "14rem" }}
               sortable
             ></Column>
-            <Column sortable header="Category" body={categoryTemplate}></Column>
+            <Column
+              header="Category"
+              filter
+              filterField="category"
+              body={categoryTemplate}
+              sortable
+            ></Column>
             <Column sortable header="Bin" body={binNumberTemplate}></Column>
-            <Column sortable header="Stock" body={stockTemplate}></Column>
+            <Column
+              header="Stock"
+              style={{ minWidth: "12rem" }}
+              filter
+              showFilterMenu={false}
+              filterMenuStyle={{ width: "14rem" }}
+              filterField="stock"
+              filterElement={stockFilterTemplate}
+              body={stockTemplate}
+              sortable
+            ></Column>
             <Column sortable field="size" header="Size"></Column>
-            <Column sortable field="isFeatured" header="Featured"></Column>
-            <Column sortable field="isActive" header="Active"></Column>
-            <Column sortable field="isTruckable" header="Truckable"></Column>
+            <Column
+              header="Featured"
+              dataType="boolean"
+              filter
+              filterField="isFeatured"
+              filterElement={verifiedRowFilterTemplate}
+              body={isFeaturedTemplate}
+              sortable
+            ></Column>
+            <Column
+              header="Active"
+              dataType="boolean"
+              filter
+              filterField="isActive"
+              filterElement={verifiedRowFilterTemplate}
+              body={isActiveTemplate}
+              sortable
+            ></Column>
+            <Column
+              header="Truckable"
+              dataType="boolean"
+              filter
+              filterField="isTruckable"
+              filterElement={verifiedRowFilterTemplate}
+              body={isTruckableTemplate}
+              sortable
+            ></Column>
             <Column header="Actions" body={actionsTemplate}></Column>
           </DataTable>
         </div>
