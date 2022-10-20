@@ -33,11 +33,13 @@ function EditMaterialForm({ material }) {
   const dispatch = useDispatch();
 
   // SELECT MATERIAL CATEGORIES FROM STORE
-  const { materialCategories } = useSelector((state) => state.materialCategories);
-  let materialCategoriesLoading = useSelector((state) => state.materialCategories).isLoading;
-  let materialCategoriesError = useSelector((state) => state.materialCategories).isError;
-  let materialCategoriesSuccess = useSelector((state) => state.materialCategories).isSuccess;
-  let materialCategoriesMessage = useSelector((state) => state.materialCategories).message;
+  const {
+    materialCategories,
+    materialCategoriesLoading,
+    materialCategoriesError,
+    materialCategoriesSuccess,
+    materialCategoriesMessage,
+  } = useSelector((state) => state.materialCategories);
 
   const {
     _id,
@@ -53,10 +55,6 @@ function EditMaterialForm({ material }) {
     isTruckable,
     isActive,
   } = formData;
-
-  //   const resetForm = () => {
-  //     setFormData(initialState);
-  //   };
 
   const onClose = () => {
     // resetForm();

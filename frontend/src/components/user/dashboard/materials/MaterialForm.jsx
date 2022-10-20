@@ -31,12 +31,17 @@ function MaterialForm() {
 
   const dispatch = useDispatch();
   // SELECT MATERIALS FROM STORE
-  const { materials, isError, isSuccess, message } = useSelector((state) => state.materials);
+  const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
+    useSelector((state) => state.materials);
 
   // SELECT MATERIAL CATEGORIES FROM STORE
-  const { materialCategories } = useSelector((state) => state.materialCategories);
-  const materialCategoriesError = useSelector((state) => state.materialCategories).isError;
-  const materialCategoriesMessage = useSelector((state) => state.materialCategories).message;
+  const {
+    materialCategories,
+    materialCategoriesLoading,
+    materialCategoriesError,
+    materialCategoriesSuccess,
+    materialCategoriesMessage,
+  } = useSelector((state) => state.materialCategories);
 
   const {
     category,
@@ -90,16 +95,16 @@ function MaterialForm() {
   };
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    if (materialsError) {
+      toast.error(materialsMessage);
+    }
+
+    if (materialsSuccess) {
+      toast.success(materialsMessage);
     }
 
     if (materialCategoriesError) {
       toast.error(materialCategoriesMessage);
-    }
-
-    if (isSuccess) {
-      toast.success(message);
     }
 
     if (materialCategories.length === 0) {
@@ -107,11 +112,11 @@ function MaterialForm() {
     }
   }, [
     materials,
+    materialsError,
+    materialsSuccess,
+    materialsMessage,
     materialCategories,
     materialCategoriesError,
-    isError,
-    isSuccess,
-    message,
     dispatch,
   ]);
 

@@ -54,26 +54,18 @@ function MaterialsDashboard() {
   };
 
   // #region RESOURCE STATES & SELECT DATA
-  // Resource states
-  let materialsLoading, materialsError, materialsSuccess, materialsMessage;
-  let materialCategoriesLoading,
+  // Select Material data
+  const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
+    useSelector((state) => state.materials);
+
+  // Select MaterialCategory data
+  const {
+    materialCategories,
+    materialCategoriesLoading,
     materialCategoriesError,
     materialCategoriesSuccess,
-    materialCategoriesMessage;
-
-  // Select material data
-  const { materials } = useSelector((state) => state.materials);
-  materialsLoading = useSelector((state) => state.materials).isLoading;
-  materialsError = useSelector((state) => state.materials).isError;
-  materialsSuccess = useSelector((state) => state.materials).isSuccess;
-  materialsMessage = useSelector((state) => state.materials).message;
-
-  // Select materialCategory data
-  const { materialCategories } = useSelector((state) => state.materialCategories);
-  materialCategoriesLoading = useSelector((state) => state.materialCategories).isLoading;
-  materialCategoriesError = useSelector((state) => state.materialCategories).isError;
-  materialCategoriesSuccess = useSelector((state) => state.materialCategories).isSuccess;
-  materialCategoriesMessage = useSelector((state) => state.materialCategories).message;
+    materialCategoriesMessage,
+  } = useSelector((state) => state.materialCategories);
   // #endregion
 
   // #region DATA TABLE TEMPLATES

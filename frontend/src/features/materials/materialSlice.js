@@ -3,10 +3,10 @@ import materialService from "./materialService";
 
 const initialState = {
   materials: [],
-  isLoading: false,
-  isError: false,
-  isSuccess: false,
-  message: "",
+  materialsLoading: false,
+  materialsError: false,
+  materialsSuccess: false,
+  materialsMessage: "",
 };
 
 // ASYNC ACTIONS
@@ -83,76 +83,76 @@ export const materialSlice = createSlice({
     resetMaterialState: (state) => initialState,
     resetMaterialMessages: (state) => ({
       ...state,
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      message: "",
+      materialsLoading: false,
+      materialsError: false,
+      materialsSuccess: false,
+      materialsMessage: "",
     }),
   },
   extraReducers: (builder) => {
     builder
       // GET ACTIVE MATERIALS
       .addCase(getActiveMaterials.pending, (state) => {
-        state.isLoading = true;
+        state.materialsLoading = true;
       })
       .addCase(getActiveMaterials.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.message = null;
+        state.materialsLoading = false;
+        state.materialsSuccess = true;
+        state.materialsMessage = null;
         state.materials = action.payload;
       })
       .addCase(getActiveMaterials.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.materialsLoading = false;
+        state.materialsError = true;
+        state.materialsMessage = action.payload;
         // state.materials = []
       })
       // CREATE MATERIAL
       .addCase(createMaterial.pending, (state) => {
-        state.isLoading = true;
+        state.materialsLoading = true;
       })
       .addCase(createMaterial.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.message = "Material created";
+        state.materialsLoading = false;
+        state.materialsSuccess = true;
+        state.materialsMessage = "Material created";
         state.materials.push(action.payload);
       })
       .addCase(createMaterial.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.materialsLoading = false;
+        state.materialsError = true;
+        state.materialsMessage = action.payload;
       })
       // UPDATE MATERIAL
       .addCase(updateMaterial.pending, (state) => {
-        state.isLoading = true;
+        state.materialsLoading = true;
       })
       .addCase(updateMaterial.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.message = "Material updated!";
+        state.materialsLoading = false;
+        state.materialsSuccess = true;
+        state.materialsMessage = "Material updated!";
         const index = state.materials.indexOf(action.payload._id);
         state.materials.splice(index, 1, action.payload);
       })
       .addCase(updateMaterial.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.materialsLoading = false;
+        state.materialsError = true;
+        state.materialsMessage = action.payload;
       })
       // DELETE MATERIAL
       .addCase(deleteMaterial.pending, (state) => {
-        state.isLoading = true;
+        state.materialsLoading = true;
       })
       .addCase(deleteMaterial.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.message = "Material deleted successfully";
+        state.materialsLoading = false;
+        state.materialsSuccess = true;
+        state.materialsMessage = "Material deleted successfully";
         const index = state.materials.indexOf(action.payload);
         state.materials.splice(index, 1);
       })
       .addCase(deleteMaterial.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.materialsLoading = false;
+        state.materialsError = true;
+        state.materialsMessage = action.payload;
       });
   },
 });

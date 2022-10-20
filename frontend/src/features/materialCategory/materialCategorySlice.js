@@ -3,10 +3,10 @@ import materialCategoryService from "./materialCategoryService";
 
 const initialState = {
   materialCategories: [],
-  isLoading: false,
-  isError: false,
-  isSuccess: false,
-  message: "",
+  materialCategoriesLoading: false,
+  materialCategoriesError: false,
+  materialCategoriesSuccess: false,
+  materialCategoriesMessage: "",
 };
 
 // ASYNC ACTIONS
@@ -34,26 +34,26 @@ export const materialCategorySlice = createSlice({
     resetMaterialCategoryState: (state) => initialState,
     resetMaterialCategoryMessages: (state) => ({
       ...state,
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      message: "",
+      materialCategoriesLoading: false,
+      materialCategoriesError: false,
+      materialCategoriesSuccess: false,
+      materialCategoriesMessage: "",
     }),
   },
   extraReducers: (builder) => {
     builder
       .addCase(getMaterialCategories.pending, (state) => {
-        state.isLoading = true;
+        state.materialCategoriesLoading = true;
       })
       .addCase(getMaterialCategories.fulfilled, (state, actions) => {
-        state.isLoading = false;
-        state.isSuccess = true;
+        state.materialCategoriesLoading = false;
+        state.materialCategoriesSuccess = true;
         state.materialCategories = actions.payload;
       })
       .addCase(getMaterialCategories, (state, actions) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = actions.payload;
+        state.materialCategoriesLoading = false;
+        state.materialCategoriesError = true;
+        state.materialCategoriesMessage = actions.payload;
       });
   },
 });
