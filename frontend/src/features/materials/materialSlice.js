@@ -81,6 +81,13 @@ export const materialSlice = createSlice({
   initialState,
   reducers: {
     resetMaterialState: (state) => initialState,
+    resetMaterialMessages: (state) => ({
+      ...state,
+      isLoading: false,
+      isError: false,
+      isSuccess: false,
+      message: "",
+    }),
   },
   extraReducers: (builder) => {
     builder
@@ -150,5 +157,5 @@ export const materialSlice = createSlice({
   },
 });
 
-export const { resetMaterialState } = materialSlice.actions;
+export const { resetMaterialState, resetMaterialMessages } = materialSlice.actions;
 export default materialSlice.reducer;

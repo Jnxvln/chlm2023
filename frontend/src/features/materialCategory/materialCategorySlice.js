@@ -32,6 +32,13 @@ export const materialCategorySlice = createSlice({
   initialState,
   reducers: {
     resetMaterialCategoryState: (state) => initialState,
+    resetMaterialCategoryMessages: (state) => ({
+      ...state,
+      isLoading: false,
+      isError: false,
+      isSuccess: false,
+      message: "",
+    }),
   },
   extraReducers: (builder) => {
     builder
@@ -51,5 +58,6 @@ export const materialCategorySlice = createSlice({
   },
 });
 
-export const { resetMaterialCategoryState } = materialCategorySlice.actions;
+export const { resetMaterialCategoryState, resetMaterialCategoryMessages } =
+  materialCategorySlice.actions;
 export default materialCategorySlice.reducer;

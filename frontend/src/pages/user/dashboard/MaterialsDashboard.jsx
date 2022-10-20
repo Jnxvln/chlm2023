@@ -12,11 +12,11 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getActiveMaterials,
   deleteMaterial,
-  resetMaterialState,
+  resetMaterialMessages,
 } from "../../../features/materials/materialSlice";
 import {
   getMaterialCategories,
-  resetMaterialCategoryState,
+  resetMaterialCategoryMessages,
 } from "../../../features/materialCategory/materialCategorySlice";
 import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
 import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
@@ -252,12 +252,10 @@ function MaterialsDashboard() {
   useEffect(() => {
     if (materialsError) {
       toast.error(materialsMessage);
-      dispatch(resetMaterialState());
     }
 
     if (materialCategoriesError) {
       toast.error(materialCategoriesMessage);
-      dispatch(resetMaterialCategoryState());
     }
 
     if (materials.length > 0) {
@@ -274,6 +272,9 @@ function MaterialsDashboard() {
       }
       setStateMaterials(materialsListCopy);
     }
+
+    dispatch(resetMaterialMessages());
+    dispatch(resetMaterialCategoryMessages());
   }, [
     materials,
     materialsError,
