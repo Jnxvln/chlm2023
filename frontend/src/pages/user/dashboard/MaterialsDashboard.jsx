@@ -324,8 +324,8 @@ function MaterialsDashboard() {
             filters={filters2}
             // filterDisplay="menu"
             filterDisplay="row"
-            filter
-            filterField="name"
+            filter="true"
+            filterfield="name"
             emptyMessage="No materials found"
             stripedRows
           >
@@ -333,7 +333,7 @@ function MaterialsDashboard() {
             <Column header="Image" body={imageBodyTemplate}></Column>
 
             {/* NAME COLUMN */}
-            <Column field="name" header="Name" filter filterField="name" filterClear={filterClearTemplate} style={{ minWidth: "14rem" }} sortable></Column>
+            <Column field="name" header="Name" filter="true" filterfield="name" filterClear={filterClearTemplate} style={{ minWidth: "14rem" }} sortable></Column>
 
             {/* CATEGORY COLUMN */}
             <Column header="Category" body={categoryTemplate} sortable></Column>
@@ -345,10 +345,10 @@ function MaterialsDashboard() {
             <Column
               header="Stock"
               style={{ minWidth: "12rem" }}
-              filter
+              filter="true"
               showFilterMenu={false}
               filterMenuStyle={{ width: "14rem" }}
-              filterField="stock"
+              filterfield="stock"
               filterElement={stockFilterTemplate}
               body={stockTemplate}
               sortable
@@ -361,8 +361,8 @@ function MaterialsDashboard() {
             <Column
               header="Featured"
               dataType="boolean"
-              filter
-              filterField="isFeatured"
+              filter="true"
+              filterfield="isFeatured"
               filterElement={verifiedRowFilterTemplate}
               body={isFeaturedTemplate}
               sortable
@@ -372,8 +372,8 @@ function MaterialsDashboard() {
             <Column
               header="Active"
               dataType="boolean"
-              filter
-              filterField="isActive"
+              filter="true"
+              filterfield="isActive"
               filterElement={verifiedRowFilterTemplate}
               body={isActiveTemplate}
               sortable
@@ -383,8 +383,8 @@ function MaterialsDashboard() {
             <Column
               header="Truckable"
               dataType="boolean"
-              filter
-              filterField="isTruckable"
+              filter="true"
+              filterfield="isTruckable"
               filterElement={verifiedRowFilterTemplate}
               body={isTruckableTemplate}
               sortable

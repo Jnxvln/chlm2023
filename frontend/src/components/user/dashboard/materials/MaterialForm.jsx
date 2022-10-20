@@ -26,31 +26,17 @@ function MaterialForm() {
     isActive: true,
   };
 
-  const cities = [
-    { name: "New York", code: "NY" },
-    { name: "Rome", code: "RM" },
-    { name: "London", code: "LDN" },
-    { name: "Istanbul", code: "IST" },
-    { name: "Paris", code: "PRS" },
-  ];
-
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
 
   const dispatch = useDispatch();
   // SELECT MATERIALS FROM STORE
-  const { materials } = useSelector((state) => state.materials);
-  let materialsLoading = useSelector((state) => state.materials).isLoading;
-  let materialsError = useSelector((state) => state.materials).isError;
-  let materialsSuccess = useSelector((state) => state.materials).isSuccess;
-  let materialsMessage = useSelector((state) => state.materials).message;
+  const { materials, isError, isSuccess, message } = useSelector((state) => state.materials);
 
   // SELECT MATERIAL CATEGORIES FROM STORE
   const { materialCategories } = useSelector((state) => state.materialCategories);
-  let materialCategoriesLoading = useSelector((state) => state.materials).isLoading;
-  let materialCategoriesError = useSelector((state) => state.materials).isError;
-  let materialCategoriesSuccess = useSelector((state) => state.materials).isSuccess;
-  let materialCategoriesMessage = useSelector((state) => state.materials).message;
+  const materialCategoriesError = useSelector((state) => state.materialCategories).isError
+  const materialCategoriesMessage = useSelector((state) => state.materialCategories).message
 
   const { category, name, image, binNumber, size, stock, notes, description, isFeatured, isTruckable, isActive } = formData;
 
@@ -72,6 +58,7 @@ function MaterialForm() {
   };
 
   const onChange = (e) => {
+    console.log(e.target.value)
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -85,20 +72,16 @@ function MaterialForm() {
   };
 
   useEffect(() => {
-    if (materialsError) {
-      toast.error(materialsMessage);
-    }
-
-    if (materialsSuccess) {
-      toast.success(materialsMessage);
+    if (isError) {
+      toast.error(message);
     }
 
     if (materialCategoriesError) {
-      toast.error(materialCategoriesMessage);
+      toast.error(materialCategoriesMessage)
     }
 
-    if (materialCategoriesSuccess) {
-      toast.success(materialCategoriesMessage);
+    if (isSuccess) {
+      toast.success(message);
     }
 
     if (materialCategories.length === 0) {
@@ -106,13 +89,12 @@ function MaterialForm() {
     }
   }, [
     materials,
-    materialsError,
-    materialsSuccess,
-    materialsMessage,
     materialCategories,
     materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage,
+    isError,
+    isSuccess,
+    message,
+    dispatch
   ]);
 
   return (

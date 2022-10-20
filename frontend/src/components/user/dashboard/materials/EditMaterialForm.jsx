@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputTextarea } from "primereact/inputtextarea";
+import { toast } from "react-toastify"
 
 // import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { updateMaterial } from "../../../../features/materials/materialSlice";
 
 function EditMaterialForm({ material }) {
@@ -27,11 +29,15 @@ function EditMaterialForm({ material }) {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
-  // const { isError, isSuccess, message } = useSelector(
-  //   (state) => state.materials
-  // );
   const dispatch = useDispatch();
+
+  // SELECT MATERIAL CATEGORIES FROM STORE
+  const { materialCategories } = useSelector((state) => state.materialCategories);
+  let materialCategoriesLoading = useSelector((state) => state.materialCategories).isLoading;
+  let materialCategoriesError = useSelector((state) => state.materialCategories).isError;
+  let materialCategoriesSuccess = useSelector((state) => state.materialCategories).isSuccess;
+  let materialCategoriesMessage = useSelector((state) => state.materialCategories).message;
+
 
   const {
     _id,
@@ -105,15 +111,15 @@ function EditMaterialForm({ material }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (isError) {
-  //     toast.error(message);
-  //   }
+  useEffect(() => {
+    if (materialCategoriesError) {
+      toast.error(materialCategoriesMessage);
+    }
 
-  //   if (isSuccess) {
-  //     toast.success(message);
-  //   }
-  // }, [isError, isSuccess, message]);
+    if (materialCategoriesSuccess) {
+      toast.success(materialCategoriesSuccess);
+    }
+  }, [materialCategoriesError, materialCategoriesSuccess, materialCategoriesMessage]);
 
   return (
     <section>
@@ -176,14 +182,18 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="category"
+                  <Dropdown
                     name="category"
+                    optionLabel="name"
+                    optionValue="_id"
                     value={category}
-                    placeholder="Category"
+                    options={materialCategories}
                     onChange={onChange}
+                    filter
+                    showClear
+                    filterBy="name"
+                    placeholder="Choose..."
                     style={{ width: "100%" }}
-                    required
                   />
                   <label htmlFor="category">Category</label>
                 </span>
