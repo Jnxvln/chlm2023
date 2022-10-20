@@ -3,15 +3,17 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
+import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { createMaterial } from "../../../../features/materials/materialSlice";
+import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
 
 function MaterialForm() {
   const initialState = {
-    category: "634ee5789d74aca955c67e33",
+    category: "",
     name: "",
     image: "",
     binNumber: "",
@@ -24,27 +26,33 @@ function MaterialForm() {
     isActive: true,
   };
 
+  const cities = [
+    { name: "New York", code: "NY" },
+    { name: "Rome", code: "RM" },
+    { name: "London", code: "LDN" },
+    { name: "Istanbul", code: "IST" },
+    { name: "Paris", code: "PRS" },
+  ];
+
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
 
-  const { isError, isSuccess, message } = useSelector(
-    (state) => state.materials
-  );
   const dispatch = useDispatch();
+  // SELECT MATERIALS FROM STORE
+  const { materials } = useSelector((state) => state.materials);
+  let materialsLoading = useSelector((state) => state.materials).isLoading;
+  let materialsError = useSelector((state) => state.materials).isError;
+  let materialsSuccess = useSelector((state) => state.materials).isSuccess;
+  let materialsMessage = useSelector((state) => state.materials).message;
 
-  const {
-    category,
-    name,
-    image,
-    binNumber,
-    size,
-    stock,
-    notes,
-    description,
-    isFeatured,
-    isTruckable,
-    isActive,
-  } = formData;
+  // SELECT MATERIAL CATEGORIES FROM STORE
+  const { materialCategories } = useSelector((state) => state.materialCategories);
+  let materialCategoriesLoading = useSelector((state) => state.materials).isLoading;
+  let materialCategoriesError = useSelector((state) => state.materials).isError;
+  let materialCategoriesSuccess = useSelector((state) => state.materials).isSuccess;
+  let materialCategoriesMessage = useSelector((state) => state.materials).message;
+
+  const { category, name, image, binNumber, size, stock, notes, description, isFeatured, isTruckable, isActive } = formData;
 
   const resetForm = () => {
     setFormData(initialState);
@@ -58,13 +66,7 @@ function MaterialForm() {
   const renderFooter = () => {
     return (
       <div>
-        <Button
-          type="button"
-          label="Cancel"
-          icon="pi pi-times"
-          onClick={onClose}
-          className="p-button-text"
-        />
+        <Button type="button" label="Cancel" icon="pi pi-times" onClick={onClose} className="p-button-text" />
       </div>
     );
   };
@@ -83,30 +85,41 @@ function MaterialForm() {
   };
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    if (materialsError) {
+      toast.error(materialsMessage);
     }
 
-    if (isSuccess) {
-      toast.success(message);
+    if (materialsSuccess) {
+      toast.success(materialsMessage);
     }
-  }, [isError, isSuccess, message]);
+
+    if (materialCategoriesError) {
+      toast.error(materialCategoriesMessage);
+    }
+
+    if (materialCategoriesSuccess) {
+      toast.success(materialCategoriesMessage);
+    }
+
+    if (materialCategories.length === 0) {
+      dispatch(getMaterialCategories());
+    }
+  }, [
+    materials,
+    materialsError,
+    materialsSuccess,
+    materialsMessage,
+    materialCategories,
+    materialCategoriesError,
+    materialCategoriesSuccess,
+    materialCategoriesMessage,
+  ]);
 
   return (
     <section>
-      <Button
-        label="New Material"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Material" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
-      <Dialog
-        header="Material Dialog"
-        visible={formDialog}
-        style={{ width: "50vw" }}
-        footer={renderFooter}
-        onHide={onClose}
-      >
+      <Dialog header="Material Dialog" visible={formDialog} footer={renderFooter} onHide={onClose} style={{ width: "50vw" }}>
         <form onSubmit={onSubmit}>
           {/* NAME, CATEGORY, BIN NUMBER */}
           <div className="formgrid grid">
@@ -114,16 +127,7 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="name"
-                    name="name"
-                    value={name}
-                    placeholder="Name"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    autoFocus
-                    required
-                  />
+                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} autoFocus required />
                   <label htmlFor="name">Name</label>
                 </span>
               </div>
@@ -133,14 +137,19 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="category"
+                  {/* <InputText id="category" name="category" value={category} placeholder="Category" onChange={onChange} style={{ width: "100%" }} required /> */}
+                  <Dropdown
                     name="category"
+                    optionLabel="name"
+                    optionValue="_id"
                     value={category}
-                    placeholder="Category"
+                    options={materialCategories}
                     onChange={onChange}
+                    filter
+                    showClear
+                    filterBy="name"
+                    placeholder="Choose..."
                     style={{ width: "100%" }}
-                    required
                   />
                   <label htmlFor="category">Category</label>
                 </span>
@@ -151,14 +160,7 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="binNumber"
-                    name="binNumber"
-                    value={binNumber}
-                    placeholder="Bin #"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="binNumber" name="binNumber" value={binNumber} placeholder="Bin #" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="binNumber">Bin #</label>
                 </span>
               </div>
@@ -171,14 +173,7 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="image"
-                    name="image"
-                    value={image}
-                    placeholder="Image"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="image" name="image" value={image} placeholder="Image" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="image">Image</label>
                 </span>
               </div>
@@ -188,14 +183,7 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="size"
-                    name="size"
-                    value={size}
-                    placeholder="Size"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="size" name="size" value={size} placeholder="Size" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="size">Size</label>
                 </span>
               </div>
@@ -205,15 +193,7 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="stock"
-                    name="stock"
-                    value={stock}
-                    placeholder="Stock"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
+                  <InputText id="stock" name="stock" value={stock} placeholder="Stock" onChange={onChange} style={{ width: "100%" }} required />
                   <label htmlFor="stock">Stock</label>
                 </span>
               </div>
@@ -226,16 +206,7 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea
-                    id="notes"
-                    name="notes"
-                    value={notes}
-                    placeholder="Notes"
-                    onChange={onChange}
-                    rows={5}
-                    cols={30}
-                    style={{ width: "100%" }}
-                  />
+                  <InputTextarea id="notes" name="notes" value={notes} placeholder="Notes" onChange={onChange} rows={5} cols={30} style={{ width: "100%" }} />
                   <label htmlFor="notes">Notes</label>
                 </span>
               </div>
@@ -272,45 +243,25 @@ function MaterialForm() {
           >
             {/* Featured */}
             <div style={{ margin: "0.8em" }}>
-              <InputSwitch
-                id="isFeatured"
-                name="isFeatured"
-                checked={isFeatured}
-                onChange={onChange}
-              />
+              <InputSwitch id="isFeatured" name="isFeatured" checked={isFeatured} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Featured</strong>
             </div>
 
             {/* Truckable */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isTruckable"
-                name="isTruckable"
-                checked={isTruckable}
-                onChange={onChange}
-              />
+              <InputSwitch id="isTruckable" name="isTruckable" checked={isTruckable} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Truckable</strong>
             </div>
 
             {/* Active */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isActive"
-                name="isActive"
-                checked={isActive}
-                onChange={onChange}
-              />
+              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button
-              type="submit"
-              label="Save"
-              iconPos="left"
-              icon="pi pi-save"
-            />
+            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
           </div>
         </form>
       </Dialog>
