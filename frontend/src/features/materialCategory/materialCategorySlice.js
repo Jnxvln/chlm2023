@@ -18,9 +18,7 @@ export const getMaterialCategories = createAsyncThunk(
       return await materialCategoryService.getMaterialCategories(token);
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -33,7 +31,7 @@ export const materialCategorySlice = createSlice({
   name: "materialCategories",
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    resetMaterialCategoryState: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -53,5 +51,5 @@ export const materialCategorySlice = createSlice({
   },
 });
 
-export const { reset } = materialCategorySlice.actions;
+export const { resetMaterialCategoryState } = materialCategorySlice.actions;
 export default materialCategorySlice.reducer;

@@ -5,11 +5,12 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputTextarea } from "primereact/inputtextarea";
-import { toast } from "react-toastify"
+import { toast } from "react-toastify";
 
 // import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { updateMaterial } from "../../../../features/materials/materialSlice";
+import { updateMaterial, resetMaterialState } from "../../../../features/materials/materialSlice";
+import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
 
 function EditMaterialForm({ material }) {
   const initialState = {
@@ -37,7 +38,6 @@ function EditMaterialForm({ material }) {
   let materialCategoriesError = useSelector((state) => state.materialCategories).isError;
   let materialCategoriesSuccess = useSelector((state) => state.materialCategories).isSuccess;
   let materialCategoriesMessage = useSelector((state) => state.materialCategories).message;
-
 
   const {
     _id,
@@ -347,23 +347,13 @@ function EditMaterialForm({ material }) {
 
             {/* Active */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isActive"
-                name="isActive"
-                checked={isActive}
-                onChange={onChange}
-              />
+              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button
-              type="submit"
-              label="Save"
-              iconPos="left"
-              icon="pi pi-save"
-            />
+            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
           </div>
         </form>
       </Dialog>

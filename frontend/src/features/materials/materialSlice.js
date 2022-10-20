@@ -17,9 +17,7 @@ export const getActiveMaterials = createAsyncThunk(
       return await materialService.getActiveMaterials();
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -36,9 +34,7 @@ export const createMaterial = createAsyncThunk(
       return await materialService.createMaterial(materialData, token);
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -55,9 +51,7 @@ export const updateMaterial = createAsyncThunk(
       return await materialService.updateMaterial(materialData, token);
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -74,9 +68,7 @@ export const deleteMaterial = createAsyncThunk(
       return await materialService.deleteMaterial(materialID, token);
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -88,7 +80,7 @@ export const materialSlice = createSlice({
   name: "materials",
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    resetMaterialState: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -158,5 +150,5 @@ export const materialSlice = createSlice({
   },
 });
 
-export const { reset } = materialSlice.actions;
+export const { resetMaterialState } = materialSlice.actions;
 export default materialSlice.reducer;

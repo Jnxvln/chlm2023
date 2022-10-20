@@ -9,8 +9,15 @@ import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { classNames } from "primereact/utils";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { getActiveMaterials, deleteMaterial } from "../../../features/materials/materialSlice";
-import { getMaterialCategories } from "../../../features/materialCategory/materialCategorySlice";
+import {
+  getActiveMaterials,
+  deleteMaterial,
+  resetMaterialState,
+} from "../../../features/materials/materialSlice";
+import {
+  getMaterialCategories,
+  resetMaterialCategoryState,
+} from "../../../features/materialCategory/materialCategorySlice";
 import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
 import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
 import Spinner from "../../../components/layout/Spinner";
@@ -49,7 +56,10 @@ function MaterialsDashboard() {
   // #region RESOURCE STATES & SELECT DATA
   // Resource states
   let materialsLoading, materialsError, materialsSuccess, materialsMessage;
-  let materialCategoriesLoading, materialCategoriesError, materialCategoriesSuccess, materialCategoriesMessage;
+  let materialCategoriesLoading,
+    materialCategoriesError,
+    materialCategoriesSuccess,
+    materialCategoriesMessage;
 
   // Select material data
   const { materials } = useSelector((state) => state.materials);
@@ -68,11 +78,19 @@ function MaterialsDashboard() {
 
   // #region DATA TABLE TEMPLATES
   const imageBodyTemplate = (rowData) => {
-    return <img src={`https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png`} alt="Test alt" className="product-image" />;
+    return (
+      <img
+        src={`https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png`}
+        alt="Test alt"
+        className="product-image"
+      />
+    );
   };
 
   const stockTemplate = (rowData) => {
-    return <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>{rowData.stock}</span>;
+    return (
+      <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>{rowData.stock}</span>
+    );
   };
 
   const stockItemTemplate = (option) => {
@@ -106,7 +124,12 @@ function MaterialsDashboard() {
     return (
       <div style={{ display: "flex" }}>
         <EditMaterialForm material={rowData} />
-        <Button icon="pi pi-trash" iconPos="left" className="p-button-danger" onClick={(e) => onDelete(e, rowData)} />
+        <Button
+          icon="pi pi-trash"
+          iconPos="left"
+          className="p-button-danger"
+          onClick={(e) => onDelete(e, rowData)}
+        />
       </div>
     );
   };
@@ -142,11 +165,23 @@ function MaterialsDashboard() {
   };
 
   const filterClearTemplate = (options) => {
-    return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} className="p-button-secondary"></Button>;
+    return (
+      <Button
+        type="button"
+        icon="pi pi-times"
+        onClick={options.filterClearCallback}
+        className="p-button-secondary"
+      ></Button>
+    );
   };
 
   const verifiedRowFilterTemplate = (options) => {
-    return <TriStateCheckbox value={options.value} onChange={(e) => options.filterApplyCallback(e.value)} />;
+    return (
+      <TriStateCheckbox
+        value={options.value}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+      />
+    );
   };
   // #endregion
 
@@ -179,24 +214,9 @@ function MaterialsDashboard() {
   };
 
   const initFilters1 = () => {
-    // EXAMPLE ONLY:
-    // setFilters1({
-    //     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    //     'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    //     'country.name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-    //     'representative': { value: null, matchMode: FilterMatchMode.IN },
-    //     'date': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-    //     'balance': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-    //     'status': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-    //     'activity': { value: null, matchMode: FilterMatchMode.BETWEEN },
-    //     'verified': { value: null, matchMode: FilterMatchMode.EQUALS }
-    // });
-
     setFilters1({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      // 'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
       name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      // 'category': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
       stock: {
         operator: FilterOperator.OR,
         constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
@@ -232,10 +252,12 @@ function MaterialsDashboard() {
   useEffect(() => {
     if (materialsError) {
       toast.error(materialsMessage);
+      dispatch(resetMaterialState());
     }
 
     if (materialCategoriesError) {
       toast.error(materialCategoriesMessage);
+      dispatch(resetMaterialCategoryState());
     }
 
     if (materials.length > 0) {
@@ -273,10 +295,20 @@ function MaterialsDashboard() {
   const renderHeader1 = () => {
     return (
       <div className="flex justify-content-between">
-        <Button type="button" icon="pi pi-filter-slash" label="Clear" className="p-button-outlined" onClick={() => {}} />
+        <Button
+          type="button"
+          icon="pi pi-filter-slash"
+          label="Clear"
+          className="p-button-outlined"
+          onClick={() => {}}
+        />
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Keyword Search" />
+          <InputText
+            value={globalFilterValue1}
+            onChange={onGlobalFilterChange1}
+            placeholder="Keyword Search"
+          />
         </span>
       </div>
     );
@@ -287,7 +319,11 @@ function MaterialsDashboard() {
       <div className="flex justify-content-end">
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText value={globalFilterValue2} onChange={onGlobalFilterChange2} placeholder="Keyword Search" />
+          <InputText
+            value={globalFilterValue2}
+            onChange={onGlobalFilterChange2}
+            placeholder="Keyword Search"
+          />
         </span>
       </div>
     );
@@ -311,7 +347,14 @@ function MaterialsDashboard() {
           <DataTable
             value={stateMaterials}
             header={header2}
-            globalFilterFields={["name", "category", "stock", "binNumber", "isActive", "isTruckable"]}
+            globalFilterFields={[
+              "name",
+              "category",
+              "stock",
+              "binNumber",
+              "isActive",
+              "isTruckable",
+            ]}
             size="small"
             scrollable
             scrollHeight="flex"
@@ -333,7 +376,15 @@ function MaterialsDashboard() {
             <Column header="Image" body={imageBodyTemplate}></Column>
 
             {/* NAME COLUMN */}
-            <Column field="name" header="Name" filter="true" filterfield="name" filterClear={filterClearTemplate} style={{ minWidth: "14rem" }} sortable></Column>
+            <Column
+              field="name"
+              header="Name"
+              filter="true"
+              filterfield="name"
+              filterClear={filterClearTemplate}
+              style={{ minWidth: "14rem" }}
+              sortable
+            ></Column>
 
             {/* CATEGORY COLUMN */}
             <Column header="Category" body={categoryTemplate} sortable></Column>
