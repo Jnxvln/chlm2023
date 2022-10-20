@@ -366,11 +366,13 @@ function MaterialsDashboard() {
             selection={materialRowSelected}
             onSelectionChange={(e) => setMaterialRowSelected(e.value)}
             dataKey="_id"
+            stateStorage="session"
+            stateKey="dt-materials-session"
+            filter
             filters={filters2}
-            // filterDisplay="menu"
-            filterDisplay="row"
-            filter="true"
             filterfield="name"
+            filterDisplay="row"
+            onFilter={(e) => setFilters2(e.filters)}
             emptyMessage="No materials found"
             stripedRows
           >
@@ -411,10 +413,10 @@ function MaterialsDashboard() {
 
             {/* ISFEATURED COLUMN */}
             <Column
+              field="isFeatured"
               header="Featured"
               dataType="boolean"
-              filter="true"
-              filterfield="isFeatured"
+              filter
               filterElement={verifiedRowFilterTemplate}
               body={isFeaturedTemplate}
               sortable
@@ -422,6 +424,7 @@ function MaterialsDashboard() {
 
             {/* ISACTIVE COLUMN */}
             <Column
+              field="isActive"
               header="Active"
               dataType="boolean"
               filter="true"
@@ -433,6 +436,7 @@ function MaterialsDashboard() {
 
             {/* ISTRUCKABLE COLUMN */}
             <Column
+              field="isTruckable"
               header="Truckable"
               dataType="boolean"
               filter="true"
