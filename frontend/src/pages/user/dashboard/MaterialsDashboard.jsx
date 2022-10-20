@@ -92,13 +92,29 @@ function MaterialsDashboard() {
   };
 
   const stockFilterTemplate = (options) => {
+    console.log("OPTIONS FOUND: ");
+    console.log(options);
     return (
       <Dropdown
         value={options.value}
         options={stockStatuses}
         onChange={(e) => options.filterApplyCallback(e.value)}
         itemTemplate={stockItemTemplate}
-        placeholder="Select current stock"
+        placeholder="Current stock"
+        className="p-column-filter"
+        showClear
+      />
+    );
+  };
+
+  const stockRowFilterTemplate = (options) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={stockStatuses}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+        itemTemplate={stockItemTemplate}
+        placeholder="Select a Status"
         className="p-column-filter"
         showClear
       />
@@ -180,11 +196,6 @@ function MaterialsDashboard() {
   // #endregion
 
   // #region FILTER HANDLERS
-  const onModelFilterChange = (e) => {
-    console.log(e);
-    //implementation goes here
-  };
-
   const onGlobalFilterChange1 = (e) => {
     const value = e.target.value;
     let _filters1 = { ...filters1 };
@@ -232,10 +243,6 @@ function MaterialsDashboard() {
 
     if (materialCategories.length === 0) {
       dispatch(getMaterialCategories());
-    }
-
-    if (stateMaterials) {
-      console.log(stateMaterials);
     }
 
     initFilters1();
@@ -389,15 +396,14 @@ function MaterialsDashboard() {
 
             {/* STOCK COLUMN */}
             <Column
+              field="stock"
               header="Stock"
-              style={{ minWidth: "12rem" }}
-              filter="true"
+              body={stockTemplate}
+              filter
+              filterElement={stockRowFilterTemplate}
               showFilterMenu={false}
               filterMenuStyle={{ width: "14rem" }}
-              filterfield="stock"
-              filterElement={stockFilterTemplate}
-              body={stockTemplate}
-              sortable
+              style={{ minWidth: "12rem" }}
             ></Column>
 
             {/* SIZE COLUMN */}
