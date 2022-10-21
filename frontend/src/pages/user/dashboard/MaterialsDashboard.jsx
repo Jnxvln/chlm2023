@@ -28,6 +28,7 @@ import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup m
 function MaterialsDashboard() {
   const dispatch = useDispatch();
   const stockStatuses = ["new", "in", "low", "out", "notavail"];
+  const [matCategories, setMatCategories] = useState([]);
   const [stateMaterials, setStateMaterials] = useState(null);
   const [globalFilterValue1, setGlobalFilterValue1] = useState("");
   const [globalFilterValue2, setGlobalFilterValue2] = useState("");
@@ -51,6 +52,14 @@ function MaterialsDashboard() {
       accept: () => dispatch(deleteMaterial(rowData._id)),
       reject: () => null,
     });
+  };
+
+  const categoryRowTemplate = (rowData) => {
+    let mat;
+    if (matCategories.length > 0) {
+      mat = matCategories.find((cat) => cat._id === rowData.category);
+      return <>{mat.name}</>;
+    }
   };
 
   // #region RESOURCE STATES & SELECT DATA
@@ -81,6 +90,37 @@ function MaterialsDashboard() {
     );
   };
 
+  const categoryTemplate = (rowData) => {
+    return (
+      <span className={`product-badge status-${rowData.category}`}>
+        {categoryRowTemplate(rowData)}
+      </span>
+    );
+  };
+
+  const categoryRowFilterTemplate = (options) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={matCategories}
+        onChange={(e) => {
+          if (e && e.value && e.value._id) {
+            return options.filterApplyCallback(e.value._id);
+          } else if (e && e.value) {
+            return options.filterApplyCallback(e.value);
+          }
+        }}
+        itemTemplate={categoryItemTemplate}
+        placeholder="Choose..."
+        className="p-column-filter"
+      />
+    );
+  };
+
+  const categoryItemTemplate = (option) => {
+    return <span className={`category status-${option.name}`}>{option.name}</span>;
+  };
+
   const stockTemplate = (rowData) => {
     return (
       <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>{rowData.stock}</span>
@@ -91,43 +131,23 @@ function MaterialsDashboard() {
     return <span className={`customer-badge status-${option}`}>{option}</span>;
   };
 
-  const stockFilterTemplate = (options) => {
-    console.log("OPTIONS FOUND: ");
-    console.log(options);
-    return (
-      <Dropdown
-        value={options.value}
-        options={stockStatuses}
-        onChange={(e) => options.filterApplyCallback(e.value)}
-        itemTemplate={stockItemTemplate}
-        placeholder="Current stock"
-        className="p-column-filter"
-        showClear
-      />
-    );
-  };
-
   const stockRowFilterTemplate = (options) => {
     return (
       <Dropdown
         value={options.value}
         options={stockStatuses}
-        onChange={(e) => options.filterApplyCallback(e.value)}
+        onChange={(e) => {
+          return options.filterApplyCallback(e.value);
+        }}
         itemTemplate={stockItemTemplate}
-        placeholder="Select a Status"
+        placeholder="Choose..."
         className="p-column-filter"
-        showClear
       />
     );
   };
 
   const binNumberTemplate = (rowData) => {
     return <>{rowData.binNumber ? <span>Bin #{rowData.binNumber}</span> : <span></span>}</>;
-  };
-
-  const categoryTemplate = (rowData) => {
-    const category = materialCategories.find((cat) => cat._id === rowData.category);
-    return <>{category && <span>{category.name}</span>}</>;
   };
 
   const actionsTemplate = (rowData) => {
@@ -288,6 +308,17 @@ function MaterialsDashboard() {
     dispatch,
   ]);
 
+  // Create a list of objects with material category names and id's used in categoryRowFilterTemplate
+  useEffect(() => {
+    if (materialCategories.length > 0) {
+      let cats = [];
+      for (let i = 0; i < materialCategories.length; i++) {
+        cats.push({ name: materialCategories[i].name, _id: materialCategories[i]._id });
+      }
+      setMatCategories(cats);
+    }
+  }, [materialCategories]);
+
   if (materialsLoading || materialCategoriesLoading) {
     return <Spinner />;
   }
@@ -391,7 +422,16 @@ function MaterialsDashboard() {
             ></Column>
 
             {/* CATEGORY COLUMN */}
-            <Column header="Category" body={categoryTemplate} sortable></Column>
+            <Column
+              field="category"
+              header="Category"
+              body={categoryTemplate}
+              filter
+              filterElement={categoryRowFilterTemplate}
+              showFilterMenu={false}
+              filterMenuStyle={{ width: "14rem" }}
+              style={{ minWidth: "14rem" }}
+            ></Column>
 
             {/* BIN NUMBER COLUMN */}
             <Column sortable header="Bin" body={binNumberTemplate}></Column>
@@ -405,7 +445,7 @@ function MaterialsDashboard() {
               filterElement={stockRowFilterTemplate}
               showFilterMenu={false}
               filterMenuStyle={{ width: "14rem" }}
-              style={{ minWidth: "12rem" }}
+              style={{ minWidth: "8rem" }}
             ></Column>
 
             {/* SIZE COLUMN */}
