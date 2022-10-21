@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/materials", require("./routes/materialRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/material-categories", require("./routes/materialCategoryRoutes"));
+app.use("/api/drivers", require("./routes/driverRoutes"));
 
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler);
