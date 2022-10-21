@@ -156,7 +156,6 @@ function MaterialsDashboard() {
         <EditMaterialForm material={rowData} />
         <Button
           icon="pi pi-trash"
-          iconPos="left"
           className="p-button-danger"
           onClick={(e) => onDelete(e, rowData)}
         />

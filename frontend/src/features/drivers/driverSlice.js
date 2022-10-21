@@ -14,7 +14,8 @@ const initialState = {
 // Get all drivers
 export const getDrivers = createAsyncThunk("drivers/getDrivers", async (_, thunkAPI) => {
   try {
-    return await driverService.getDrivers();
+    const token = thunkAPI.getState().auth.user.token;
+    return await driverService.getDrivers(token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
