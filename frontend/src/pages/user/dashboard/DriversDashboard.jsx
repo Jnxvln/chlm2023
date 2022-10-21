@@ -1,52 +1,99 @@
 import React, { useState, useEffect } from "react";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { getDrivers } from "../../../features/drivers/driverSlice"
+import {
+  getDrivers,
+  deleteDriver,
+  resetDriverMessages,
+} from "../../../features/drivers/driverSlice";
 import { Button } from "primereact/button";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
-// import { InputText } from "primereact/inputtext";
-// import { Dropdown } from "primereact/dropdown";
-// import { FilterMatchMode, FilterOperator } from "primereact/api";
-// import { classNames } from "primereact/utils";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { classNames } from "primereact/utils";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
+import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
+import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
 function DriversDashboard() {
   const dispatch = useDispatch();
 
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector((state) => state.drivers)
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [driverRowSelected, setDriverRowSelected] = useState(null);
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    // category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+
+  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
+    (state) => state.drivers
+  );
+
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: "Are you sure you want to delete?",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteDriver(rowData._id)),
+      reject: () => null,
+    });
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
 
   // #region DATA TABLE TEMPLATES
 
-  const dateHiredTemplate = (rowData) => {
+  const dataTableHeaderTemplate = () => {
     return (
-      <>{dayjs(rowData.dateHired).format('MM/DD/YYYY')}</>
-    )
-  }
+      <div className="flex justify-content-between">
+        <div>
+          <DriverForm />
+        </div>
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="First, last, or truck #"
+          />
+        </span>
+      </div>
+    );
+  };
+
+  const dateHiredTemplate = (rowData) => {
+    return <>{dayjs(rowData.dateHired).format("MM/DD/YYYY")}</>;
+  };
 
   const dateReleasedTemplate = (rowData) => {
-    return (
-      <>{rowData.dateReleased ? dayjs(rowData.dateReleased).format('MM/DD/YY') : ''}</>
-    )
-  }
+    return <>{rowData.dateReleased ? dayjs(rowData.dateReleased).format("MM/DD/YY") : ""}</>;
+  };
 
   const isActiveTemplate = (rowData) => {
-    return (
-      <>
-        { rowData.isActive ? (
-          <i className="pi pi-check"/>
-        ) : ""}
-      </>
-    )
-  }
+    return <>{rowData.isActive ? <i className="pi pi-check" /> : ""}</>;
+  };
 
   const isActiveRowFilterTemplate = (options) => {
     <TriStateCheckbox
-        value={options.value}
-        onChange={(e) => options.filterApplyCallback(e.value)}
-      />
-  }
+      value={options.value}
+      onChange={(e) => options.filterApplyCallback(e.value)}
+    />;
+  };
 
   const filterClearTemplate = (options) => {
     return (
@@ -57,50 +104,144 @@ function DriversDashboard() {
         className="p-button-secondary"
       ></Button>
     );
-  }
+  };
 
   const actionsTemplate = (rowData) => {
     return (
-      <>
-        <Button icon="pi pi-pencil" style={{ marginRight: '0.5em' }} />
-        <Button icon="pi pi-trash" className="p-button-danger" />
-      </>
-    )
-  }
+      <div style={{ display: "flex" }}>
+        <EditDriverForm driver={rowData} />
+        <Button
+          icon="pi pi-trash"
+          className="p-button-danger"
+          onClick={(e) => onDelete(e, rowData)}
+        />
+      </div>
+    );
+  };
   // #endregion
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    });
+
+    setGlobalFilterValue("");
+  };
 
   // RUN ONCE - FETCH
   useEffect(() => {
     if (drivers.length === 0) {
-      dispatch(getDrivers())
+      dispatch(getDrivers());
     }
-  }, [])
 
+    initFilters();
+  }, []);
+
+  // RUN EACH
   useEffect(() => {
     if (driversError) {
-      toast.error(driversMessage)
+      toast.error(driversMessage);
     }
 
-    if (driversSuccess) {
-      toast.success(driversMessage)
-    }
-  }, [drivers, driversError, driversSuccess, driversMessage])
+    dispatch(resetDriverMessages());
+  }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
   return (
     <section>
-      <h1>Drivers</h1>
+      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Drivers</h1>
+
+      <ConfirmPopup />
 
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
-          <DataTable value={drivers}>
-            <Column field="isActive" dataType="boolean" header="Active" filterElement={isActiveRowFilterTemplate} body={isActiveTemplate} sortable></Column>
-            <Column field="firstName" header="First" filter filterField="firstName" filterClear={filterClearTemplate} sortable></Column>
-            <Column field="lastName" header="Last" filter filterField="lastName" filterClear={filterClearTemplate} sortable></Column>
-            <Column field="defaultTruck" header="Truck" filter filterField="defaultTruck" filterClear={filterClearTemplate} sortable></Column>
-            <Column field="endDumpPayRate" header="ED Rate" filter filterField="endDumpPayRate" filterClear={filterClearTemplate} sortable></Column>
-            <Column field="flatBedPayRate" header="FB Rate" filter filterField="flatBedPayRate" filterClear={filterClearTemplate} sortable></Column>
-            <Column field="ncRate" header="NC Rate" filter filterField="ncRate" filterClear={filterClearTemplate} sortable></Column>
-            <Column header="Hired" body={dateHiredTemplate} dataType="date" filter filterField="dateHired" filterClear={filterClearTemplate} sortable sortField="dateHired"></Column>
-            <Column header="Released" body={dateReleasedTemplate}></Column>
+          <DataTable
+            value={drivers}
+            header={dataTableHeaderTemplate}
+            globalFilterFields={["firstName", "lastName", "defaultTruck"]}
+            size="small"
+            scrollable
+            scrollHeight="flex"
+            sortMode="multiple"
+            responsiveLayout="scroll"
+            filter
+            filters={filters}
+            filterfield="name"
+            filterDisplay="row"
+            onFilter={(e) => setFilters(e.filters)}
+            selectionMode="single"
+            selection={driverRowSelected}
+            onSelectionChange={(e) => setDriverRowSelected(e.value)}
+            dataKey="_id"
+            stateStorage="session"
+            stateKey="dt-drivers-session"
+            emptyMessage="No drivers found"
+            stripedRows
+          >
+            {/* IS ACTIVE */}
+            <Column
+              field="isActive"
+              dataType="boolean"
+              header="Active"
+              filterElement={isActiveRowFilterTemplate}
+              body={isActiveTemplate}
+              sortable
+            ></Column>
+
+            {/* FIRST NAME */}
+            <Column
+              field="firstName"
+              header="First"
+              filter
+              filterField="firstName"
+              filterClear={filterClearTemplate}
+              style={{ minWidth: "12em" }}
+              sortable
+            ></Column>
+
+            {/* LAST NAME */}
+            <Column
+              field="lastName"
+              header="Last"
+              filter
+              filterField="lastName"
+              filterClear={filterClearTemplate}
+              style={{ minWidth: "12em" }}
+              sortable
+            ></Column>
+
+            {/* DEFAULT TRUCK */}
+            <Column field="defaultTruck" header="Truck" sortable></Column>
+
+            {/* END DUMP PAY RATE */}
+            <Column field="endDumpPayRate" header="ED Rate" sortable></Column>
+
+            {/* FLAT BED PAY RATE */}
+            <Column field="flatBedPayRate" header="FB Rate" sortable></Column>
+
+            {/* NC RATE */}
+            <Column field="ncRate" header="NC Rate" sortable></Column>
+
+            {/* DATE HIRED */}
+            <Column
+              header="Hired"
+              body={dateHiredTemplate}
+              dataType="date"
+              sortable
+              sortField="dateHired"
+            ></Column>
+
+            {/* DATE RELESED */}
+            <Column
+              header="Released"
+              body={dateReleasedTemplate}
+              dataType="date"
+              sortable
+              sortField="dateReleased"
+            ></Column>
+
+            {/* ACTIONS */}
             <Column header="Actions" body={actionsTemplate}></Column>
           </DataTable>
         </div>

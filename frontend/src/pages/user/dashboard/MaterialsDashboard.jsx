@@ -348,7 +348,10 @@ function MaterialsDashboard() {
 
   const renderHeader2 = () => {
     return (
-      <div className="flex justify-content-end">
+      <div className="flex justify-content-between">
+        <div>
+          <MaterialForm />
+        </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputText
@@ -368,11 +371,11 @@ function MaterialsDashboard() {
 
   return (
     <section>
-      <h1>Materials</h1>
+      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>Materials</h1>
 
       <ConfirmPopup />
 
-      <MaterialForm />
+      {/* <MaterialForm /> */}
 
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>

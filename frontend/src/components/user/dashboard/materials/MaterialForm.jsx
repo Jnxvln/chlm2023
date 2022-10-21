@@ -28,8 +28,8 @@ function MaterialForm() {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
   const dispatch = useDispatch();
+
   // SELECT MATERIALS FROM STORE
   const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
     useSelector((state) => state.materials);

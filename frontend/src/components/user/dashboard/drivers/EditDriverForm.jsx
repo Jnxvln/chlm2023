@@ -2,29 +2,28 @@ import { useState, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
+import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
+import { Calendar } from "primereact/calendar";
+import Spinner from "../../../../components/layout/Spinner";
+
 import { toast } from "react-toastify";
-
-// import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { updateMaterial } from "../../../../features/materials/materialSlice";
-import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
+import { updateDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
+import { getDrivers } from "../../../../features/drivers/driverSlice";
 
-function EditMaterialForm({ material }) {
+function EditDriverForm({ driver }) {
   const initialState = {
     _id: "",
-    category: "",
-    name: "",
-    image: "",
-    binNumber: "",
-    size: "",
-    stock: "",
-    notes: "",
-    description: "",
-    isFeatured: false,
-    isTruckable: false,
+    firstName: "",
+    lastName: "",
+    endDumpPayRate: "",
+    flatBedPayRate: "",
+    ncRate: "",
+    defaultTruck: "",
+    dateHired: "",
+    dateReleased: "",
     isActive: true,
   };
 
@@ -32,27 +31,21 @@ function EditMaterialForm({ material }) {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
-  // SELECT MATERIAL CATEGORIES FROM STORE
-  const {
-    materialCategories,
-    materialCategoriesLoading,
-    materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage,
-  } = useSelector((state) => state.materialCategories);
+  // SELECT DRIVERS FROM STORE
+  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
+    (state) => state.drivers
+  );
 
   const {
     _id,
-    category,
-    name,
-    image,
-    binNumber,
-    size,
-    stock,
-    notes,
-    description,
-    isFeatured,
-    isTruckable,
+    firstName,
+    lastName,
+    endDumpPayRate,
+    flatBedPayRate,
+    ncRate,
+    defaultTruck,
+    dateHired,
+    dateReleased,
     isActive,
   } = formData;
 
@@ -76,6 +69,7 @@ function EditMaterialForm({ material }) {
   };
 
   const onChange = (e) => {
+    console.log(e.target.value);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -84,40 +78,48 @@ function EditMaterialForm({ material }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateMaterial(formData));
+    dispatch(updateDriver(formData));
     onClose();
   };
 
   useEffect(() => {
-    if (material) {
+    if (driver) {
       setFormData((prevState) => ({
         ...prevState,
-        _id: material._id,
-        name: material.name,
-        category: material.category,
-        image: material.image,
-        binNumber: material.binNumber,
-        size: material.size,
-        stock: material.stock,
-        notes: material.notes,
-        description: material.description,
-        isFeatured: material.isFeatured,
-        isActive: material.isFeatured,
-        isTruckable: material.isTruckable,
+        _id: driver._id,
+        firstName: driver.firstName,
+        lastName: driver.lastName,
+        endDumpPayRate: driver.endDumpPayRate,
+        flatBedPayRate: driver.flatBedPayRate,
+        ncRate: driver.ncRate,
+        defaultTruck: driver.defaultTruck,
+        dateHired: driver.dateHired,
+        dateReleased: driver.dateReleased,
+        isActive: driver.isActive,
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (materialCategoriesError) {
-      toast.error(materialCategoriesMessage);
+    if (driversError) {
+      toast.error(driversMessage);
     }
 
-    if (materialCategoriesSuccess) {
-      toast.success(materialCategoriesSuccess);
+    if (driversSuccess) {
+      toast.success(driversMessage);
     }
-  }, [materialCategoriesError, materialCategoriesSuccess, materialCategoriesMessage, dispatch]);
+
+    if (drivers.length === 0) {
+      dispatch(getDrivers());
+    }
+
+    dispatch(resetDriverMessages());
+  }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
+
+  if (driversLoading) {
+    return <Spinner />;
+  }
 
   return (
     <section>
@@ -125,18 +127,18 @@ function EditMaterialForm({ material }) {
         icon="pi pi-pencil"
         iconPos="left"
         style={{ marginRight: "0.5em" }}
-        onClick={(e) => setFormDialog(true)}
+        onClick={() => setFormDialog(true)}
       />
 
       <Dialog
-        header="Edit Material Dialog"
+        header="Edit Driver Dialog"
         visible={formDialog}
         style={{ width: "50vw" }}
         footer={renderFooter}
         onHide={onClose}
       >
         <form onSubmit={onSubmit}>
-          {/* NAME, CATEGORY, BIN NUMBER */}
+          {/* FIRST NAME, LAST NAME, DEFAULT TRUCK */}
           <div className="formgrid grid">
             {/* ID */}
             <div className="field col">
@@ -157,196 +159,161 @@ function EditMaterialForm({ material }) {
               </div>
             </div>
 
-            {/* Name */}
+            {/* First Name */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
                   <InputText
-                    id="name"
-                    name="name"
-                    value={name}
-                    placeholder="Name"
+                    id="firstName"
+                    name="firstName"
+                    value={firstName}
+                    placeholder="First name"
                     onChange={onChange}
                     style={{ width: "100%" }}
                     autoFocus
                     required
                   />
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="firstName">First Name</label>
                 </span>
               </div>
             </div>
 
-            {/* Category */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <Dropdown
-                    name="category"
-                    optionLabel="name"
-                    optionValue="_id"
-                    value={category}
-                    options={materialCategories}
-                    onChange={onChange}
-                    filter
-                    showClear
-                    filterBy="name"
-                    placeholder="Choose..."
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="category">Category</label>
-                </span>
-              </div>
-            </div>
-
-            {/* Bin Number */}
+            {/* Last Name */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
                   <InputText
-                    id="binNumber"
-                    name="binNumber"
-                    value={binNumber}
-                    placeholder="Bin #"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="binNumber">Bin #</label>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* IMAGE, SIZE, STOCK */}
-          <div className="formgrid grid">
-            {/* Image */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="image"
-                    name="image"
-                    value={image}
-                    placeholder="Image"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="image">Image</label>
-                </span>
-              </div>
-            </div>
-
-            {/* Size */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="size"
-                    name="size"
-                    value={size}
-                    placeholder="Size"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="size">Size</label>
-                </span>
-              </div>
-            </div>
-
-            {/* Stock */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="stock"
-                    name="stock"
-                    value={stock}
-                    placeholder="Stock"
+                    id="lastName"
+                    name="lastName"
+                    value={lastName}
+                    placeholder="Last name"
                     onChange={onChange}
                     style={{ width: "100%" }}
                     required
                   />
-                  <label htmlFor="stock">Stock</label>
+                  <label htmlFor="lastName">Last Name</label>
+                </span>
+              </div>
+            </div>
+
+            {/* Default Truck */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="defaultTruck"
+                    name="defaultTruck"
+                    value={defaultTruck}
+                    placeholder="Truck #"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="defaultTruck">Truck #</label>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* NOTES, DESCRIPTION */}
+          {/* ENDDUMP RATE, FLATBED RATE, NC RATE */}
           <div className="formgrid grid">
-            {/* Notes */}
+            {/* End Dump Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea
-                    id="notes"
-                    name="notes"
-                    value={notes}
-                    placeholder="Notes"
+                  <InputText
+                    id="endDumpPayRate"
+                    name="endDumpPayRate"
+                    value={endDumpPayRate}
+                    placeholder="ED Rate"
                     onChange={onChange}
-                    rows={5}
-                    cols={30}
                     style={{ width: "100%" }}
+                    required
                   />
-                  <label htmlFor="notes">Notes</label>
+                  <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
                 </span>
               </div>
             </div>
 
-            {/* Description */}
+            {/* Flatbed Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea
-                    id="description"
-                    name="description"
-                    value={description}
-                    placeholder="Description"
+                  <InputText
+                    id="flatBedPayRate"
+                    name="flatBedPayRate"
+                    value={flatBedPayRate}
+                    placeholder="FB Rate"
                     onChange={onChange}
-                    rows={5}
-                    cols={30}
                     style={{ width: "100%" }}
+                    required
                   />
-                  <label htmlFor="description">Description</label>
+                  <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
+                </span>
+              </div>
+            </div>
+
+            {/* NC Rate */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="ncRate"
+                    name="ncRate"
+                    value={ncRate}
+                    placeholder="NC Rate"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    required
+                  />
+                  <label htmlFor="ncRate">Non-commission Rate</label>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* FEATURED, TRUCKABLE, ACTIVE  */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "start",
-              alignItems: "center",
-              gap: "25px",
-            }}
-          >
-            {/* Featured */}
-            <div style={{ margin: "0.8em" }}>
-              <InputSwitch
-                id="isFeatured"
-                name="isFeatured"
-                checked={isFeatured}
-                onChange={onChange}
-              />
-              <strong style={{ marginLeft: "0.5em" }}>Featured</strong>
+          {/* DATE HIRED, DATE RELEASED */}
+          <div className="formgrid grid">
+            {/* Date Hired */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <Calendar
+                    id="dateHired"
+                    name="dateHired"
+                    value={dateHired}
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  ></Calendar>
+                  <label htmlFor="dateHired">Date Hired</label>
+                </span>
+              </div>
             </div>
 
-            {/* Truckable */}
-            <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isTruckable"
-                name="isTruckable"
-                checked={isTruckable}
-                onChange={onChange}
-              />
-              <strong style={{ marginLeft: "0.5em" }}>Truckable</strong>
+            {/* Date Released */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <Calendar
+                    id="dateReleased"
+                    name="dateReleased"
+                    value={dateReleased}
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  ></Calendar>
+                  <label htmlFor="dateReleased">Date Released</label>
+                </span>
+              </div>
             </div>
+          </div>
 
-            {/* Active */}
-            <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
-              <strong style={{ marginLeft: "0.5em" }}>Active</strong>
+          {/* IS ACTIVE */}
+          <div className="formgrid grid">
+            {/* IsActive */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+                <strong style={{ marginLeft: "0.5em" }}>Active</strong>
+              </div>
             </div>
           </div>
 
@@ -359,4 +326,4 @@ function EditMaterialForm({ material }) {
   );
 }
 
-export default EditMaterialForm;
+export default EditDriverForm;
