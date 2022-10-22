@@ -57,10 +57,12 @@ function EditDriverForm({ driver }) {
 
   // Handle form input change
   const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    if (e.hasOwnProperty("target")) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
   };
 
   // Handle form submit
