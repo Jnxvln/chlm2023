@@ -33,14 +33,20 @@ function DriversDashboard() {
     // category: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  // Select Drivers from store slice
+  const {
+    drivers,
+    driversLoading,
+    driversError,
+    driversSuccess,
+    driversMessage,
+  } = useSelector((state) => state.drivers);
 
+  // Delete driver confirmation
   const onDelete = (e, rowData) => {
     confirmPopup({
       target: e.target,
-      message: "Are you sure you want to delete?",
+      message: `Delete driver ${rowData.firstName} ${rowData.lastName}?`,
       icon: "pi pi-exclamation-triangle",
       accept: () => dispatch(deleteDriver(rowData._id)),
       reject: () => null,
@@ -81,7 +87,13 @@ function DriversDashboard() {
   };
 
   const dateReleasedTemplate = (rowData) => {
-    return <>{rowData.dateReleased ? dayjs(rowData.dateReleased).format("MM/DD/YY") : ""}</>;
+    return (
+      <>
+        {rowData.dateReleased
+          ? dayjs(rowData.dateReleased).format("MM/DD/YY")
+          : ""}
+      </>
+    );
   };
 
   const isActiveTemplate = (rowData) => {
@@ -158,6 +170,7 @@ function DriversDashboard() {
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
             value={drivers}
+            loading={driversLoading}
             header={dataTableHeaderTemplate}
             globalFilterFields={["firstName", "lastName", "defaultTruck"]}
             size="small"

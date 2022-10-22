@@ -3,15 +3,11 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
-import { Dropdown } from "primereact/dropdown";
-import { InputTextarea } from "primereact/inputtextarea";
+import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
-import Spinner from "../../../../components/layout/Spinner";
 
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import { updateDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
-import { getDrivers } from "../../../../features/drivers/driverSlice";
+import { useDispatch } from "react-redux";
+import { updateDriver } from "../../../../features/drivers/driverSlice";
 
 function EditDriverForm({ driver }) {
   const initialState = {
@@ -26,16 +22,11 @@ function EditDriverForm({ driver }) {
     dateReleased: "",
     isActive: true,
   };
-
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
-  // SELECT DRIVERS FROM STORE
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
-
+  // Destructure form data
   const {
     _id,
     firstName,
@@ -49,11 +40,7 @@ function EditDriverForm({ driver }) {
     isActive,
   } = formData;
 
-  const onClose = () => {
-    // resetForm();
-    setFormDialog(false);
-  };
-
+  // Dialog footer
   const renderFooter = () => {
     return (
       <div>
@@ -68,20 +55,27 @@ function EditDriverForm({ driver }) {
     );
   };
 
+  // Handle form input change
   const onChange = (e) => {
-    console.log(e.target.value);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
 
+  // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(updateDriver(formData));
     onClose();
   };
 
+  // Clear form on dialog close
+  const onClose = () => {
+    setFormDialog(false);
+  };
+
+  // Set form data to `driver` prop
   useEffect(() => {
     if (driver) {
       setFormData((prevState) => ({
@@ -98,28 +92,7 @@ function EditDriverForm({ driver }) {
         isActive: driver.isActive,
       }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (driversError) {
-      toast.error(driversMessage);
-    }
-
-    if (driversSuccess) {
-      toast.success(driversMessage);
-    }
-
-    if (drivers.length === 0) {
-      dispatch(getDrivers());
-    }
-
-    dispatch(resetDriverMessages());
-  }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
-
-  if (driversLoading) {
-    return <Spinner />;
-  }
+  }, [driver]);
 
   return (
     <section>
@@ -136,6 +109,7 @@ function EditDriverForm({ driver }) {
         style={{ width: "50vw" }}
         footer={renderFooter}
         onHide={onClose}
+        blockScroll
       >
         <form onSubmit={onSubmit}>
           {/* FIRST NAME, LAST NAME, DEFAULT TRUCK */}
@@ -219,54 +193,65 @@ function EditDriverForm({ driver }) {
             {/* End Dump Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="endDumpPayRate"
-                    name="endDumpPayRate"
-                    value={endDumpPayRate}
-                    placeholder="ED Rate"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
-                  <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
-                </span>
+                <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
+                <InputNumber
+                  id="endDumpPayRate"
+                  name="endDumpPayRate"
+                  value={endDumpPayRate}
+                  placeholder="ED Rate"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  suffix=" /ton"
+                  step={0.01}
+                  onChange={onChange}
+                  style={{ width: "100%" }}
+                  showButtons
+                  required
+                />
               </div>
             </div>
 
             {/* Flatbed Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="flatBedPayRate"
-                    name="flatBedPayRate"
-                    value={flatBedPayRate}
-                    placeholder="FB Rate"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
-                  <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
-                </span>
+                <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
+                <InputNumber
+                  id="flatBedPayRate"
+                  name="flatBedPayRate"
+                  value={flatBedPayRate}
+                  placeholder="FB Rate"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  suffix=" /ton"
+                  step={0.01}
+                  onChange={onChange}
+                  style={{ width: "100%" }}
+                  showButtons
+                  required
+                />
               </div>
             </div>
 
             {/* NC Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="ncRate"
-                    name="ncRate"
-                    value={ncRate}
-                    placeholder="NC Rate"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
-                  <label htmlFor="ncRate">Non-commission Rate</label>
-                </span>
+                <label htmlFor="ncRate">Non-commission Rate</label>
+                <InputNumber
+                  id="ncRate"
+                  name="ncRate"
+                  value={ncRate}
+                  placeholder="NC Rate"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  suffix=" /hr"
+                  step={0.01}
+                  onChange={onChange}
+                  style={{ width: "100%" }}
+                  required
+                />
               </div>
             </div>
           </div>
@@ -280,7 +265,7 @@ function EditDriverForm({ driver }) {
                   <Calendar
                     id="dateHired"
                     name="dateHired"
-                    value={dateHired}
+                    value={new Date(dateHired)}
                     onChange={onChange}
                     style={{ width: "100%" }}
                   ></Calendar>
@@ -296,7 +281,7 @@ function EditDriverForm({ driver }) {
                   <Calendar
                     id="dateReleased"
                     name="dateReleased"
-                    value={dateReleased}
+                    value={new Date(dateReleased)}
                     onChange={onChange}
                     style={{ width: "100%" }}
                   ></Calendar>
@@ -311,14 +296,24 @@ function EditDriverForm({ driver }) {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+                <InputSwitch
+                  id="isActive"
+                  name="isActive"
+                  checked={isActive}
+                  onChange={onChange}
+                />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
+            <Button
+              type="submit"
+              label="Save"
+              iconPos="left"
+              icon="pi pi-save"
+            />
           </div>
         </form>
       </Dialog>

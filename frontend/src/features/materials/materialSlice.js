@@ -17,7 +17,9 @@ export const getActiveMaterials = createAsyncThunk(
       return await materialService.getActiveMaterials();
     } catch (error) {
       const message =
-        (error.response && error.response.data && error.response.data.message) ||
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -34,7 +36,9 @@ export const createMaterial = createAsyncThunk(
       return await materialService.createMaterial(materialData, token);
     } catch (error) {
       const message =
-        (error.response && error.response.data && error.response.data.message) ||
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -51,7 +55,9 @@ export const updateMaterial = createAsyncThunk(
       return await materialService.updateMaterial(materialData, token);
     } catch (error) {
       const message =
-        (error.response && error.response.data && error.response.data.message) ||
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -68,7 +74,9 @@ export const deleteMaterial = createAsyncThunk(
       return await materialService.deleteMaterial(materialID, token);
     } catch (error) {
       const message =
-        (error.response && error.response.data && error.response.data.message) ||
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
         error.message ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -130,7 +138,9 @@ export const materialSlice = createSlice({
         state.materialsLoading = false;
         state.materialsSuccess = true;
         state.materialsMessage = "Material updated!";
-        const index = state.materials.indexOf(action.payload._id);
+        const index = state.materials
+          .map((material) => material._id)
+          .indexOf(action.payload._id);
         state.materials.splice(index, 1, action.payload);
       })
       .addCase(updateMaterial.rejected, (state, action) => {
@@ -157,5 +167,6 @@ export const materialSlice = createSlice({
   },
 });
 
-export const { resetMaterialState, resetMaterialMessages } = materialSlice.actions;
+export const { resetMaterialState, resetMaterialMessages } =
+  materialSlice.actions;
 export default materialSlice.reducer;

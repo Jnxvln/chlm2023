@@ -47,7 +47,7 @@ function MaterialsDashboard() {
   const onDelete = (e, rowData) => {
     confirmPopup({
       target: e.target,
-      message: "Are you sure you want to delete?",
+      message: `Delete material ${rowData.name}?`,
       icon: "pi pi-exclamation-triangle",
       accept: () => dispatch(deleteMaterial(rowData._id)),
       reject: () => null,
@@ -64,8 +64,13 @@ function MaterialsDashboard() {
 
   // #region RESOURCE STATES & SELECT DATA
   // Select Material data
-  const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
-    useSelector((state) => state.materials);
+  const {
+    materials,
+    materialsLoading,
+    materialsError,
+    materialsSuccess,
+    materialsMessage,
+  } = useSelector((state) => state.materials);
 
   // Select MaterialCategory data
   const {
@@ -118,12 +123,16 @@ function MaterialsDashboard() {
   };
 
   const categoryItemTemplate = (option) => {
-    return <span className={`category status-${option.name}`}>{option.name}</span>;
+    return (
+      <span className={`category status-${option.name}`}>{option.name}</span>
+    );
   };
 
   const stockTemplate = (rowData) => {
     return (
-      <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>{rowData.stock}</span>
+      <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>
+        {rowData.stock}
+      </span>
     );
   };
 
@@ -147,7 +156,15 @@ function MaterialsDashboard() {
   };
 
   const binNumberTemplate = (rowData) => {
-    return <>{rowData.binNumber ? <span>Bin #{rowData.binNumber}</span> : <span></span>}</>;
+    return (
+      <>
+        {rowData.binNumber ? (
+          <span>Bin #{rowData.binNumber}</span>
+        ) : (
+          <span></span>
+        )}
+      </>
+    );
   };
 
   const actionsTemplate = (rowData) => {
@@ -282,7 +299,9 @@ function MaterialsDashboard() {
       let materialsListCopy = [];
 
       for (let i = 0; i < materials.length; i++) {
-        let category = materialCategories.find((cat) => cat._id === materials[i].category);
+        let category = materialCategories.find(
+          (cat) => cat._id === materials[i].category
+        );
 
         let materialCopy = { ...materials[i] };
         if (category && category.name) {
@@ -312,7 +331,10 @@ function MaterialsDashboard() {
     if (materialCategories.length > 0) {
       let cats = [];
       for (let i = 0; i < materialCategories.length; i++) {
-        cats.push({ name: materialCategories[i].name, _id: materialCategories[i]._id });
+        cats.push({
+          name: materialCategories[i].name,
+          _id: materialCategories[i]._id,
+        });
       }
       setMatCategories(cats);
     }

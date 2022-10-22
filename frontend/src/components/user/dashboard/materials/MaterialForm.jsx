@@ -8,7 +8,10 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { createMaterial, resetMaterialState } from "../../../../features/materials/materialSlice";
+import {
+  createMaterial,
+  resetMaterialState,
+} from "../../../../features/materials/materialSlice";
 import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
 
 function MaterialForm() {
@@ -31,8 +34,13 @@ function MaterialForm() {
   const dispatch = useDispatch();
 
   // SELECT MATERIALS FROM STORE
-  const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
-    useSelector((state) => state.materials);
+  const {
+    materials,
+    materialsLoading,
+    materialsError,
+    materialsSuccess,
+    materialsMessage,
+  } = useSelector((state) => state.materials);
 
   // SELECT MATERIAL CATEGORIES FROM STORE
   const {
@@ -81,7 +89,6 @@ function MaterialForm() {
   };
 
   const onChange = (e) => {
-    console.log(e.target.value);
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -122,7 +129,11 @@ function MaterialForm() {
 
   return (
     <section>
-      <Button label="New Material" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
+      <Button
+        label="New Material"
+        icon="pi pi-plus"
+        onClick={() => setFormDialog(true)}
+      />
 
       <Dialog
         header="Material Dialog"
@@ -130,6 +141,7 @@ function MaterialForm() {
         footer={renderFooter}
         onHide={onClose}
         style={{ width: "50vw" }}
+        blockScroll
       >
         <form onSubmit={onSubmit}>
           {/* NAME, CATEGORY, BIN NUMBER */}
@@ -323,13 +335,23 @@ function MaterialForm() {
 
             {/* Active */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+              <InputSwitch
+                id="isActive"
+                name="isActive"
+                checked={isActive}
+                onChange={onChange}
+              />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
+            <Button
+              type="submit"
+              label="Save"
+              iconPos="left"
+              icon="pi pi-save"
+            />
           </div>
         </form>
       </Dialog>

@@ -117,7 +117,12 @@ function EditMaterialForm({ material }) {
     if (materialCategoriesSuccess) {
       toast.success(materialCategoriesSuccess);
     }
-  }, [materialCategoriesError, materialCategoriesSuccess, materialCategoriesMessage, dispatch]);
+  }, [
+    materialCategoriesError,
+    materialCategoriesSuccess,
+    materialCategoriesMessage,
+    dispatch,
+  ]);
 
   return (
     <section>
@@ -134,6 +139,7 @@ function EditMaterialForm({ material }) {
         style={{ width: "50vw" }}
         footer={renderFooter}
         onHide={onClose}
+        blockScroll
       >
         <form onSubmit={onSubmit}>
           {/* NAME, CATEGORY, BIN NUMBER */}
@@ -345,13 +351,23 @@ function EditMaterialForm({ material }) {
 
             {/* Active */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+              <InputSwitch
+                id="isActive"
+                name="isActive"
+                checked={isActive}
+                onChange={onChange}
+              />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
+            <Button
+              type="submit"
+              label="Save"
+              iconPos="left"
+              icon="pi pi-save"
+            />
           </div>
         </form>
       </Dialog>

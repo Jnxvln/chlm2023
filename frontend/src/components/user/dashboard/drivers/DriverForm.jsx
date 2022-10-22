@@ -3,14 +3,15 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
-import { Dropdown } from "primereact/dropdown";
-import { InputTextarea } from "primereact/inputtextarea";
+import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
-import Spinner from "../../../../components/layout/Spinner";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { createDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
+import {
+  createDriver,
+  resetDriverMessages,
+} from "../../../../features/drivers/driverSlice";
 import { getDrivers } from "../../../../features/drivers/driverSlice";
 
 function DriverForm() {
@@ -31,9 +32,13 @@ function DriverForm() {
 
   const dispatch = useDispatch();
   // SELECT DRIVERS FROM STORE
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  const {
+    drivers,
+    driversLoading,
+    driversError,
+    driversSuccess,
+    driversMessage,
+  } = useSelector((state) => state.drivers);
 
   const {
     firstName,
@@ -71,11 +76,12 @@ function DriverForm() {
   };
 
   const onChange = (e) => {
-    console.log(e.target.value);
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    if (e.hasOwnProperty("target")) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
   };
 
   const onSubmit = (e) => {
@@ -100,13 +106,13 @@ function DriverForm() {
     dispatch(resetDriverMessages());
   }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
 
-  if (driversLoading) {
-    return <Spinner />;
-  }
-
   return (
     <section>
-      <Button label="New Driver" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
+      <Button
+        label="New Driver"
+        icon="pi pi-plus"
+        onClick={() => setFormDialog(true)}
+      />
 
       <Dialog
         header="Driver Dialog"
@@ -114,6 +120,7 @@ function DriverForm() {
         footer={renderFooter}
         onHide={onClose}
         style={{ width: "50vw" }}
+        blockScroll
       >
         <form onSubmit={onSubmit}>
           {/* FIRST NAME, LAST NAME, DEFAULT TRUCK */}
@@ -178,54 +185,65 @@ function DriverForm() {
             {/* End Dump Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="endDumpPayRate"
-                    name="endDumpPayRate"
-                    value={endDumpPayRate}
-                    placeholder="ED Rate"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
-                  <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
-                </span>
+                <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
+                <InputNumber
+                  id="endDumpPayRate"
+                  name="endDumpPayRate"
+                  value={endDumpPayRate}
+                  placeholder="ED Rate"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  suffix=" /ton"
+                  step={0.01}
+                  onChange={onChange}
+                  style={{ width: "100%" }}
+                  showButtons
+                  required
+                />
               </div>
             </div>
 
             {/* Flatbed Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="flatBedPayRate"
-                    name="flatBedPayRate"
-                    value={flatBedPayRate}
-                    placeholder="FB Rate"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
-                  <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
-                </span>
+                <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
+                <InputNumber
+                  id="flatBedPayRate"
+                  name="flatBedPayRate"
+                  value={flatBedPayRate}
+                  placeholder="FB Rate"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  suffix=" /ton"
+                  step={0.01}
+                  onChange={onChange}
+                  style={{ width: "100%" }}
+                  showButtons
+                  required
+                />
               </div>
             </div>
 
             {/* NC Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="ncRate"
-                    name="ncRate"
-                    value={ncRate}
-                    placeholder="NC Rate"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    required
-                  />
-                  <label htmlFor="ncRate">Non-commission Rate</label>
-                </span>
+                <label htmlFor="ncRate">Non-commission Rate</label>
+                <InputNumber
+                  id="ncRate"
+                  name="ncRate"
+                  value={ncRate}
+                  placeholder="NC Rate"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  suffix=" /hr"
+                  step={0.01}
+                  onChange={onChange}
+                  style={{ width: "100%" }}
+                  required
+                />
               </div>
             </div>
           </div>
@@ -270,14 +288,24 @@ function DriverForm() {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+                <InputSwitch
+                  id="isActive"
+                  name="isActive"
+                  checked={isActive}
+                  onChange={onChange}
+                />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
+            <Button
+              type="submit"
+              label="Save"
+              iconPos="left"
+              icon="pi pi-save"
+            />
           </div>
         </form>
       </Dialog>
