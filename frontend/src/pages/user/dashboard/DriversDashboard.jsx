@@ -11,10 +11,8 @@ import {
 } from "../../../features/drivers/driverSlice";
 import { Button } from "primereact/button";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { classNames } from "primereact/utils";
+import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
 import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
 import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag

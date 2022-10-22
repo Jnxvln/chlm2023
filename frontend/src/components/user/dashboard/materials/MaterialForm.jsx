@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createMaterial,
-  resetMaterialState,
 } from "../../../../features/materials/materialSlice";
 import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
 
@@ -29,6 +28,28 @@ function MaterialForm() {
     isActive: true,
   };
 
+  const stockStatuses = [
+    {
+      label: 'New',
+      value: 'new'
+    },
+    {
+      label: 'In',
+      value: 'in'
+    },
+    {
+      label: 'Low',
+      value: 'low'
+    },
+    {
+      label: 'Out',
+      value: 'out'
+    },
+    {
+      label: 'Not Avail',
+      value: 'notavail'
+    }
+  ]
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
@@ -36,7 +57,6 @@ function MaterialForm() {
   // SELECT MATERIALS FROM STORE
   const {
     materials,
-    materialsLoading,
     materialsError,
     materialsSuccess,
     materialsMessage,
@@ -45,9 +65,7 @@ function MaterialForm() {
   // SELECT MATERIAL CATEGORIES FROM STORE
   const {
     materialCategories,
-    materialCategoriesLoading,
     materialCategoriesError,
-    materialCategoriesSuccess,
     materialCategoriesMessage,
   } = useSelector((state) => state.materialCategories);
 
@@ -124,6 +142,7 @@ function MaterialForm() {
     materialsMessage,
     materialCategories,
     materialCategoriesError,
+    materialCategoriesMessage,
     dispatch,
   ]);
 
@@ -169,7 +188,6 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  {/* <InputText id="category" name="category" value={category} placeholder="Category" onChange={onChange} style={{ width: "100%" }} required /> */}
                   <Dropdown
                     name="category"
                     optionLabel="name"
@@ -246,14 +264,15 @@ function MaterialForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="stock"
+                  <Dropdown
                     name="stock"
+                    optionLabel="label"
+                    optionValue="value"
                     value={stock}
-                    placeholder="Stock"
+                    options={stockStatuses}
                     onChange={onChange}
+                    placeholder="Choose..."
                     style={{ width: "100%" }}
-                    required
                   />
                   <label htmlFor="stock">Stock</label>
                 </span>

@@ -4,8 +4,9 @@ import { InputText } from "primereact/inputtext";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
+import { ProgressBar } from "primereact/progressbar"
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { FilterMatchMode } from "primereact/api";
 import { classNames } from "primereact/utils";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,10 +31,10 @@ function MaterialsDashboard() {
   const stockStatuses = ["new", "in", "low", "out", "notavail"];
   const [matCategories, setMatCategories] = useState([]);
   const [stateMaterials, setStateMaterials] = useState(null);
-  const [globalFilterValue1, setGlobalFilterValue1] = useState("");
+  // const [globalFilterValue1, setGlobalFilterValue1] = useState("");
   const [globalFilterValue2, setGlobalFilterValue2] = useState("");
   const [materialRowSelected, setMaterialRowSelected] = useState(null);
-  const [filters1, setFilters1] = useState(null);
+  // const [filters1, setFilters1] = useState(null);
   const [filters2, setFilters2] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -129,10 +130,30 @@ function MaterialsDashboard() {
   };
 
   const stockTemplate = (rowData) => {
+
+    let progress
+
+    switch (rowData.stock.toLowerCase()) {
+      case 'new':
+        progress = 100
+        break
+      case 'in':
+        progress = 75
+        break
+      case 'low':
+        progress = 25
+        break
+      case 'out':
+        progress = 0
+        break
+      default:
+        progress = 0
+    }
+
     return (
-      <span className={`product-badge status-${rowData.stock.toLowerCase()}`}>
-        {rowData.stock}
-      </span>
+      <>
+        <ProgressBar progress={progress} inline sx={{width: '100px'}} />
+      </>
     );
   };
 
@@ -232,14 +253,14 @@ function MaterialsDashboard() {
   // #endregion
 
   // #region FILTER HANDLERS
-  const onGlobalFilterChange1 = (e) => {
-    const value = e.target.value;
-    let _filters1 = { ...filters1 };
-    _filters1["global"].value = value;
+  // const onGlobalFilterChange1 = (e) => {
+  //   const value = e.target.value;
+  //   let _filters1 = { ...filters1 };
+  //   _filters1["global"].value = value;
 
-    setFilters1(_filters1);
-    setGlobalFilterValue1(value);
-  };
+  //   setFilters1(_filters1);
+  //   setGlobalFilterValue1(value);
+  // };
 
   const onGlobalFilterChange2 = (e) => {
     const value = e.target.value;
@@ -250,25 +271,25 @@ function MaterialsDashboard() {
     setGlobalFilterValue2(value);
   };
 
-  const clearFilter1 = () => {
-    initFilters1();
-  };
+  // const clearFilter1 = () => {
+  //   initFilters1();
+  // };
 
-  const initFilters1 = () => {
-    setFilters1({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      stock: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-      category: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
-      isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
-    });
+  // const initFilters1 = () => {
+  //   setFilters1({
+  //     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  //     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  //     stock: {
+  //       operator: FilterOperator.OR,
+  //       constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+  //     },
+  //     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  //     isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
+  //     isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
+  //   });
 
-    setGlobalFilterValue1("");
-  };
+  //   setGlobalFilterValue1("");
+  // };
   // #endregion
 
   // Fetch resources once (no dependencies)
@@ -281,7 +302,7 @@ function MaterialsDashboard() {
       dispatch(getMaterialCategories());
     }
 
-    initFilters1();
+    // initFilters1();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -344,29 +365,7 @@ function MaterialsDashboard() {
     return <Spinner />;
   }
 
-  const header = <div className="table-header">Products</div>;
-
-  const renderHeader1 = () => {
-    return (
-      <div className="flex justify-content-between">
-        <Button
-          type="button"
-          icon="pi pi-filter-slash"
-          label="Clear"
-          className="p-button-outlined"
-          onClick={() => {}}
-        />
-        <span className="p-input-icon-left">
-          <i className="pi pi-search" />
-          <InputText
-            value={globalFilterValue1}
-            onChange={onGlobalFilterChange1}
-            placeholder="Keyword Search"
-          />
-        </span>
-      </div>
-    );
-  };
+  // const header = <div className="table-header">Products</div>;
 
   const renderHeader2 = () => {
     return (
@@ -386,9 +385,6 @@ function MaterialsDashboard() {
     );
   };
 
-  // Choose whichever you like (header2 puts filters on separate row)
-  // Also choose between filters (use filters1 with header1, filters2 with header2)
-  const header1 = renderHeader1();
   const header2 = renderHeader2();
 
   return (
@@ -396,8 +392,6 @@ function MaterialsDashboard() {
       <h1 style={{ textAlign: "center", fontSize: "20pt" }}>Materials</h1>
 
       <ConfirmPopup />
-
-      {/* <MaterialForm /> */}
 
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
