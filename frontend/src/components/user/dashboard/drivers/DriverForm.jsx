@@ -8,10 +8,7 @@ import { Calendar } from "primereact/calendar";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  createDriver,
-  resetDriverMessages,
-} from "../../../../features/drivers/driverSlice";
+import { createDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
 import { getDrivers } from "../../../../features/drivers/driverSlice";
 
 function DriverForm() {
@@ -32,13 +29,9 @@ function DriverForm() {
 
   const dispatch = useDispatch();
   // SELECT DRIVERS FROM STORE
-  const {
-    drivers,
-    driversLoading,
-    driversError,
-    driversSuccess,
-    driversMessage,
-  } = useSelector((state) => state.drivers);
+  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
+    (state) => state.drivers
+  );
 
   const {
     firstName,
@@ -75,6 +68,7 @@ function DriverForm() {
     );
   };
 
+  // Handle form text input
   const onChange = (e) => {
     if (e.hasOwnProperty("target")) {
       setFormData((prevState) => ({
@@ -84,6 +78,15 @@ function DriverForm() {
     }
   };
 
+  // Handle form number input
+  const onChangeNumber = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.originalEvent.target.name]: e.originalEvent.target.value,
+    }));
+  };
+
+  // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(createDriver(formData));
@@ -108,11 +111,7 @@ function DriverForm() {
 
   return (
     <section>
-      <Button
-        label="New Driver"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Driver" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         header="Driver Dialog"
@@ -191,14 +190,11 @@ function DriverForm() {
                   name="endDumpPayRate"
                   value={endDumpPayRate}
                   placeholder="ED Rate"
-                  mode="currency"
-                  currency="USD"
-                  locale="en-US"
-                  suffix=" /ton"
+                  mode="decimal"
+                  minFractionDigits={2}
                   step={0.01}
-                  onChange={onChange}
+                  onChange={onChangeNumber}
                   style={{ width: "100%" }}
-                  showButtons
                   required
                 />
               </div>
@@ -212,15 +208,12 @@ function DriverForm() {
                   id="flatBedPayRate"
                   name="flatBedPayRate"
                   value={flatBedPayRate}
-                  placeholder="FB Rate"
-                  mode="currency"
-                  currency="USD"
-                  locale="en-US"
+                  mode="decimal"
+                  minFractionDigits={2}
                   suffix=" /ton"
                   step={0.01}
-                  onChange={onChange}
+                  onChange={onChangeNumber}
                   style={{ width: "100%" }}
-                  showButtons
                   required
                 />
               </div>
@@ -235,12 +228,10 @@ function DriverForm() {
                   name="ncRate"
                   value={ncRate}
                   placeholder="NC Rate"
-                  mode="currency"
-                  currency="USD"
-                  locale="en-US"
-                  suffix=" /hr"
+                  mode="decimal"
+                  minFractionDigits={2}
                   step={0.01}
-                  onChange={onChange}
+                  onChange={onChangeNumber}
                   style={{ width: "100%" }}
                   required
                 />
@@ -288,24 +279,14 @@ function DriverForm() {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch
-                  id="isActive"
-                  name="isActive"
-                  checked={isActive}
-                  onChange={onChange}
-                />
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button
-              type="submit"
-              label="Save"
-              iconPos="left"
-              icon="pi pi-save"
-            />
+            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
           </div>
         </form>
       </Dialog>

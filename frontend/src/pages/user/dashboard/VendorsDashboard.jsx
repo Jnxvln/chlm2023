@@ -1,50 +1,45 @@
 import React, { useState, useEffect } from "react";
-import dayjs from "dayjs";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getDrivers,
-  deleteDriver,
-  resetDriverMessages,
-} from "../../../features/drivers/driverSlice";
+  getVendors,
+  deleteVendor,
+  resetVendorMessages,
+} from "../../../features/vendors/vendorSlice";
 import { Button } from "primereact/button";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { classNames } from "primereact/utils";
+import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
-import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
-import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
+import VendorForm from "../../../components/user/dashboard/vendors/VendorForm";
+import EditVendorForm from "../../../components/user/dashboard/vendors/EditVendorForm";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
-function DriversDashboard() {
+function VendorsDashboard() {
   const dispatch = useDispatch();
 
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const [driverRowSelected, setDriverRowSelected] = useState(null);
+  const [vendorRowSelected, setVendorRowSelected] = useState(null);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    // category: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    shortName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  // Select Drivers from store slice
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
+  // Select Vendors from store slice
+  const { vendors, vendorsLoading, vendorsError, vendorsSuccess, vendorsMessage } = useSelector(
+    (state) => state.vendors
   );
 
-  // Delete driver confirmation
+  // Delete vendor confirmation
   const onDelete = (e, rowData) => {
     confirmPopup({
       target: e.target,
-      message: `Delete driver ${rowData.firstName} ${rowData.lastName}?`,
+      message: `Delete vendor ${rowData.name}?`,
       icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteDriver(rowData._id)),
+      accept: () => dispatch(deleteVendor(rowData._id)),
       reject: () => null,
     });
   };
@@ -64,26 +59,18 @@ function DriversDashboard() {
     return (
       <div className="flex justify-content-between">
         <div>
-          <DriverForm />
+          <VendorForm />
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputText
             value={globalFilterValue}
             onChange={onGlobalFilterChange}
-            placeholder="First, last, or truck #"
+            placeholder="Name or short name"
           />
         </span>
       </div>
     );
-  };
-
-  const dateHiredTemplate = (rowData) => {
-    return <>{dayjs(rowData.dateHired).format("MM/DD/YYYY")}</>;
-  };
-
-  const dateReleasedTemplate = (rowData) => {
-    return <>{rowData.dateReleased ? dayjs(rowData.dateReleased).format("MM/DD/YY") : ""}</>;
   };
 
   const isActiveTemplate = (rowData) => {
@@ -108,22 +95,18 @@ function DriversDashboard() {
     );
   };
 
-  const endDumpPayRateTemplate = (rowData) => {
-    return <>{parseFloat(rowData.endDumpPayRate).toFixed(2)}</>;
+  const chtFuelSurchargeTemplate = (rowData) => {
+    return <>{parseFloat(rowData.chtFuelSurcharge).toFixed(2)}</>;
   };
 
-  const flatBedPayRateTemplate = (rowData) => {
-    return <>{parseFloat(rowData.flatBedPayRate).toFixed(2)}</>;
-  };
-
-  const ncRateTemplate = (rowData) => {
-    return <>{parseFloat(rowData.ncRate).toFixed(2)}</>;
+  const vendorFuelSurchargeTemplate = (rowData) => {
+    return <>{parseFloat(rowData.vendorFuelSurcharge).toFixed(2)}</>;
   };
 
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        <EditDriverForm driver={rowData} />
+        <EditVendorForm vendor={rowData} />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
@@ -137,9 +120,8 @@ function DriversDashboard() {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      shortName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     });
 
     setGlobalFilterValue("");
@@ -147,34 +129,41 @@ function DriversDashboard() {
 
   // RUN ONCE - FETCH
   useEffect(() => {
-    if (drivers.length === 0) {
-      dispatch(getDrivers());
+    if (vendors.length === 0) {
+      console.log("dispatching getVendors()");
+      dispatch(getVendors());
     }
 
     initFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // RUN EACH
   useEffect(() => {
-    if (driversError) {
-      toast.error(driversMessage);
+    if (vendorsError) {
+      toast.error(vendorsMessage);
     }
 
-    dispatch(resetDriverMessages());
-  }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
+    if (vendorsSuccess) {
+      toast.success(vendorsMessage);
+    }
+
+    dispatch(resetVendorMessages());
+  }, [vendors, vendorsError, vendorsSuccess, vendorsMessage, dispatch]);
+
   return (
     <section>
-      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Drivers</h1>
+      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Vendors</h1>
 
       <ConfirmPopup />
 
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={drivers}
-            loading={driversLoading}
+            value={vendors}
+            loading={vendorsLoading}
             header={dataTableHeaderTemplate}
-            globalFilterFields={["firstName", "lastName", "defaultTruck"]}
+            globalFilterFields={["name", "shortName"]}
             size="small"
             scrollable
             scrollHeight="flex"
@@ -186,12 +175,12 @@ function DriversDashboard() {
             filterDisplay="row"
             onFilter={(e) => setFilters(e.filters)}
             selectionMode="single"
-            selection={driverRowSelected}
-            onSelectionChange={(e) => setDriverRowSelected(e.value)}
+            selection={vendorRowSelected}
+            onSelectionChange={(e) => setVendorRowSelected(e.value)}
             dataKey="_id"
             stateStorage="session"
-            stateKey="dt-drivers-session"
-            emptyMessage="No drivers found"
+            stateKey="dt-vendors-session"
+            emptyMessage="No vendors found"
             stripedRows
           >
             {/* IS ACTIVE */}
@@ -204,66 +193,46 @@ function DriversDashboard() {
               sortable
             ></Column>
 
-            {/* FIRST NAME */}
+            {/* NAME */}
             <Column
-              field="firstName"
-              header="First"
+              field="name"
+              header="Name"
               filter
-              filterField="firstName"
+              filterField="name"
               filterClear={filterClearTemplate}
               style={{ minWidth: "12em" }}
               sortable
             ></Column>
 
-            {/* LAST NAME */}
+            {/* SHORT NAME */}
             <Column
-              field="lastName"
-              header="Last"
+              field="shortName"
+              header="Short Name"
               filter
-              filterField="lastName"
+              filterField="shortName"
               filterClear={filterClearTemplate}
               style={{ minWidth: "12em" }}
               sortable
             ></Column>
 
-            {/* DEFAULT TRUCK */}
-            <Column field="defaultTruck" header="Truck" sortable></Column>
-
-            {/* END DUMP PAY RATE */}
+            {/* CHT FSC */}
             <Column
-              field="endDumpPayRate"
-              header="ED Rate"
-              body={endDumpPayRateTemplate}
+              field="chtFuelSurcharge"
+              dataType="number"
+              header="CHT FSC"
+              style={{ minWidth: "12em" }}
               sortable
+              body={chtFuelSurchargeTemplate}
             ></Column>
 
-            {/* FLAT BED PAY RATE */}
+            {/* VENDOR FSC */}
             <Column
-              field="flatBedPayRate"
-              header="FB Rate"
-              body={flatBedPayRateTemplate}
+              field="vendorFuelSurcharge"
+              dataType="number"
+              header="Vendor FSC"
+              style={{ minWidth: "12em" }}
               sortable
-            ></Column>
-
-            {/* NC RATE */}
-            <Column field="ncRate" header="NC Rate" body={ncRateTemplate} sortable></Column>
-
-            {/* DATE HIRED */}
-            <Column
-              header="Hired"
-              body={dateHiredTemplate}
-              dataType="date"
-              sortable
-              sortField="dateHired"
-            ></Column>
-
-            {/* DATE RELESED */}
-            <Column
-              header="Released"
-              body={dateReleasedTemplate}
-              dataType="date"
-              sortable
-              sortField="dateReleased"
+              body={vendorFuelSurchargeTemplate}
             ></Column>
 
             {/* ACTIONS */}
@@ -275,4 +244,4 @@ function DriversDashboard() {
   );
 }
 
-export default DriversDashboard;
+export default VendorsDashboard;

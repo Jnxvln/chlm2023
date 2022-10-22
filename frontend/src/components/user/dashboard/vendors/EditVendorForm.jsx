@@ -4,22 +4,16 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
-import { Calendar } from "primereact/calendar";
-
 import { useDispatch } from "react-redux";
-import { updateDriver } from "../../../../features/drivers/driverSlice";
+import { updateVendor } from "../../../../features/vendors/vendorSlice";
 
-function EditDriverForm({ driver }) {
+function EditVendorForm({ vendor }) {
   const initialState = {
     _id: "",
-    firstName: "",
-    lastName: "",
-    endDumpPayRate: "",
-    flatBedPayRate: "",
-    ncRate: "",
-    defaultTruck: "",
-    dateHired: "",
-    dateReleased: "",
+    name: "",
+    shortName: "",
+    chtFuelSurcharge: "",
+    vendorFuelSurcharge: "",
     isActive: true,
   };
   const [formDialog, setFormDialog] = useState(false);
@@ -27,18 +21,7 @@ function EditDriverForm({ driver }) {
   const dispatch = useDispatch();
 
   // Destructure form data
-  const {
-    _id,
-    firstName,
-    lastName,
-    endDumpPayRate,
-    flatBedPayRate,
-    ncRate,
-    defaultTruck,
-    dateHired,
-    dateReleased,
-    isActive,
-  } = formData;
+  const { _id, name, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
 
   // Dialog footer
   const renderFooter = () => {
@@ -76,7 +59,7 @@ function EditDriverForm({ driver }) {
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateDriver(formData));
+    dispatch(updateVendor(formData));
     onClose();
   };
 
@@ -85,24 +68,20 @@ function EditDriverForm({ driver }) {
     setFormDialog(false);
   };
 
-  // Set form data to `driver` prop
+  // Set form data to `vendor` prop
   useEffect(() => {
-    if (driver) {
+    if (vendor) {
       setFormData((prevState) => ({
         ...prevState,
-        _id: driver._id,
-        firstName: driver.firstName,
-        lastName: driver.lastName,
-        endDumpPayRate: driver.endDumpPayRate,
-        flatBedPayRate: driver.flatBedPayRate,
-        ncRate: driver.ncRate,
-        defaultTruck: driver.defaultTruck,
-        dateHired: driver.dateHired,
-        dateReleased: driver.dateReleased,
-        isActive: driver.isActive,
+        _id: vendor._id,
+        name: vendor.name,
+        shortName: vendor.shortName,
+        chtFuelSurcharge: vendor.chtFuelSurcharge,
+        vendorFuelSurcharge: vendor.vendorFuelSurcharge,
+        isActive: vendor.isActive,
       }));
     }
-  }, [driver]);
+  }, [vendor]);
 
   return (
     <section>
@@ -114,7 +93,7 @@ function EditDriverForm({ driver }) {
       />
 
       <Dialog
-        header="Edit Driver Dialog"
+        header="Edit Vendor Dialog"
         visible={formDialog}
         style={{ width: "50vw" }}
         footer={renderFooter}
@@ -122,7 +101,7 @@ function EditDriverForm({ driver }) {
         blockScroll
       >
         <form onSubmit={onSubmit}>
-          {/* FIRST NAME, LAST NAME, DEFAULT TRUCK */}
+          {/* ID, NAME, SHORT NAME */}
           <div className="formgrid grid">
             {/* ID */}
             <div className="field col">
@@ -143,72 +122,55 @@ function EditDriverForm({ driver }) {
               </div>
             </div>
 
-            {/* First Name */}
+            {/* Name */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
                   <InputText
-                    id="firstName"
-                    name="firstName"
-                    value={firstName}
-                    placeholder="First name"
+                    id="name"
+                    name="name"
+                    value={name}
+                    placeholder="Name"
                     onChange={onChange}
                     style={{ width: "100%" }}
                     autoFocus
                     required
                   />
-                  <label htmlFor="firstName">First Name</label>
+                  <label htmlFor="name">Name</label>
                 </span>
               </div>
             </div>
 
-            {/* Last Name */}
+            {/* Short Name */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
                   <InputText
-                    id="lastName"
-                    name="lastName"
-                    value={lastName}
-                    placeholder="Last name"
+                    id="shortName"
+                    name="shortName"
+                    value={shortName}
+                    placeholder="Short Name"
                     onChange={onChange}
                     style={{ width: "100%" }}
                     required
                   />
-                  <label htmlFor="lastName">Last Name</label>
-                </span>
-              </div>
-            </div>
-
-            {/* Default Truck */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="defaultTruck"
-                    name="defaultTruck"
-                    value={defaultTruck}
-                    placeholder="Truck #"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="defaultTruck">Truck #</label>
+                  <label htmlFor="shortName">Short Name</label>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* ENDDUMP RATE, FLATBED RATE, NC RATE */}
+          {/* CHT FUEL SCHG, VENDOR FUEL SCHG */}
           <div className="formgrid grid">
-            {/* End Dump Pay Rate */}
+            {/* CHT Fuel Schg */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
+                <label htmlFor="chtFuelSurcharge">CHT Fuel Schg</label>
                 <InputNumber
-                  id="endDumpPayRate"
-                  name="endDumpPayRate"
-                  value={endDumpPayRate}
-                  placeholder="ED Rate"
+                  id="chtFuelSurcharge"
+                  name="chtFuelSurcharge"
+                  value={chtFuelSurcharge}
+                  placeholder="CHT Fuel Schg"
                   mode="decimal"
                   minFractionDigits={2}
                   step={0.01}
@@ -219,15 +181,15 @@ function EditDriverForm({ driver }) {
               </div>
             </div>
 
-            {/* Flatbed Pay Rate */}
+            {/* Vendor Fuel Schg */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
+                <label htmlFor="vendorFuelSurcharge">Vendor Fuel Schg</label>
                 <InputNumber
-                  id="flatBedPayRate"
-                  name="flatBedPayRate"
-                  value={flatBedPayRate}
-                  placeholder="FB Rate"
+                  id="vendorFuelSurcharge"
+                  name="vendorFuelSurcharge"
+                  value={vendorFuelSurcharge}
+                  placeholder="Vendor Fuel Schg"
                   mode="decimal"
                   minFractionDigits={2}
                   step={0.01}
@@ -235,60 +197,6 @@ function EditDriverForm({ driver }) {
                   style={{ width: "100%" }}
                   required
                 />
-              </div>
-            </div>
-
-            {/* NC Rate */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="ncRate">Non-commission Rate</label>
-                <InputNumber
-                  id="ncRate"
-                  name="ncRate"
-                  value={ncRate}
-                  placeholder="NC Rate"
-                  mode="decimal"
-                  minFractionDigits={2}
-                  step={0.01}
-                  onChange={onChangeNumber}
-                  style={{ width: "100%" }}
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* DATE HIRED, DATE RELEASED */}
-          <div className="formgrid grid">
-            {/* Date Hired */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <Calendar
-                    id="dateHired"
-                    name="dateHired"
-                    value={new Date(dateHired)}
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  ></Calendar>
-                  <label htmlFor="dateHired">Date Hired</label>
-                </span>
-              </div>
-            </div>
-
-            {/* Date Released */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <Calendar
-                    id="dateReleased"
-                    name="dateReleased"
-                    value={new Date(dateReleased)}
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  ></Calendar>
-                  <label htmlFor="dateReleased">Date Released</label>
-                </span>
               </div>
             </div>
           </div>
@@ -313,4 +221,4 @@ function EditDriverForm({ driver }) {
   );
 }
 
-export default EditDriverForm;
+export default EditVendorForm;

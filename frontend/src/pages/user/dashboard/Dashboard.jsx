@@ -5,7 +5,7 @@ import { TabView, TabPanel } from "primereact/tabview";
 import HaulsDashboard from "./HaulsDashboard";
 import DeliveriesDashboard from "./DeliveriesDashboard";
 import FreightRoutesDashboard from "./FreightRoutesDashboard";
-import VendorsAndProductsDashboard from "./VendorsAndProductsDashboard";
+import VendorsDashboard from "./VendorsDashboard";
 import MaterialsDashboard from "./MaterialsDashboard";
 import CarportsDashboard from "./CarportsDashboard";
 import DriversDashboard from "./DriversDashboard";
@@ -27,10 +27,7 @@ function Dashboard() {
       <h1>Dashboard</h1>
       <h4>Welcome, {user && user.firstName}</h4>
 
-      <TabView
-        activeIndex={tabsActiveIndex}
-        onTabChange={(e) => setTabsActiveIndex(e.index)}
-      >
+      <TabView activeIndex={tabsActiveIndex} onTabChange={(e) => setTabsActiveIndex(e.index)}>
         <TabPanel header="Hauls">
           <HaulsDashboard />
         </TabPanel>
@@ -40,8 +37,8 @@ function Dashboard() {
         <TabPanel header="Freight Routes">
           <FreightRoutesDashboard />
         </TabPanel>
-        <TabPanel header="Vendors & Products">
-          <VendorsAndProductsDashboard />
+        <TabPanel header="Vendors">
+          <VendorsDashboard />
         </TabPanel>
         <TabPanel header="Materials">
           <MaterialsDashboard />
