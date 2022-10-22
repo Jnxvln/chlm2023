@@ -8,10 +8,10 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  createMaterial,
-} from "../../../../features/materials/materialSlice";
+import { createMaterial } from "../../../../features/materials/materialSlice";
 import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function MaterialForm() {
   const initialState = {
@@ -30,37 +30,33 @@ function MaterialForm() {
 
   const stockStatuses = [
     {
-      label: 'New',
-      value: 'new'
+      label: "New",
+      value: "new",
     },
     {
-      label: 'In',
-      value: 'in'
+      label: "In",
+      value: "in",
     },
     {
-      label: 'Low',
-      value: 'low'
+      label: "Low",
+      value: "low",
     },
     {
-      label: 'Out',
-      value: 'out'
+      label: "Out",
+      value: "out",
     },
     {
-      label: 'Not Avail',
-      value: 'notavail'
-    }
-  ]
+      label: "Not Avail",
+      value: "notavail",
+    },
+  ];
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
   // SELECT MATERIALS FROM STORE
-  const {
-    materials,
-    materialsError,
-    materialsSuccess,
-    materialsMessage,
-  } = useSelector((state) => state.materials);
+  const { materials, materialsError, materialsSuccess, materialsMessage } =
+    useSelector((state) => state.materials);
 
   // SELECT MATERIAL CATEGORIES FROM STORE
   const {
@@ -83,6 +79,16 @@ function MaterialForm() {
     isActive,
   } = formData;
 
+  // #region COMPONENT RENDERERS
+  const materialDialogHeader = () => {
+    return <DialogHeader resourceType="Material" isEdit={false} />;
+  };
+
+  const materialDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
   const resetForm = () => {
     setFormData(initialState);
   };
@@ -90,20 +96,6 @@ function MaterialForm() {
   const onClose = () => {
     resetForm();
     setFormDialog(false);
-  };
-
-  const renderFooter = () => {
-    return (
-      <div>
-        <Button
-          type="button"
-          label="Cancel"
-          icon="pi pi-times"
-          onClick={onClose}
-          className="p-button-text"
-        />
-      </div>
-    );
   };
 
   const onChange = (e) => {
@@ -155,9 +147,10 @@ function MaterialForm() {
       />
 
       <Dialog
-        header="Material Dialog"
+        id="newMaterialDialog"
         visible={formDialog}
-        footer={renderFooter}
+        header={materialDialogHeader}
+        footer={materialDialogFooter}
         onHide={onClose}
         style={{ width: "50vw" }}
         blockScroll
@@ -362,15 +355,6 @@ function MaterialForm() {
               />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
-          </div>
-
-          <div style={{ marginTop: "1em" }}>
-            <Button
-              type="submit"
-              label="Save"
-              iconPos="left"
-              icon="pi pi-save"
-            />
           </div>
         </form>
       </Dialog>

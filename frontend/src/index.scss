@@ -1,0 +1,84 @@
+@import "./styles/_colors.scss";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: $body-background-primary;
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+}
+
+form {
+  padding: 1em;
+}
+
+.p-dialog-header {
+  background-color: $default-dialog-header-backgroundColor;
+  padding: 0;
+  border: none;
+  border-radius: none;
+}
+
+// #region VENDOR DIALOG STYLES ===========================
+
+// Vendor Dialog Styles
+#editVendorDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newVendorDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
+// Material Dialog Styles
+#editMaterialDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newMaterialDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
+// Driver Dialog Styles
+#editDriverDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newDriverDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+// #endregion =========================================
+
+.dialog-header {
+  color: rgb(240, 240, 240);
+  padding: 0.6em;
+}
+
+.dialog-header-editVendor {
+  background-color: orange;
+  padding: 0.6em;
+}
+
+.dialog-title {
+  margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: normal;
+  font-size: 18pt;
+}
+
+.p-dialog-header-close-icon.pi.pi-times {
+  color: white;
+  font-weight: bold;
+  font-size: 14pt;
+}
+
+.vendors-dialog-header {
+  padding: 0.5em;
+}

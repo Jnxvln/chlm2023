@@ -5,9 +5,10 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
-
 import { useDispatch } from "react-redux";
 import { updateDriver } from "../../../../features/drivers/driverSlice";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function EditDriverForm({ driver }) {
   const initialState = {
@@ -40,20 +41,46 @@ function EditDriverForm({ driver }) {
     isActive,
   } = formData;
 
-  // Dialog footer
-  const renderFooter = () => {
+  const resetForm = () => {
+    if (driver) {
+      setFormData((prevState) => ({
+        ...prevState,
+        _id: driver._id,
+        firstName: driver.firstName,
+        lastName: driver.lastName,
+        endDumpPayRate: driver.endDumpPayRate,
+        flatBedPayRate: driver.flatBedPayRate,
+        ncRate: driver.ncRate,
+        defaultTruck: driver.defaultTruck,
+        dateHired: driver.dateHired,
+        dateReleased: driver.dateReleased,
+        isActive: driver.isActive,
+      }));
+    } else {
+      setFormData(initialState);
+    }
+  };
+
+  const onClose = () => {
+    resetForm();
+    setFormDialog(false);
+  };
+
+  // #region COMPONENT RENDERERS
+  const driverDialogHeader = () => {
     return (
-      <div>
-        <Button
-          type="button"
-          label="Cancel"
-          icon="pi pi-times"
-          onClick={onClose}
-          className="p-button-text"
-        />
-      </div>
+      <DialogHeader
+        resourceType="Driver"
+        resourceName={`${driver.firstName} ${driver.lastName}`}
+        isEdit
+      />
     );
   };
+
+  const driverDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
 
   // Handle form text input
   const onChange = (e) => {
@@ -78,11 +105,6 @@ function EditDriverForm({ driver }) {
     e.preventDefault();
     dispatch(updateDriver(formData));
     onClose();
-  };
-
-  // Clear form on dialog close
-  const onClose = () => {
-    setFormDialog(false);
   };
 
   // Set form data to `driver` prop
@@ -114,10 +136,11 @@ function EditDriverForm({ driver }) {
       />
 
       <Dialog
-        header="Edit Driver Dialog"
+        id="editDriverDialog"
         visible={formDialog}
         style={{ width: "50vw" }}
-        footer={renderFooter}
+        header={driverDialogHeader}
+        footer={driverDialogFooter}
         onHide={onClose}
         blockScroll
       >
@@ -298,14 +321,15 @@ function EditDriverForm({ driver }) {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+                <InputSwitch
+                  id="isActive"
+                  name="isActive"
+                  checked={isActive}
+                  onChange={onChange}
+                />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>
-          </div>
-
-          <div style={{ marginTop: "1em" }}>
-            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
           </div>
         </form>
       </Dialog>

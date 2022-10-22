@@ -4,7 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { ProgressBar } from 'primereact/progressbar';
+import { ProgressBar } from "primereact/progressbar";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { classNames } from "primereact/utils";
@@ -88,10 +88,10 @@ function MaterialsDashboard() {
     return (
       <img
         src={`${rowData.image}`}
-        width="100"
-        height="100"
-        alt="Test alt"
-        className="product-image"
+        width="80%"
+        height="auto"
+        alt={rowData.name}
+        className="material-img"
       />
     );
   };
@@ -130,44 +130,47 @@ function MaterialsDashboard() {
   };
 
   const stockTemplate = (rowData) => {
-
     let progress = {
-      value: '',
-      color: ''
-    }
+      value: "",
+      color: "",
+    };
 
     switch (rowData.stock.toLowerCase()) {
-      case 'new':
-        progress.value = 100
-        progress.color = '#68DF2C'
-        break
-      case 'in':
-        progress.value = 50
-        progress.color = '#F4BD2B'
-        break
-      case 'low':
-        progress.value = 25
-        progress.color = '#F37531'
-        break
-      case 'out':
-        progress.value = 2
-        progress.color = '#DF1C1C'
-        break
-      case 'notavail':
-        progress.value = 0
-        progress.color = '#F35131'
-        break
+      case "new":
+        progress.value = 100;
+        progress.color = "#68DF2C";
+        break;
+      case "in":
+        progress.value = 50;
+        progress.color = "#F4BD2B";
+        break;
+      case "low":
+        progress.value = 25;
+        progress.color = "#F37531";
+        break;
+      case "out":
+        progress.value = 2;
+        progress.color = "#DF1C1C";
+        break;
+      case "notavail":
+        progress.value = 0;
+        progress.color = "#F35131";
+        break;
       default:
-        progress.value = 0
-        progress.color = '#F35131'
-        break
+        progress.value = 0;
+        progress.color = "#F35131";
+        break;
     }
 
     return (
-      <div style={{ width: '100%' }}>
-        <ProgressBar value={progress.value} color={progress.color} style={{ height: '6px' }} />
+      <div style={{ width: "100%" }}>
+        <ProgressBar
+          value={progress.value}
+          color={progress.color}
+          style={{ height: "6px" }}
+        />
       </div>
-    )
+    );
   };
 
   const stockItemTemplate = (option) => {
@@ -404,7 +407,8 @@ function MaterialsDashboard() {
     <section>
       <h1 style={{ textAlign: "center", fontSize: "20pt" }}>Materials</h1>
 
-      <br/><br/>
+      <br />
+      <br />
 
       <ConfirmPopup />
 
@@ -441,7 +445,14 @@ function MaterialsDashboard() {
             stripedRows
           >
             {/* IMAGE COLUMN */}
-            <Column header="Image" body={imageBodyTemplate}></Column>
+            <Column
+              header="Image"
+              style={{ minWidth: "120px" }}
+              body={imageBodyTemplate}
+            ></Column>
+
+            {/* BIN NUMBER COLUMN */}
+            <Column sortable header="Bin" body={binNumberTemplate}></Column>
 
             {/* NAME COLUMN */}
             <Column
@@ -465,9 +476,6 @@ function MaterialsDashboard() {
               filterMenuStyle={{ width: "14rem" }}
               style={{ minWidth: "14rem" }}
             ></Column>
-
-            {/* BIN NUMBER COLUMN */}
-            <Column sortable header="Bin" body={binNumberTemplate}></Column>
 
             {/* STOCK COLUMN */}
             <Column
