@@ -28,7 +28,6 @@ function DriversDashboard() {
     firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    // category: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   // Select Drivers from store slice
@@ -150,6 +149,7 @@ function DriversDashboard() {
     }
 
     initFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // RUN EACH

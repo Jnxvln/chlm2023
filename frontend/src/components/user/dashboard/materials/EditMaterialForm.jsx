@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 // import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { updateMaterial } from "../../../../features/materials/materialSlice";
-import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
+// import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
 
 function EditMaterialForm({ material }) {
   const initialState = {
@@ -58,7 +58,6 @@ function EditMaterialForm({ material }) {
   // SELECT MATERIAL CATEGORIES FROM STORE
   const {
     materialCategories,
-    materialCategoriesLoading,
     materialCategoriesError,
     materialCategoriesSuccess,
     materialCategoriesMessage,

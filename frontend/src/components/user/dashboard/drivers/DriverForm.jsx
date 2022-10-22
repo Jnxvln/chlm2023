@@ -29,7 +29,7 @@ function DriverForm() {
 
   const dispatch = useDispatch();
   // SELECT DRIVERS FROM STORE
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
+  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
     (state) => state.drivers
   );
 
