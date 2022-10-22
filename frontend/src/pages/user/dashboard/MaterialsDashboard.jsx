@@ -4,7 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { ProgressBar } from "primereact/progressbar"
+import { ProgressBar } from 'primereact/progressbar';
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { classNames } from "primereact/utils";
@@ -131,30 +131,43 @@ function MaterialsDashboard() {
 
   const stockTemplate = (rowData) => {
 
-    let progress
+    let progress = {
+      value: '',
+      color: ''
+    }
 
     switch (rowData.stock.toLowerCase()) {
       case 'new':
-        progress = 100
+        progress.value = 100
+        progress.color = '#68DF2C'
         break
       case 'in':
-        progress = 75
+        progress.value = 50
+        progress.color = '#F4BD2B'
         break
       case 'low':
-        progress = 25
+        progress.value = 25
+        progress.color = '#F37531'
         break
       case 'out':
-        progress = 0
+        progress.value = 2
+        progress.color = '#DF1C1C'
+        break
+      case 'notavail':
+        progress.value = 0
+        progress.color = '#F35131'
         break
       default:
-        progress = 0
+        progress.value = 0
+        progress.color = '#F35131'
+        break
     }
 
     return (
-      <>
-        <ProgressBar progress={progress} inline sx={{width: '100px'}} />
-      </>
-    );
+      <div style={{ width: '100%' }}>
+        <ProgressBar value={progress.value} color={progress.color} style={{ height: '6px' }} />
+      </div>
+    )
   };
 
   const stockItemTemplate = (option) => {
@@ -390,6 +403,8 @@ function MaterialsDashboard() {
   return (
     <section>
       <h1 style={{ textAlign: "center", fontSize: "20pt" }}>Materials</h1>
+
+      <br/><br/>
 
       <ConfirmPopup />
 
