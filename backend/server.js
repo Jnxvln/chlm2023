@@ -20,6 +20,8 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/material-categories", require("./routes/materialCategoryRoutes"));
 app.use("/api/drivers", require("./routes/driverRoutes"));
 app.use("/api/vendors", require("./routes/vendorRoutes"));
+app.use("/api/delivery-clients", require("./routes/deliveryClientRoutes"));
+app.use("/api/deliveries", require("./routes/deliveryRoutes"));
 
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler);
