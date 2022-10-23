@@ -14,6 +14,8 @@ import {
   resetDeliveryClientMessages,
 } from "../../../features/deliveryClients/deliveryClientSlice";
 import dayjs from "dayjs";
+import DeliveryClientForm from "../../../components/user/dashboard/deliveries/deliveryClientForm";
+import DeliveryForm from "../../../components/user/dashboard/deliveries/deliveryForm";
 
 function DeliveriesDashboard() {
   const dispatch = useDispatch();
@@ -119,6 +121,25 @@ function DeliveriesDashboard() {
       </div>
     );
   };
+
+  const dataTableHeaderTemplate = () => {
+    return (
+      <div className="flex justify-content-between">
+        <div>
+          <DeliveryForm />
+          <DeliveryClientForm />
+        </div>
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          {/* <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="First, last, or truck #"
+          /> */}
+        </span>
+      </div>
+    );
+  };
   // #endregion
 
   // Fetch data
@@ -219,7 +240,11 @@ function DeliveriesDashboard() {
 
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
-          <DataTable value={deliveries} loading={deliveriesLoading}>
+          <DataTable
+            value={deliveries}
+            loading={deliveriesLoading}
+            header={dataTableHeaderTemplate}
+          >
             {/* Has Paid */}
             <Column
               field="hasPaid"

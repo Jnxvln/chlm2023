@@ -54,6 +54,22 @@ form {
 #newDriverDialog .p-dialog-header {
   background-color: $new-dialog-header-backgroundColor;
 }
+
+// Delivery Client Dialog Styles
+#editDeliveryClientDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newDeliveryClientDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
+// Delivery Dialog Styles
+#editDeliveryDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newDeliveryDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
 // #endregion =========================================
 
 .dialog-header {
