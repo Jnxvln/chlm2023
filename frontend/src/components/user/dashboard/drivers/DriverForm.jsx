@@ -216,7 +216,6 @@ function DriverForm() {
                   value={flatBedPayRate}
                   mode="decimal"
                   minFractionDigits={2}
-                  suffix=" /ton"
                   step={0.01}
                   onChange={onChangeNumber}
                   style={{ width: "100%" }}

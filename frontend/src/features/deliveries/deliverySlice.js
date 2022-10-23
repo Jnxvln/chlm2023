@@ -33,7 +33,7 @@ export const getDeliveries = createAsyncThunk(
 // Create delivery
 export const createDelivery = createAsyncThunk(
   "deliveries/createDelivery",
-  async (deliveryData, token) => {
+  async (deliveryData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await deliveryService.createDelivery(deliveryData, token);
@@ -52,7 +52,7 @@ export const createDelivery = createAsyncThunk(
 // Update delivery
 export const updateDelivery = createAsyncThunk(
   "deliveries/updateDelivery",
-  async (deliveryData, token) => {
+  async (deliveryData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await deliveryService.updateDelivery(deliveryData, token);
@@ -71,7 +71,7 @@ export const updateDelivery = createAsyncThunk(
 // Delete delivery
 export const deleteDelivery = createAsyncThunk(
   "deliveries/deleteDelivery",
-  async (deliveryId, token) => {
+  async (deliveryId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await deliveryService.deleteDelivery(deliveryId, token);

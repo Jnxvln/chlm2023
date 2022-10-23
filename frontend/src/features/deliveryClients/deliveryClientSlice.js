@@ -33,7 +33,7 @@ export const getDeliveryClients = createAsyncThunk(
 // Create delivery client
 export const createDeliveryClient = createAsyncThunk(
   "deliveryClients/createDeliveryClient",
-  async (deliveryClientData, token) => {
+  async (deliveryClientData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await deliveryClientService.createDeliveryClient(
