@@ -72,9 +72,6 @@ const createHaul = asyncHandler(async (req, res) => {
 // @route   PUT /api/hauls/:id
 // @access  Private
 const updateHaul = asyncHandler(async (req, res) => {
-
-  console.log(req.headers)
-
   const haul = await Haul.findById(req.params.id);
 
   if (!haul) {
