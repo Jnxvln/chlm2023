@@ -9,7 +9,7 @@ import { Calendar } from "primereact/calendar";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { updateHaul } from "../../../../features/hauls/haulSlice";
-import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice"
+import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
@@ -30,24 +30,24 @@ function EditHaulForm({ haul }) {
     rate: null,
     miles: null,
     payRate: null,
-    driverPay: null
+    driverPay: null,
   };
 
   const loadTypeOptions = [
-    { label: 'End Dump', value: 'enddump' },
-    { label: 'Flatbed (%)', value: 'flatbedperc' },
-    { label: 'Flatbed (mi)', value: 'flatbedmi' },
-  ]
+    { label: "End Dump", value: "enddump" },
+    { label: "Flatbed (%)", value: "flatbedperc" },
+    { label: "Flatbed (mi)", value: "flatbedmi" },
+  ];
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
 
   const dispatch = useDispatch();
 
-// SELECT DRIVERS FROM STORE
-    const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
-      (state) => state.drivers
-    );
+  // SELECT DRIVERS FROM STORE
+  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
+    (state) => state.drivers
+  );
 
   const {
     _id,
@@ -65,7 +65,7 @@ function EditHaulForm({ haul }) {
     rate,
     miles,
     payRate,
-    driverPay
+    driverPay,
   } = formData;
 
   const resetForm = () => {
@@ -87,7 +87,7 @@ function EditHaulForm({ haul }) {
         rate: haul.rate,
         miles: haul.miles,
         payRate: haul.payRate,
-        driverPay: haul.driverPay
+        driverPay: haul.driverPay,
       }));
     } else {
       setFormData(initialState);
@@ -109,15 +109,22 @@ function EditHaulForm({ haul }) {
   };
   // #endregion
 
-
   // DRIVERS ITEM TEMPLATE
   const driversItemTemplate = (rowData) => {
-    return <>{rowData.firstName} {rowData.lastName}</>
-  }
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
 
   const driverOptionLabelTemplate = (rowData) => {
-    return <>{rowData.firstName} {rowData.lastName}</>
-  }
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
 
   // Handle form text input
   const onChange = (e) => {
@@ -144,31 +151,31 @@ function EditHaulForm({ haul }) {
     onClose();
   };
 
-// RUN ONCE - FETCH HAULS & DRIVERS
+  // RUN ONCE - FETCH HAULS & DRIVERS
   useEffect(() => {
     if (haul) {
-        setFormData((prevState) => ({
-          ...prevState,
-          _id: haul._id,
-          driver: haul.driver,
+      setFormData((prevState) => ({
+        ...prevState,
+        _id: haul._id,
+        driver: haul.driver,
         dateHaul: haul.dateHaul,
-          truck: haul.truck,
-          broker: haul.broker,
-          chInvoice: haul.chInvoice,
-          loadType: haul.loadType,
-          invoice: haul.invoice,
-          from: haul.from,
-          to: haul.to,
-          product: haul.product,
-          tons: haul.tons,
-          rate: haul.rate,
-          miles: haul.miles,
-          payRate: haul.payRate,
-          driverPay: haul.driverPay
-        }));
-      }
+        truck: haul.truck,
+        broker: haul.broker,
+        chInvoice: haul.chInvoice,
+        loadType: haul.loadType,
+        invoice: haul.invoice,
+        from: haul.from,
+        to: haul.to,
+        product: haul.product,
+        tons: haul.tons,
+        rate: haul.rate,
+        miles: haul.miles,
+        payRate: haul.payRate,
+        driverPay: haul.driverPay,
+      }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [haul])
+  }, [haul]);
 
   return (
     <section>
@@ -208,7 +215,7 @@ function EditHaulForm({ haul }) {
                 </span>
               </div>
             </div>
-            
+
             {/* Driver */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
@@ -279,6 +286,8 @@ function EditHaulForm({ haul }) {
                     name="dateHaul"
                     value={new Date(dateHaul)}
                     onChange={onChange}
+                    showTime
+                    hourFormat="12"
                     style={{ width: "100%" }}
                   ></Calendar>
                   <label htmlFor="dateHaul">Haul Date</label>

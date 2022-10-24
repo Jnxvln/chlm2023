@@ -8,12 +8,8 @@ import { Calendar } from "primereact/calendar";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getHauls,
-  createHaul,
-  resetHaulMessages,
-} from "../../../../features/hauls/haulSlice";
-import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice"
+import { getHauls, createHaul, resetHaulMessages } from "../../../../features/hauls/haulSlice";
+import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
@@ -33,28 +29,27 @@ function HaulForm() {
     rate: null,
     miles: null,
     payRate: null,
-    driverPay: null
+    driverPay: null,
   };
 
   const loadTypeOptions = [
-    { label: 'End Dump', value: 'enddump' },
-    { label: 'Flatbed (%)', value: 'flatbedperc' },
-    { label: 'Flatbed (mi)', value: 'flatbedmi' },
-  ]
+    { label: "End Dump", value: "enddump" },
+    { label: "Flatbed (%)", value: "flatbedperc" },
+    { label: "Flatbed (mi)", value: "flatbedmi" },
+  ];
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
 
   const dispatch = useDispatch();
-  // SELECT HAULS FROM STORE
-  const { hauls, haulsError, haulsSuccess, haulsMessage } = useSelector(
-    (state) => state.hauls
-  );
 
-// SELECT DRIVERS FROM STORE
-    const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
-      (state) => state.drivers
-    );
+  // SELECT HAULS FROM STORE
+  const { hauls, haulsError, haulsSuccess, haulsMessage } = useSelector((state) => state.hauls);
+
+  // SELECT DRIVERS FROM STORE
+  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
+    (state) => state.drivers
+  );
 
   const {
     driver,
@@ -71,7 +66,7 @@ function HaulForm() {
     rate,
     miles,
     payRate,
-    driverPay
+    driverPay,
   } = formData;
 
   const resetForm = () => {
@@ -93,15 +88,22 @@ function HaulForm() {
   };
   // #endregion
 
-
   // DRIVERS ITEM TEMPLATE
   const driversItemTemplate = (rowData) => {
-    return <>{rowData.firstName} {rowData.lastName}</>
-  }
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
 
   const driverOptionLabelTemplate = (rowData) => {
-    return <>{rowData.firstName} {rowData.lastName}</>
-  }
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
 
   // Handle form text input
   const onChange = (e) => {
@@ -128,58 +130,64 @@ function HaulForm() {
     onClose();
   };
 
-// RUN ONCE - FETCH HAULS & DRIVERS
+  // RUN ONCE - FETCH HAULS & DRIVERS
   useEffect(() => {
     if (hauls.length === 0) {
-        dispatch(getHauls())
+      dispatch(getHauls());
     }
 
     if (drivers.length === 0) {
-        dispatch(getDrivers())
+      dispatch(getDrivers());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (haulsError) {
-        if (haulsMessage && haulsMessage.length > 0) {
-            toast.error(haulsMessage)
-        } else {
-            toast.error('Haul error occurred, but no message provided')
-        }
+      if (haulsMessage && haulsMessage.length > 0) {
+        toast.error(haulsMessage);
+      } else {
+        toast.error("Haul error occurred, but no message provided");
+      }
     }
 
     if (haulsSuccess) {
-        if (haulsMessage && haulsMessage.length > 0) {
-            toast.success(haulsMessage)
-        }
+      if (haulsMessage && haulsMessage.length > 0) {
+        toast.success(haulsMessage);
+      }
     }
 
     if (driversError) {
-        if (driversMessage && driversMessage.length > 0) {
-            toast.error(driversMessage)
-        } else {
-            toast.error('Driver error occurred, but no message provided')
-        }
+      if (driversMessage && driversMessage.length > 0) {
+        toast.error(driversMessage);
+      } else {
+        toast.error("Driver error occurred, but no message provided");
+      }
     }
 
     if (driversSuccess) {
-        if (driversMessage && driversMessage.length > 0) {
-            toast.success(driversMessage)
-        }
+      if (driversMessage && driversMessage.length > 0) {
+        toast.success(driversMessage);
+      }
     }
 
     dispatch(resetHaulMessages());
     dispatch(resetDriverMessages());
-  }, [hauls, haulsError, haulsSuccess, haulsMessage, drivers, driversError, driversSuccess, driversMessage, dispatch]);
+  }, [
+    hauls,
+    haulsError,
+    haulsSuccess,
+    haulsMessage,
+    drivers,
+    driversError,
+    driversSuccess,
+    driversMessage,
+    dispatch,
+  ]);
 
   return (
     <section>
-      <Button
-        label="New Haul"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Haul" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newHaulDialog"
@@ -263,6 +271,8 @@ function HaulForm() {
                     name="dateHaul"
                     value={dateHaul}
                     onChange={onChange}
+                    showTime
+                    hourFormat="12"
                     style={{ width: "100%" }}
                   ></Calendar>
                   <label htmlFor="dateHaul">Haul Date</label>
