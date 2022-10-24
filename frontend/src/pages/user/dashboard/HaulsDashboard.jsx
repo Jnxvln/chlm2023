@@ -4,13 +4,8 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getHauls,
-  deleteHaul,
-  resetHaulMessages,
-} from "../../../features/hauls/haulSlice";
+import { getHauls, deleteHaul, resetHaulMessages } from "../../../features/hauls/haulSlice";
 import { Button } from "primereact/button";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import HaulForm from "../../../components/user/dashboard/hauls/HaulForm";
@@ -32,7 +27,7 @@ function HaulsDashboard() {
     invoice: { value: null, matchMode: FilterMatchMode.CONTAINS },
     from: { value: null, matchMode: FilterMatchMode.CONTAINS },
     to: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    product: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    product: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   // Select Hauls from store slice
@@ -88,48 +83,48 @@ function HaulsDashboard() {
   };
 
   const brokerTemplate = (rowData) => {
-    return <>{rowData.broker}</>
-  }
+    return <>{rowData.broker}</>;
+  };
 
   const invoiceTemplate = (rowData) => {
-    return <>{rowData.invoice}</>
-  }
+    return <>{rowData.invoice}</>;
+  };
 
   const chInvoiceTemplate = (rowData) => {
-    return <>{rowData.chInvoice}</>
-  }
+    return <>{rowData.chInvoice}</>;
+  };
 
   const fromTemplate = (rowData) => {
-    return <>{rowData.from}</>
-  }
+    return <>{rowData.from}</>;
+  };
 
   const toTemplate = (rowData) => {
-    return <>{rowData.to}</>
-  }
+    return <>{rowData.to}</>;
+  };
 
   const productTemplate = (rowData) => {
-    return <>{rowData.product}</>
-  }
+    return <>{rowData.product}</>;
+  };
 
   const tonsTemplate = (rowData) => {
-    return <>{rowData.tons ? parseFloat(rowData.tons).toFixed(2) : ''}</>
-  }
+    return <>{rowData.tons ? parseFloat(rowData.tons).toFixed(2) : ""}</>;
+  };
 
   const rateTemplate = (rowData) => {
-    return <>{rowData.rate ? parseFloat(rowData.rate).toFixed(2) : ''}</>
-  }
+    return <>{rowData.rate ? parseFloat(rowData.rate).toFixed(2) : ""}</>;
+  };
 
   const milesTemplate = (rowData) => {
-    return <>{rowData.miles ? parseFloat(rowData.miles).toFixed(2) : ''}</>
-  }
+    return <>{rowData.miles ? parseFloat(rowData.miles).toFixed(2) : ""}</>;
+  };
 
   const payRateTemplate = (rowData) => {
-    return <>{rowData.payRate ? parseFloat(rowData.payRate).toFixed(2) : ''}</>
-  }
+    return <>{rowData.payRate ? parseFloat(rowData.payRate).toFixed(2) : ""}</>;
+  };
 
   const truckTemplate = (rowData) => {
-    return <>{rowData.truck}</>
-  }
+    return <>{rowData.truck}</>;
+  };
 
   const actionsTemplate = (rowData) => {
     return (
@@ -155,7 +150,7 @@ function HaulsDashboard() {
       invoice: { value: null, matchMode: FilterMatchMode.CONTAINS },
       from: { value: null, matchMode: FilterMatchMode.CONTAINS },
       to: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      product: { value: null, matchMode: FilterMatchMode.CONTAINS }
+      product: { value: null, matchMode: FilterMatchMode.CONTAINS },
     });
 
     setGlobalFilterValue("");
@@ -191,7 +186,16 @@ function HaulsDashboard() {
             value={hauls}
             loading={haulsLoading}
             header={dataTableHeaderTemplate}
-            globalFilterFields={["truck", "broker", "chInvoice", "loadType", "invoice", "from", "to", "product"]}
+            globalFilterFields={[
+              "truck",
+              "broker",
+              "chInvoice",
+              "loadType",
+              "invoice",
+              "from",
+              "to",
+              "product",
+            ]}
             size="small"
             scrollable
             scrollHeight="flex"
@@ -232,20 +236,10 @@ function HaulsDashboard() {
             ></Column>
 
             {/* BROKER */}
-            <Column
-              field="broker"
-              header="Customer"
-              body={brokerTemplate}
-              sortable
-            ></Column>
+            <Column field="broker" header="Customer" body={brokerTemplate} sortable></Column>
 
             {/* INVOICE */}
-            <Column
-              field="invoice"
-              header="Invoice"
-              body={invoiceTemplate}
-              sortable
-            ></Column>
+            <Column field="invoice" header="Invoice" body={invoiceTemplate} sortable></Column>
 
             {/* CHINVOICE */}
             <Column
@@ -256,68 +250,28 @@ function HaulsDashboard() {
             ></Column>
 
             {/* FROM */}
-            <Column
-              field="from"
-              header="From"
-              body={fromTemplate}
-              sortable
-            ></Column>
+            <Column field="from" header="From" body={fromTemplate} sortable></Column>
 
             {/* TO */}
-            <Column
-              field="to"
-              header="To"
-              body={toTemplate}
-              sortable
-            ></Column>
+            <Column field="to" header="To" body={toTemplate} sortable></Column>
 
             {/* PRODUCT */}
-            <Column
-              field="product"
-              header="Product"
-              body={productTemplate}
-              sortable
-            ></Column>
+            <Column field="product" header="Product" body={productTemplate} sortable></Column>
 
             {/* TONS */}
-            <Column
-              field="tons"
-              header="Tons"
-              body={tonsTemplate}
-              sortable
-            ></Column>
+            <Column field="tons" header="Tons" body={tonsTemplate} sortable></Column>
 
             {/* RATE */}
-            <Column
-              field="rate"
-              header="Rate"
-              body={rateTemplate}
-              sortable
-            ></Column>
+            <Column field="rate" header="Rate" body={rateTemplate} sortable></Column>
 
             {/* MILES */}
-            <Column
-              field="miles"
-              header="Miles"
-              body={milesTemplate}
-              sortable
-            ></Column>
+            <Column field="miles" header="Miles" body={milesTemplate} sortable></Column>
 
             {/* PAYRATE */}
-            <Column
-              field="payRate"
-              header="Pay"
-              body={payRateTemplate}
-              sortable
-            ></Column>
+            <Column field="payRate" header="Pay" body={payRateTemplate} sortable></Column>
 
             {/* TRUCK */}
-            <Column
-              field="truck"
-              header="Truck"
-              body={truckTemplate}
-              sortable
-            ></Column>
+            <Column field="truck" header="Truck" body={truckTemplate} sortable></Column>
 
             {/* ACTIONS */}
             <Column header="Actions" body={actionsTemplate}></Column>

@@ -8,10 +8,7 @@ import { Calendar } from "primereact/calendar";
 
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  createDriver,
-  resetDriverMessages,
-} from "../../../../features/drivers/driverSlice";
+import { createDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
 import { getDrivers } from "../../../../features/drivers/driverSlice";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
@@ -20,9 +17,9 @@ function DriverForm() {
   const initialState = {
     firstName: "",
     lastName: "",
-    endDumpPayRate: "",
-    flatBedPayRate: "",
-    ncRate: "",
+    endDumpPayRate: null,
+    flatBedPayRate: null,
+    ncRate: null,
     defaultTruck: "",
     dateHired: "",
     dateReleased: "",
@@ -112,11 +109,7 @@ function DriverForm() {
 
   return (
     <section>
-      <Button
-        label="New Driver"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Driver" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newDriverDialog"
@@ -195,7 +188,7 @@ function DriverForm() {
                   id="endDumpPayRate"
                   name="endDumpPayRate"
                   value={endDumpPayRate}
-                  placeholder="ED Rate"
+                  placeholder="End dump Rate"
                   mode="decimal"
                   minFractionDigits={2}
                   step={0.01}
@@ -214,9 +207,9 @@ function DriverForm() {
                   id="flatBedPayRate"
                   name="flatBedPayRate"
                   value={flatBedPayRate}
+                  placeholder="Flatbed Rate"
                   mode="decimal"
                   minFractionDigits={2}
-                  suffix=" /ton"
                   step={0.01}
                   onChange={onChangeNumber}
                   style={{ width: "100%" }}
@@ -285,12 +278,7 @@ function DriverForm() {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch
-                  id="isActive"
-                  name="isActive"
-                  checked={isActive}
-                  onChange={onChange}
-                />
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>
