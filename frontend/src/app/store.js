@@ -4,6 +4,7 @@ import driverReducer from "../features/drivers/driverSlice";
 import vendorReducer from "../features/vendors/vendorSlice";
 import materialReducer from "../features/materials/materialSlice";
 import materialCategoryReducer from "../features/materialCategory/materialCategorySlice";
+import haulReducer from "../features/hauls/haulSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     vendors: vendorReducer,
     materials: materialReducer,
     materialCategories: materialCategoryReducer,
+    hauls: haulReducer
   },
 });

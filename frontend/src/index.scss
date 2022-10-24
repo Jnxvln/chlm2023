@@ -54,6 +54,14 @@ form {
 #newDriverDialog .p-dialog-header {
   background-color: $new-dialog-header-backgroundColor;
 }
+
+// Haul Dialog Styles
+#editHaulDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newHaulDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
 // #endregion =========================================
 
 .dialog-header {

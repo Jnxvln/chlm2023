@@ -1,0 +1,465 @@
+import { useState, useEffect } from "react";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { InputNumber } from "primereact/inputnumber";
+import { Dropdown } from "primereact/dropdown";
+import { Calendar } from "primereact/calendar";
+
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getHauls,
+  createHaul,
+  resetHaulMessages,
+} from "../../../../features/hauls/haulSlice";
+import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice"
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+
+function HaulForm() {
+  const initialState = {
+    driver: undefined,
+    dateHaul: undefined,
+    truck: "",
+    broker: "",
+    chInvoice: "",
+    loadType: "",
+    invoice: "",
+    from: "",
+    to: "",
+    product: "",
+    tons: null,
+    rate: null,
+    miles: null,
+    payRate: null,
+    driverPay: null
+  };
+
+  const loadTypeOptions = [
+    { label: 'End Dump', value: 'enddump' },
+    { label: 'Flatbed (%)', value: 'flatbedperc' },
+    { label: 'Flatbed (mi)', value: 'flatbedmi' },
+  ]
+
+  const [formDialog, setFormDialog] = useState(false);
+  const [formData, setFormData] = useState(initialState);
+
+  const dispatch = useDispatch();
+  // SELECT HAULS FROM STORE
+  const { hauls, haulsError, haulsSuccess, haulsMessage } = useSelector(
+    (state) => state.hauls
+  );
+
+// SELECT DRIVERS FROM STORE
+    const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
+      (state) => state.drivers
+    );
+
+  const {
+    driver,
+    dateHaul,
+    truck,
+    broker,
+    chInvoice,
+    loadType,
+    invoice,
+    from,
+    to,
+    product,
+    tons,
+    rate,
+    miles,
+    payRate,
+    driverPay
+  } = formData;
+
+  const resetForm = () => {
+    setFormData(initialState);
+  };
+
+  const onClose = () => {
+    resetForm();
+    setFormDialog(false);
+  };
+
+  // #region COMPONENT RENDERERS
+  const haulDialogHeader = () => {
+    return <DialogHeader resourceType="Haul" isEdit={false} />;
+  };
+
+  const haulDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
+
+  // DRIVERS ITEM TEMPLATE
+  const driversItemTemplate = (rowData) => {
+    return <>{rowData.firstName} {rowData.lastName}</>
+  }
+
+  const driverOptionLabelTemplate = (rowData) => {
+    return <>{rowData.firstName} {rowData.lastName}</>
+  }
+
+  // Handle form text input
+  const onChange = (e) => {
+    if (e.hasOwnProperty("target")) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
+  };
+
+  // Handle form number input
+  const onChangeNumber = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.originalEvent.target.name]: e.originalEvent.target.value,
+    }));
+  };
+
+  // Handle form submit
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createHaul(formData));
+    onClose();
+  };
+
+// RUN ONCE - FETCH HAULS & DRIVERS
+  useEffect(() => {
+    if (hauls.length === 0) {
+        dispatch(getHauls())
+    }
+
+    if (drivers.length === 0) {
+        dispatch(getDrivers())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (haulsError) {
+        if (haulsMessage && haulsMessage.length > 0) {
+            toast.error(haulsMessage)
+        } else {
+            toast.error('Haul error occurred, but no message provided')
+        }
+    }
+
+    if (haulsSuccess) {
+        if (haulsMessage && haulsMessage.length > 0) {
+            toast.success(haulsMessage)
+        }
+    }
+
+    if (driversError) {
+        if (driversMessage && driversMessage.length > 0) {
+            toast.error(driversMessage)
+        } else {
+            toast.error('Driver error occurred, but no message provided')
+        }
+    }
+
+    if (driversSuccess) {
+        if (driversMessage && driversMessage.length > 0) {
+            toast.success(driversMessage)
+        }
+    }
+
+    dispatch(resetHaulMessages());
+    dispatch(resetDriverMessages());
+  }, [hauls, haulsError, haulsSuccess, haulsMessage, drivers, driversError, driversSuccess, driversMessage, dispatch]);
+
+  return (
+    <section>
+      <Button
+        label="New Haul"
+        icon="pi pi-plus"
+        onClick={() => setFormDialog(true)}
+      />
+
+      <Dialog
+        id="newHaulDialog"
+        visible={formDialog}
+        header={haulDialogHeader}
+        footer={haulDialogFooter}
+        onHide={onClose}
+        style={{ width: "50vw" }}
+        blockScroll
+      >
+        <form onSubmit={onSubmit}>
+          {/* DRIVER, LOAD TYPE, TRUCK */}
+          <div className="formgrid grid">
+            {/* Driver */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <Dropdown
+                    name="driver"
+                    optionLabel={driverOptionLabelTemplate}
+                    optionValue="_id"
+                    value={driver}
+                    options={drivers}
+                    onChange={onChange}
+                    itemTemplate={driversItemTemplate}
+                    showClear
+                    placeholder="Choose..."
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="driver">Driver</label>
+                </span>
+              </div>
+            </div>
+
+            {/* Load Type */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <Dropdown
+                    name="loadType"
+                    optionLabel="label"
+                    optionValue="value"
+                    value={loadType}
+                    options={loadTypeOptions}
+                    onChange={onChange}
+                    showClear
+                    placeholder="Choose..."
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="loadType">Load Type</label>
+                </span>
+              </div>
+            </div>
+
+            {/* Truck */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="truck"
+                    name="truck"
+                    value={truck}
+                    placeholder="Truck"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="truck">Truck</label>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* DATE HAUL, CUSTOMER (BROKER), LOAD/REF # (invoice) */}
+          <div className="formgrid grid">
+            {/* Date Haul */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <Calendar
+                    id="dateHaul"
+                    name="dateHaul"
+                    value={dateHaul}
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  ></Calendar>
+                  <label htmlFor="dateHaul">Haul Date</label>
+                </span>
+              </div>
+            </div>
+
+            {/* Customer (broker) */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="broker"
+                    name="broker"
+                    value={broker}
+                    placeholder="broker"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="broker">Customer</label>
+                </span>
+              </div>
+            </div>
+
+            {/* Load/Ref # (invoice) */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="invoice"
+                    name="invoice"
+                    value={invoice}
+                    placeholder="invoice"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="invoice">Load/Ref #</label>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* CHINVOICE, FROM, TO */}
+          <div className="formgrid grid">
+            {/* chInoice */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="chInvoice"
+                    name="chInvoice"
+                    value={chInvoice}
+                    placeholder="CH Invoice"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="chInvoice">CH Invoice</label>
+                </span>
+              </div>
+            </div>
+
+            {/* From */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="from"
+                    name="from"
+                    value={from}
+                    placeholder="From"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="from">From</label>
+                </span>
+              </div>
+            </div>
+
+            {/* To */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="to"
+                    name="to"
+                    value={to}
+                    placeholder="To"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="to">To</label>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* MATERIAL */}
+          <div className="formgrid grid">
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputText
+                    id="product"
+                    name="product"
+                    value={product}
+                    placeholder="Material"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="product">Material</label>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* RATE or PAY RATE, TONS, MILES  */}
+          <div className="formgrid grid">
+            {/* Rate */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="ncRate">Rate</label>
+                <InputNumber
+                  id="rate"
+                  name="rate"
+                  value={rate}
+                  placeholder="Rate"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Pay Rate */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="payRate">Pay Rate</label>
+                <InputNumber
+                  id="payRate"
+                  name="payRate"
+                  value={payRate}
+                  placeholder="Pay Rate"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Tons */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="tons">Tons</label>
+                <InputNumber
+                  id="tons"
+                  name="tons"
+                  value={tons}
+                  placeholder="Tons"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Miles */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="miles">Miles</label>
+                <InputNumber
+                  id="miles"
+                  name="miles"
+                  value={miles}
+                  placeholder="Miles"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </Dialog>
+    </section>
+  );
+}
+
+export default HaulForm;
