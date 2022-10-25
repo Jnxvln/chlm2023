@@ -36,7 +36,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-      <ToastContainer position="bottom-center" hideProgressBar />
+      <ToastContainer position="bottom-center" limit={3} hideProgressBar />
     </>
   );
 }
