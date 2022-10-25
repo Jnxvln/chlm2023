@@ -16,8 +16,8 @@ import {
   resetDeliveryClientMessages,
 } from "../../../features/deliveryClients/deliveryClientSlice";
 import dayjs from "dayjs";
-import DeliveryClientForm from "../../../components/user/dashboard/deliveries/deliveryClientForm";
-import DeliveryForm from "../../../components/user/dashboard/deliveries/deliveryForm";
+import DeliveryClientForm from "../../../components/user/dashboard/deliveries/DeliveryClientForm";
+import DeliveryForm from "../../../components/user/dashboard/deliveries/DeliveryForm";
 import EditDeliveryForm from "../../../components/user/dashboard/deliveries/EditDeliveryForm";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
@@ -27,13 +27,17 @@ function DeliveriesDashboard() {
   const deliveryClientOverlayPanel = useRef(null);
   const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedClientAvatar, setSelectedClientAvatar] = useState(null);
-  const { deliveries, deliveriesLoading, deliveriesError, deliveriesMessage } =
+
+  // Pull in delivery state
+  const { deliveries, deliveriesLoading, deliveriesError, deliveriesSuccess, deliveriesMessage } =
     useSelector((state) => state.deliveries);
 
+  // Pull in delivery client state
   const {
     deliveryClients,
     deliveryClientsLoading,
     deliveryClientsError,
+    deliveryClientsSuccess,
     deliveryClientsMessage,
   } = useSelector((state) => state.deliveryClients);
 
@@ -106,15 +110,9 @@ function DeliveriesDashboard() {
     return (
       <div>
         {Boolean(rowData.hasPaid) ? (
-          <i
-            className="pi pi-check"
-            style={{ color: "green", fontWeight: "bold" }}
-          ></i>
+          <i className="pi pi-check" style={{ color: "green", fontWeight: "bold" }}></i>
         ) : (
-          <i
-            className="pi pi-dollar"
-            style={{ color: "red", fontWeight: "bold" }}
-          ></i>
+          <i className="pi pi-dollar" style={{ color: "red", fontWeight: "bold" }}></i>
         )}
       </div>
     );
@@ -124,15 +122,9 @@ function DeliveriesDashboard() {
     return (
       <div>
         {Boolean(rowData.completed) ? (
-          <i
-            className="pi pi-check"
-            style={{ color: "green", fontWeight: "bold" }}
-          ></i>
+          <i className="pi pi-check" style={{ color: "green", fontWeight: "bold" }}></i>
         ) : (
-          <i
-            className="pi pi-times"
-            style={{ color: "red", fontWeight: "bold" }}
-          ></i>
+          <i className="pi pi-times" style={{ color: "red", fontWeight: "bold" }}></i>
         )}
       </div>
     );
@@ -171,42 +163,55 @@ function DeliveriesDashboard() {
   };
   // #endregion
 
-  // Fetch data
-  useEffect(() => {
-    dispatch(getDeliveryClients());
-    dispatch(getDeliveries());
-  }, []);
-
   // Check for messages
   useEffect(() => {
-    if (deliveryClientsError) {
-      toast.error(deliveryClientsError);
+    if (deliveryClients.length === 0) {
+      dispatch(getDeliveryClients());
     }
 
-    if (deliveriesError) {
+    if (deliveriesError && deliveriesMessage.length > 0) {
       toast.error(deliveriesMessage);
+    }
+
+    if (deliveryClientsSuccess && deliveryClientsMessage.length > 0) {
+      toast.success(deliveryClientsMessage);
+    }
+
+    if (deliveries.length === 0) {
+      dispatch(getDeliveries());
+    }
+
+    if (deliveriesError && deliveriesMessage.length > 0) {
+      toast.error(deliveriesMessage);
+    }
+
+    if (deliveriesSuccess && deliveriesMessage.length > 0) {
+      toast.success(deliveriesMessage);
     }
 
     dispatch(resetDeliveryClientMessages());
     dispatch(resetDeliveryMessages());
   }, [
+    deliveryClients,
     deliveryClientsError,
+    deliveryClientsSuccess,
     deliveryClientsMessage,
+    deliveries,
     deliveriesError,
+    deliveriesSuccess,
     deliveriesMessage,
+    dispatch,
   ]);
 
   // Check for selected client avatar (in Deliveries DataTable)
   useEffect(() => {
-    const client = deliveryClients.find(
-      (client) => client._id === selectedClientId
-    );
+    const client = deliveryClients.find((client) => client._id === selectedClientId);
     setSelectedClientAvatar(client);
   }, [selectedClientId]);
 
   return (
     <section>
-      <h1>Deliveries</h1>
+      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Deliveries</h1>
 
       <ConfirmPopup />
 
@@ -225,9 +230,7 @@ function DeliveriesDashboard() {
             {selectedClientAvatar.phone && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Phone(s):</strong>{" "}
-                <div style={{ whiteSpace: "pre" }}>
-                  {selectedClientAvatar.phone}
-                </div>
+                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.phone}</div>
               </div>
             )}
 
@@ -235,9 +238,7 @@ function DeliveriesDashboard() {
             {selectedClientAvatar.address && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Address:</strong>{" "}
-                <div style={{ whiteSpace: "pre" }}>
-                  {selectedClientAvatar.address}
-                </div>
+                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.address}</div>
               </div>
             )}
 
@@ -245,9 +246,7 @@ function DeliveriesDashboard() {
             {selectedClientAvatar.company && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Company:</strong>{" "}
-                <div style={{ whiteSpace: "pre" }}>
-                  {selectedClientAvatar.company}
-                </div>
+                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.company}</div>
               </div>
             )}
 
@@ -259,6 +258,7 @@ function DeliveriesDashboard() {
                   <a
                     href={`https://www.google.com/maps/search/?api=1&query=${selectedClientAvatar.coordinates}`}
                     target="_blank"
+                    rel="noreferrer"
                   >
                     {selectedClientAvatar.coordinates}
                   </a>
@@ -277,11 +277,7 @@ function DeliveriesDashboard() {
             header={dataTableHeaderTemplate}
           >
             {/* Has Paid */}
-            <Column
-              field="hasPaid"
-              header="Paid?"
-              body={hasPaidTemplate}
-            ></Column>
+            <Column field="hasPaid" header="Paid?" body={hasPaidTemplate}></Column>
 
             {/* Delivery Date */}
             <Column
@@ -308,19 +304,10 @@ function DeliveriesDashboard() {
             ></Column>
 
             {/* Product Quantity */}
-            <Column
-              field="productQuantity"
-              header="Qty"
-              body={productQuantityTemplate}
-            ></Column>
+            <Column field="productQuantity" header="Qty" body={productQuantityTemplate}></Column>
 
             {/* Address */}
-            <Column
-              field="address"
-              header="Address"
-              body={addressTemplate}
-              sortable
-            ></Column>
+            <Column field="address" header="Address" body={addressTemplate} sortable></Column>
 
             {/* Contact Name */}
             <Column
@@ -347,11 +334,7 @@ function DeliveriesDashboard() {
             ></Column>
 
             {/* Completed */}
-            <Column
-              field="completed"
-              header="Completed?"
-              body={completedTemplate}
-            ></Column>
+            <Column field="completed" header="Completed?" body={completedTemplate}></Column>
 
             {/* Actions */}
             <Column header="Actions" body={actionsTemplate}></Column>

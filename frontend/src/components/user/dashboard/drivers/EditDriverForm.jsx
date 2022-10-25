@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
+// Store data
 import { useDispatch } from "react-redux";
 import { updateDriver } from "../../../../features/drivers/driverSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function EditDriverForm({ driver }) {
+  // #region VARS ------------------------
   const initialState = {
     _id: "",
     firstName: "",
@@ -40,7 +43,26 @@ function EditDriverForm({ driver }) {
     dateReleased,
     isActive,
   } = formData;
+  // #endregion
 
+  // #region COMPONENT RENDERERS
+  const driverDialogHeader = () => {
+    return (
+      <DialogHeader
+        resourceType="Driver"
+        resourceName={`${driver.firstName} ${driver.lastName}`}
+        isEdit
+      />
+    );
+  };
+
+  const driverDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
+  // #region FORM HANDLERS
+  // Handle form reset
   const resetForm = () => {
     if (driver) {
       setFormData((prevState) => ({
@@ -61,26 +83,11 @@ function EditDriverForm({ driver }) {
     }
   };
 
+  // Handle form closing
   const onClose = () => {
     resetForm();
     setFormDialog(false);
   };
-
-  // #region COMPONENT RENDERERS
-  const driverDialogHeader = () => {
-    return (
-      <DialogHeader
-        resourceType="Driver"
-        resourceName={`${driver.firstName} ${driver.lastName}`}
-        isEdit
-      />
-    );
-  };
-
-  const driverDialogFooter = () => {
-    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
-  };
-  // #endregion
 
   // Handle form text input
   const onChange = (e) => {
@@ -106,6 +113,7 @@ function EditDriverForm({ driver }) {
     dispatch(updateDriver(formData));
     onClose();
   };
+  // #endregion
 
   // Set form data to `driver` prop
   useEffect(() => {
@@ -321,12 +329,7 @@ function EditDriverForm({ driver }) {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch
-                  id="isActive"
-                  name="isActive"
-                  checked={isActive}
-                  onChange={onChange}
-                />
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>

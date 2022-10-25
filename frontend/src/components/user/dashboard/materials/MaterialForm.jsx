@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
-
-import { toast } from "react-toastify";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import { createMaterial } from "../../../../features/materials/materialSlice";
 import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function MaterialForm() {
+  // #region VARS ------------------------
   const initialState = {
     category: "",
     name: "",
@@ -54,16 +55,15 @@ function MaterialForm() {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
-  // SELECT MATERIALS FROM STORE
-  const { materials, materialsError, materialsSuccess, materialsMessage } =
-    useSelector((state) => state.materials);
+  // Select materials from store
+  const { materials, materialsError, materialsSuccess, materialsMessage } = useSelector(
+    (state) => state.materials
+  );
 
-  // SELECT MATERIAL CATEGORIES FROM STORE
-  const {
-    materialCategories,
-    materialCategoriesError,
-    materialCategoriesMessage,
-  } = useSelector((state) => state.materialCategories);
+  // Select material categories from store
+  const { materialCategories, materialCategoriesError, materialCategoriesMessage } = useSelector(
+    (state) => state.materialCategories
+  );
 
   const {
     category,
@@ -78,6 +78,7 @@ function MaterialForm() {
     isTruckable,
     isActive,
   } = formData;
+  // #endregion
 
   // #region COMPONENT RENDERERS
   const materialDialogHeader = () => {
@@ -89,15 +90,19 @@ function MaterialForm() {
   };
   // #endregion
 
+  // #region FORM HANDLERS
+  // Handle form reset
   const resetForm = () => {
     setFormData(initialState);
   };
 
+  // Handle form closing
   const onClose = () => {
     resetForm();
     setFormDialog(false);
   };
 
+  // Handle form input
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -105,46 +110,23 @@ function MaterialForm() {
     }));
   };
 
+  // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(createMaterial(formData));
     onClose();
   };
+  // #endregion
 
   useEffect(() => {
-    if (materialsError) {
-      toast.error(materialsMessage);
-    }
-
-    if (materialsSuccess) {
-      toast.success(materialsMessage);
-    }
-
-    if (materialCategoriesError) {
-      toast.error(materialCategoriesMessage);
-    }
-
     if (materialCategories.length === 0) {
       dispatch(getMaterialCategories());
     }
-  }, [
-    materials,
-    materialsError,
-    materialsSuccess,
-    materialsMessage,
-    materialCategories,
-    materialCategoriesError,
-    materialCategoriesMessage,
-    dispatch,
-  ]);
+  }, [materialCategories, dispatch]);
 
   return (
     <section>
-      <Button
-        label="New Material"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Material" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newMaterialDialog"
@@ -347,12 +329,7 @@ function MaterialForm() {
 
             {/* Active */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isActive"
-                name="isActive"
-                checked={isActive}
-                onChange={onChange}
-              />
+              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
           </div>

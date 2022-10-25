@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
-
-import { toast } from "react-toastify";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import { createDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
 import { getDrivers } from "../../../../features/drivers/driverSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function DriverForm() {
+  // #region VARS ------------------------
   const initialState = {
     firstName: "",
     lastName: "",
@@ -28,13 +30,14 @@ function DriverForm() {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
   const dispatch = useDispatch();
-  // SELECT DRIVERS FROM STORE
+
+  // Select drivers from store
   const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
     (state) => state.drivers
   );
 
+  // Destructure form data
   const {
     firstName,
     lastName,
@@ -46,15 +49,7 @@ function DriverForm() {
     dateReleased,
     isActive,
   } = formData;
-
-  const resetForm = () => {
-    setFormData(initialState);
-  };
-
-  const onClose = () => {
-    resetForm();
-    setFormDialog(false);
-  };
+  // #endregion
 
   // #region COMPONENT RENDERERS
   const driverDialogHeader = () => {
@@ -65,6 +60,18 @@ function DriverForm() {
     return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
   };
   // #endregion
+
+  // #region FORM HANDLERS
+  // Handle form reset
+  const resetForm = () => {
+    setFormData(initialState);
+  };
+
+  // Handle form closing
+  const onClose = () => {
+    resetForm();
+    setFormDialog(false);
+  };
 
   // Handle form text input
   const onChange = (e) => {
@@ -90,6 +97,7 @@ function DriverForm() {
     dispatch(createDriver(formData));
     onClose();
   };
+  // #endregion
 
   useEffect(() => {
     if (driversError) {

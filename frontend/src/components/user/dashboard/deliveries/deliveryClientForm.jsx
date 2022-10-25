@@ -1,20 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  createDeliveryClient,
-  getDeliveryClients,
-  resetDeliveryClientMessages,
-} from "../../../../features/deliveryClients/deliveryClientSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// Store data
+import { useDispatch } from "react-redux";
+import { createDeliveryClient } from "../../../../features/deliveryClients/deliveryClientSlice";
 
 function DeliveryClientForm() {
+  // #region VARS ------------------------
   const initialState = {
     firstName: "",
     lastName: "",
@@ -27,34 +25,15 @@ function DeliveryClientForm() {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
   const dispatch = useDispatch();
-  // SELECT DELIVERY CLIENTS FROM STORE
-  const {
-    deliveryClients,
-    deliveryClientsError,
-    deliveryClientsSuccess,
-    deliveryClientsMessage,
-  } = useSelector((state) => state.deliveryClients);
 
-  const {
-    firstName,
-    lastName,
-    phone,
-    companyName,
-    address,
-    coordinates,
-    directions,
-  } = formData;
+  // Select deliveryClients from store
+  // const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
+  //   useSelector((state) => state.deliveryClients);
 
-  const resetForm = () => {
-    setFormData(initialState);
-  };
-
-  const onClose = () => {
-    resetForm();
-    setFormDialog(false);
-  };
+  // Select deliveries from store
+  const { firstName, lastName, phone, companyName, address, coordinates, directions } = formData;
+  // #endregion
 
   // #region COMPONENT RENDERERS
   const deliveryClientDialogHeader = () => {
@@ -66,6 +45,7 @@ function DeliveryClientForm() {
   };
   // #endregion
 
+  // #region FORM HANDLERS
   // Handle form text input
   const onChange = (e) => {
     if (e.hasOwnProperty("target")) {
@@ -81,44 +61,28 @@ function DeliveryClientForm() {
     e.preventDefault();
 
     if (!firstName || !lastName || !phone) {
-      return toast.error(
-        "First name, last name, and phone number are required fields"
-      );
+      return toast.error("First name, last name, and phone number are required fields");
     }
 
     dispatch(createDeliveryClient(formData));
     onClose();
   };
 
-  useEffect(() => {
-    if (deliveryClientsError) {
-      toast.error(deliveryClientsMessage);
-    }
+  // Handle form reset
+  const resetForm = () => {
+    setFormData(initialState);
+  };
 
-    if (deliveryClientsSuccess && deliveryClientsMessage.length > 0) {
-      toast.success(deliveryClientsMessage);
-    }
-
-    if (deliveryClients.length === 0) {
-      dispatch(getDeliveryClients());
-    }
-
-    dispatch(resetDeliveryClientMessages());
-  }, [
-    deliveryClients,
-    deliveryClientsError,
-    deliveryClientsSuccess,
-    deliveryClientsMessage,
-    dispatch,
-  ]);
+  // Handle form closing
+  const onClose = () => {
+    resetForm();
+    setFormDialog(false);
+  };
+  // #endregion
 
   return (
     <section>
-      <Button
-        label="New Delivery Client"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Delivery Client" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newDeliveryClientDialog"

@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import VendorForm from "../../../components/user/dashboard/vendors/VendorForm";
+import EditVendorForm from "../../../components/user/dashboard/vendors/EditVendorForm";
+// PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { toast } from "react-toastify";
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+import { Button } from "primereact/button";
+import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import { FilterMatchMode } from "primereact/api";
+import { InputText } from "primereact/inputtext";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import {
   getVendors,
   deleteVendor,
   resetVendorMessages,
 } from "../../../features/vendors/vendorSlice";
-import { Button } from "primereact/button";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { FilterMatchMode } from "primereact/api";
-import { InputText } from "primereact/inputtext";
-import VendorForm from "../../../components/user/dashboard/vendors/VendorForm";
-import EditVendorForm from "../../../components/user/dashboard/vendors/EditVendorForm";
-import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
-import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
 function VendorsDashboard() {
-  const dispatch = useDispatch();
-
+  // #region VARS ------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [vendorRowSelected, setVendorRowSelected] = useState(null);
   const [filters, setFilters] = useState({
@@ -27,34 +28,15 @@ function VendorsDashboard() {
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
     shortName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const dispatch = useDispatch();
 
   // Select Vendors from store slice
   const { vendors, vendorsLoading, vendorsError, vendorsSuccess, vendorsMessage } = useSelector(
     (state) => state.vendors
   );
-
-  // Delete vendor confirmation
-  const onDelete = (e, rowData) => {
-    confirmPopup({
-      target: e.target,
-      message: `Delete vendor ${rowData.name}?`,
-      icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteVendor(rowData._id)),
-      reject: () => null,
-    });
-  };
-
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-    _filters["global"].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  };
+  // #endregion
 
   // #region DATA TABLE TEMPLATES
-
   const dataTableHeaderTemplate = () => {
     return (
       <div className="flex justify-content-between">
@@ -117,6 +99,17 @@ function VendorsDashboard() {
   };
   // #endregion
 
+  // Handle filter change
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  // Initialize datatable filters
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -127,24 +120,33 @@ function VendorsDashboard() {
     setGlobalFilterValue("");
   };
 
-  // RUN ONCE - FETCH
-  useEffect(() => {
-    if (vendors.length === 0) {
-      console.log("dispatching getVendors()");
-      dispatch(getVendors());
-    }
+  // Delete vendor confirmation
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Delete vendor ${rowData.name}?`,
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteVendor(rowData._id)),
+      reject: () => null,
+    });
+  };
 
+  // RUN ONCE - INIT FILTERS
+  useEffect(() => {
     initFilters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // RUN EACH
   useEffect(() => {
-    if (vendorsError) {
+    if (vendors.length === 0) {
+      dispatch(getVendors());
+    }
+
+    if (vendorsError && vendorsMessage && vendorsMessage.length > 0) {
       toast.error(vendorsMessage);
     }
 
-    if (vendorsSuccess) {
+    if (vendorsSuccess && vendorsMessage && vendorsMessage.length > 0) {
       toast.success(vendorsMessage);
     }
 

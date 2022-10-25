@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import HaulForm from "../../../components/user/dashboard/hauls/HaulForm";
+import EditHaulForm from "../../../components/user/dashboard/hauls/EditHaulForm";
+// PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import { getHauls, deleteHaul, resetHaulMessages } from "../../../features/hauls/haulSlice";
-import { getDrivers, resetDriverMessages } from "../../../features/drivers/driverSlice";
 import { Button } from "primereact/button";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import HaulForm from "../../../components/user/dashboard/hauls/HaulForm";
-import EditHaulForm from "../../../components/user/dashboard/hauls/EditHaulForm";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+// Store data
+import { useSelector, useDispatch } from "react-redux";
+import { getDrivers, resetDriverMessages } from "../../../features/drivers/driverSlice";
+import { getHauls, deleteHaul, resetHaulMessages } from "../../../features/hauls/haulSlice";
 
 function HaulsDashboard() {
-  const dispatch = useDispatch();
-
+  // #region VARS ------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [multiSortMeta, setMultiSortMeta] = useState([{ field: "dateHaul", order: -1 }]);
   const [haulRowSelected, setHaulRowSelected] = useState(null);
@@ -31,6 +32,7 @@ function HaulsDashboard() {
     to: { value: null, matchMode: FilterMatchMode.CONTAINS },
     product: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const dispatch = useDispatch();
 
   // Select Hauls from store slice
   const { hauls, haulsLoading, haulsError, haulsSuccess, haulsMessage } = useSelector(
@@ -41,26 +43,7 @@ function HaulsDashboard() {
   const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
     (state) => state.drivers
   );
-
-  // Delete haul confirmation
-  const onDelete = (e, rowData) => {
-    confirmPopup({
-      target: e.target,
-      message: `Delete haul invoice ${rowData.invoice}?`,
-      icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteHaul(rowData._id)),
-      reject: () => null,
-    });
-  };
-
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-    _filters["global"].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  };
+  // #endregion
 
   // #region DATA TABLE TEMPLATES
   const dataTableHeaderTemplate = () => {
@@ -79,11 +62,6 @@ function HaulsDashboard() {
         </span>
       </div>
     );
-  };
-
-  const driverTemplate = (rowData) => {
-    const driver = drivers.find((driver) => driver._id === rowData.driver);
-    return <>{driver ? <>{driver.firstName}</> : <></>}</>;
   };
 
   const dateHaulTemplate = (rowData) => {
@@ -152,6 +130,17 @@ function HaulsDashboard() {
   };
   // #endregion
 
+  // #region Filters
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  // Initialize datatable filters
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -168,30 +157,49 @@ function HaulsDashboard() {
     setGlobalFilterValue("");
   };
 
-  // RUN ONCE - FETCH
+  // Delete haul confirmation
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Delete haul invoice ${rowData.invoice}?`,
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteHaul(rowData._id)),
+      reject: () => null,
+    });
+  };
+
+  // RUN ONCE - INIT FILTERS
+  useEffect(() => {
+    initFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (hauls.length === 0) {
       dispatch(getHauls());
+    }
+
+    if (haulsError && haulsMessage && haulsMessage.length > 0) {
+      toast.error(haulsMessage);
+    }
+
+    if (haulsSuccess && haulsMessage && haulsMessage.length > 0) {
+      toast.success(haulsMessage);
     }
 
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
 
-    initFilters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // RUN EACH
-  useEffect(() => {
-    if (haulsError) {
-      toast.error(haulsMessage);
-    }
-
-    if (driversError) {
+    if (driversError && driversMessage && driversMessage.length > 0) {
       toast.error(driversMessage);
     }
 
+    if (driversSuccess && driversMessage && driversMessage.length > 0) {
+      toast.success(driversMessage);
+    }
+
+    dispatch(resetDriverMessages());
     dispatch(resetHaulMessages());
   }, [
     hauls,
@@ -204,6 +212,7 @@ function HaulsDashboard() {
     driversMessage,
     dispatch,
   ]);
+
   return (
     <section>
       <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Hauls</h1>

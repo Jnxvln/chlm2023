@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
-
-import { toast } from "react-toastify";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import { updateHaul } from "../../../../features/hauls/haulSlice";
-import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function EditHaulForm({ haul }) {
+  // #region VARS ------------------------
   const initialState = {
     _id: "",
     driver: undefined,
@@ -41,14 +41,12 @@ function EditHaulForm({ haul }) {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
   const dispatch = useDispatch();
 
-  // SELECT DRIVERS FROM STORE
-  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  // Select drivers from store
+  const { drivers } = useSelector((state) => state.drivers);
 
+  // Destructure form data
   const {
     _id,
     driver,
@@ -67,7 +65,38 @@ function EditHaulForm({ haul }) {
     payRate,
     driverPay,
   } = formData;
+  // #endregion
 
+  // #region COMPONENT RENDERERS
+  const haulDialogHeader = () => {
+    return <DialogHeader resourceType="Haul" resourceName={`Inv ${haul.invoice}`} isEdit />;
+  };
+
+  const haulDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
+  // #region COMPONENT TEMPLATES
+  const driversItemTemplate = (rowData) => {
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
+
+  const driverOptionLabelTemplate = (rowData) => {
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
+  // #endregion
+
+  // #region FORM HANDLERS
+  // Handle form reset
   const resetForm = () => {
     if (haul) {
       setFormData((prevState) => ({
@@ -94,36 +123,10 @@ function EditHaulForm({ haul }) {
     }
   };
 
+  // Handle form closing
   const onClose = () => {
     resetForm();
     setFormDialog(false);
-  };
-
-  // #region COMPONENT RENDERERS
-  const haulDialogHeader = () => {
-    return <DialogHeader resourceType="Haul" resourceName={`Inv ${haul.invoice}`} isEdit />;
-  };
-
-  const haulDialogFooter = () => {
-    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
-  };
-  // #endregion
-
-  // DRIVERS ITEM TEMPLATE
-  const driversItemTemplate = (rowData) => {
-    return (
-      <>
-        {rowData.firstName} {rowData.lastName}
-      </>
-    );
-  };
-
-  const driverOptionLabelTemplate = (rowData) => {
-    return (
-      <>
-        {rowData.firstName} {rowData.lastName}
-      </>
-    );
   };
 
   // Handle form text input
@@ -150,6 +153,7 @@ function EditHaulForm({ haul }) {
     dispatch(updateHaul(formData));
     onClose();
   };
+  // #endregion
 
   // RUN ONCE - FETCH HAULS & DRIVERS
   useEffect(() => {

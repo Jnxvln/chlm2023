@@ -1,23 +1,19 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
-
-import { toast } from "react-toastify";
+import { InputSwitch } from "primereact/inputswitch";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getDeliveryClients,
-  resetDeliveryClientMessages,
-} from "../../../../features/deliveryClients/deliveryClientSlice";
-import {
-  createDelivery,
-  resetDeliveryMessages,
-} from "../../../../features/deliveries/deliverySlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+import { getDeliveryClients } from "../../../../features/deliveryClients/deliveryClientSlice";
+import { createDelivery } from "../../../../features/deliveries/deliverySlice";
 
 function DeliveryForm() {
   // #region VARS ------------------------
@@ -43,16 +39,13 @@ function DeliveryForm() {
   const dispatch = useDispatch();
 
   // Select deliveryClients from store
-  const {
-    deliveryClients,
-    deliveryClientsError,
-    deliveryClientsSuccess,
-    deliveryClientsMessage,
-  } = useSelector((state) => state.deliveryClients);
+  const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
+    useSelector((state) => state.deliveryClients);
 
   // Select deliveries from store
-  const { deliveries, deliveriesError, deliveriesSuccess, deliveriesMessage } =
-    useSelector((state) => state.deliveries);
+  const { deliveries, deliveriesError, deliveriesSuccess, deliveriesMessage } = useSelector(
+    (state) => state.deliveries
+  );
 
   // Destructure form data
   const {
@@ -122,8 +115,8 @@ function DeliveryForm() {
     e.preventDefault();
 
     formData.deliveryClient = formData.deliveryClient._id;
-    console.log("DELIVERY TO SUBMIT: ");
-    console.log(formData);
+    // console.log("DELIVERY TO SUBMIT: ");
+    // console.log(formData);
 
     if (!deliveryClient) {
       return toast.error("A client is required");
@@ -159,52 +152,17 @@ function DeliveryForm() {
     resetForm();
     setFormDialog(false);
   };
+  // #endregion
 
   useEffect(() => {
-    if (deliveryClientsError) {
-      toast.error(deliveryClientsMessage);
-    }
-
-    if (deliveriesError && deliveriesMessage.length > 0) {
-      toast.error(deliveriesMessage);
-    }
-
-    if (deliveryClientsSuccess && deliveryClientsMessage.length > 0) {
-      toast.success(deliveryClientsMessage);
-    }
-
-    if (deliveriesSuccess && deliveriesMessage.length > 0) {
-      toast.success(deliveriesMessage);
-    }
-
     if (deliveryClients.length === 0) {
       dispatch(getDeliveryClients());
     }
 
-    dispatch(resetDeliveryClientMessages());
-    dispatch(resetDeliveryMessages());
-  }, [
-    deliveryClients,
-    deliveryClientsError,
-    deliveryClientsSuccess,
-    deliveryClientsMessage,
-    deliveries,
-    deliveriesError,
-    deliveriesSuccess,
-    deliveriesMessage,
-    dispatch,
-  ]);
-
-  useEffect(() => {
-    console.log("Delivery client selected: ");
-    console.log(selectedDeliveryClient);
     if (selectedDeliveryClient) {
       setFormData((prevState) => ({
         ...prevState,
-        contactName:
-          selectedDeliveryClient.firstName +
-          " " +
-          selectedDeliveryClient.lastName,
+        contactName: selectedDeliveryClient.firstName + " " + selectedDeliveryClient.lastName,
         contactPhone: selectedDeliveryClient.phone,
         address: selectedDeliveryClient.address,
         coordinates: selectedDeliveryClient.coordinates,
@@ -214,15 +172,11 @@ function DeliveryForm() {
         directions: selectedDeliveryClient.directions,
       }));
     }
-  }, [selectedDeliveryClient]);
+  }, [deliveryClients, selectedDeliveryClient, dispatch]);
 
   return (
     <section>
-      <Button
-        label="New Delivery"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Delivery" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newDeliveryDialog"
@@ -230,7 +184,7 @@ function DeliveryForm() {
         header={deliveryDialogHeader}
         footer={deliveryDialogFooter}
         onHide={onClose}
-        style={{ width: "50vw" }}
+        style={{ width: "900px" }}
         blockScroll
       >
         <form onSubmit={onSubmit}>
@@ -431,6 +385,43 @@ function DeliveryForm() {
                   />
                   <label htmlFor="notes">Notes</label>
                 </span>
+              </div>
+            </div>
+          </div>
+
+          {/* HAS PAID, DIRECTIONS REMINDER, COMPLETED */}
+          <div className="formgrid grid">
+            {/* Has Paid */}
+            <div className="field col">
+              <div>
+                <InputSwitch id="hasPaid" name="hasPaid" checked={hasPaid} onChange={onChange} />
+                <strong style={{ marginLeft: "0.5em" }}>Has Paid</strong>
+              </div>
+            </div>
+
+            {/* Directions Reminder */}
+            <div className="field col">
+              <div>
+                <InputSwitch
+                  id="directionsReminder"
+                  name="directionsReminder"
+                  checked={directionsReminder}
+                  onChange={onChange}
+                />
+                <strong style={{ marginLeft: "0.5em" }}>Directions Reminder</strong>
+              </div>
+            </div>
+
+            {/* Completed */}
+            <div className="field col">
+              <div>
+                <InputSwitch
+                  id="completed"
+                  name="completed"
+                  checked={completed}
+                  onChange={onChange}
+                />
+                <strong style={{ marginLeft: "0.5em" }}>Completed</strong>
               </div>
             </div>
           </div>

@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
+// Store data
 import { useDispatch } from "react-redux";
 import { updateVendor } from "../../../../features/vendors/vendorSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function EditVendorForm({ vendor }) {
+  // #region VARS ------------------------
   const initialState = {
     _id: "",
     name: "",
@@ -23,15 +26,21 @@ function EditVendorForm({ vendor }) {
   const dispatch = useDispatch();
 
   // Destructure form data
-  const {
-    _id,
-    name,
-    shortName,
-    chtFuelSurcharge,
-    vendorFuelSurcharge,
-    isActive,
-  } = formData;
+  const { _id, name, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
+  // #endregion
 
+  // #region COMPONENT RENDERERS
+  const vendorDialogHeader = () => {
+    return <DialogHeader resourceType="Vendor" resourceName={vendor.name} isEdit />;
+  };
+
+  const vendorDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
+  // #region FORM HANDLERS
+  // Handle form reset
   const resetForm = () => {
     if (vendor) {
       setFormData((prevState) => ({
@@ -48,22 +57,11 @@ function EditVendorForm({ vendor }) {
     }
   };
 
+  // Handle form closing
   const onClose = () => {
     resetForm();
     setFormDialog(false);
   };
-
-  // #region COMPONENT RENDERERS
-  const vendorDialogHeader = () => {
-    return (
-      <DialogHeader resourceType="Vendor" resourceName={vendor.name} isEdit />
-    );
-  };
-
-  const vendorDialogFooter = () => {
-    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
-  };
-  // #endregion
 
   // Handle form text input
   const onChange = (e) => {
@@ -89,11 +87,7 @@ function EditVendorForm({ vendor }) {
     dispatch(updateVendor(formData));
     onClose();
   };
-
-  // Clear form on dialog close
-  // const onClose = () => {
-  //   setFormDialog(false);
-  // };
+  // #endregion
 
   // Set form data to `vendor` prop
   useEffect(() => {
@@ -234,12 +228,7 @@ function EditVendorForm({ vendor }) {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch
-                  id="isActive"
-                  name="isActive"
-                  checked={isActive}
-                  onChange={onChange}
-                />
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>

@@ -1,20 +1,19 @@
 import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputTextarea } from "primereact/inputtextarea";
-import { toast } from "react-toastify";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
-
-// import { toast } from "react-toastify";
+// Select data
 import { useSelector, useDispatch } from "react-redux";
 import { updateMaterial } from "../../../../features/materials/materialSlice";
-// import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
 
 function EditMaterialForm({ material }) {
+  // #region VARS ------------------------
   const initialState = {
     _id: "",
     category: "",
@@ -57,7 +56,7 @@ function EditMaterialForm({ material }) {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
-  // SELECT MATERIAL CATEGORIES FROM STORE
+  // Select materials from state
   const {
     materialCategories,
     materialCategoriesError,
@@ -79,7 +78,20 @@ function EditMaterialForm({ material }) {
     isTruckable,
     isActive,
   } = formData;
+  // #endregion
 
+  // #region COMPONENT RENDERERS
+  const materialDialogHeader = () => {
+    return <DialogHeader resourceType="Material" resourceName={material.name} isEdit />;
+  };
+
+  const materialDialogFooter = () => {
+    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
+  // #region FORM HANDLERS
+  // Handle reset form
   const resetForm = () => {
     if (material) {
       setFormData((prevState) => ({
@@ -102,27 +114,12 @@ function EditMaterialForm({ material }) {
     }
   };
 
+  // Handle form closing
   const onClose = () => {
     resetForm();
     setFormDialog(false);
   };
-
-  // #region COMPONENT RENDERERS
-  const materialDialogHeader = () => {
-    return (
-      <DialogHeader
-        resourceType="Material"
-        resourceName={material.name}
-        isEdit
-      />
-    );
-  };
-
-  const materialDialogFooter = () => {
-    return <DialogFooter onClose={onClose} onSubmit={onSubmit} />;
-  };
-  // #endregion
-
+  // Handle form change
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -130,12 +127,15 @@ function EditMaterialForm({ material }) {
     }));
   };
 
+  // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(updateMaterial(formData));
     onClose();
   };
+  // #endregion
 
+  // Fill FormData with contents of Material prop
   useEffect(() => {
     if (material) {
       setFormData((prevState) => ({
@@ -156,21 +156,6 @@ function EditMaterialForm({ material }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (materialCategoriesError) {
-      toast.error(materialCategoriesMessage);
-    }
-
-    if (materialCategoriesSuccess) {
-      toast.success(materialCategoriesSuccess);
-    }
-  }, [
-    materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage,
-    dispatch,
-  ]);
 
   return (
     <section>
@@ -401,12 +386,7 @@ function EditMaterialForm({ material }) {
 
             {/* Active */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isActive"
-                name="isActive"
-                checked={isActive}
-                onChange={onChange}
-              />
+              <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Active</strong>
             </div>
           </div>

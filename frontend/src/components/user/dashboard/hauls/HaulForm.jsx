@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
-
-import { toast } from "react-toastify";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
-import { getHauls, createHaul, resetHaulMessages } from "../../../../features/hauls/haulSlice";
-import { getDrivers, resetDriverMessages } from "../../../../features/drivers/driverSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+import { getHauls, createHaul } from "../../../../features/hauls/haulSlice";
+import { getDrivers } from "../../../../features/drivers/driverSlice";
 
 function HaulForm() {
+  // #region VARS ------------------------
   const initialState = {
     driver: undefined,
     dateHaul: undefined,
@@ -40,17 +41,15 @@ function HaulForm() {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
   const dispatch = useDispatch();
 
-  // SELECT HAULS FROM STORE
-  const { hauls, haulsError, haulsSuccess, haulsMessage } = useSelector((state) => state.hauls);
+  // Select hauls from store
+  const { hauls } = useSelector((state) => state.hauls);
 
-  // SELECT DRIVERS FROM STORE
-  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  // Select drivers from store
+  const { drivers } = useSelector((state) => state.drivers);
 
+  // Destructure form data
   const {
     driver,
     dateHaul,
@@ -68,15 +67,7 @@ function HaulForm() {
     payRate,
     driverPay,
   } = formData;
-
-  const resetForm = () => {
-    setFormData(initialState);
-  };
-
-  const onClose = () => {
-    resetForm();
-    setFormDialog(false);
-  };
+  // #endregion
 
   // #region COMPONENT RENDERERS
   const haulDialogHeader = () => {
@@ -88,7 +79,7 @@ function HaulForm() {
   };
   // #endregion
 
-  // DRIVERS ITEM TEMPLATE
+  // #region COMPONENT TEMPLATES
   const driversItemTemplate = (rowData) => {
     return (
       <>
@@ -103,6 +94,19 @@ function HaulForm() {
         {rowData.firstName} {rowData.lastName}
       </>
     );
+  };
+  // #endregion
+
+  // #region FORM HANDLERS
+  // Handle reset form
+  const resetForm = () => {
+    setFormData(initialState);
+  };
+
+  // Handle form closing
+  const onClose = () => {
+    resetForm();
+    setFormDialog(false);
   };
 
   // Handle form text input
@@ -129,8 +133,8 @@ function HaulForm() {
     dispatch(createHaul(formData));
     onClose();
   };
+  // #endregion
 
-  // RUN ONCE - FETCH HAULS & DRIVERS
   useEffect(() => {
     if (hauls.length === 0) {
       dispatch(getHauls());
@@ -139,51 +143,7 @@ function HaulForm() {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (haulsError) {
-      if (haulsMessage && haulsMessage.length > 0) {
-        toast.error(haulsMessage);
-      } else {
-        toast.error("Haul error occurred, but no message provided");
-      }
-    }
-
-    if (haulsSuccess) {
-      if (haulsMessage && haulsMessage.length > 0) {
-        toast.success(haulsMessage);
-      }
-    }
-
-    if (driversError) {
-      if (driversMessage && driversMessage.length > 0) {
-        toast.error(driversMessage);
-      } else {
-        toast.error("Driver error occurred, but no message provided");
-      }
-    }
-
-    if (driversSuccess) {
-      if (driversMessage && driversMessage.length > 0) {
-        toast.success(driversMessage);
-      }
-    }
-
-    dispatch(resetHaulMessages());
-    dispatch(resetDriverMessages());
-  }, [
-    hauls,
-    haulsError,
-    haulsSuccess,
-    haulsMessage,
-    drivers,
-    driversError,
-    driversSuccess,
-    driversMessage,
-    dispatch,
-  ]);
+  }, [hauls, drivers]);
 
   return (
     <section>

@@ -1,15 +1,18 @@
 import { useState } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter_SubmitClose from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
+// Store data
 import { useDispatch } from "react-redux";
 import { createVendor } from "../../../../features/vendors/vendorSlice";
-import DialogHeader from "../../../dialogComponents/DialogHeader";
-import DialogFooter_SubmitClose from "../../../dialogComponents/DialogFooter_SubmitClose";
 
 function VendorForm() {
+  // #region VARS ------------------------
   const initialState = {
     name: "",
     shortName: "",
@@ -20,12 +23,11 @@ function VendorForm() {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-
   const dispatch = useDispatch();
 
   // Destructure form data
-  const { name, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } =
-    formData;
+  const { name, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
+  // #endregion
 
   // #region COMPONENT RENDERERS
   const vendorDialogHeader = () => {
@@ -37,27 +39,16 @@ function VendorForm() {
   };
   // #endregion
 
+  // #region FORM HANDLERS
+  // Handle form reset
   const resetForm = () => {
     setFormData(initialState);
   };
 
+  // Handle form closing
   const onClose = () => {
     resetForm();
     setFormDialog(false);
-  };
-
-  const renderFooter = () => {
-    return (
-      <div>
-        <Button
-          type="button"
-          label="Cancel"
-          icon="pi pi-times"
-          onClick={onClose}
-          className="p-button-text"
-        />
-      </div>
-    );
   };
 
   // Handle form text input
@@ -82,14 +73,11 @@ function VendorForm() {
     dispatch(createVendor(formData));
     onClose();
   };
+  // #endregion
 
   return (
     <section>
-      <Button
-        label="New Vendor"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-      />
+      <Button label="New Vendor" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newVendorDialog"
@@ -187,24 +175,14 @@ function VendorForm() {
             {/* IsActive */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <InputSwitch
-                  id="isActive"
-                  name="isActive"
-                  checked={isActive}
-                  onChange={onChange}
-                />
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
                 <strong style={{ marginLeft: "0.5em" }}>Active</strong>
               </div>
             </div>
           </div>
 
           <div style={{ marginTop: "1em" }}>
-            <Button
-              type="submit"
-              label="Save"
-              iconPos="left"
-              icon="pi pi-save"
-            />
+            <Button type="submit" label="Save" iconPos="left" icon="pi pi-save" />
           </div>
         </form>
       </Dialog>

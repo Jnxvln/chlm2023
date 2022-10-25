@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
+import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
+// PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { toast } from "react-toastify";
+import { Button } from "primereact/button";
+import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import { FilterMatchMode } from "primereact/api";
+import { InputText } from "primereact/inputtext";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import {
   getDrivers,
   deleteDriver,
   resetDriverMessages,
 } from "../../../features/drivers/driverSlice";
-import { Button } from "primereact/button";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { FilterMatchMode } from "primereact/api";
-import { InputText } from "primereact/inputtext";
-import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
-import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
-import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
-import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
 function DriversDashboard() {
-  const dispatch = useDispatch();
-
+  // #region VARS ------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [driverRowSelected, setDriverRowSelected] = useState(null);
   const [filters, setFilters] = useState({
@@ -29,34 +30,15 @@ function DriversDashboard() {
     lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const dispatch = useDispatch();
 
   // Select Drivers from store slice
   const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
     (state) => state.drivers
   );
-
-  // Delete driver confirmation
-  const onDelete = (e, rowData) => {
-    confirmPopup({
-      target: e.target,
-      message: `Delete driver ${rowData.firstName} ${rowData.lastName}?`,
-      icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteDriver(rowData._id)),
-      reject: () => null,
-    });
-  };
-
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-    _filters["global"].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  };
+  // #endregion
 
   // #region DATA TABLE TEMPLATES
-
   const dataTableHeaderTemplate = () => {
     return (
       <div className="flex justify-content-between">
@@ -131,6 +113,18 @@ function DriversDashboard() {
   };
   // #endregion
 
+  // #region FILTERS
+  // Handle global filter change
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  // Initialize filters
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -141,25 +135,38 @@ function DriversDashboard() {
 
     setGlobalFilterValue("");
   };
+  // #endregion
 
-  // RUN ONCE - FETCH
+  // Handle delete driver confirmation
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Delete driver ${rowData.firstName} ${rowData.lastName}?`,
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteDriver(rowData._id)),
+      reject: () => null,
+    });
+  };
+
+  // RUN ONCE - INITIALIZE DATATABLE FILTERS
   useEffect(() => {
-    if (drivers.length === 0) {
-      dispatch(getDrivers());
-    }
-
     initFilters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // RUN EACH
   useEffect(() => {
-    if (driversError) {
+    if (drivers.length === 0) {
+      dispatch(getDrivers());
+    }
+
+    if (driversError && driversMessage && driversMessage.length > 0) {
       toast.error(driversMessage);
     }
 
     dispatch(resetDriverMessages());
   }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
+
   return (
     <section>
       <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Drivers</h1>

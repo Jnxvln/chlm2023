@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
+import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
+import Spinner from "../../../components/layout/Spinner";
+// PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Column } from "primereact/column";
@@ -8,7 +15,7 @@ import { ProgressBar } from "primereact/progressbar";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { classNames } from "primereact/utils";
-import { toast } from "react-toastify";
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import {
   getActiveMaterials,
@@ -19,22 +26,14 @@ import {
   getMaterialCategories,
   resetMaterialCategoryMessages,
 } from "../../../features/materialCategory/materialCategorySlice";
-import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
-import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
-import Spinner from "../../../components/layout/Spinner";
-
-import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
-import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
 function MaterialsDashboard() {
-  const dispatch = useDispatch();
+  // #region VARS ------------------------
   const stockStatuses = ["new", "in", "low", "out", "notavail"];
   const [matCategories, setMatCategories] = useState([]);
   const [stateMaterials, setStateMaterials] = useState(null);
-  // const [globalFilterValue1, setGlobalFilterValue1] = useState("");
   const [globalFilterValue2, setGlobalFilterValue2] = useState("");
   const [materialRowSelected, setMaterialRowSelected] = useState(null);
-  // const [filters1, setFilters1] = useState(null);
   const [filters2, setFilters2] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -44,34 +43,11 @@ function MaterialsDashboard() {
     isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
     isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
+  const dispatch = useDispatch();
 
-  const onDelete = (e, rowData) => {
-    confirmPopup({
-      target: e.target,
-      message: `Delete material ${rowData.name}?`,
-      icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteMaterial(rowData._id)),
-      reject: () => null,
-    });
-  };
-
-  const categoryRowTemplate = (rowData) => {
-    let mat;
-    if (matCategories.length > 0) {
-      mat = matCategories.find((cat) => cat._id === rowData.category);
-      return <>{mat.name}</>;
-    }
-  };
-
-  // #region RESOURCE STATES & SELECT DATA
   // Select Material data
-  const {
-    materials,
-    materialsLoading,
-    materialsError,
-    materialsSuccess,
-    materialsMessage,
-  } = useSelector((state) => state.materials);
+  const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
+    useSelector((state) => state.materials);
 
   // Select MaterialCategory data
   const {
@@ -124,9 +100,7 @@ function MaterialsDashboard() {
   };
 
   const categoryItemTemplate = (option) => {
-    return (
-      <span className={`category status-${option.name}`}>{option.name}</span>
-    );
+    return <span className={`category status-${option.name}`}>{option.name}</span>;
   };
 
   const stockTemplate = (rowData) => {
@@ -164,11 +138,7 @@ function MaterialsDashboard() {
 
     return (
       <div style={{ width: "100%" }}>
-        <ProgressBar
-          value={progress.value}
-          color={progress.color}
-          style={{ height: "6px" }}
-        />
+        <ProgressBar value={progress.value} color={progress.color} style={{ height: "6px" }} />
       </div>
     );
   };
@@ -192,16 +162,16 @@ function MaterialsDashboard() {
     );
   };
 
+  const categoryRowTemplate = (rowData) => {
+    let mat;
+    if (matCategories.length > 0) {
+      mat = matCategories.find((cat) => cat._id === rowData.category);
+      return <>{mat.name}</>;
+    }
+  };
+
   const binNumberTemplate = (rowData) => {
-    return (
-      <>
-        {rowData.binNumber ? (
-          <span>Bin #{rowData.binNumber}</span>
-        ) : (
-          <span></span>
-        )}
-      </>
-    );
+    return <>{rowData.binNumber ? <span>Bin #{rowData.binNumber}</span> : <span></span>}</>;
   };
 
   const actionsTemplate = (rowData) => {
@@ -269,15 +239,6 @@ function MaterialsDashboard() {
   // #endregion
 
   // #region FILTER HANDLERS
-  // const onGlobalFilterChange1 = (e) => {
-  //   const value = e.target.value;
-  //   let _filters1 = { ...filters1 };
-  //   _filters1["global"].value = value;
-
-  //   setFilters1(_filters1);
-  //   setGlobalFilterValue1(value);
-  // };
-
   const onGlobalFilterChange2 = (e) => {
     const value = e.target.value;
     let _filters2 = { ...filters2 };
@@ -286,59 +247,38 @@ function MaterialsDashboard() {
     setFilters2(_filters2);
     setGlobalFilterValue2(value);
   };
-
-  // const clearFilter1 = () => {
-  //   initFilters1();
-  // };
-
-  // const initFilters1 = () => {
-  //   setFilters1({
-  //     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  //     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  //     stock: {
-  //       operator: FilterOperator.OR,
-  //       constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-  //     },
-  //     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  //     isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
-  //     isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
-  //   });
-
-  //   setGlobalFilterValue1("");
-  // };
   // #endregion
 
-  // Fetch resources once (no dependencies)
+  // Handle delete material
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Delete material ${rowData.name}?`,
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteMaterial(rowData._id)),
+      reject: () => null,
+    });
+  };
+  // useEffect for everything else
   useEffect(() => {
     if (materials.length === 0) {
       dispatch(getActiveMaterials());
     }
 
-    if (materialCategories.length === 0) {
-      dispatch(getMaterialCategories());
-    }
-
-    // initFilters1();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect for everything else
-  useEffect(() => {
-    if (materialsError) {
+    if (materialsError && materialsMessage && materialsMessage.length > 0) {
       toast.error(materialsMessage);
     }
 
-    if (materialCategoriesError) {
-      toast.error(materialCategoriesMessage);
+    if (materialsSuccess && materialsMessage && materialsMessage.length > 0) {
+      toast.success(materialsMessage);
     }
 
+    // ?
     if (materials.length > 0) {
       let materialsListCopy = [];
 
       for (let i = 0; i < materials.length; i++) {
-        let category = materialCategories.find(
-          (cat) => cat._id === materials[i].category
-        );
+        let category = materialCategories.find((cat) => cat._id === materials[i].category);
 
         let materialCopy = { ...materials[i] };
         if (category && category.name) {
@@ -347,6 +287,26 @@ function MaterialsDashboard() {
         materialsListCopy.push(materialCopy);
       }
       setStateMaterials(materialsListCopy);
+    }
+
+    if (materialCategories.length === 0) {
+      dispatch(getMaterialCategories());
+    }
+
+    if (
+      materialCategoriesError &&
+      materialCategoriesMessage &&
+      materialCategoriesMessage.length > 0
+    ) {
+      toast.error(materialCategoriesMessage);
+    }
+
+    if (
+      materialCategoriesSuccess &&
+      materialCategoriesMessage &&
+      materialCategoriesMessage.length > 0
+    ) {
+      toast.success(materialCategoriesMessage);
     }
 
     dispatch(resetMaterialMessages());
@@ -381,9 +341,7 @@ function MaterialsDashboard() {
     return <Spinner />;
   }
 
-  // const header = <div className="table-header">Products</div>;
-
-  const renderHeader2 = () => {
+  const renderHeader = () => {
     return (
       <div className="flex justify-content-between">
         <div>
@@ -401,11 +359,9 @@ function MaterialsDashboard() {
     );
   };
 
-  const header2 = renderHeader2();
-
   return (
     <section>
-      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>Materials</h1>
+      <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Materials</h1>
 
       <br />
       <br />
@@ -416,7 +372,7 @@ function MaterialsDashboard() {
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
             value={stateMaterials}
-            header={header2}
+            header={renderHeader}
             globalFilterFields={[
               "name",
               "category",
@@ -445,11 +401,7 @@ function MaterialsDashboard() {
             stripedRows
           >
             {/* IMAGE COLUMN */}
-            <Column
-              header="Image"
-              style={{ minWidth: "120px" }}
-              body={imageBodyTemplate}
-            ></Column>
+            <Column header="Image" style={{ minWidth: "120px" }} body={imageBodyTemplate}></Column>
 
             {/* BIN NUMBER COLUMN */}
             <Column sortable header="Bin" body={binNumberTemplate}></Column>
