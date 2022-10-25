@@ -21,7 +21,7 @@ function HaulForm() {
     truck: "",
     broker: "",
     chInvoice: "",
-    loadType: "",
+    loadType: "enddump",
     invoice: "",
     from: "",
     to: "",
@@ -135,6 +135,7 @@ function HaulForm() {
   };
   // #endregion
 
+  // RUN ONCE - FETCH DATA
   useEffect(() => {
     if (hauls.length === 0) {
       dispatch(getHauls());
@@ -143,7 +144,36 @@ function HaulForm() {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
-  }, [hauls, drivers, dispatch]);
+  }, [])
+
+  useEffect(() => {
+    if (drivers && driver) {
+      // Get the current driver as an object
+      const driverObj = drivers.find(d => d._id === driver)
+
+      // Set the FormData's defaultTruck field to driverObj's defaultTruck & associated driver pay
+      if (driverObj) {
+        setFormData((prevState) => ({
+          ...prevState,
+          truck: driverObj.defaultTruck,
+        }))
+      }
+
+      if (loadType === 'enddump') {
+        setFormData((prevState) => ({
+          ...prevState,
+          driverPay: driverObj.endDumpPayRate,
+        }))
+      }
+
+      if (loadType === 'flatbedperc') {
+        setFormData((prevState) => ({
+          ...prevState,
+          driverPay: driverObj.flatBedPayRate,
+        }))
+      }
+    }
+  }, [hauls, driver, drivers, dispatch]);
 
   return (
     <section>
@@ -176,6 +206,8 @@ function HaulForm() {
                     showClear
                     placeholder="Choose..."
                     style={{ width: "100%" }}
+                    required
+                    autoFocus
                   />
                   <label htmlFor="driver">Driver</label>
                 </span>
@@ -278,7 +310,7 @@ function HaulForm() {
           {/* CHINVOICE, FROM, TO */}
           <div className="formgrid grid">
             {/* chInoice */}
-            <div className="field col">
+            { (loadType === 'flatbedperc' || loadType === 'flatbedmi') && <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
                   <InputText
@@ -292,8 +324,8 @@ function HaulForm() {
                   <label htmlFor="chInvoice">CH Invoice</label>
                 </span>
               </div>
-            </div>
-
+            </div>}
+            
             {/* From */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
@@ -348,8 +380,47 @@ function HaulForm() {
             </div>
           </div>
 
-          {/* TONS, MILES */}
+          {/* RATE or PAY RATE, TONS, MILES, DRIVER PAY  */}
           <div className="formgrid grid">
+
+            {/* Rate */} 
+            { (loadType === 'enddump' || loadType === 'flatbedmi') && <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="ncRate">Rate</label>
+                <InputNumber
+                  id="rate"
+                  name="rate"
+                  value={rate}
+                  placeholder="Rate"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>}
+
+            {/* Pay Rate */}
+            { loadType === 'flatbedperc' && <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="payRate">Pay Rate</label>
+                <InputNumber
+                  id="payRate"
+                  name="payRate"
+                  value={payRate}
+                  placeholder="Pay Rate"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>}
+
             {/* Tons */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
@@ -370,7 +441,7 @@ function HaulForm() {
             </div>
 
             {/* Miles */}
-            <div className="field col">
+            { loadType === 'flatbedmi' && <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <label htmlFor="miles">Miles</label>
                 <InputNumber
@@ -386,51 +457,10 @@ function HaulForm() {
                   required
                 />
               </div>
-            </div>
-          </div>
-
-          {/* RATE or PAY RATE, TONS, MILES, DRIVER PAY  */}
-          <div className="formgrid grid">
-            {/* Rate */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="ncRate">Rate</label>
-                <InputNumber
-                  id="rate"
-                  name="rate"
-                  value={rate}
-                  placeholder="Rate"
-                  mode="decimal"
-                  minFractionDigits={2}
-                  step={0.01}
-                  onChange={onChangeNumber}
-                  style={{ width: "100%" }}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Pay Rate */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="payRate">Pay Rate</label>
-                <InputNumber
-                  id="payRate"
-                  name="payRate"
-                  value={payRate}
-                  placeholder="Pay Rate"
-                  mode="decimal"
-                  minFractionDigits={2}
-                  step={0.01}
-                  onChange={onChangeNumber}
-                  style={{ width: "100%" }}
-                  required
-                />
-              </div>
-            </div>
-
+            </div>}
+            
             {/* Driver Pay */}
-            <div className="field col">
+            { loadType !== 'flatbedmi' && <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <label htmlFor="driverPay">Driver Pay</label>
                 <InputNumber
@@ -446,7 +476,8 @@ function HaulForm() {
                   required
                 />
               </div>
-            </div>
+            </div>}
+            
           </div>
         </form>
       </Dialog>

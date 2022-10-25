@@ -193,24 +193,22 @@ function HaulsDashboard() {
   // RUN ONCE - INIT FILTERS
   useEffect(() => {
     initFilters();
+    if (hauls.length === 0) {
+      dispatch(getHauls());
+    }
+    if (drivers.length === 0) {
+      dispatch(getDrivers());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (hauls.length === 0) {
-      dispatch(getHauls());
-    }
-
     if (haulsError && haulsMessage && haulsMessage.length > 0) {
       toast.error(haulsMessage);
     }
 
     if (haulsSuccess && haulsMessage && haulsMessage.length > 0) {
       toast.success(haulsMessage);
-    }
-
-    if (drivers.length === 0) {
-      dispatch(getDrivers());
     }
 
     if (driversError && driversMessage && driversMessage.length > 0) {

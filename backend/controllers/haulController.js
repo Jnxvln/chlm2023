@@ -45,6 +45,31 @@ const createHaul = asyncHandler(async (req, res) => {
   }
   // #endregion
 
+  // Next, clear extraneous fields depending on loadType
+  let overrides = {
+    chInvoice: null,
+    rate: null,
+    miles: null,
+    payRate: null,
+    driverPay: null
+  }
+
+  if (req.body.loadType === 'enddump') {
+    overrides.rate = req.body.rate
+  }
+
+  if (req.body.loadType === 'flatbedperc') {
+    overrides.chInvoice = req.body.chInvoice
+    overrides.payRate = req.body.payRate,
+    overrides.driverPay = req.body.driverPay
+  }
+
+  if (req.body.loadType === 'flatbedmi') {
+    overrides.chInvoice = req.body.chInvoice
+    overrides.rate = req.body.rate,
+    overrides.miles = req.body.miles
+  }
+
   const haul = await Haul.create({
     createdBy: req.user.id,
     updatedBy: req.user.id,
@@ -53,17 +78,17 @@ const createHaul = asyncHandler(async (req, res) => {
     timeHaul: req.body.dateHaul,
     truck: req.body.truck,
     broker: req.body.broker,
-    chInvoice: req.body.chInvoice,
+    chInvoice: overrides.chInvoice,
     loadType: req.body.loadType,
     invoice: req.body.invoice,
     from: req.body.from,
     to: req.body.to,
     product: req.body.product,
     tons: req.body.tons,
-    rate: req.body.rate,
-    miles: req.body.miles,
-    payRate: req.body.payRate,
-    driverPay: req.body.driverPay,
+    rate: overrides.rate,
+    miles: overrides.miles,
+    payRate: overrides.payRate,
+    driverPay: overrides.driverPay,
   });
 
   res.status(200).json(haul);
@@ -80,6 +105,31 @@ const updateHaul = asyncHandler(async (req, res) => {
     throw new Error("Haul not found");
   }
 
+    // Next, clear extraneous fields depending on loadType
+    let overrides = {
+      chInvoice: null,
+      rate: null,
+      miles: null,
+      payRate: null,
+      driverPay: null
+    }
+  
+    if (req.body.loadType === 'enddump') {
+      overrides.rate = req.body.rate
+    }
+  
+    if (req.body.loadType === 'flatbedperc') {
+      overrides.chInvoice = req.body.chInvoice
+      overrides.payRate = req.body.payRate,
+      overrides.driverPay = req.body.driverPay
+    }
+  
+    if (req.body.loadType === 'flatbedmi') {
+      overrides.chInvoice = req.body.chInvoice
+      overrides.rate = req.body.rate,
+      overrides.miles = req.body.miles
+    }
+
   const updatedHaul = await Haul.findByIdAndUpdate(
     req.params.id,
     {
@@ -89,17 +139,17 @@ const updateHaul = asyncHandler(async (req, res) => {
       timeHaul: req.body.dateHaul,
       truck: req.body.truck,
       broker: req.body.broker,
-      chInvoice: req.body.chInvoice,
+      chInvoice: overrides.chInvoice,
       loadType: req.body.loadType,
       invoice: req.body.invoice,
       from: req.body.from,
       to: req.body.to,
       product: req.body.product,
       tons: req.body.tons,
-      rate: req.body.rate,
-      miles: req.body.miles,
-      payRate: req.body.payRate,
-      driverPay: req.body.driverPay,
+      rate: overrides.rate,
+      miles: overrides.miles,
+      payRate: overrides.payRate,
+      driverPay: overrides.driverPay,
     },
     { new: true }
   );
