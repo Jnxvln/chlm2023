@@ -28,9 +28,6 @@ const createHaul = async (haulData, token) => {
 
 // Update haul
 const updateHaul = async (haulData, token) => {
-
-    console.log(`[haulService.js updateHaul()]: Token: ${token}`)
-
     const config = {
         headers: {
           Authorization: `Bearer ${token}`,
