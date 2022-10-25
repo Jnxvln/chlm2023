@@ -13,15 +13,16 @@ import {
   resetDeliveryClientMessages,
 } from "../../../../features/deliveryClients/deliveryClientSlice";
 import {
-  createDelivery,
+  updateDelivery,
   resetDeliveryMessages,
 } from "../../../../features/deliveries/deliverySlice";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 
-function DeliveryForm() {
+function DeliveryForm({ delivery }) {
   // #region VARS ------------------------
   const initialState = {
+    _id: "",
     deliveryClient: undefined,
     deliveryDate: undefined,
     contactName: "",
@@ -56,6 +57,7 @@ function DeliveryForm() {
 
   // Destructure form data
   const {
+    _id,
     deliveryClient,
     deliveryDate,
     contactPhone,
@@ -73,7 +75,21 @@ function DeliveryForm() {
 
   // #region COMPONENT RENDERERS ------------------------
   const deliveryDialogHeader = () => {
-    return <DialogHeader resourceType="Delivery" isEdit={false} />;
+    return (
+      <DialogHeader
+        resourceType="Delivery"
+        resourceName={
+          deliveryClients.find(
+            (client) => client._id === delivery.deliveryClient
+          ).firstName +
+          " " +
+          deliveryClients.find(
+            (client) => client._id === delivery.deliveryClient
+          ).lastName
+        }
+        isEdit
+      />
+    );
   };
 
   const deliveryDialogFooter = () => {
@@ -122,7 +138,7 @@ function DeliveryForm() {
     e.preventDefault();
 
     formData.deliveryClient = formData.deliveryClient._id;
-    console.log("DELIVERY TO SUBMIT: ");
+    console.log("DELIVERY TO SUBMIT FOR UPDATE: ");
     console.log(formData);
 
     if (!deliveryClient) {
@@ -145,13 +161,32 @@ function DeliveryForm() {
       return toast.error("The product quantity is required");
     }
 
-    dispatch(createDelivery(formData));
+    dispatch(updateDelivery(formData));
     onClose();
   };
 
   // Handle form reset
   const resetForm = () => {
-    setFormData(initialState);
+    if (delivery) {
+      setFormData((prevState) => ({
+        ...prevState,
+        _id: delivery._id,
+        deliveryClient: delivery.deliveryClient,
+        deliveryDate: delivery.deliveryDate,
+        contactPhone: delivery.contactPhone,
+        address: delivery.address,
+        coordinates: delivery.coordinates,
+        productName: delivery.productName,
+        productQuantity: delivery.productQuantity,
+        notes: delivery.notes,
+        directions: delivery.directions,
+        hasPaid: delivery.hasPaid,
+        directionsReminder: delivery.directionsReminder,
+        completed: delivery.completed,
+      }));
+    } else {
+      setFormData(initialState);
+    }
   };
 
   // Handle dialog close
@@ -159,6 +194,31 @@ function DeliveryForm() {
     resetForm();
     setFormDialog(false);
   };
+  // #endregion
+
+  useEffect(() => {
+    if (delivery) {
+      console.log("DELIVERY CLIENT: ");
+      console.log(delivery.deliveryClient);
+    }
+
+    setFormData((prevState) => ({
+      ...prevState,
+      _id: delivery._id,
+      deliveryClient: delivery.deliveryClient,
+      deliveryDate: delivery.deliveryDate,
+      contactPhone: delivery.contactPhone,
+      address: delivery.address,
+      coordinates: delivery.coordinates,
+      productName: delivery.productName,
+      productQuantity: delivery.productQuantity,
+      notes: delivery.notes,
+      directions: delivery.directions,
+      hasPaid: delivery.hasPaid,
+      directionsReminder: delivery.directionsReminder,
+      completed: delivery.completed,
+    }));
+  }, [delivery]);
 
   useEffect(() => {
     if (deliveryClientsError) {
@@ -219,18 +279,18 @@ function DeliveryForm() {
   return (
     <section>
       <Button
-        label="New Delivery"
-        icon="pi pi-plus"
+        icon="pi pi-pencil"
+        iconPos="left"
+        style={{ marginRight: "0.5em" }}
         onClick={() => setFormDialog(true)}
       />
 
       <Dialog
-        id="newDeliveryDialog"
+        id="editDeliveryDialog"
         visible={formDialog}
         header={deliveryDialogHeader}
         footer={deliveryDialogFooter}
         onHide={onClose}
-        style={{ width: "50vw" }}
         blockScroll
       >
         <form onSubmit={onSubmit}>
@@ -250,9 +310,12 @@ function DeliveryForm() {
                     name="deliveryClient"
                     value={deliveryClient}
                     options={deliveryClients}
-                    optionLabel="firstName"
+                    optionLabel={(option) => (
+                      <>
+                        {option.firstName} {option.lastName}
+                      </>
+                    )}
                     itemTemplate={clientOptionTemplate}
-                    valueTemplate={selectedClientTemplate}
                     filter
                     filterBy="firstName"
                     onChange={(e) => {
@@ -279,7 +342,7 @@ function DeliveryForm() {
                   <Calendar
                     id="deliveryDate"
                     name="deliveryDate"
-                    value={deliveryDate}
+                    value={new Date(deliveryDate)}
                     onChange={onChange}
                     style={{ width: "100%" }}
                     required

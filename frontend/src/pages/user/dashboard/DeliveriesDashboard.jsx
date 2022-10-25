@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  deleteDelivery,
   getDeliveries,
   resetDeliveryMessages,
 } from "../../../features/deliveries/deliverySlice";
@@ -16,6 +18,9 @@ import {
 import dayjs from "dayjs";
 import DeliveryClientForm from "../../../components/user/dashboard/deliveries/deliveryClientForm";
 import DeliveryForm from "../../../components/user/dashboard/deliveries/deliveryForm";
+import EditDeliveryForm from "../../../components/user/dashboard/deliveries/EditDeliveryForm";
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
 function DeliveriesDashboard() {
   const dispatch = useDispatch();
@@ -31,6 +36,17 @@ function DeliveriesDashboard() {
     deliveryClientsError,
     deliveryClientsMessage,
   } = useSelector((state) => state.deliveryClients);
+
+  // Delete delivery confirmation
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Delete this delivery?`,
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteDelivery(rowData._id)),
+      reject: () => null,
+    });
+  };
 
   // #region COMPONENT TEMPLATES
   const deliveryDateTemplate = (rowData) => {
@@ -60,7 +76,7 @@ function DeliveriesDashboard() {
   };
 
   const contactPhoneTemplate = (rowData) => {
-    return <>{rowData.contactPhone}</>;
+    return <div style={{ whiteSpace: "pre" }}>{rowData.contactPhone}</div>;
   };
 
   const coordinatesTemplate = (rowData) => {
@@ -140,6 +156,19 @@ function DeliveriesDashboard() {
       </div>
     );
   };
+
+  const actionsTemplate = (rowData) => {
+    return (
+      <div style={{ display: "flex" }}>
+        <EditDeliveryForm delivery={rowData} />
+        <Button
+          icon="pi pi-trash"
+          className="p-button-danger"
+          onClick={(e) => onDelete(e, rowData)}
+        />
+      </div>
+    );
+  };
   // #endregion
 
   // Fetch data
@@ -178,6 +207,8 @@ function DeliveriesDashboard() {
   return (
     <section>
       <h1>Deliveries</h1>
+
+      <ConfirmPopup />
 
       <OverlayPanel ref={deliveryClientOverlayPanel} showCloseIcon>
         {selectedClientAvatar && (
@@ -288,8 +319,6 @@ function DeliveriesDashboard() {
               field="address"
               header="Address"
               body={addressTemplate}
-              filter
-              filterField="address"
               sortable
             ></Column>
 
@@ -314,8 +343,6 @@ function DeliveriesDashboard() {
               field="coordinates"
               header="Coords"
               body={coordinatesTemplate}
-              filter
-              filterField="coordinates"
               sortable
             ></Column>
 
@@ -325,6 +352,9 @@ function DeliveriesDashboard() {
               header="Completed?"
               body={completedTemplate}
             ></Column>
+
+            {/* Actions */}
+            <Column header="Actions" body={actionsTemplate}></Column>
           </DataTable>
         </div>
       </div>
