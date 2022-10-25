@@ -25,11 +25,6 @@ const createDelivery = asyncHandler(async (req, res) => {
     throw new Error("Delivery date is required");
   }
 
-  if (!req.body.contactName) {
-    res.status(400);
-    throw new Error("Contact name is required");
-  }
-
   if (!req.body.contactPhone) {
     res.status(400);
     throw new Error("Contact phone is required");
@@ -51,7 +46,6 @@ const createDelivery = asyncHandler(async (req, res) => {
     updatedBy: req.user.id,
     deliveryClient: req.body.deliveryClient,
     deliveryDate: req.body.deliveryDate,
-    contactName: req.body.contactName,
     contactPhone: req.body.contactPhone,
     address: req.body.address,
     coordinates: req.body.coordinates,
@@ -84,7 +78,6 @@ const updateDelivery = asyncHandler(async (req, res) => {
       updatedBy: req.user.id,
       deliveryClient: req.body.deliveryClient,
       deliveryDate: req.body.deliveryDate,
-      contactName: req.body.contactName,
       contactPhone: req.body.contactPhone,
       address: req.body.address,
       coordinates: req.body.coordinates,
