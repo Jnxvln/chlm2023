@@ -55,6 +55,22 @@ form {
   background-color: $new-dialog-header-backgroundColor;
 }
 
+// Delivery Client Dialog Styles
+#editDeliveryClientDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newDeliveryClientDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
+// Delivery Dialog Styles
+#editDeliveryDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newDeliveryDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
 // Haul Dialog Styles
 #editHaulDialog .p-dialog-header {
   background-color: $edit-dialog-header-backgroundColor;
@@ -89,4 +105,12 @@ form {
 
 .vendors-dialog-header {
   padding: 0.5em;
+}
+
+#deliveryClient {
+  width: 100% !important;
+}
+
+#deliveryClient input {
+  width: 100% !important;
 }
