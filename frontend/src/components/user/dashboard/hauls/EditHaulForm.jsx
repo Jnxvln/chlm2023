@@ -204,17 +204,6 @@ function EditHaulForm({ haul }) {
         }
       }
     }
-
-    // if (loadType) {
-    //   // Whenever loadType changes, clear dependent fields [chInvoice, payRate, rate, driverPay, and miles]
-    //   setFormData((prevState) => ({
-    //     ...prevState,
-    //     chInvoice: '',
-    //     payRate: '',
-    //     rate: '',
-    //     miles: ''
-    //   }))
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [haul, driver, drivers, dispatch]);
 
