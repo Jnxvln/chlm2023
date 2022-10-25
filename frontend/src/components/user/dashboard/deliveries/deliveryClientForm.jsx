@@ -78,7 +78,7 @@ function DeliveryClientForm() {
 
   return (
     <section>
-      <Button label="New Delivery Client" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
+      <Button label="New Client" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="newDeliveryClientDialog"

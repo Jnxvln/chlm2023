@@ -143,7 +143,7 @@ function HaulForm() {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
-  }, [hauls, drivers]);
+  }, [hauls, drivers, dispatch]);
 
   return (
     <section>
@@ -170,7 +170,7 @@ function HaulForm() {
                     optionLabel={driverOptionLabelTemplate}
                     optionValue="_id"
                     value={driver}
-                    options={drivers}
+                    options={drivers.filter((driver) => driver.isActive === true)}
                     onChange={onChange}
                     itemTemplate={driversItemTemplate}
                     showClear
@@ -348,7 +348,48 @@ function HaulForm() {
             </div>
           </div>
 
-          {/* RATE or PAY RATE, TONS, MILES  */}
+          {/* TONS, MILES */}
+          <div className="formgrid grid">
+            {/* Tons */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="tons">Tons</label>
+                <InputNumber
+                  id="tons"
+                  name="tons"
+                  value={tons}
+                  placeholder="Tons"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Miles */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <label htmlFor="miles">Miles</label>
+                <InputNumber
+                  id="miles"
+                  name="miles"
+                  value={miles}
+                  placeholder="Miles"
+                  mode="decimal"
+                  minFractionDigits={2}
+                  step={0.01}
+                  onChange={onChangeNumber}
+                  style={{ width: "100%" }}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* RATE or PAY RATE, TONS, MILES, DRIVER PAY  */}
           <div className="formgrid grid">
             {/* Rate */}
             <div className="field col">
@@ -388,34 +429,15 @@ function HaulForm() {
               </div>
             </div>
 
-            {/* Tons */}
+            {/* Driver Pay */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="tons">Tons</label>
+                <label htmlFor="driverPay">Driver Pay</label>
                 <InputNumber
-                  id="tons"
-                  name="tons"
-                  value={tons}
-                  placeholder="Tons"
-                  mode="decimal"
-                  minFractionDigits={2}
-                  step={0.01}
-                  onChange={onChangeNumber}
-                  style={{ width: "100%" }}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Miles */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="miles">Miles</label>
-                <InputNumber
-                  id="miles"
-                  name="miles"
-                  value={miles}
-                  placeholder="Miles"
+                  id="driverPay"
+                  name="driverPay"
+                  value={driverPay}
+                  placeholder="Driver Pay"
                   mode="decimal"
                   minFractionDigits={2}
                   step={0.01}

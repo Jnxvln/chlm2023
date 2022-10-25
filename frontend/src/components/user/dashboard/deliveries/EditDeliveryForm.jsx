@@ -40,13 +40,7 @@ function DeliveryForm({ delivery }) {
   const dispatch = useDispatch();
 
   // Select deliveryClients from store
-  const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
-    useSelector((state) => state.deliveryClients);
-
-  // Select deliveries from store
-  const { deliveries, deliveriesError, deliveriesSuccess, deliveriesMessage } = useSelector(
-    (state) => state.deliveries
-  );
+  const { deliveryClients } = useSelector((state) => state.deliveryClients);
 
   // Destructure form data
   const {
@@ -88,18 +82,6 @@ function DeliveryForm({ delivery }) {
 
   // #region TEMPLATES ------------------------
   const clientOptionTemplate = (option, props) => {
-    if (option) {
-      return (
-        <>
-          {option.firstName} {option.lastName}
-        </>
-      );
-    }
-
-    return <span>{props.placeholder}</span>;
-  };
-
-  const selectedClientTemplate = (option, props) => {
     if (option) {
       return (
         <>
@@ -230,7 +212,15 @@ function DeliveryForm({ delivery }) {
         directions: selectedDeliveryClient.directions,
       }));
     }
-  }, [delivery, deliveryClients, selectedDeliveryClient, dispatch]);
+  }, [
+    delivery,
+    deliveryClients,
+    selectedDeliveryClient,
+    notes,
+    productName,
+    productQuantity,
+    dispatch,
+  ]);
 
   return (
     <section>
@@ -253,6 +243,25 @@ function DeliveryForm({ delivery }) {
         <form onSubmit={onSubmit}>
           {/* DELIVERY CLIENT, DELIVERY DATE */}
           <div className="formgrid grid">
+            {/* _ID */}
+            <div className="formgrid grid">
+              <div className="field col" style={{ display: "none" }}>
+                <div style={{ margin: "0.8em 0" }}>
+                  <span className="p-float-label">
+                    <InputText
+                      id="_id"
+                      name="_id"
+                      value={_id}
+                      placeholder="ID"
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                    />
+                    <label htmlFor="_id">ID</label>
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {/* Delivery client */}
             <div className="field col">
               <div
@@ -275,7 +284,7 @@ function DeliveryForm({ delivery }) {
                     filterBy="firstName"
                     onChange={(e) => {
                       setSelectedDeliveryClient(e.value);
-                      onChange(e)
+                      onChange(e);
                     }}
                     placeholder="Client name"
                     style={{ minWidth: "100% !important" }}

@@ -47,13 +47,8 @@ function DeliveriesDashboard() {
     useSelector((state) => state.deliveries);
 
   // Pull in delivery client state
-  const {
-    deliveryClients,
-    deliveryClientsLoading,
-    deliveryClientsError,
-    deliveryClientsSuccess,
-    deliveryClientsMessage,
-  } = useSelector((state) => state.deliveryClients);
+  const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
+    useSelector((state) => state.deliveryClients);
   // #endregion
 
   // #region COMPONENT TEMPLATES
@@ -138,7 +133,7 @@ function DeliveriesDashboard() {
     return (
       <div className="flex justify-content-between">
         <div>
-          <div class="flex" style={{ gap: '1em' }}>
+          <div class="flex" style={{ gap: "1em" }}>
             <DeliveryForm />
             <DeliveryClientForm />
           </div>
@@ -208,7 +203,7 @@ function DeliveriesDashboard() {
   useEffect(() => {
     initFilters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   // Check for messages
   useEffect(() => {
@@ -236,10 +231,10 @@ function DeliveriesDashboard() {
       toast.success(deliveriesMessage);
     }
 
-      // Check for selected client avatar (in Deliveries DataTable)
+    // Check for selected client avatar (in Deliveries DataTable)
     if (selectedClientId) {
       const client = deliveryClients.find((client) => client._id === selectedClientId);
-    setSelectedClientAvatar(client);
+      setSelectedClientAvatar(client);
     }
 
     dispatch(resetDeliveryClientMessages());
@@ -323,12 +318,7 @@ function DeliveriesDashboard() {
             value={deliveries}
             loading={deliveriesLoading}
             header={dataTableHeaderTemplate}
-            globalFilterFields={[
-              "productName",
-              "address",
-              "contactName",
-              "contactPhone",
-            ]}
+            globalFilterFields={["productName", "address", "contactName", "contactPhone"]}
             scrollable
             autoLayout
             responsiveLayout="scroll"

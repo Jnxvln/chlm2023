@@ -183,12 +183,7 @@ function EditHaulForm({ haul }) {
 
   return (
     <section>
-      <Button
-        icon="pi pi-pencil"
-        iconPos="left"
-        style={{ marginRight: "0.5em" }}
-        onClick={() => setFormDialog(true)}
-      />
+      <Button icon="pi pi-pencil" iconPos="left" onClick={() => setFormDialog(true)} />
 
       <Dialog
         id="editHaulDialog"
@@ -229,7 +224,7 @@ function EditHaulForm({ haul }) {
                     optionLabel={driverOptionLabelTemplate}
                     optionValue="_id"
                     value={driver}
-                    options={drivers}
+                    options={drivers.filter((driver) => driver.isActive === true)}
                     onChange={onChange}
                     itemTemplate={driversItemTemplate}
                     showClear

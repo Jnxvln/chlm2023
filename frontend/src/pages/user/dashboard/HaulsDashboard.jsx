@@ -14,7 +14,12 @@ import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup m
 // Store data
 import { useSelector, useDispatch } from "react-redux";
 import { getDrivers, resetDriverMessages } from "../../../features/drivers/driverSlice";
-import { getHauls, deleteHaul, resetHaulMessages } from "../../../features/hauls/haulSlice";
+import {
+  getHauls,
+  createHaul,
+  deleteHaul,
+  resetHaulMessages,
+} from "../../../features/hauls/haulSlice";
 
 function HaulsDashboard() {
   // #region VARS ------------------------
@@ -40,7 +45,7 @@ function HaulsDashboard() {
   );
 
   // Select Drivers from store slice
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
+  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
     (state) => state.drivers
   );
   // #endregion
@@ -69,7 +74,7 @@ function HaulsDashboard() {
   };
 
   const timeHaulTemplate = (rowData) => {
-    return <>{dayjs(rowData.dateHaul).format("hh:MM a")}</>;
+    return <>{dayjs(rowData.timeHaul).format("hh:MM a")}</>;
   };
 
   const brokerTemplate = (rowData) => {
@@ -118,8 +123,14 @@ function HaulsDashboard() {
 
   const actionsTemplate = (rowData) => {
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", gap: "0.5em" }}>
         <EditHaulForm haul={rowData} />
+        <Button
+          icon="pi pi-copy"
+          className="p-button-info"
+          style={{ backgroundColor: "#83B869" }}
+          onClick={(e) => onDuplicate(e, rowData)}
+        />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
@@ -165,6 +176,16 @@ function HaulsDashboard() {
       message: `Delete haul invoice ${rowData.invoice}?`,
       icon: "pi pi-exclamation-triangle",
       accept: () => dispatch(deleteHaul(rowData._id)),
+      reject: () => null,
+    });
+  };
+
+  const onDuplicate = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Copy haul invoice ${rowData.invoice}?`,
+      icon: "pi pi-question-circle",
+      accept: () => dispatch(createHaul(rowData)),
       reject: () => null,
     });
   };
@@ -269,7 +290,13 @@ function HaulsDashboard() {
             ></Column>
 
             {/* TIME (DATE HAUL) */}
-            <Column field="timeHaul" header="Time" body={timeHaulTemplate} sortable></Column>
+            <Column
+              field="timeHaul"
+              header="Time"
+              body={timeHaulTemplate}
+              dataType="date"
+              sortable
+            ></Column>
 
             {/* BROKER */}
             <Column field="broker" header="Cust" body={brokerTemplate} sortable></Column>
