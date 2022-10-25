@@ -98,6 +98,26 @@ function DeliveryForm({ delivery }) {
 
     return <span>{props.placeholder}</span>;
   };
+
+  const selectedClientTemplate = (option, props) => {
+    if (option) {
+      return (
+        <>
+          {option.firstName} {option.lastName}
+        </>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
+  };
+
+  const driverOptionLabelTemplate = (rowData) => {
+    return (
+      <>
+        {rowData.firstName} {rowData.lastName}
+      </>
+    );
+  };
   // #endregion
 
   // #region FORM HANDLERS ------------------------
@@ -245,22 +265,17 @@ function DeliveryForm({ delivery }) {
                   <Dropdown
                     id="deliveryClient"
                     name="deliveryClient"
+                    optionLabel={driverOptionLabelTemplate}
+                    optionValue="_id"
                     value={deliveryClient}
                     options={deliveryClients}
-                    optionLabel={(option) => (
-                      <>
-                        {option.firstName} {option.lastName}
-                      </>
-                    )}
                     itemTemplate={clientOptionTemplate}
+                    // valueTemplate={selectedClientTemplate}
                     filter
                     filterBy="firstName"
                     onChange={(e) => {
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        deliveryClient: e.value,
-                      }));
                       setSelectedDeliveryClient(e.value);
+                      onChange(e)
                     }}
                     placeholder="Client name"
                     style={{ minWidth: "100% !important" }}

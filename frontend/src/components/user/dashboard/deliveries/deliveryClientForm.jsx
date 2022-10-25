@@ -27,11 +27,7 @@ function DeliveryClientForm() {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
-  // Select deliveryClients from store
-  // const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
-  //   useSelector((state) => state.deliveryClients);
-
-  // Select deliveries from store
+  // Destructure form data
   const { firstName, lastName, phone, companyName, address, coordinates, directions } = formData;
   // #endregion
 
@@ -138,14 +134,14 @@ function DeliveryClientForm() {
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
                   <InputText
-                    id="company"
-                    name="company"
+                    id="companyName"
+                    name="companyName"
                     value={companyName}
                     placeholder="Company Name"
                     onChange={onChange}
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="company">Company Name</label>
+                  <label htmlFor="companyName">Company Name</label>
                 </span>
               </div>
             </div>

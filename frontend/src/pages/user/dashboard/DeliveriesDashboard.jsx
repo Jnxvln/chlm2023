@@ -1,10 +1,20 @@
 import { useState, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import DeliveryClientForm from "../../../components/user/dashboard/deliveries/DeliveryClientForm";
+import DeliveryForm from "../../../components/user/dashboard/deliveries/DeliveryForm";
+import EditDeliveryForm from "../../../components/user/dashboard/deliveries/EditDeliveryForm";
+// PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { OverlayPanel } from "primereact/overlaypanel";
-import { toast } from "react-toastify";
+import { InputText } from "primereact/inputtext";
+import { FilterMatchMode } from "primereact/api";
+import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
+import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
+// Store data
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteDelivery,
@@ -15,18 +25,22 @@ import {
   getDeliveryClients,
   resetDeliveryClientMessages,
 } from "../../../features/deliveryClients/deliveryClientSlice";
-import dayjs from "dayjs";
-import DeliveryClientForm from "../../../components/user/dashboard/deliveries/DeliveryClientForm";
-import DeliveryForm from "../../../components/user/dashboard/deliveries/DeliveryForm";
-import EditDeliveryForm from "../../../components/user/dashboard/deliveries/EditDeliveryForm";
-import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
-import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 
 function DeliveriesDashboard() {
+  // #region VARS ------------------------
   const dispatch = useDispatch();
   const deliveryClientOverlayPanel = useRef(null);
   const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedClientAvatar, setSelectedClientAvatar] = useState(null);
+  const [deliveryRowSelected, setDeliveryRowSelected] = useState(null);
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    address: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    contactName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    contactPhone: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
 
   // Pull in delivery state
   const { deliveries, deliveriesLoading, deliveriesError, deliveriesSuccess, deliveriesMessage } =
@@ -40,17 +54,7 @@ function DeliveriesDashboard() {
     deliveryClientsSuccess,
     deliveryClientsMessage,
   } = useSelector((state) => state.deliveryClients);
-
-  // Delete delivery confirmation
-  const onDelete = (e, rowData) => {
-    confirmPopup({
-      target: e.target,
-      message: `Delete this delivery?`,
-      icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteDelivery(rowData._id)),
-      reject: () => null,
-    });
-  };
+  // #endregion
 
   // #region COMPONENT TEMPLATES
   const deliveryDateTemplate = (rowData) => {
@@ -134,16 +138,18 @@ function DeliveriesDashboard() {
     return (
       <div className="flex justify-content-between">
         <div>
-          <DeliveryForm />
-          <DeliveryClientForm />
+          <div class="flex" style={{ gap: '1em' }}>
+            <DeliveryForm />
+            <DeliveryClientForm />
+          </div>
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          {/* <InputText
+          <InputText
             value={globalFilterValue}
             onChange={onGlobalFilterChange}
-            placeholder="First, last, or truck #"
-          /> */}
+            placeholder="Phone, address, or product name"
+          />
         </span>
       </div>
     );
@@ -162,6 +168,47 @@ function DeliveriesDashboard() {
     );
   };
   // #endregion
+
+  // #region Filters
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  // Initialize datatable filters
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      address: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      contactName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      contactPhone: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    });
+
+    setGlobalFilterValue("");
+  };
+  // #endregion
+
+  // Delete delivery confirmation
+  const onDelete = (e, rowData) => {
+    confirmPopup({
+      target: e.target,
+      message: `Delete this delivery?`,
+      icon: "pi pi-exclamation-triangle",
+      accept: () => dispatch(deleteDelivery(rowData._id)),
+      reject: () => null,
+    });
+  };
+
+  // RUN ONCE - INIT FILTERS
+  useEffect(() => {
+    initFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Check for messages
   useEffect(() => {
@@ -189,9 +236,16 @@ function DeliveriesDashboard() {
       toast.success(deliveriesMessage);
     }
 
+      // Check for selected client avatar (in Deliveries DataTable)
+    if (selectedClientId) {
+      const client = deliveryClients.find((client) => client._id === selectedClientId);
+    setSelectedClientAvatar(client);
+    }
+
     dispatch(resetDeliveryClientMessages());
     dispatch(resetDeliveryMessages());
   }, [
+    selectedClientId,
     deliveryClients,
     deliveryClientsError,
     deliveryClientsSuccess,
@@ -202,12 +256,6 @@ function DeliveriesDashboard() {
     deliveriesMessage,
     dispatch,
   ]);
-
-  // Check for selected client avatar (in Deliveries DataTable)
-  useEffect(() => {
-    const client = deliveryClients.find((client) => client._id === selectedClientId);
-    setSelectedClientAvatar(client);
-  }, [selectedClientId]);
 
   return (
     <section>
@@ -275,6 +323,31 @@ function DeliveriesDashboard() {
             value={deliveries}
             loading={deliveriesLoading}
             header={dataTableHeaderTemplate}
+            globalFilterFields={[
+              "productName",
+              "address",
+              "contactName",
+              "contactPhone",
+            ]}
+            scrollable
+            autoLayout
+            responsiveLayout="scroll"
+            size="small"
+            scrollHeight="flex"
+            sortMode="multiple"
+            removableSort
+            filter
+            filters={filters}
+            filterDisplay="row"
+            onFilter={(e) => setFilters(e.filters)}
+            selectionMode="single"
+            selection={deliveryRowSelected}
+            onSelectionChange={(e) => setDeliveryRowSelected(e.value)}
+            dataKey="_id"
+            stateStorage="session"
+            stateKey="dt-deliveries-session"
+            emptyMessage="No deliveries found"
+            stripedRows
           >
             {/* Has Paid */}
             <Column field="hasPaid" header="Paid?" body={hasPaidTemplate}></Column>

@@ -18,9 +18,9 @@ import { getHauls, deleteHaul, resetHaulMessages } from "../../../features/hauls
 
 function HaulsDashboard() {
   // #region VARS ------------------------
-  const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [multiSortMeta, setMultiSortMeta] = useState([{ field: "dateHaul", order: -1 }]);
   const [haulRowSelected, setHaulRowSelected] = useState(null);
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     truck: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -156,6 +156,7 @@ function HaulsDashboard() {
 
     setGlobalFilterValue("");
   };
+  // #endregion
 
   // Delete haul confirmation
   const onDelete = (e, rowData) => {
