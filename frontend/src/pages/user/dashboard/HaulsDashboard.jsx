@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import HaulForm from "../../../components/user/dashboard/hauls/HaulForm";
 import EditHaulForm from "../../../components/user/dashboard/hauls/EditHaulForm";
+import DateRangeSelector from "../../../components/user/dashboard/hauls/DateRangeSelector";
+import DriverSelector from "../../../components/user/dashboard/hauls/DriverSelector";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -23,6 +25,8 @@ import {
 
 function HaulsDashboard() {
   // #region VARS ------------------------
+  const [rangeDates, setRangeDates] = useState([]);
+  const [filteredHauls, setFilteredHauls] = useState([]);
   const [multiSortMeta, setMultiSortMeta] = useState([{ field: "dateHaul", order: -1 }]);
   const [haulRowSelected, setHaulRowSelected] = useState(null);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
@@ -50,12 +54,51 @@ function HaulsDashboard() {
   );
   // #endregion
 
+  // Date Range Selector
+  const onDateRangeSelected = (e) => {
+    let dateStart; // will be e.value[0]
+    let dateEnd; // will be e.value[1]
+
+    if (!e || !e.value) {
+      // Clear ranges and filteredHauls (DataTable will default to `hauls`)
+      setRangeDates([]);
+      setFilteredHauls([]);
+      return;
+    }
+
+    if (e.value[0] && e.value[1]) {
+      // Convert to dates
+      dateStart = dayjs(e.value[0]);
+      dateEnd = dayjs(e.value[1]);
+
+      // Get difference between start and end dates
+      const difference = dateEnd.diff(dateStart, "day");
+
+      // Create an array of dates including start and end dates
+      let dates = [];
+      for (let i = 0; i < difference + 1; i++) {
+        dates.push(new Date(dateStart.add(i, "day")).toDateString());
+      }
+
+      // Set rangeDates in state to this array
+      setRangeDates(dates);
+    }
+  };
+
   // #region DATA TABLE TEMPLATES
   const dataTableHeaderTemplate = () => {
     return (
       <div className="flex justify-content-between">
-        <div>
-          <HaulForm />
+        <div className="flex">
+          <div style={{ marginRight: "1em" }}>
+            <DriverSelector drivers={drivers} />
+          </div>
+          <div style={{ marginRight: "1em" }}>
+            <HaulForm />
+          </div>
+          <div>
+            <DateRangeSelector onDateRangeSelected={onDateRangeSelected} />
+          </div>
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -219,6 +262,12 @@ function HaulsDashboard() {
       toast.success(driversMessage);
     }
 
+    if (rangeDates && rangeDates.length > 0) {
+      // If rangeDates exists and has dates added, filter hauls based on this range
+      const fHauls = hauls.filter((h) => rangeDates.includes(new Date(h.dateHaul).toDateString()));
+      setFilteredHauls(fHauls);
+    }
+
     dispatch(resetDriverMessages());
     dispatch(resetHaulMessages());
   }, [
@@ -230,6 +279,7 @@ function HaulsDashboard() {
     driversError,
     driversSuccess,
     driversMessage,
+    rangeDates,
     dispatch,
   ]);
 
@@ -242,7 +292,7 @@ function HaulsDashboard() {
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={hauls}
+            value={filteredHauls.length > 0 ? filteredHauls : hauls}
             loading={haulsLoading}
             header={dataTableHeaderTemplate}
             globalFilterFields={[
