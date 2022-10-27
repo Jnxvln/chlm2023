@@ -315,7 +315,7 @@ function HaulsDashboard() {
             multiSortMeta={multiSortMeta}
             onSort={(e) => setMultiSortMeta(e.multiSortMeta)}
             responsiveLayout="scroll"
-            filter
+            filter="true"
             filters={filters}
             filterDisplay="row"
             onFilter={(e) => setFilters(e.filters)}

@@ -185,7 +185,7 @@ function DriversDashboard() {
             scrollHeight="flex"
             sortMode="multiple"
             responsiveLayout="scroll"
-            filter
+            filter="true"
             filters={filters}
             filterfield="name"
             filterDisplay="row"

@@ -392,7 +392,7 @@ function MaterialsDashboard() {
             dataKey="_id"
             stateStorage="session"
             stateKey="dt-materials-session"
-            filter
+            filter="true"
             filters={filters2}
             filterfield="name"
             filterDisplay="row"

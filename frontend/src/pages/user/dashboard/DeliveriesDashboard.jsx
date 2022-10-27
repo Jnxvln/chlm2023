@@ -360,7 +360,7 @@ function DeliveriesDashboard() {
             scrollHeight="flex"
             sortMode="multiple"
             removableSort
-            filter
+            filter="true"
             filters={filters}
             filterDisplay="row"
             onFilter={(e) => setFilters(e.filters)}
