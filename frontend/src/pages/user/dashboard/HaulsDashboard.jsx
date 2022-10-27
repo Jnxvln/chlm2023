@@ -16,20 +16,16 @@ import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup m
 // Store data
 import { useSelector, useDispatch } from "react-redux";
 import { getDrivers, resetDriverMessages } from "../../../features/drivers/driverSlice";
-import {
-  getHauls,
-  createHaul,
-  deleteHaul,
-  resetHaulMessages,
-} from "../../../features/hauls/haulSlice";
+import { getHauls, createHaul, deleteHaul, resetHaulMessages } from "../../../features/hauls/haulSlice";
 
 function HaulsDashboard() {
   // #region VARS ------------------------
   const [rangeDates, setRangeDates] = useState([]);
   const [filteredHauls, setFilteredHauls] = useState([]);
-  const [multiSortMeta, setMultiSortMeta] = useState([{ field: "dateHaul", order: -1 }]);
   const [haulRowSelected, setHaulRowSelected] = useState(null);
+  const [selectedDriverId, setSelectedDriverId] = useState(undefined);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [multiSortMeta, setMultiSortMeta] = useState([{ field: "dateHaul", order: -1 }]);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     truck: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -42,56 +38,17 @@ function HaulsDashboard() {
     product: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const dispatch = useDispatch();
-
-  // Select Hauls from store slice
-  const { hauls, haulsLoading, haulsError, haulsSuccess, haulsMessage } = useSelector(
-    (state) => state.hauls
-  );
-
-  // Select Drivers from store slice
-  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  const { hauls, haulsLoading, haulsError, haulsSuccess, haulsMessage } = useSelector((state) => state.hauls);
+  const { drivers, driversError, driversSuccess, driversMessage } = useSelector((state) => state.drivers);
   // #endregion
 
-  // Date Range Selector
-  const onDateRangeSelected = (e) => {
-    let dateStart; // will be e.value[0]
-    let dateEnd; // will be e.value[1]
-
-    if (!e || !e.value) {
-      // Clear ranges and filteredHauls (DataTable will default to `hauls`)
-      setRangeDates([]);
-      setFilteredHauls([]);
-      return;
-    }
-
-    if (e.value[0] && e.value[1]) {
-      // Convert to dates
-      dateStart = dayjs(e.value[0]);
-      dateEnd = dayjs(e.value[1]);
-
-      // Get difference between start and end dates
-      const difference = dateEnd.diff(dateStart, "day");
-
-      // Create an array of dates including start and end dates
-      let dates = [];
-      for (let i = 0; i < difference + 1; i++) {
-        dates.push(new Date(dateStart.add(i, "day")).toDateString());
-      }
-
-      // Set rangeDates in state to this array
-      setRangeDates(dates);
-    }
-  };
-
-  // #region DATA TABLE TEMPLATES
+  // #region DATA TABLE TEMPLATES ------------------------
   const dataTableHeaderTemplate = () => {
     return (
       <div className="flex justify-content-between">
         <div className="flex">
           <div style={{ marginRight: "1em" }}>
-            <DriverSelector drivers={drivers} />
+            <DriverSelector drivers={drivers} onSelectDriver={onSelectDriver} />
           </div>
           <div style={{ marginRight: "1em" }}>
             <HaulForm />
@@ -102,11 +59,7 @@ function HaulsDashboard() {
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
-            placeholder="Invoice, truck, from, to, etc."
-          />
+          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Invoice, truck, from, to, etc." />
         </span>
       </div>
     );
@@ -168,23 +121,14 @@ function HaulsDashboard() {
     return (
       <div style={{ display: "flex", gap: "0.5em" }}>
         <EditHaulForm haul={rowData} />
-        <Button
-          icon="pi pi-copy"
-          className="p-button-info"
-          style={{ backgroundColor: "#83B869" }}
-          onClick={(e) => onDuplicate(e, rowData)}
-        />
-        <Button
-          icon="pi pi-trash"
-          className="p-button-danger"
-          onClick={(e) => onDelete(e, rowData)}
-        />
+        <Button icon="pi pi-copy" className="p-button-info" style={{ backgroundColor: "#83B869" }} onClick={(e) => onDuplicate(e, rowData)} />
+        <Button icon="pi pi-trash" className="p-button-danger" onClick={(e) => onDelete(e, rowData)} />
       </div>
     );
   };
   // #endregion
 
-  // #region Filters
+  // #region FILTERS ------------------------
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
     let _filters = { ...filters };
@@ -212,7 +156,9 @@ function HaulsDashboard() {
   };
   // #endregion
 
-  // Delete haul confirmation
+  // #region HANDLERS ------------------------
+
+  // Handle Delete haul confirmation
   const onDelete = (e, rowData) => {
     confirmPopup({
       target: e.target,
@@ -223,6 +169,7 @@ function HaulsDashboard() {
     });
   };
 
+  // Handle duplicate haul
   const onDuplicate = (e, rowData) => {
     confirmPopup({
       target: e.target,
@@ -233,7 +180,48 @@ function HaulsDashboard() {
     });
   };
 
-  // RUN ONCE - INIT FILTERS
+  // Handle DateRangeSelector component operations
+  const onDateRangeSelected = (e) => {
+    let dateStart; // e.value[0]
+    let dateEnd; // e.value[1]
+
+    if (!e || !e.value) {
+      // Clear ranges and filteredHauls (DataTable will default to `hauls`). Used when clear button pressed
+      setRangeDates([]);
+      setFilteredHauls([]);
+      return;
+    }
+
+    if (e.value[0] && e.value[1]) {
+      // Convert event values to dayjs dates
+      dateStart = dayjs(e.value[0]);
+      dateEnd = dayjs(e.value[1]);
+
+      // Get difference between start and end dates
+      const difference = dateEnd.diff(dateStart, "day");
+
+      // Create an array of dates including start and end dates
+      let dates = [];
+      for (let i = 0; i < difference + 1; i++) {
+        dates.push(new Date(dateStart.add(i, "day")).toDateString()); // toDateString format is used here for ease of comparing dates in another function
+      }
+
+      // Set rangeDates in state to this array
+      setRangeDates(dates);
+    }
+  };
+
+  // Handle driver selected in dropdown
+  const onSelectDriver = (driverId) => {
+    if (!driverId) {
+      return new Error("onSelectDriver: Missing driverId");
+    }
+
+    setSelectedDriverId(driverId);
+  };
+  // #endregion
+
+  // RUN ONCE
   useEffect(() => {
     initFilters();
     if (hauls.length === 0) {
@@ -241,6 +229,18 @@ function HaulsDashboard() {
     }
     if (drivers.length === 0) {
       dispatch(getDrivers());
+    }
+
+    if (localStorage.getItem("selectedHaulsDateRange")) {
+      const _haulsDateRange = JSON.parse(localStorage.getItem("selectedHaulsDateRange"));
+
+      if (_haulsDateRange.length > 0) {
+        // Manually call onDateRangeSelected, passing in a pseudo-event object based on localStorage values
+        let e = {
+          value: [new Date(_haulsDateRange[0]), new Date(_haulsDateRange[1])],
+        };
+        onDateRangeSelected(e);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -263,9 +263,17 @@ function HaulsDashboard() {
     }
 
     if (rangeDates && rangeDates.length > 0) {
-      // If rangeDates exists and has dates added, filter hauls based on this range
-      const fHauls = hauls.filter((h) => rangeDates.includes(new Date(h.dateHaul).toDateString()));
-      setFilteredHauls(fHauls);
+      // Filter hauls first by date range (rangeDates), then by the driver's id
+      let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
+
+      // Filter hauls within selected date range
+      if (_selectedDriverId && _selectedDriverId.length > 0) {
+        let _filteredHauls = hauls.filter((haul) => haul.driver === _selectedDriverId && rangeDates.includes(new Date(haul.dateHaul).toDateString()));
+        setFilteredHauls(_filteredHauls);
+      } else {
+        console.log("No driver id found, no hauls to display");
+        setFilteredHauls([]);
+      }
     }
 
     dispatch(resetDriverMessages());
@@ -280,6 +288,8 @@ function HaulsDashboard() {
     driversSuccess,
     driversMessage,
     rangeDates,
+    rangeDates.length,
+    selectedDriverId,
     dispatch,
   ]);
 
@@ -292,19 +302,10 @@ function HaulsDashboard() {
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={filteredHauls.length > 0 ? filteredHauls : hauls}
+            value={filteredHauls}
             loading={haulsLoading}
             header={dataTableHeaderTemplate}
-            globalFilterFields={[
-              "dateHaul",
-              "broker",
-              "invoice",
-              "chInvoice",
-              "invoice",
-              "from",
-              "to",
-              "product",
-            ]}
+            globalFilterFields={["dateHaul", "broker", "invoice", "chInvoice", "invoice", "from", "to", "product"]}
             scrollable
             autoLayout
             size="small"
@@ -329,22 +330,10 @@ function HaulsDashboard() {
           >
             {/* <Column field="driver" header="Driver" body={driverTemplate}></Column> */}
             {/* HAUL DATE */}
-            <Column
-              field="dateHaul"
-              header="Date"
-              body={dateHaulTemplate}
-              dataType="date"
-              sortable
-            ></Column>
+            <Column field="dateHaul" header="Date" body={dateHaulTemplate} dataType="date" sortable></Column>
 
             {/* TIME (DATE HAUL) */}
-            <Column
-              field="timeHaul"
-              header="Time"
-              body={timeHaulTemplate}
-              dataType="date"
-              sortable
-            ></Column>
+            <Column field="timeHaul" header="Time" body={timeHaulTemplate} dataType="date" sortable></Column>
 
             {/* BROKER */}
             <Column field="broker" header="Cust" body={brokerTemplate} sortable></Column>
