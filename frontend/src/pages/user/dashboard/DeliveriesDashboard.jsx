@@ -198,7 +198,7 @@ function DeliveriesDashboard() {
   };
   // #endregion
 
-  // #region Filters
+  // #region FILTERS
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
     let _filters = { ...filters };
