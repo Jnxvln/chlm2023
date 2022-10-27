@@ -128,6 +128,14 @@ function HaulForm() {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
+
+    // FIXME: Not quite working (not updating immediately, usually have to refresh page!)
+    if (localStorage.getItem('selectedDriverId')) {
+      setFormData((prevState) => ({
+        ...prevState,
+        driver: localStorage.getItem('selectedDriverId')
+      }))
+    }
   }, []);
 
   useEffect(() => {
