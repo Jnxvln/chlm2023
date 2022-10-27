@@ -133,7 +133,7 @@ function DeliveriesDashboard() {
     return (
       <div className="flex justify-content-between">
         <div>
-          <div class="flex" style={{ gap: "1em" }}>
+          <div className="flex" style={{ gap: "1em" }}>
             <DeliveryForm />
             <DeliveryClientForm />
           </div>
