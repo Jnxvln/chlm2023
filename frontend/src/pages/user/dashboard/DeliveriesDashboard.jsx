@@ -52,7 +52,7 @@ function DeliveriesDashboard() {
       command: () => {
         const coords = `${copyCoordinates[0]},${copyCoordinates[1]}`;
         navigator.clipboard.writeText(coords);
-        alert("Copied!");
+        toast.success("Coordinates copied!");
       },
     },
   ];
