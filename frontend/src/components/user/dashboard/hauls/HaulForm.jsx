@@ -50,23 +50,7 @@ function HaulForm() {
   const { drivers } = useSelector((state) => state.drivers);
 
   // Destructure form data
-  const {
-    driver,
-    dateHaul,
-    truck,
-    broker,
-    chInvoice,
-    loadType,
-    invoice,
-    from,
-    to,
-    product,
-    tons,
-    rate,
-    miles,
-    payRate,
-    driverPay,
-  } = formData;
+  const { driver, dateHaul, truck, broker, chInvoice, loadType, invoice, from, to, product, tons, rate, miles, payRate, driverPay } = formData;
   // #endregion
 
   // #region COMPONENT RENDERERS
@@ -159,14 +143,14 @@ function HaulForm() {
         }));
       }
 
-      if (loadType === "enddump") {
+      if (driverObj && loadType === "enddump") {
         setFormData((prevState) => ({
           ...prevState,
           driverPay: driverObj.endDumpPayRate,
         }));
       }
 
-      if (loadType === "flatbedperc") {
+      if (driverObj && loadType === "flatbedperc") {
         setFormData((prevState) => ({
           ...prevState,
           driverPay: driverObj.flatBedPayRate,
@@ -177,12 +161,7 @@ function HaulForm() {
 
   return (
     <section>
-      <Button
-        label="New Haul"
-        icon="pi pi-plus"
-        onClick={() => setFormDialog(true)}
-        style={{ height: "100% !important" }}
-      />
+      <Button label="New Haul" icon="pi pi-plus" onClick={() => setFormDialog(true)} style={{ height: "100% !important" }} />
 
       <Dialog
         id="newHaulDialog"
@@ -243,14 +222,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="truck"
-                    name="truck"
-                    value={truck}
-                    placeholder="Truck"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="truck" name="truck" value={truck} placeholder="Truck" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="truck">Truck</label>
                 </span>
               </div>
@@ -263,15 +235,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <Calendar
-                    id="dateHaul"
-                    name="dateHaul"
-                    value={dateHaul}
-                    onChange={onChange}
-                    showTime
-                    hourFormat="12"
-                    style={{ width: "100%" }}
-                  ></Calendar>
+                  <Calendar id="dateHaul" name="dateHaul" value={dateHaul} onChange={onChange} showTime hourFormat="12" style={{ width: "100%" }}></Calendar>
                   <label htmlFor="dateHaul">Haul Date</label>
                 </span>
               </div>
@@ -281,14 +245,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="broker"
-                    name="broker"
-                    value={broker}
-                    placeholder="broker"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="broker" name="broker" value={broker} placeholder="broker" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="broker">Customer</label>
                 </span>
               </div>
@@ -298,14 +255,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="invoice"
-                    name="invoice"
-                    value={invoice}
-                    placeholder="invoice"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="invoice" name="invoice" value={invoice} placeholder="invoice" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="invoice">Load/Ref #</label>
                 </span>
               </div>
@@ -319,14 +269,7 @@ function HaulForm() {
               <div className="field col">
                 <div style={{ margin: "0.8em 0" }}>
                   <span className="p-float-label">
-                    <InputText
-                      id="chInvoice"
-                      name="chInvoice"
-                      value={chInvoice}
-                      placeholder="CH Invoice"
-                      onChange={onChange}
-                      style={{ width: "100%" }}
-                    />
+                    <InputText id="chInvoice" name="chInvoice" value={chInvoice} placeholder="CH Invoice" onChange={onChange} style={{ width: "100%" }} />
                     <label htmlFor="chInvoice">CH Invoice</label>
                   </span>
                 </div>
@@ -337,14 +280,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="from"
-                    name="from"
-                    value={from}
-                    placeholder="From"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="from" name="from" value={from} placeholder="From" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="from">From</label>
                 </span>
               </div>
@@ -354,14 +290,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="to"
-                    name="to"
-                    value={to}
-                    placeholder="To"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="to" name="to" value={to} placeholder="To" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="to">To</label>
                 </span>
               </div>
@@ -373,14 +302,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="product"
-                    name="product"
-                    value={product}
-                    placeholder="Material"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="product" name="product" value={product} placeholder="Material" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="product">Material</label>
                 </span>
               </div>

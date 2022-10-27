@@ -50,7 +50,7 @@ function HaulsDashboard() {
           <div style={{ marginRight: "1em" }}>
             <DriverSelector drivers={drivers} onSelectDriver={onSelectDriver} />
           </div>
-          <div style={{ marginRight: "1em" }}>
+          <div style={{ marginRight: "4em" }}>
             <HaulForm />
           </div>
           <div>
