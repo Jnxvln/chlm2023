@@ -11,6 +11,8 @@ import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { InputText } from "primereact/inputtext";
+import { Tooltip } from "primereact/tooltip";
+import { ContextMenu } from "primereact/contextmenu";
 import { FilterMatchMode } from "primereact/api";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
@@ -34,6 +36,7 @@ function DeliveriesDashboard() {
   const [selectedClientAvatar, setSelectedClientAvatar] = useState(null);
   const [deliveryRowSelected, setDeliveryRowSelected] = useState(null);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [copyCoordinates, setCopyCoordinates] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     productName: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -41,6 +44,18 @@ function DeliveriesDashboard() {
     contactName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     contactPhone: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const deliveryMapMarkerReference = useRef(null);
+  const deliveryMarkerContextMenuItems = [
+    {
+      label: "Copy coordinates",
+      icon: "pi pi-copy",
+      command: () => {
+        const coords = `${copyCoordinates[0]},${copyCoordinates[1]}`;
+        navigator.clipboard.writeText(coords);
+        alert("Copied!");
+      },
+    },
+  ];
 
   // Pull in delivery state
   const { deliveries, deliveriesLoading, deliveriesError, deliveriesSuccess, deliveriesMessage } =
@@ -85,12 +100,31 @@ function DeliveriesDashboard() {
   const coordinatesTemplate = (rowData) => {
     if (rowData.coordinates) {
       const parts = rowData.coordinates.replace(/ /g, "").split(",");
+      const coords = [parseFloat(parts[0]).toFixed(6), parseFloat(parts[1]).toFixed(6)];
 
       return (
-        <div>
-          <div>{parts[0]},</div>
-          <div>{parts[1]}</div>
-        </div>
+        <>
+          <ContextMenu
+            model={deliveryMarkerContextMenuItems}
+            ref={deliveryMapMarkerReference}
+          ></ContextMenu>
+          <a
+            href={`https://maps.google.com/?q=${coords[0]},${coords[1]}`}
+            target="_blank"
+            rel="noreferrer"
+            onContextMenu={(e) => {
+              setCopyCoordinates(coords);
+              deliveryMapMarkerReference.current.show(e);
+            }}
+          >
+            <Tooltip target=".deliveryMapMarker">
+              <span>
+                {coords[0]}, {coords[1]}
+              </span>
+            </Tooltip>
+            <i className="pi pi-map-marker deliveryMapMarker" tooltip="Enter your username" />
+          </a>
+        </>
       );
     } else {
       return <></>;
