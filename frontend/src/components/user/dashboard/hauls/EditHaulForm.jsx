@@ -315,6 +315,7 @@ function EditHaulForm({ haul }) {
                     onChange={onChange}
                     showTime
                     hourFormat="12"
+                    selectOtherMonths
                     style={{ width: "100%" }}
                   ></Calendar>
                   <label htmlFor="dateHaul">Haul Date</label>

@@ -39,13 +39,8 @@ function DeliveryForm() {
   const dispatch = useDispatch();
 
   // Select deliveryClients from store
-  const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
+  const { deliveryClients } =
     useSelector((state) => state.deliveryClients);
-
-  // Select deliveries from store
-  const { deliveries, deliveriesError, deliveriesSuccess, deliveriesMessage } = useSelector(
-    (state) => state.deliveries
-  );
 
   // Destructure form data
   const {
@@ -236,6 +231,7 @@ function DeliveryForm() {
                     value={deliveryDate}
                     onChange={onChange}
                     style={{ width: "100%" }}
+                    selectOtherMonths
                     required
                   ></Calendar>
                   <label htmlFor="deliveryDate">Delivery Date</label>

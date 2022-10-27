@@ -235,7 +235,7 @@ function HaulForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <Calendar id="dateHaul" name="dateHaul" value={dateHaul} onChange={onChange} showTime hourFormat="12" style={{ width: "100%" }}></Calendar>
+                  <Calendar id="dateHaul" name="dateHaul" value={dateHaul} onChange={onChange} selectOtherMonths showTime hourFormat="12" style={{ width: "100%" }}></Calendar>
                   <label htmlFor="dateHaul">Haul Date</label>
                 </span>
               </div>

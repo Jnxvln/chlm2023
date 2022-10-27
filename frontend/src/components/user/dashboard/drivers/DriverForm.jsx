@@ -257,6 +257,7 @@ function DriverForm() {
                     name="dateHired"
                     value={dateHired}
                     onChange={onChange}
+                    selectOtherMonths
                     style={{ width: "100%" }}
                   ></Calendar>
                   <label htmlFor="dateHired">Date Hired</label>

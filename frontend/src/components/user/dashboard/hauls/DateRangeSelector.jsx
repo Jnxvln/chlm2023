@@ -30,7 +30,7 @@ function DateRangeSelector({ onDateRangeSelected }) {
 
   return (
     <>
-      <Calendar value={date} onChange={onChange} selectionMode="range" placeholder="Choose start & end date" showButtonBar showIcon />
+      <Calendar value={date} onChange={onChange} selectionMode="range" placeholder="Choose start & end date" selectOtherMonths showButtonBar showIcon />
     </>
   );
 }

@@ -300,6 +300,7 @@ function EditDriverForm({ driver }) {
                     name="dateHired"
                     value={new Date(dateHired)}
                     onChange={onChange}
+                    selectOtherMonths
                     style={{ width: "100%" }}
                   ></Calendar>
                   <label htmlFor="dateHired">Date Hired</label>

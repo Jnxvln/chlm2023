@@ -306,6 +306,7 @@ function DeliveryForm({ delivery }) {
                     value={new Date(deliveryDate)}
                     onChange={onChange}
                     style={{ width: "100%" }}
+                    selectOtherMonths
                     required
                   ></Calendar>
                   <label htmlFor="deliveryDate">Delivery Date</label>
