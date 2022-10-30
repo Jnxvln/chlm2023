@@ -23,6 +23,8 @@ app.use("/api/vendors", require("./routes/vendorRoutes"));
 app.use("/api/delivery-clients", require("./routes/deliveryClientRoutes"));
 app.use("/api/deliveries", require("./routes/deliveryRoutes"));
 app.use("/api/hauls", require("./routes/haulRoutes"));
+app.use("/api/vendor-products", require("./routes/vendorProductRoutes"));
+app.use("/api/freight-routes", require("./routes/freightRouteRoutes"));
 
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler);
