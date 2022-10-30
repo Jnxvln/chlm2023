@@ -39,6 +39,14 @@ form {
   background-color: $new-dialog-header-backgroundColor;
 }
 
+// Vendor Product Dialog Styles
+#editVendorProductDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newVendorProductDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
 // Material Dialog Styles
 #editMaterialDialog .p-dialog-header {
   background-color: $edit-dialog-header-backgroundColor;

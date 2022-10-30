@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import driverReducer from "../features/drivers/driverSlice";
 import vendorReducer from "../features/vendors/vendorSlice";
+import vendorProductReducer from "../features/vendorProducts/vendorProductSlice";
 import materialReducer from "../features/materials/materialSlice";
 import materialCategoryReducer from "../features/materialCategory/materialCategorySlice";
 import deliveryReducer from "../features/deliveries/deliverySlice";
@@ -13,6 +14,7 @@ export const store = configureStore({
     auth: authReducer,
     drivers: driverReducer,
     vendors: vendorReducer,
+    vendorProducts: vendorProductReducer,
     materials: materialReducer,
     materialCategories: materialCategoryReducer,
     deliveries: deliveryReducer,

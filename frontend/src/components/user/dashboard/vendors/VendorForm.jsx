@@ -79,15 +79,7 @@ function VendorForm() {
     <section>
       <Button label="New Vendor" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
-      <Dialog
-        id="newVendorDialog"
-        visible={formDialog}
-        header={vendorDialogHeader}
-        footer={vendorDialogFooter}
-        onHide={onClose}
-        style={{ width: "50vw" }}
-        blockScroll
-      >
+      <Dialog id="newVendorDialog" visible={formDialog} header={vendorDialogHeader} footer={vendorDialogFooter} onHide={onClose} blockScroll>
         <form onSubmit={onSubmit}>
           {/* NAME, SHORT NAME */}
           <div className="formgrid grid">
@@ -95,16 +87,7 @@ function VendorForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="name"
-                    name="name"
-                    value={name}
-                    placeholder="Name"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    autoFocus
-                    required
-                  />
+                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} autoFocus required />
                   <label htmlFor="name">Name</label>
                 </span>
               </div>

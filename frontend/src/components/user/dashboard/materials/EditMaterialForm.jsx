@@ -57,27 +57,9 @@ function EditMaterialForm({ material }) {
   const dispatch = useDispatch();
 
   // Select materials from state
-  const {
-    materialCategories,
-    materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage,
-  } = useSelector((state) => state.materialCategories);
+  const { materialCategories } = useSelector((state) => state.materialCategories);
 
-  const {
-    _id,
-    category,
-    name,
-    image,
-    binNumber,
-    size,
-    stock,
-    notes,
-    description,
-    isFeatured,
-    isTruckable,
-    isActive,
-  } = formData;
+  const { _id, category, name, image, binNumber, size, stock, notes, description, isFeatured, isTruckable, isActive } = formData;
   // #endregion
 
   // #region COMPONENT RENDERERS
@@ -159,12 +141,7 @@ function EditMaterialForm({ material }) {
 
   return (
     <section>
-      <Button
-        icon="pi pi-pencil"
-        iconPos="left"
-        style={{ marginRight: "0.5em" }}
-        onClick={(e) => setFormDialog(true)}
-      />
+      <Button icon="pi pi-pencil" iconPos="left" style={{ marginRight: "0.5em" }} onClick={(e) => setFormDialog(true)} />
 
       <Dialog
         id="editMaterialDialog"
@@ -182,16 +159,7 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="_id"
-                    name="_id"
-                    value={_id}
-                    placeholder="ID"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    readOnly
-                    required
-                  />
+                  <InputText id="_id" name="_id" value={_id} placeholder="ID" onChange={onChange} style={{ width: "100%" }} readOnly required />
                   <label htmlFor="_id">ID</label>
                 </span>
               </div>
@@ -201,16 +169,7 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="name"
-                    name="name"
-                    value={name}
-                    placeholder="Name"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                    autoFocus
-                    required
-                  />
+                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} autoFocus required />
                   <label htmlFor="name">Name</label>
                 </span>
               </div>
@@ -242,14 +201,7 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="binNumber"
-                    name="binNumber"
-                    value={binNumber}
-                    placeholder="Bin #"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="binNumber" name="binNumber" value={binNumber} placeholder="Bin #" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="binNumber">Bin #</label>
                 </span>
               </div>
@@ -262,14 +214,7 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="image"
-                    name="image"
-                    value={image}
-                    placeholder="Image"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="image" name="image" value={image} placeholder="Image" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="image">Image</label>
                 </span>
               </div>
@@ -279,14 +224,7 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
-                    id="size"
-                    name="size"
-                    value={size}
-                    placeholder="Size"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
+                  <InputText id="size" name="size" value={size} placeholder="Size" onChange={onChange} style={{ width: "100%" }} />
                   <label htmlFor="size">Size</label>
                 </span>
               </div>
@@ -318,16 +256,7 @@ function EditMaterialForm({ material }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea
-                    id="notes"
-                    name="notes"
-                    value={notes}
-                    placeholder="Notes"
-                    onChange={onChange}
-                    rows={5}
-                    cols={30}
-                    style={{ width: "100%" }}
-                  />
+                  <InputTextarea id="notes" name="notes" value={notes} placeholder="Notes" onChange={onChange} rows={5} cols={30} style={{ width: "100%" }} />
                   <label htmlFor="notes">Notes</label>
                 </span>
               </div>
@@ -364,23 +293,13 @@ function EditMaterialForm({ material }) {
           >
             {/* Featured */}
             <div style={{ margin: "0.8em" }}>
-              <InputSwitch
-                id="isFeatured"
-                name="isFeatured"
-                checked={isFeatured}
-                onChange={onChange}
-              />
+              <InputSwitch id="isFeatured" name="isFeatured" checked={isFeatured} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Featured</strong>
             </div>
 
             {/* Truckable */}
             <div style={{ margin: "0.8em 0" }}>
-              <InputSwitch
-                id="isTruckable"
-                name="isTruckable"
-                checked={isTruckable}
-                onChange={onChange}
-              />
+              <InputSwitch id="isTruckable" name="isTruckable" checked={isTruckable} onChange={onChange} />
               <strong style={{ marginLeft: "0.5em" }}>Truckable</strong>
             </div>
 
