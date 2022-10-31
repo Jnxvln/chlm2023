@@ -3,6 +3,7 @@ import authReducer from "../features/auth/authSlice";
 import driverReducer from "../features/drivers/driverSlice";
 import vendorReducer from "../features/vendors/vendorSlice";
 import vendorProductReducer from "../features/vendorProducts/vendorProductSlice";
+import freightRouteReducer from "../features/freightRoutes/freightRouteSlice";
 import materialReducer from "../features/materials/materialSlice";
 import materialCategoryReducer from "../features/materialCategory/materialCategorySlice";
 import deliveryReducer from "../features/deliveries/deliverySlice";
@@ -15,6 +16,7 @@ export const store = configureStore({
     drivers: driverReducer,
     vendors: vendorReducer,
     vendorProducts: vendorProductReducer,
+    freightRoutes: freightRouteReducer,
     materials: materialReducer,
     materialCategories: materialCategoryReducer,
     deliveries: deliveryReducer,

@@ -2,11 +2,20 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import VendorDataTable from "../../../components/user/dashboard/vendors/VendorDataTable";
 import VendorProductDataTable from "../../../components/user/dashboard/vendors/VendorProductDataTable";
+import FreightRouteDataTable from "../../../components/user/dashboard/vendors/FreightRouteDataTable";
+// PrimeReact Components
 import { TabView, TabPanel } from "primereact/tabview";
 // Store data
 import { useSelector, useDispatch } from "react-redux";
 import { getVendors, resetVendorMessages } from "../../../features/vendors/vendorSlice";
-import { getVendorProducts, resetVendorProductMessages } from "../../../features/vendorProducts/vendorProductSlice";
+import {
+  getVendorProducts,
+  resetVendorProductMessages,
+} from "../../../features/vendorProducts/vendorProductSlice";
+import {
+  getFreightRoutes,
+  resetFreightRouteMessages,
+} from "../../../features/freightRoutes/freightRouteSlice";
 
 function VendorsDashboard() {
   // #region VARS ------------------------
@@ -14,12 +23,27 @@ function VendorsDashboard() {
   const dispatch = useDispatch();
 
   // Select Vendors from store slice
-  const { vendors, vendorsLoading, vendorsError, vendorsSuccess, vendorsMessage } = useSelector((state) => state.vendors);
+  const { vendors, vendorsLoading, vendorsError, vendorsSuccess, vendorsMessage } = useSelector(
+    (state) => state.vendors
+  );
 
   // Select Vendor Products from store slice
-  const { vendorProducts, vendorProductsLoading, vendorProductsError, vendorProductsSuccess, vendorProductsMessage } = useSelector(
-    (state) => state.vendorProducts
-  );
+  const {
+    vendorProducts,
+    vendorProductsLoading,
+    vendorProductsError,
+    vendorProductsSuccess,
+    vendorProductsMessage,
+  } = useSelector((state) => state.vendorProducts);
+
+  // Select Freight Routes store slice
+  const {
+    freightRoutes,
+    freightRoutesLoading,
+    freightRoutesError,
+    freightRoutesSuccess,
+    freightRoutesMessage,
+  } = useSelector((state) => state.freightRoutes);
   // #endregion
 
   useEffect(() => {
@@ -49,9 +73,37 @@ function VendorsDashboard() {
       toast.success(vendorProductsMessage);
     }
 
+    // FREIGHT ROUTES
+    if (freightRoutes.length === 0) {
+      dispatch(getFreightRoutes());
+    }
+
+    if (freightRoutesError && freightRoutesMessage && freightRoutesMessage.length > 0) {
+      toast.error(freightRoutesMessage);
+    }
+
+    if (freightRoutesSuccess && freightRoutesMessage && freightRoutesMessage.length > 0) {
+      toast.success(freightRoutesMessage);
+    }
+
     dispatch(resetVendorMessages());
     dispatch(resetVendorProductMessages());
-  }, [vendors, vendorsError, vendorsSuccess, vendorsMessage, vendorProducts, vendorProductsError, vendorProductsSuccess, vendorProductsMessage, dispatch]);
+    dispatch(resetFreightRouteMessages());
+  }, [
+    vendors,
+    vendorsError,
+    vendorsSuccess,
+    vendorsMessage,
+    vendorProducts,
+    vendorProductsError,
+    vendorProductsSuccess,
+    vendorProductsMessage,
+    freightRoutes,
+    freightRoutesError,
+    freightRoutesSuccess,
+    freightRoutesMessage,
+    dispatch,
+  ]);
 
   return (
     <section>
@@ -62,9 +114,19 @@ function VendorsDashboard() {
           <VendorDataTable vendors={vendors} vendorsLoading={vendorsLoading} />
         </TabPanel>
         <TabPanel header="Products">
-          <VendorProductDataTable vendors={vendors} vendorProducts={vendorProducts} vendorProductsLoading={vendorProductsLoading} />
+          <VendorProductDataTable
+            vendors={vendors}
+            vendorProducts={vendorProducts}
+            vendorProductsLoading={vendorProductsLoading}
+          />
         </TabPanel>
-        <TabPanel header="Routes">Freight Routes datatable here</TabPanel>
+        <TabPanel header="Routes">
+          <FreightRouteDataTable
+            vendors={vendors}
+            freightRoutes={freightRoutes}
+            freightRoutesLoading={freightRoutesLoading}
+          />
+        </TabPanel>
       </TabView>
     </section>
   );
