@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-// import FreightRouteForm from "./FreightRouteForm";
-// import EditFreightRouteForm from "./EditFreightRouteForm";
+import FreightRouteForm from "./FreightRouteForm";
+import EditFreightRouteForm from "./EditFreightRouteForm";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -10,7 +10,6 @@ import { Button } from "primereact/button";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
 // Store data
 import { useDispatch } from "react-redux";
 import { deleteFreightRoute } from "../../../../features/freightRoutes/freightRouteSlice";
@@ -31,10 +30,7 @@ function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading })
     return (
       <div className="flex justify-content-between">
         <div>
-          {/* <VendorProductForm vendors={vendors} /> */}
-          <Button icon="pi pi-plus" iconPos="left">
-            New Freight Route
-          </Button>
+          <FreightRouteForm vendors={vendors} />
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -70,8 +66,7 @@ function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading })
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        {/* <EditVendorProductForm vendors={vendors} vendorProduct={rowData} /> */}
-        <Button icon="pi pi-pencil" iconPos="left"></Button>
+        <EditFreightRouteForm vendors={vendors} freightRoute={rowData} />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"

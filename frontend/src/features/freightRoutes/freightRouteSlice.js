@@ -116,7 +116,7 @@ export const freightRouteSlice = createSlice({
       .addCase(createFreightRoute.fulfilled, (state, action) => {
         state.freightRoutesLoading = false;
         state.freightRoutesSuccess = true;
-        state.freightRoutesMessage = "Freight route created";
+        state.freightRoutesMessage = "Route created";
         state.freightRoutes.push(action.payload);
       })
       .addCase(createFreightRoute.rejected, (state, action) => {
@@ -131,7 +131,7 @@ export const freightRouteSlice = createSlice({
       .addCase(updateFreightRoute.fulfilled, (state, action) => {
         state.freightRoutesLoading = false;
         state.freightRoutesSuccess = true;
-        state.freightRoutesMessage = "Freight route updated";
+        state.freightRoutesMessage = "Route updated";
         const index = state.freightRoutes
           .map((freightRoute) => freightRoute._id)
           .indexOf(action.payload._id);
@@ -149,7 +149,7 @@ export const freightRouteSlice = createSlice({
       .addCase(deleteFreightRoute.fulfilled, (state, action) => {
         state.freightRoutesLoading = false;
         state.freightRoutesSuccess = true;
-        state.freightRoutesMessage = "Freight route deleted";
+        state.freightRoutesMessage = "Route deleted";
         const index = state.freightRoutes
           .map((freightRoute) => freightRoute._id)
           .indexOf(action.payload._id);

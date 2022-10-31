@@ -1,0 +1,197 @@
+import { useState, useEffect } from "react";
+import DialogHeader from "../../../dialogComponents/DialogHeader";
+import DialogFooter_SubmitClose from "../../../dialogComponents/DialogFooter_SubmitClose";
+// PrimeReact Components
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { InputSwitch } from "primereact/inputswitch";
+import { InputNumber } from "primereact/inputnumber";
+import { Dropdown } from "primereact/dropdown";
+import { InputTextarea } from "primereact/inputtextarea";
+// Store data
+import { useDispatch } from "react-redux";
+import { createFreightRoute } from "../../../../features/freightRoutes/freightRouteSlice";
+
+function FreightRouteForm({ vendors }) {
+    // #region VARS ------------------------
+    const initialState = {
+      vendorId: undefined,
+      destination: "",
+      freightCost: null,
+      notes: "",
+      isActive: true,
+    };
+  
+    const [sortedVendors, setSortedVendors] = useState([]);
+    const [formDialog, setFormDialog] = useState(false);
+    const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
+  
+    // Destructure form data
+    const { vendorId, destination, freightCost, notes, isActive } = formData;
+    // #endregion
+
+    // #region COMPONENT RENDERERS ------------------------
+    const freightRouteDialogHeader = () => {
+      return <DialogHeader resourceType="Route" isEdit={false} />;
+    };
+
+    const freightRouteDialogFooter = () => {
+      return <DialogFooter_SubmitClose onClose={onClose} onSubmit={onSubmit} />;
+    };
+    // #endregion
+  
+    // #region TEMPLATES --------------------------
+    const vendorOptionTemplate = (option) => {
+      return <>{option.name}</>;
+    };
+    // #endregion
+
+    // #region FORM HANDLERS ------------------------
+    // Handle form reset
+    const resetForm = () => {
+      setFormData(initialState);
+    };
+
+    // Handle form closing
+    const onClose = () => {
+      resetForm();
+      setFormDialog(false);
+    };
+
+    // Handle form text input
+    const onChange = (e) => {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    };
+
+    // Handle form number input
+    const onChangeNumber = (e) => {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.originalEvent.target.name]: e.originalEvent.target.value,
+      }));
+    };
+
+    // Handle form submit
+    const onSubmit = (e) => {
+      e.preventDefault();
+      dispatch(createFreightRoute(formData));
+      onClose();
+    };
+    // #endregion
+    
+    useEffect(() => {
+      // Sort vendors alphabetically
+      if (vendors && vendors.length > 1) {
+        setSortedVendors([...vendors].sort((a, b) => a.name.localeCompare(b.name)));
+      }
+    }, [vendors]);
+
+    return (
+      <section>
+      <Button label="New Route" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
+
+      <Dialog id="newFreightRouteDialog" visible={formDialog} header={freightRouteDialogHeader} footer={freightRouteDialogFooter} onHide={onClose} blockScroll>
+        <form onSubmit={onSubmit}>
+          {/* VENDOR*/}
+          <div className="formgrid grid">
+            <div className="field col">
+              <div className="p-float-label">
+                <Dropdown
+                  id="freightRouteVendorId"
+                  value={vendorId}
+                  options={sortedVendors}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      vendorId: e.value,
+                    }));
+                  }}
+                  optionLabel="name"
+                  optionValue="_id"
+                  placeholder="Choose vendor"
+                  itemTemplate={vendorOptionTemplate}
+                  style={{ width: "100%" }}
+                  required
+                  autoFocus
+                />
+                <label htmlFor="freightRouteVendorId">Vendor *</label>
+              </div>
+            </div>
+          </div>
+
+          {/* DESTINATION, FREIGHT COST */}
+          <div className="formgrid grid">
+            {/* Destination */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                  <span className="p-float-label">
+                    <InputText
+                      id="destination"
+                      name="destination"
+                      value={destination}
+                      placeholder="Destination"
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                      required
+                    />
+                    <label htmlFor="destination">Destination</label>
+                  </span>
+              </div>
+            </div>
+
+            {/* Freight Cost */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                  <span className="p-float-label">
+
+                    <InputNumber
+                      id="freightCost"
+                      name="freightCost"
+                      value={freightCost}
+                      placeholder="Freight Cost"
+                      mode="decimal"
+                      minFractionDigits={2}
+                      step={0.01}
+                      onChange={onChangeNumber}
+                      style={{ width: "100%" }}
+                      required
+                    />
+                    <label htmlFor="freightCost">Freight Cost</label>
+                  </span>
+              </div>
+            </div>
+          </div>
+
+          {/* NOTES */}
+          <div className="formgrid grid">
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <span className="p-float-label">
+                  <InputTextarea id="notes" name="notes" value={notes} placeholder="Notes" onChange={onChange} rows={5} cols={30} style={{ width: "100%" }} />
+                  <label htmlFor="notes">Notes</label>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* IS ACTIVE */}
+          <div className="formgrid grid">
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <InputSwitch id="isActive" name="isActive" checked={isActive} onChange={onChange} />
+                <strong style={{ marginLeft: "0.5em" }}>Active</strong>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Dialog>
+    </section>
+  )
+}
+
+export default FreightRouteForm

@@ -49,10 +49,6 @@ function VendorDataTable({ vendors, vendorsLoading }) {
     return <>{rowData.isActive ? <i className="pi pi-check" /> : ""}</>;
   };
 
-  const filterClearTemplate = (options) => {
-    return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} className="p-button-secondary"></Button>;
-  };
-
   const chtFuelSurchargeTemplate = (rowData) => {
     return <>{parseFloat(rowData.chtFuelSurcharge).toFixed(2)}</>;
   };
@@ -140,15 +136,12 @@ function VendorDataTable({ vendors, vendorsLoading }) {
           stripedRows
         >
           {/* NAME */}
-          <Column field="name" header="Name" filter filterField="name" filterClear={filterClearTemplate} style={{ minWidth: "12em" }} sortable></Column>
+          <Column field="name" header="Name" style={{ minWidth: "12em" }} sortable></Column>
 
           {/* SHORT NAME */}
           <Column
             field="shortName"
             header="Short Name"
-            filter
-            filterField="shortName"
-            filterClear={filterClearTemplate}
             style={{ minWidth: "12em" }}
             sortable
           ></Column>
