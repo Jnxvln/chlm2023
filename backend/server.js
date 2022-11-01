@@ -20,10 +20,11 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/material-categories", require("./routes/materialCategoryRoutes"));
 app.use("/api/drivers", require("./routes/driverRoutes"));
 app.use("/api/vendors", require("./routes/vendorRoutes"));
+app.use("/api/vendor-products", require("./routes/vendorProductRoutes"));
+app.use("/api/vendor-locations", require("./routes/vendorLocationRoutes"));
 app.use("/api/delivery-clients", require("./routes/deliveryClientRoutes"));
 app.use("/api/deliveries", require("./routes/deliveryRoutes"));
 app.use("/api/hauls", require("./routes/haulRoutes"));
-app.use("/api/vendor-products", require("./routes/vendorProductRoutes"));
 app.use("/api/freight-routes", require("./routes/freightRouteRoutes"));
 
 // OVERRIDE ERROR HANDLER

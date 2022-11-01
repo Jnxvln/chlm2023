@@ -19,12 +19,11 @@ const createVendor = asyncHandler(async (req, res) => {
     throw new Error("Please provide all required fields");
   }
 
-  console.log(req.body);
-
   const vendor = await Vendor.create({
     createdBy: req.user.id,
     updatedBy: req.user.id,
     name: req.body.name,
+    locations: req.body.locations,
     shortName: req.body.shortName,
     chtFuelSurcharge: req.body.chtFuelSurcharge || 0.0,
     vendorFuelSurcharge: req.body.vendorFuelSurcharge || 0.0,
@@ -45,18 +44,9 @@ const updateVendor = asyncHandler(async (req, res) => {
     throw new Error("Vendor not found");
   }
 
-  const updatedVendor = await Vendor.findByIdAndUpdate(
-    req.params.id,
-    {
-      updatedBy: req.user.id,
-      name: req.body.name,
-      shortName: req.body.shortName,
-      chtFuelSurcharge: req.body.chtFuelSurcharge || 0.0,
-      vendorFuelSurcharge: req.body.vendorFuelSurcharge || 0.0,
-      isActive: req.body.isActive,
-    },
-    { new: true }
-  );
+  const updates = { ...vendor, updatedBy: req.user.id };
+
+  const updatedVendor = await Vendor.findByIdAndUpdate(req.params.id, updates, { new: true });
 
   res.status(200).json(updatedVendor);
 });
