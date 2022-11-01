@@ -13,10 +13,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { getHauls, createHaul } from "../../../../features/hauls/haulSlice";
 import { getDrivers } from "../../../../features/drivers/driverSlice";
 
-function HaulForm() {
+function HaulForm({ selectedDriverId }) {
   // #region VARS ------------------------
   const initialState = {
-    driver: undefined,
+    driver: localStorage.getItem('selectedDriverId') || undefined,
     dateHaul: undefined,
     truck: "",
     broker: "",
@@ -128,15 +128,16 @@ function HaulForm() {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
+  }, []);
 
-    // FIXME: Not quite working (not updating immediately, usually have to refresh page!)
-    if (localStorage.getItem('selectedDriverId')) {
+  useEffect(() => {
+    if (selectedDriverId) {
       setFormData((prevState) => ({
         ...prevState,
-        driver: localStorage.getItem('selectedDriverId')
+        driver: selectedDriverId
       }))
     }
-  }, []);
+  }, [selectedDriverId])
 
   useEffect(() => {
     if (drivers && driver) {
