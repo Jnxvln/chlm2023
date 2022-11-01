@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import VendorDataTable from "../../../components/user/dashboard/vendors/VendorDataTable";
+import VendorLocationDataTable from "../../../components/user/dashboard/vendors/VendorLocationDataTable";
 import VendorProductDataTable from "../../../components/user/dashboard/vendors/VendorProductDataTable";
 import FreightRouteDataTable from "../../../components/user/dashboard/vendors/FreightRouteDataTable";
 // PrimeReact Components
@@ -16,6 +17,10 @@ import {
   getFreightRoutes,
   resetFreightRouteMessages,
 } from "../../../features/freightRoutes/freightRouteSlice";
+import {
+  getVendorLocations,
+  resetVendorLocationMessages,
+} from "../../../features/vendorLocations/vendorLocationSlice";
 
 function VendorsDashboard() {
   // #region VARS ------------------------
@@ -26,6 +31,15 @@ function VendorsDashboard() {
   const { vendors, vendorsLoading, vendorsError, vendorsSuccess, vendorsMessage } = useSelector(
     (state) => state.vendors
   );
+
+  // Select Vendor Locations from store slice
+  const {
+    vendorLocations,
+    vendorLocationsLoading,
+    vendorLocationsError,
+    vendorLocationsSuccess,
+    vendorLocationsMessage,
+  } = useSelector((state) => state.vendorLocations);
 
   // Select Vendor Products from store slice
   const {
@@ -60,6 +74,19 @@ function VendorsDashboard() {
       toast.success(vendorsMessage);
     }
 
+    // VENDOR LOCATIONS
+    if (vendorLocations.length === 0) {
+      dispatch(getVendorLocations());
+    }
+
+    if (vendorLocationsError && vendorLocationsMessage && vendorLocationsMessage.length > 0) {
+      toast.error(vendorLocationsMessage);
+    }
+
+    if (vendorLocationsSuccess && vendorLocationsMessage && vendorLocationsMessage.length > 0) {
+      toast.success(vendorLocationsMessage);
+    }
+
     // VENDOR PRODUCTS
     if (vendorProducts.length === 0) {
       dispatch(getVendorProducts());
@@ -89,11 +116,16 @@ function VendorsDashboard() {
     dispatch(resetVendorMessages());
     dispatch(resetVendorProductMessages());
     dispatch(resetFreightRouteMessages());
+    dispatch(resetVendorLocationMessages());
   }, [
     vendors,
     vendorsError,
     vendorsSuccess,
     vendorsMessage,
+    vendorLocations,
+    vendorLocationsError,
+    vendorLocationsSuccess,
+    vendorLocationsMessage,
     vendorProducts,
     vendorProductsError,
     vendorProductsSuccess,
@@ -111,11 +143,23 @@ function VendorsDashboard() {
 
       <TabView activeIndex={activeTabIndex} onTabChange={(e) => setActiveTabIndex(e.index)}>
         <TabPanel header="Vendors">
-          <VendorDataTable vendors={vendors} vendorsLoading={vendorsLoading} />
+          <VendorDataTable
+            vendors={vendors}
+            vendorLocations={vendorLocations}
+            vendorsLoading={vendorsLoading}
+          />
+        </TabPanel>
+        <TabPanel header="Locations">
+          <VendorLocationDataTable
+            vendors={vendors}
+            vendorLocations={vendorLocations}
+            vendorLocationsLoading={vendorLocationsLoading}
+          />
         </TabPanel>
         <TabPanel header="Products">
           <VendorProductDataTable
             vendors={vendors}
+            vendorLocations={vendorLocations}
             vendorProducts={vendorProducts}
             vendorProductsLoading={vendorProductsLoading}
           />
@@ -123,6 +167,7 @@ function VendorsDashboard() {
         <TabPanel header="Routes">
           <FreightRouteDataTable
             vendors={vendors}
+            vendorLocations={vendorLocations}
             freightRoutes={freightRoutes}
             freightRoutesLoading={freightRoutesLoading}
           />

@@ -14,11 +14,12 @@ import { useDispatch } from "react-redux";
 import { updateVendorProduct } from "../../../../features/vendorProducts/vendorProductSlice";
 import { toast } from "react-toastify";
 
-function VendorProductForm({ vendors, vendorProduct }) {
+function VendorProductForm({ vendors, vendorProduct, vendorLocations }) {
   // #region VARS ------------------------
   const initialState = {
     _id: undefined,
     vendorId: undefined,
+    vendorLocationId: undefined,
     name: "",
     productCost: undefined,
     notes: "",
@@ -26,12 +27,13 @@ function VendorProductForm({ vendors, vendorProduct }) {
   };
 
   const [sortedVendors, setSortedVendors] = useState([]);
+  const [filteredVendorLocations, setFilteredVendorLocations] = useState([]);
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
   // Destructure form data
-  const { vendorId, name, productCost, notes, isActive } = formData;
+  const { vendorId, vendorLocationId, name, productCost, notes, isActive } = formData;
   // #endregion
 
   // #region COMPONENT RENDERERS
@@ -52,6 +54,7 @@ function VendorProductForm({ vendors, vendorProduct }) {
         ...prevState,
         _id: vendorProduct._id,
         vendorId: vendorProduct.vendorId,
+        vendorLocationId: vendorProduct.vendorLocationId,
         name: vendorProduct.name,
         productCost: vendorProduct.productCost,
         notes: vendorProduct.notes,
@@ -93,6 +96,10 @@ function VendorProductForm({ vendors, vendorProduct }) {
       return toast.error("A vendor is required");
     }
 
+    if (!vendorLocationId) {
+      return toast.error("A vendor location is required");
+    }
+
     if (!name) {
       return toast.error("A product name is required");
     }
@@ -110,6 +117,10 @@ function VendorProductForm({ vendors, vendorProduct }) {
   const vendorOptionTemplate = (option) => {
     return <>{option.name}</>;
   };
+
+  const vendorLocationOptionTemplate = (option) => {
+    return <>{option.name}</>;
+  };
   // #endregion
 
   useEffect(() => {
@@ -117,7 +128,13 @@ function VendorProductForm({ vendors, vendorProduct }) {
     if (vendors && vendors.length > 1) {
       setSortedVendors([...vendors].sort((a, b) => a.name.localeCompare(b.name)));
     }
-  }, [vendors]);
+
+    // Get vendor locations according to vendorId selected
+    if (vendorId && vendorId.length > 0 && vendorLocations && vendorLocations.length > 0) {
+      const _filteredLocations = vendorLocations.filter((loc) => loc.vendorId === vendorId);
+      setFilteredVendorLocations(_filteredLocations);
+    }
+  }, [vendors, vendorId, vendorLocations]);
 
   // Fill FormData with contents of Material prop
   useEffect(() => {
@@ -126,6 +143,7 @@ function VendorProductForm({ vendors, vendorProduct }) {
         ...prevState,
         _id: vendorProduct._id,
         vendorId: vendorProduct.vendorId,
+        vendorLocationId: vendorProduct.vendorLocationId,
         name: vendorProduct.name,
         productCost: vendorProduct.productCost,
         notes: vendorProduct.notes,
@@ -137,7 +155,11 @@ function VendorProductForm({ vendors, vendorProduct }) {
 
   return (
     <section>
-      <Button icon="pi pi-pencil" style={{ marginRight: "0.5em" }} onClick={() => setFormDialog(true)} />
+      <Button
+        icon="pi pi-pencil"
+        style={{ marginRight: "0.5em" }}
+        onClick={() => setFormDialog(true)}
+      />
 
       <Dialog
         id="editVendorProductDialog"
@@ -150,6 +172,7 @@ function VendorProductForm({ vendors, vendorProduct }) {
         <form onSubmit={onSubmit}>
           {/* VENDOR */}
           <div className="formgrid grid">
+            {/* Vendor ID */}
             <div className="field col">
               <div className="p-float-label">
                 <Dropdown
@@ -171,6 +194,31 @@ function VendorProductForm({ vendors, vendorProduct }) {
                 <label htmlFor="vendorProductVendorId">Vendor *</label>
               </div>
             </div>
+
+            {/* Vendor Location ID */}
+            <div className="field col">
+              <div className="p-float-label">
+                <Dropdown
+                  id="vendorLocationId"
+                  value={vendorLocationId}
+                  options={filteredVendorLocations}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      vendorLocationId: e.value,
+                    }));
+                  }}
+                  optionLabel="name"
+                  optionValue="_id"
+                  placeholder="Location..."
+                  itemTemplate={vendorLocationOptionTemplate}
+                  style={{ width: "100%" }}
+                  required
+                  autoFocus
+                />
+                <label htmlFor="vendorLocationId">Location *</label>
+              </div>
+            </div>
           </div>
 
           {/* NAME, PRODUCT COST */}
@@ -179,7 +227,16 @@ function VendorProductForm({ vendors, vendorProduct }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} autoFocus required />
+                  <InputText
+                    id="name"
+                    name="name"
+                    value={name}
+                    placeholder="Name"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    autoFocus
+                    required
+                  />
                   <label htmlFor="name">Name *</label>
                 </span>
               </div>
@@ -212,7 +269,16 @@ function VendorProductForm({ vendors, vendorProduct }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea id="notes" name="notes" value={notes} placeholder="Notes" onChange={onChange} rows={5} cols={30} style={{ width: "100%" }} />
+                  <InputTextarea
+                    id="notes"
+                    name="notes"
+                    value={notes}
+                    placeholder="Notes"
+                    onChange={onChange}
+                    rows={5}
+                    cols={30}
+                    style={{ width: "100%" }}
+                  />
                   <label htmlFor="notes">Notes</label>
                 </span>
               </div>

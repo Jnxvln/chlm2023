@@ -24,6 +24,11 @@ const createVendorProduct = asyncHandler(async (req, res) => {
     throw new Error("Product name is required");
   }
 
+  if (!req.body.vendorLocationId) {
+    res.status(400);
+    throw new Error("Vendor location is required");
+  }
+
   if (!req.body.productCost || req.body.productCost.toString().length <= 0) {
     res.status(400);
     throw new Error("Product cost is required (or enter 0.00)");
@@ -33,6 +38,7 @@ const createVendorProduct = asyncHandler(async (req, res) => {
     createdBy: req.user.id,
     updatedBy: req.user.id,
     vendorId: req.body.vendorId,
+    vendorLocationId: req.body.vendorLocationId,
     name: req.body.name,
     productCost: req.body.productCost,
     notes: req.body.notes,
@@ -55,7 +61,9 @@ const updateVendorProduct = asyncHandler(async (req, res) => {
 
   const updates = { ...req.body, updatedBy: req.user.id };
 
-  const updatedVendorProduct = await VendorProduct.findByIdAndUpdate(req.params.id, updates, { new: true });
+  const updatedVendorProduct = await VendorProduct.findByIdAndUpdate(req.params.id, updates, {
+    new: true,
+  });
 
   res.status(200).json(updatedVendorProduct);
 });

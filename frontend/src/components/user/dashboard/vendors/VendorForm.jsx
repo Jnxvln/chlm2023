@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter_SubmitClose from "../../../dialogComponents/DialogFooter_SubmitClose";
 // PrimeReact Components
@@ -8,25 +8,31 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 // Store data
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { createVendor } from "../../../../features/vendors/vendorSlice";
+import { getVendorLocations } from "../../../../features/vendorLocations/vendorLocationSlice";
 
 function VendorForm() {
   // #region VARS ------------------------
   const initialState = {
     name: "",
+    locations: [],
     shortName: "",
     chtFuelSurcharge: 0,
     vendorFuelSurcharge: 0,
     isActive: true,
   };
 
+  // const [vendorLocations, setVendorLocations] = useState([]);
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
+  // Get VendorLocations from store
+  const { vendorLocations } = useSelector((state) => state.vendorLocations);
+
   // Destructure form data
-  const { name, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
+  const { name, locations, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
   // #endregion
 
   // #region COMPONENT RENDERERS
@@ -75,11 +81,25 @@ function VendorForm() {
   };
   // #endregion
 
+  useEffect(() => {
+    if (!vendorLocations || vendorLocations.length <= 0) {
+      dispatch(getVendorLocations());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <section>
       <Button label="New Vendor" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
 
-      <Dialog id="newVendorDialog" visible={formDialog} header={vendorDialogHeader} footer={vendorDialogFooter} onHide={onClose} blockScroll>
+      <Dialog
+        id="newVendorDialog"
+        visible={formDialog}
+        header={vendorDialogHeader}
+        footer={vendorDialogFooter}
+        onHide={onClose}
+        blockScroll
+      >
         <form onSubmit={onSubmit}>
           {/* NAME, SHORT NAME */}
           <div className="formgrid grid">
@@ -87,7 +107,16 @@ function VendorForm() {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} autoFocus required />
+                  <InputText
+                    id="name"
+                    name="name"
+                    value={name}
+                    placeholder="Name"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    autoFocus
+                    required
+                  />
                   <label htmlFor="name">Name</label>
                 </span>
               </div>

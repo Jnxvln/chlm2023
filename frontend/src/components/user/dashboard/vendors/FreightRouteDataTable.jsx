@@ -14,7 +14,7 @@ import { InputText } from "primereact/inputtext";
 import { useDispatch } from "react-redux";
 import { deleteFreightRoute } from "../../../../features/freightRoutes/freightRouteSlice";
 
-function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading }) {
+function FreightRouteDataTable({ vendors, vendorLocations, freightRoutes, freightRoutesLoading }) {
   // #region VARS -------------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
@@ -30,7 +30,7 @@ function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading })
     return (
       <div className="flex justify-content-between">
         <div>
-          <FreightRouteForm vendors={vendors} />
+          <FreightRouteForm vendors={vendors} vendorLocations={vendorLocations} />
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -46,6 +46,10 @@ function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading })
 
   const vendorNameTemplate = (rowData) => {
     return <>{vendors.find((v) => v._id === rowData.vendorId).name}</>;
+  };
+
+  const vendorLocationTemplate = (rowData) => {
+    return <>{vendorLocations.find((loc) => loc._id === rowData.vendorLocationId).name}</>;
   };
 
   const freightRouteFreightCostTemplate = (rowData) => {
@@ -66,7 +70,11 @@ function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading })
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        <EditFreightRouteForm vendors={vendors} freightRoute={rowData} />
+        <EditFreightRouteForm
+          vendors={vendors}
+          vendorLocations={vendorLocations}
+          freightRoute={rowData}
+        />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
@@ -147,6 +155,14 @@ function FreightRouteDataTable({ vendors, freightRoutes, freightRoutesLoading })
         >
           {/* VENDOR NAME */}
           <Column field="vendorId" header="Vendor" body={vendorNameTemplate} sortable />
+
+          {/* VENDOR LOCATION */}
+          <Column
+            field="vendorLocationId"
+            header="Location"
+            body={vendorLocationTemplate}
+            sortable
+          />
 
           {/* DESTINATION */}
           <Column

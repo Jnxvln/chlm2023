@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import VendorProductForm from "./VendorProductForm";
-import EditVendorProductForm from "./EditVendorProductForm";
+import VendorLocationForm from "./VendorLocationForm";
+import EditVendorLocationForm from "./EditVendorLocationForm";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -12,30 +12,25 @@ import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 // Store data
 import { useDispatch } from "react-redux";
-import { deleteVendorProduct } from "../../../../features/vendorProducts/vendorProductSlice";
+import { deleteVendorLocation } from "../../../../features/vendorLocations/vendorLocationSlice";
 
-function VendorProductDataTable({
-  vendors,
-  vendorLocations,
-  vendorProducts,
-  vendorProductsLoading,
-}) {
-  // #region VARS -------------------------------
+function VendorLocationDataTable({ vendors, vendorLocations, vendorLocationsLoading }) {
+  // #region VARS -------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
-  const [vendorProductRowSelected, setVendorProductRowSelected] = useState(null);
+  const [vendorLocationRowSelected, setVendorLocationRowSelected] = useState(null);
   const dispatch = useDispatch();
   // #endregion
 
-  // #region TEMPLATES -------------------------------
-  const vendorProductsDataTableHeaderTemplate = () => {
+  // #region TEMPLATES -------------------------
+  const vendorLocationsDataTableHeaderTemplate = () => {
     return (
       <div className="flex justify-content-between">
         <div>
-          <VendorProductForm vendors={vendors} vendorLocations={vendorLocations} />
+          <VendorLocationForm vendors={vendors} />
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -43,18 +38,6 @@ function VendorProductDataTable({
         </span>
       </div>
     );
-  };
-
-  const vendorNameTemplate = (rowData) => {
-    return <>{vendors.find((v) => v._id === rowData.vendorId).name}</>;
-  };
-
-  const vendorLocationTemplate = (rowData) => {
-    return <>{vendorLocations.find((loc) => loc._id === rowData.vendorLocationId).name}</>;
-  };
-
-  const vendorProductProductCostTemplate = (rowData) => {
-    return <>${parseFloat(rowData.productCost).toFixed(2)}</>;
   };
 
   const isActiveRowFilterTemplate = (options) => {
@@ -68,14 +51,23 @@ function VendorProductDataTable({
     return <>{rowData.isActive ? <i className="pi pi-check" /> : ""}</>;
   };
 
+  //   const chtFuelSurchargeTemplate = (rowData) => {
+  //     return <>{parseFloat(rowData.chtFuelSurcharge).toFixed(2)}</>;
+  //   };
+
+  //   const vendorFuelSurchargeTemplate = (rowData) => {
+  //     return <>{parseFloat(rowData.vendorFuelSurcharge).toFixed(2)}</>;
+  //   };
+
+  const vendorNameTemplate = (rowData) => {
+    const vendor = vendors.find((v) => v._id === rowData.vendorId);
+    return <>{vendor.name}</>;
+  };
+
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        <EditVendorProductForm
-          vendors={vendors}
-          vendorLocations={vendorLocations}
-          vendorProduct={rowData}
-        />
+        <EditVendorLocationForm vendors={vendors} vendorLocation={rowData} />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
@@ -86,7 +78,7 @@ function VendorProductDataTable({
   };
   // #endregion
 
-  // #region FILTERS -------------------------------
+  // #region FILTERS -------------------------
   // Handle filter change
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -102,20 +94,19 @@ function VendorProductDataTable({
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      shortName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     });
 
     setGlobalFilterValue("");
   };
   // #endregion
 
-  // Delete vendor confirmation
+  // Delete vendor location confirmation
   const onDelete = (e, rowData) => {
     confirmPopup({
       target: e.target,
-      message: `Delete product ${rowData.name}?`,
+      message: `Delete location ${rowData.name}?`,
       icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteVendorProduct(rowData._id)),
+      accept: () => dispatch(deleteVendorLocation(rowData._id)),
       reject: () => null,
     });
   };
@@ -131,9 +122,9 @@ function VendorProductDataTable({
       <ConfirmPopup />
       <div className="card" style={{ height: "calc(100vh - 145px)" }}>
         <DataTable
-          value={vendorProducts}
-          loading={vendorProductsLoading}
-          header={vendorProductsDataTableHeaderTemplate}
+          value={vendorLocations}
+          loading={vendorLocationsLoading}
+          header={vendorLocationsDataTableHeaderTemplate}
           globalFilterFields={["name"]}
           size="small"
           scrollable
@@ -146,36 +137,19 @@ function VendorProductDataTable({
           filterDisplay="row"
           onFilter={(e) => setFilters(e.filters)}
           selectionMode="single"
-          selection={vendorProductRowSelected}
-          onSelectionChange={(e) => setVendorProductRowSelected(e.value)}
+          selection={vendorLocationRowSelected}
+          onSelectionChange={(e) => setVendorLocationRowSelected(e.value)}
           dataKey="_id"
           stateStorage="session"
-          stateKey="dt-vendorProducts-session"
-          emptyMessage="No vendor products found"
+          stateKey="dt-vendorLocations-session"
+          emptyMessage="No vendor locations found"
           stripedRows
         >
-          {/* VENDOR NAME */}
-          <Column field="vendorId" header="Vendor" body={vendorNameTemplate} sortable />
-
-          {/* VENDOR LOCATION */}
-          <Column
-            field="vendorLocationId"
-            header="Location"
-            body={vendorLocationTemplate}
-            sortable
-          />
+          {/* VENDOR */}
+          <Column field="vendorId" header="Vendor" body={vendorNameTemplate} sortable></Column>
 
           {/* NAME */}
-          <Column field="name" header="Name" style={{ minWidth: "12em" }} sortable></Column>
-
-          {/* PRODUCT COST */}
-          <Column
-            field="productCost"
-            dataType="number"
-            header="Product Cost"
-            body={vendorProductProductCostTemplate}
-            sortable
-          ></Column>
+          <Column field="name" header="Name" sortable></Column>
 
           {/* IS ACTIVE */}
           <Column
@@ -195,4 +169,4 @@ function VendorProductDataTable({
   );
 }
 
-export default VendorProductDataTable;
+export default VendorLocationDataTable;

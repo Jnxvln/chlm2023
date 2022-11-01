@@ -35,14 +35,21 @@ function VendorDataTable({ vendors, vendorsLoading }) {
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Name or short name" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Name or short name"
+          />
         </span>
       </div>
     );
   };
 
   const isActiveRowFilterTemplate = (options) => {
-    <TriStateCheckbox value={options.value} onChange={(e) => options.filterApplyCallback(e.value)} />;
+    <TriStateCheckbox
+      value={options.value}
+      onChange={(e) => options.filterApplyCallback(e.value)}
+    />;
   };
 
   const isActiveTemplate = (rowData) => {
@@ -61,7 +68,11 @@ function VendorDataTable({ vendors, vendorsLoading }) {
     return (
       <div style={{ display: "flex" }}>
         <EditVendorForm vendor={rowData} />
-        <Button icon="pi pi-trash" className="p-button-danger" onClick={(e) => onDelete(e, rowData)} />
+        <Button
+          icon="pi pi-trash"
+          className="p-button-danger"
+          onClick={(e) => onDelete(e, rowData)}
+        />
       </div>
     );
   };
@@ -147,7 +158,14 @@ function VendorDataTable({ vendors, vendorsLoading }) {
           ></Column>
 
           {/* CHT FSC */}
-          <Column field="chtFuelSurcharge" dataType="number" header="CHT FSC" style={{ minWidth: "12em" }} sortable body={chtFuelSurchargeTemplate}></Column>
+          <Column
+            field="chtFuelSurcharge"
+            dataType="number"
+            header="CHT FSC"
+            style={{ minWidth: "12em" }}
+            sortable
+            body={chtFuelSurchargeTemplate}
+          ></Column>
 
           {/* VENDOR FSC */}
           <Column
@@ -160,7 +178,14 @@ function VendorDataTable({ vendors, vendorsLoading }) {
           ></Column>
 
           {/* IS ACTIVE */}
-          <Column field="isActive" dataType="boolean" header="Active" filterElement={isActiveRowFilterTemplate} body={isActiveTemplate} sortable></Column>
+          <Column
+            field="isActive"
+            dataType="boolean"
+            header="Active"
+            filterElement={isActiveRowFilterTemplate}
+            body={isActiveTemplate}
+            sortable
+          ></Column>
 
           {/* ACTIONS */}
           <Column header="Actions" body={actionsTemplate}></Column>

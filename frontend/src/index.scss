@@ -47,6 +47,14 @@ form {
   background-color: $new-dialog-header-backgroundColor;
 }
 
+// Vendor Location Dialog Styles
+#editVendorLocationDialog .p-dialog-header {
+  background-color: $edit-dialog-header-backgroundColor;
+}
+#newVendorLocationDialog .p-dialog-header {
+  background-color: $new-dialog-header-backgroundColor;
+}
+
 // Freight Route Dialog Styles
 #editFreightRouteDialog .p-dialog-header {
   background-color: $edit-dialog-header-backgroundColor;

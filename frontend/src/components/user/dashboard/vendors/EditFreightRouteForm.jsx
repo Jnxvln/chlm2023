@@ -14,130 +14,151 @@ import { useDispatch } from "react-redux";
 import { updateFreightRoute } from "../../../../features/freightRoutes/freightRouteSlice";
 import { toast } from "react-toastify";
 
-function EditFreightRouteForm({ vendors, freightRoute }) {
+function EditFreightRouteForm({ vendors, vendorLocations, freightRoute }) {
+  // #region VARS ------------------------
+  const initialState = {
+    _id: undefined,
+    vendorId: undefined,
+    vendorLocationId: undefined,
+    destination: "",
+    freightCost: undefined,
+    notes: "",
+    isActive: true,
+  };
 
-    // #region VARS ------------------------
-    const initialState = {
-      _id: undefined,
-      vendorId: undefined,
-      destination: "",
-      freightCost: undefined,
-      notes: "",
-      isActive: true,
-    };
-  
-    const [sortedVendors, setSortedVendors] = useState([]);
-    const [formDialog, setFormDialog] = useState(false);
-    const [formData, setFormData] = useState(initialState);
-    const dispatch = useDispatch();
-  
-    // Destructure form data
-    const { vendorId, destination, freightCost, notes, isActive } = formData;
-    // #endregion
-  
-    // #region COMPONENT RENDERERS ------------------------
-    const freightRouteDialogHeader = () => {
-      return <DialogHeader resourceType="Route" resourceName={freightRoute.destination} isEdit />;
-    };
-  
-    const freightRouteDialogFooter = () => {
-      return <DialogFooter_SubmitClose onClose={onClose} onSubmit={onSubmit} />;
-    };
-    // #endregion
-  
-    // #region FORM HANDLERS ------------------------
-    // Handle form reset
-    const resetForm = () => {
-      if (freightRoute) {
-        setFormData((prevState) => ({
-          ...prevState,
-          _id: freightRoute._id,
-          vendorId: freightRoute.vendorId,
-          destination: freightRoute.destination,
-          freightCost: freightRoute.freightCost,
-          notes: freightRoute.notes,
-          isActive: freightRoute.isActive,
-        }));
-      }
-      setFormData(initialState);
-    };
-  
-    // Handle form closing
-    const onClose = () => {
-      resetForm();
-      setFormDialog(false);
-    };
-  
-    // Handle form text input
-    const onChange = (e) => {
-      if (e.hasOwnProperty("target")) {
-        setFormData((prevState) => ({
-          ...prevState,
-          [e.target.name]: e.target.value,
-        }));
-      }
-    };
-  
-    // Handle form number input
-    const onChangeNumber = (e) => {
+  const [sortedVendors, setSortedVendors] = useState([]);
+  const [filteredVendorLocations, setFilteredVendorLocations] = useState([]);
+  const [formDialog, setFormDialog] = useState(false);
+  const [formData, setFormData] = useState(initialState);
+  const dispatch = useDispatch();
+
+  // Destructure form data
+  const { vendorId, vendorLocationId, destination, freightCost, notes, isActive } = formData;
+  // #endregion
+
+  // #region COMPONENT RENDERERS ------------------------
+  const freightRouteDialogHeader = () => {
+    return <DialogHeader resourceType="Route" resourceName={freightRoute.destination} isEdit />;
+  };
+
+  const freightRouteDialogFooter = () => {
+    return <DialogFooter_SubmitClose onClose={onClose} onSubmit={onSubmit} />;
+  };
+  // #endregion
+
+  // #region FORM HANDLERS ------------------------
+  // Handle form reset
+  const resetForm = () => {
+    if (freightRoute) {
       setFormData((prevState) => ({
         ...prevState,
-        [e.originalEvent.target.name]: e.originalEvent.target.value,
+        _id: freightRoute._id,
+        vendorId: freightRoute.vendorId,
+        vendorLocationId: freightRoute.vendorLocationId,
+        destination: freightRoute.destination,
+        freightCost: freightRoute.freightCost,
+        notes: freightRoute.notes,
+        isActive: freightRoute.isActive,
       }));
-    };
-  
-    // Handle form submit
-    const onSubmit = (e) => {
-      e.preventDefault();
-  
-      if (!vendorId) {
-        return toast.error("A vendor is required");
-      }
-  
-      if (!destination) {
-        return toast.error("Destination is required");
-      }
-  
-      if (!freightCost) {
-        return toast.error("Freight cost is required (or 0)");
-      }
-  
-      dispatch(updateFreightRoute(formData));
-      onClose();
-    };
-    // #endregion
-  
-    // #region TEMPLATES ------------------------
-    const vendorOptionTemplate = (option) => {
-      return <>{option.name}</>;
-    };
-    // #endregion
-  
-    useEffect(() => {
-      // Sort vendors alphabetically
-      if (vendors && vendors.length > 1) {
-        setSortedVendors([...vendors].sort((a, b) => a.name.localeCompare(b.name)));
-      }
-    }, [vendors]);
+    }
+    setFormData(initialState);
+  };
 
-    // Fill FormData with contents of Freight Route prop
-    useEffect(() => {
-      if (freightRoute) {
-        setFormData((prevState) => ({
-          ...prevState,
-          _id: freightRoute._id,
-          vendorId: freightRoute.vendorId,
-          destination: freightRoute.destination,
-          freightCost: freightRoute.freightCost,
-          notes: freightRoute.notes,
-          isActive: freightRoute.isActive,
-        }));
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  // Handle form closing
+  const onClose = () => {
+    resetForm();
+    setFormDialog(false);
+  };
+
+  // Handle form text input
+  const onChange = (e) => {
+    if (e.hasOwnProperty("target")) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
+  };
+
+  // Handle form number input
+  const onChangeNumber = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.originalEvent.target.name]: e.originalEvent.target.value,
+    }));
+  };
+
+  // Handle form submit
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (!vendorId) {
+      return toast.error("A vendor is required");
+    }
+
+    if (!vendorLocationId) {
+      return toast.error("A vendor location is required");
+    }
+
+    if (!destination) {
+      return toast.error("Destination is required");
+    }
+
+    if (!freightCost) {
+      return toast.error("Freight cost is required (or 0)");
+    }
+
+    dispatch(updateFreightRoute(formData));
+    onClose();
+  };
+  // #endregion
+
+  // #region TEMPLATES ------------------------
+  const vendorOptionTemplate = (option) => {
+    return <>{option.name}</>;
+  };
+
+  const vendorLocationOptionTemplate = (option) => {
+    return <>{option.name}</>;
+  };
+  // #endregion
+
+  useEffect(() => {
+    // Sort vendors alphabetically
+    if (vendors && vendors.length > 1) {
+      setSortedVendors([...vendors].sort((a, b) => a.name.localeCompare(b.name)));
+    }
+
+    // Get vendor locations according to vendorId selected
+    if (vendorId && vendorId.length > 0 && vendorLocations && vendorLocations.length > 0) {
+      const _filteredLocations = vendorLocations.filter((loc) => loc.vendorId === vendorId);
+      setFilteredVendorLocations(_filteredLocations);
+    }
+  }, [vendors, vendorId, vendorLocations]);
+
+  // Fill FormData with contents of Freight Route prop
+  useEffect(() => {
+    if (freightRoute) {
+      setFormData((prevState) => ({
+        ...prevState,
+        _id: freightRoute._id,
+        vendorId: freightRoute.vendorId,
+        vendorLocationId: freightRoute.vendorLocationId,
+        destination: freightRoute.destination,
+        freightCost: freightRoute.freightCost,
+        notes: freightRoute.notes,
+        isActive: freightRoute.isActive,
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <section>
-      <Button icon="pi pi-pencil" style={{ marginRight: "0.5em" }} onClick={() => setFormDialog(true)} />
+      <Button
+        icon="pi pi-pencil"
+        style={{ marginRight: "0.5em" }}
+        onClick={() => setFormDialog(true)}
+      />
 
       <Dialog
         id="editFreightRouteDialog"
@@ -148,8 +169,9 @@ function EditFreightRouteForm({ vendors, freightRoute }) {
         blockScroll
       >
         <form onSubmit={onSubmit}>
-          {/* VENDOR*/}
+          {/* VENDOR, VENDOR LOCATION */}
           <div className="formgrid grid">
+            {/* Vendor */}
             <div className="field col">
               <div className="p-float-label">
                 <Dropdown
@@ -173,6 +195,31 @@ function EditFreightRouteForm({ vendors, freightRoute }) {
                 <label htmlFor="freightRouteVendorId">Vendor *</label>
               </div>
             </div>
+
+            {/* Vendor Location ID */}
+            <div className="field col">
+              <div className="p-float-label">
+                <Dropdown
+                  id="vendorLocationId"
+                  value={vendorLocationId}
+                  options={filteredVendorLocations}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      vendorLocationId: e.value,
+                    }));
+                  }}
+                  optionLabel="name"
+                  optionValue="_id"
+                  placeholder="Location..."
+                  itemTemplate={vendorLocationOptionTemplate}
+                  style={{ width: "100%" }}
+                  required
+                  autoFocus
+                />
+                <label htmlFor="vendorLocationId">Location *</label>
+              </div>
+            </div>
           </div>
 
           {/* DESTINATION, FREIGHT COST */}
@@ -180,40 +227,39 @@ function EditFreightRouteForm({ vendors, freightRoute }) {
             {/* Destination */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                  <span className="p-float-label">
-                    <InputText
-                      id="destination"
-                      name="destination"
-                      value={destination}
-                      placeholder="Destination"
-                      onChange={onChange}
-                      style={{ width: "100%" }}
-                      required
-                    />
-                    <label htmlFor="destination">Destination</label>
-                  </span>
+                <span className="p-float-label">
+                  <InputText
+                    id="destination"
+                    name="destination"
+                    value={destination}
+                    placeholder="Destination"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    required
+                  />
+                  <label htmlFor="destination">Destination</label>
+                </span>
               </div>
             </div>
 
             {/* Freight Cost */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                  <span className="p-float-label">
-
-                    <InputNumber
-                      id="freightCost"
-                      name="freightCost"
-                      value={freightCost}
-                      placeholder="Freight Cost"
-                      mode="decimal"
-                      minFractionDigits={2}
-                      step={0.01}
-                      onChange={onChangeNumber}
-                      style={{ width: "100%" }}
-                      required
-                    />
-                    <label htmlFor="freightCost">Freight Cost</label>
-                  </span>
+                <span className="p-float-label">
+                  <InputNumber
+                    id="freightCost"
+                    name="freightCost"
+                    value={freightCost}
+                    placeholder="Freight Cost"
+                    mode="decimal"
+                    minFractionDigits={2}
+                    step={0.01}
+                    onChange={onChangeNumber}
+                    style={{ width: "100%" }}
+                    required
+                  />
+                  <label htmlFor="freightCost">Freight Cost</label>
+                </span>
               </div>
             </div>
           </div>
@@ -223,7 +269,16 @@ function EditFreightRouteForm({ vendors, freightRoute }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea id="notes" name="notes" value={notes} placeholder="Notes" onChange={onChange} rows={5} cols={30} style={{ width: "100%" }} />
+                  <InputTextarea
+                    id="notes"
+                    name="notes"
+                    value={notes}
+                    placeholder="Notes"
+                    onChange={onChange}
+                    rows={5}
+                    cols={30}
+                    style={{ width: "100%" }}
+                  />
                   <label htmlFor="notes">Notes</label>
                 </span>
               </div>
@@ -242,7 +297,7 @@ function EditFreightRouteForm({ vendors, freightRoute }) {
         </form>
       </Dialog>
     </section>
-  )
+  );
 }
 
-export default EditFreightRouteForm
+export default EditFreightRouteForm;

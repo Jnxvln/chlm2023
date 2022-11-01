@@ -17,6 +17,10 @@ const vendorProductSchema = mongoose.Schema(
       required: [true, "A vendor is required"],
       ref: "Vendor",
     },
+    vendorLocationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "A vendor location is required"],
+    },
     name: {
       type: String,
       required: [true, "Product name is required"],

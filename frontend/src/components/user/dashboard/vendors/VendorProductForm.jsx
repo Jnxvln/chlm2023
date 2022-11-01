@@ -14,10 +14,11 @@ import { useDispatch } from "react-redux";
 import { createVendorProduct } from "../../../../features/vendorProducts/vendorProductSlice";
 import { toast } from "react-toastify";
 
-function VendorProductForm({ vendors }) {
+function VendorProductForm({ vendors, vendorLocations }) {
   // #region VARS ------------------------
   const initialState = {
     vendorId: undefined,
+    vendorLocationId: undefined,
     name: "",
     productCost: undefined,
     notes: "",
@@ -25,12 +26,13 @@ function VendorProductForm({ vendors }) {
   };
 
   const [sortedVendors, setSortedVendors] = useState([]);
+  const [filteredVendorLocations, setFilteredVendorLocations] = useState([]);
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
 
   // Destructure form data
-  const { vendorId, name, productCost, notes, isActive } = formData;
+  const { vendorId, vendorLocationId, name, productCost, notes, isActive } = formData;
   // #endregion
 
   // #region COMPONENT RENDERERS
@@ -98,6 +100,10 @@ function VendorProductForm({ vendors }) {
   const vendorOptionTemplate = (option) => {
     return <>{option.name}</>;
   };
+
+  const vendorLocationOptionTemplate = (option) => {
+    return <>{option.name}</>;
+  };
   // #endregion
 
   useEffect(() => {
@@ -105,7 +111,13 @@ function VendorProductForm({ vendors }) {
     if (vendors && vendors.length > 1) {
       setSortedVendors([...vendors].sort((a, b) => a.name.localeCompare(b.name)));
     }
-  }, [vendors]);
+
+    // Get vendor locations according to vendorId selected
+    if (vendorId && vendorId.length > 0 && vendorLocations && vendorLocations.length > 0) {
+      const _filteredLocations = vendorLocations.filter((loc) => loc.vendorId === vendorId);
+      setFilteredVendorLocations(_filteredLocations);
+    }
+  }, [vendors, vendorId, vendorLocations]);
 
   return (
     <section>
@@ -120,8 +132,9 @@ function VendorProductForm({ vendors }) {
         blockScroll
       >
         <form onSubmit={onSubmit}>
-          {/* VENDOR */}
+          {/* VENDOR, VENDOR LOCATION */}
           <div className="formgrid grid">
+            {/* Vendor Id */}
             <div className="field col">
               <div className="p-float-label">
                 <Dropdown
@@ -145,6 +158,31 @@ function VendorProductForm({ vendors }) {
                 <label htmlFor="vendorProductVendorId">Vendor *</label>
               </div>
             </div>
+
+            {/* Vendor Location ID */}
+            <div className="field col">
+              <div className="p-float-label">
+                <Dropdown
+                  id="vendorLocationId"
+                  value={vendorLocationId}
+                  options={filteredVendorLocations}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      vendorLocationId: e.value,
+                    }));
+                  }}
+                  optionLabel="name"
+                  optionValue="_id"
+                  placeholder="Location..."
+                  itemTemplate={vendorLocationOptionTemplate}
+                  style={{ width: "100%" }}
+                  required
+                  autoFocus
+                />
+                <label htmlFor="vendorLocationId">Location *</label>
+              </div>
+            </div>
           </div>
 
           {/* NAME, PRODUCT COST */}
@@ -153,7 +191,15 @@ function VendorProductForm({ vendors }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} required />
+                  <InputText
+                    id="name"
+                    name="name"
+                    value={name}
+                    placeholder="Name"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    required
+                  />
                   <label htmlFor="name">Name *</label>
                 </span>
               </div>
@@ -186,7 +232,16 @@ function VendorProductForm({ vendors }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputTextarea id="notes" name="notes" value={notes} placeholder="Notes" onChange={onChange} rows={5} cols={30} style={{ width: "100%" }} />
+                  <InputTextarea
+                    id="notes"
+                    name="notes"
+                    value={notes}
+                    placeholder="Notes"
+                    onChange={onChange}
+                    rows={5}
+                    cols={30}
+                    style={{ width: "100%" }}
+                  />
                   <label htmlFor="notes">Notes</label>
                 </span>
               </div>
