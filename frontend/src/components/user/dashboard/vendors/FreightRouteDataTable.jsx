@@ -45,12 +45,13 @@ function FreightRouteDataTable({ vendors, vendorLocations, freightRoutes, freigh
   };
 
   const vendorNameTemplate = (rowData) => {
-    return <>{vendors.find((v) => v._id === rowData.vendorId).name}</>;
+    const vendor = vendors.find((v) => v._id === rowData.vendorId);
+    return vendor ? <>{vendor.name}</> : <>[err]</>;
   };
 
   const routeVendorLocationTemplate = (rowData) => {
     const location = vendorLocations.find((loc) => loc._id === rowData.vendorLocationId);
-    return <>{location.name}</>;
+    return location ? <>{location.name}</> : <>[err]</>;
   };
 
   const freightRouteFreightCostTemplate = (rowData) => {

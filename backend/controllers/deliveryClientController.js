@@ -19,15 +19,17 @@ const createDeliveryClient = asyncHandler(async (req, res) => {
     throw new Error("Please provide all required fields");
   }
 
-  const clientExists = await DeliveryClient.find({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+  const clientExists = await DeliveryClient.findOne({
+    firstName: { $regex: req.body.firstName, $options: "i" },
+    lastName: { $regex: req.body.lastName, $options: "i" },
     phone: req.body.phone,
   });
 
-  if (clientExists.length > 0) {
+  if (clientExists) {
     res.status(400);
-    throw new Error("This client already exists");
+    throw new Error(
+      `Client "${req.body.firstName} ${req.body.lastName}" with phone "${req.body.phone}" already exists`
+    );
   }
 
   const deliveryClient = await DeliveryClient.create({

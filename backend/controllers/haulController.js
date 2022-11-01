@@ -45,29 +45,36 @@ const createHaul = asyncHandler(async (req, res) => {
   }
   // #endregion
 
+  const invoiceExists = await Haul.findOne({
+    invoice: { $regex: req.body.invoice, $options: "i" },
+  });
+
+  if (invoiceExists) {
+    res.status(400);
+    throw new Error(`Invoice ${req.body.invoice} already exists`);
+  }
+
   // Next, clear extraneous fields depending on loadType
   let overrides = {
     chInvoice: null,
     rate: null,
     miles: null,
     payRate: null,
-    driverPay: null
+    driverPay: null,
+  };
+
+  if (req.body.loadType === "enddump") {
+    overrides.rate = req.body.rate;
   }
 
-  if (req.body.loadType === 'enddump') {
-    overrides.rate = req.body.rate
+  if (req.body.loadType === "flatbedperc") {
+    overrides.chInvoice = req.body.chInvoice;
+    (overrides.payRate = req.body.payRate), (overrides.driverPay = req.body.driverPay);
   }
 
-  if (req.body.loadType === 'flatbedperc') {
-    overrides.chInvoice = req.body.chInvoice
-    overrides.payRate = req.body.payRate,
-    overrides.driverPay = req.body.driverPay
-  }
-
-  if (req.body.loadType === 'flatbedmi') {
-    overrides.chInvoice = req.body.chInvoice
-    overrides.rate = req.body.rate,
-    overrides.miles = req.body.miles
+  if (req.body.loadType === "flatbedmi") {
+    overrides.chInvoice = req.body.chInvoice;
+    (overrides.rate = req.body.rate), (overrides.miles = req.body.miles);
   }
 
   const haul = await Haul.create({
@@ -105,30 +112,28 @@ const updateHaul = asyncHandler(async (req, res) => {
     throw new Error("Haul not found");
   }
 
-    // Next, clear extraneous fields depending on loadType
-    let overrides = {
-      chInvoice: null,
-      rate: null,
-      miles: null,
-      payRate: null,
-      driverPay: null
-    }
-  
-    if (req.body.loadType === 'enddump') {
-      overrides.rate = req.body.rate
-    }
-  
-    if (req.body.loadType === 'flatbedperc') {
-      overrides.chInvoice = req.body.chInvoice
-      overrides.payRate = req.body.payRate,
-      overrides.driverPay = req.body.driverPay
-    }
-  
-    if (req.body.loadType === 'flatbedmi') {
-      overrides.chInvoice = req.body.chInvoice
-      overrides.rate = req.body.rate,
-      overrides.miles = req.body.miles
-    }
+  // Next, clear extraneous fields depending on loadType
+  let overrides = {
+    chInvoice: null,
+    rate: null,
+    miles: null,
+    payRate: null,
+    driverPay: null,
+  };
+
+  if (req.body.loadType === "enddump") {
+    overrides.rate = req.body.rate;
+  }
+
+  if (req.body.loadType === "flatbedperc") {
+    overrides.chInvoice = req.body.chInvoice;
+    (overrides.payRate = req.body.payRate), (overrides.driverPay = req.body.driverPay);
+  }
+
+  if (req.body.loadType === "flatbedmi") {
+    overrides.chInvoice = req.body.chInvoice;
+    (overrides.rate = req.body.rate), (overrides.miles = req.body.miles);
+  }
 
   const updatedHaul = await Haul.findByIdAndUpdate(
     req.params.id,

@@ -19,10 +19,19 @@ const createMaterialCategory = asyncHandler(async (req, res) => {
     throw new Error("A category name is required");
   }
 
+  const categoryExists = await MaterialCategory.findOne({
+    name: { $regex: req.body.name, $options: "i" },
+  });
+
+  if (categoryExists) {
+    res.status(400);
+    throw new Error("Category `name` already exists");
+  }
+
   const materialCategory = await MaterialCategory.create({
     createdBy: req.user.id,
     name: req.body.name,
-    isPublic: req.body.isPublic
+    isPublic: req.body.isPublic,
   });
 
   res.status(200).json(materialCategory);
@@ -37,6 +46,15 @@ const updateMaterialCategory = asyncHandler(async (req, res) => {
   if (!materialCategory) {
     res.status(400);
     throw new Error("Material category not found");
+  }
+
+  const categoryExists = await MaterialCategory.findOne({
+    name: { $regex: req.body.name, $options: "i" },
+  });
+
+  if (categoryExists) {
+    res.status(400);
+    throw new Error("Category `name` already exists");
   }
 
   const updatedMaterialCategory = await MaterialCategory.findByIdAndUpdate(

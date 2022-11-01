@@ -22,7 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // Check if exists
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findOne({ email: { $regex: req.body.email, $options: "i" } });
 
   if (userExists) {
     res.status(400);
@@ -62,7 +62,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // Check for user email
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: { $regex: req.body.email, $options: "i" } });
 
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({

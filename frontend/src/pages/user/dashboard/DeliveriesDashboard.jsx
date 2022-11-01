@@ -18,8 +18,15 @@ import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup>
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 // Store data
 import { useSelector, useDispatch } from "react-redux";
-import { deleteDelivery, getDeliveries, resetDeliveryMessages } from "../../../features/deliveries/deliverySlice";
-import { getDeliveryClients, resetDeliveryClientMessages } from "../../../features/deliveryClients/deliveryClientSlice";
+import {
+  deleteDelivery,
+  getDeliveries,
+  resetDeliveryMessages,
+} from "../../../features/deliveries/deliverySlice";
+import {
+  getDeliveryClients,
+  resetDeliveryClientMessages,
+} from "../../../features/deliveryClients/deliveryClientSlice";
 
 function DeliveriesDashboard() {
   // #region VARS ------------------------
@@ -51,10 +58,12 @@ function DeliveriesDashboard() {
   ];
 
   // Pull in delivery state
-  const { deliveries, deliveriesLoading, deliveriesError, deliveriesSuccess, deliveriesMessage } = useSelector((state) => state.deliveries);
+  const { deliveries, deliveriesLoading, deliveriesError, deliveriesSuccess, deliveriesMessage } =
+    useSelector((state) => state.deliveries);
 
   // Pull in delivery client state
-  const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } = useSelector((state) => state.deliveryClients);
+  const { deliveryClients, deliveryClientsError, deliveryClientsSuccess, deliveryClientsMessage } =
+    useSelector((state) => state.deliveryClients);
   // #endregion
 
   // #region COMPONENT TEMPLATES
@@ -95,7 +104,10 @@ function DeliveriesDashboard() {
 
       return (
         <>
-          <ContextMenu model={deliveryMarkerContextMenuItems} ref={deliveryMapMarkerReference}></ContextMenu>
+          <ContextMenu
+            model={deliveryMarkerContextMenuItems}
+            ref={deliveryMapMarkerReference}
+          ></ContextMenu>
           <a
             href={`https://maps.google.com/?q=${coords[0]},${coords[1]}`}
             target="_blank"
@@ -162,7 +174,11 @@ function DeliveriesDashboard() {
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Phone, address, or product name" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Phone, address, or product name"
+          />
         </span>
       </div>
     );
@@ -172,7 +188,11 @@ function DeliveriesDashboard() {
     return (
       <div style={{ display: "flex" }}>
         <EditDeliveryForm delivery={rowData} />
-        <Button icon="pi pi-trash" className="p-button-danger" onClick={(e) => onDelete(e, rowData)} />
+        <Button
+          icon="pi pi-trash"
+          className="p-button-danger"
+          onClick={(e) => onDelete(e, rowData)}
+        />
       </div>
     );
   };
@@ -229,6 +249,10 @@ function DeliveriesDashboard() {
       toast.error(deliveriesMessage);
     }
 
+    if (deliveryClientsError && deliveryClientsMessage.length > 0) {
+      toast.error(deliveryClientsMessage);
+    }
+
     if (deliveryClientsSuccess && deliveryClientsMessage.length > 0) {
       toast.success(deliveryClientsMessage);
     }
@@ -278,28 +302,32 @@ function DeliveriesDashboard() {
             {/* Render First & Last Name */}
             {selectedClientAvatar.firstName && selectedClientAvatar.lastName && (
               <div style={{ marginBottom: "0.6em" }}>
-                <strong>Name:</strong> {selectedClientAvatar.firstName} {selectedClientAvatar.lastName}
+                <strong>Name:</strong> {selectedClientAvatar.firstName}{" "}
+                {selectedClientAvatar.lastName}
               </div>
             )}
 
             {/* Render phone */}
             {selectedClientAvatar.phone && (
               <div style={{ marginBottom: "0.6em" }}>
-                <strong>Phone(s):</strong> <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.phone}</div>
+                <strong>Phone(s):</strong>{" "}
+                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.phone}</div>
               </div>
             )}
 
             {/* Render address */}
             {selectedClientAvatar.address && (
               <div style={{ marginBottom: "0.6em" }}>
-                <strong>Address:</strong> <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.address}</div>
+                <strong>Address:</strong>{" "}
+                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.address}</div>
               </div>
             )}
 
             {/* Render company */}
             {selectedClientAvatar.company && (
               <div style={{ marginBottom: "0.6em" }}>
-                <strong>Company:</strong> <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.company}</div>
+                <strong>Company:</strong>{" "}
+                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.company}</div>
               </div>
             )}
 
@@ -308,7 +336,11 @@ function DeliveriesDashboard() {
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Coords:</strong>{" "}
                 <div style={{ whiteSpace: "pre" }}>
-                  <a href={`https://www.google.com/maps/search/?api=1&query=${selectedClientAvatar.coordinates}`} target="_blank" rel="noreferrer">
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${selectedClientAvatar.coordinates}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {selectedClientAvatar.coordinates}
                   </a>
                 </div>
@@ -349,13 +381,28 @@ function DeliveriesDashboard() {
             <Column field="hasPaid" header="Paid?" body={hasPaidTemplate}></Column>
 
             {/* Delivery Date */}
-            <Column field="deliveryDate" header="Deliver" body={deliveryDateTemplate} sortable></Column>
+            <Column
+              field="deliveryDate"
+              header="Deliver"
+              body={deliveryDateTemplate}
+              sortable
+            ></Column>
 
             {/* Delivery Client */}
-            <Column field="deliveryClient" header="Client" body={deliveryClientTemplate} sortable></Column>
+            <Column
+              field="deliveryClient"
+              header="Client"
+              body={deliveryClientTemplate}
+              sortable
+            ></Column>
 
             {/* Product Name */}
-            <Column field="productName" header="Material" body={productNameTemplate} sortable></Column>
+            <Column
+              field="productName"
+              header="Material"
+              body={productNameTemplate}
+              sortable
+            ></Column>
 
             {/* Product Quantity */}
             <Column field="productQuantity" header="Qty" body={productQuantityTemplate}></Column>
@@ -364,13 +411,28 @@ function DeliveriesDashboard() {
             <Column field="address" header="Address" body={addressTemplate} sortable></Column>
 
             {/* Contact Name */}
-            <Column field="contactName" header="Contact Name" body={contactNameTemplate} sortable></Column>
+            <Column
+              field="contactName"
+              header="Contact Name"
+              body={contactNameTemplate}
+              sortable
+            ></Column>
 
             {/* Contact  Phone */}
-            <Column field="contactPhone" header="Contact Phone" body={contactPhoneTemplate} sortable></Column>
+            <Column
+              field="contactPhone"
+              header="Contact Phone"
+              body={contactPhoneTemplate}
+              sortable
+            ></Column>
 
             {/* Coordinates */}
-            <Column field="coordinates" header="Coords" body={coordinatesTemplate} sortable></Column>
+            <Column
+              field="coordinates"
+              header="Coords"
+              body={coordinatesTemplate}
+              sortable
+            ></Column>
 
             {/* Completed */}
             <Column field="completed" header="Completed?" body={completedTemplate}></Column>

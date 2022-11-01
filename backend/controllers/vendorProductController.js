@@ -34,6 +34,17 @@ const createVendorProduct = asyncHandler(async (req, res) => {
     throw new Error("Product cost is required (or enter 0.00)");
   }
 
+  const vendorProductExists = await VendorProduct.findOne({
+    vendorId: req.body.vendorId,
+    vendorLocationId: req.body.vendorLocationId,
+    name: { $regex: req.body.name, $options: "i" },
+  });
+
+  if (vendorProductExists) {
+    res.status(400);
+    throw new Error("Product already exists");
+  }
+
   const vendorProduct = await VendorProduct.create({
     createdBy: req.user.id,
     updatedBy: req.user.id,
@@ -57,6 +68,17 @@ const updateVendorProduct = asyncHandler(async (req, res) => {
   if (!vendorProduct) {
     res.status(400);
     throw new Error("Vendor Product not found");
+  }
+
+  const vendorProductExists = await VendorProduct.findOne({
+    vendorId: req.body.vendorId,
+    vendorLocationId: req.body.vendorLocationId,
+    name: { $regex: req.body.name, $options: "i" },
+  });
+
+  if (vendorProductExists) {
+    res.status(400);
+    throw new Error("Product already exists");
   }
 
   const updates = { ...req.body, updatedBy: req.user.id };

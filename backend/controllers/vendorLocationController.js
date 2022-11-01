@@ -24,6 +24,15 @@ const createVendorLocation = asyncHandler(async (req, res) => {
     throw new Error("A vendor is required");
   }
 
+  const vendorLocationExists = await VendorLocation.findOne({
+    destination: { $regex: req.body.destination, $options: "i" },
+  });
+
+  if (vendorLocationExists) {
+    res.status(400);
+    throw new Error("This location already exists");
+  }
+
   const vendorLocationData = { ...req.body, createdBy: req.user.id, updatedBy: req.user.id };
 
   const vendorLocation = await VendorLocation.create(vendorLocationData);
@@ -40,6 +49,15 @@ const updateVendorLocation = asyncHandler(async (req, res) => {
   if (!vendorLocation) {
     res.status(400);
     throw new Error("Vendor location not found");
+  }
+
+  const vendorLocationExists = await VendorLocation.findOne({
+    destination: { $regex: req.body.destination, $options: "i" },
+  });
+
+  if (vendorLocationExists) {
+    res.status(400);
+    throw new Error("This location already exists");
   }
 
   const updates = { ...req.body, updatedBy: req.user.id };

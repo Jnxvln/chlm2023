@@ -19,6 +19,21 @@ const createVendor = asyncHandler(async (req, res) => {
     throw new Error("Please provide all required fields");
   }
 
+  const vendorNameExists = await Vendor.findOne({ name: { $regex: req.body.name, $options: "i" } });
+  const vendorShortNameExists = await Vendor.findOne({
+    shortName: { $regex: req.body.shortName, $options: "i" },
+  });
+
+  if (vendorNameExists) {
+    res.status(400);
+    throw new Error("Vendor name already exists");
+  }
+
+  if (vendorShortNameExists) {
+    res.status(400);
+    throw new Error("Vendor short name already exists");
+  }
+
   const vendor = await Vendor.create({
     createdBy: req.user.id,
     updatedBy: req.user.id,
@@ -42,6 +57,21 @@ const updateVendor = asyncHandler(async (req, res) => {
   if (!vendor) {
     res.status(400);
     throw new Error("Vendor not found");
+  }
+
+  const vendorNameExists = await Vendor.findOne({ name: { $regex: req.body.name, $options: "i" } });
+  const vendorShortNameExists = await Vendor.findOne({
+    shortName: { $regex: req.body.shortName, $options: "i" },
+  });
+
+  if (vendorNameExists) {
+    res.status(400);
+    throw new Error("Vendor name already exists");
+  }
+
+  if (vendorShortNameExists) {
+    res.status(400);
+    throw new Error("Vendor short name already exists");
   }
 
   const updates = { ...vendor, updatedBy: req.user.id };

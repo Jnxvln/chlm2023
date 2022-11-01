@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+import { toast } from "react-toastify";
 // PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -113,6 +114,19 @@ function MaterialForm() {
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (!name) {
+      return toast.error("Name is required");
+    }
+
+    if (!category) {
+      return toast.error("Category is required");
+    }
+
+    if (!stock) {
+      return toast.error("Stock is required");
+    }
+
     dispatch(createMaterial(formData));
     onClose();
   };
@@ -148,13 +162,13 @@ function MaterialForm() {
                     id="name"
                     name="name"
                     value={name}
-                    placeholder="Name"
+                    placeholder="Name *"
                     onChange={onChange}
                     style={{ width: "100%" }}
                     autoFocus
                     required
                   />
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="name">Name *</label>
                 </span>
               </div>
             </div>
@@ -176,7 +190,7 @@ function MaterialForm() {
                     placeholder="Choose..."
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="category">Category</label>
+                  <label htmlFor="category">Category *</label>
                 </span>
               </div>
             </div>
@@ -249,7 +263,7 @@ function MaterialForm() {
                     placeholder="Choose..."
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="stock">Stock</label>
+                  <label htmlFor="stock">Stock *</label>
                 </span>
               </div>
             </div>

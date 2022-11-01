@@ -7,6 +7,11 @@ const materialSchema = mongoose.Schema(
       required: [true, "A user is required"],
       ref: "User",
     },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "A user is required"],
+      ref: "User",
+    },
     name: {
       type: String,
       required: [true, "Name field required"],

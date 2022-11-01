@@ -160,8 +160,12 @@ function DriversDashboard() {
       dispatch(getDrivers());
     }
 
-    if (driversError && driversMessage && driversMessage.length > 0) {
+    if (driversError && driversMessage) {
       toast.error(driversMessage);
+    }
+
+    if (driversSuccess && driversMessage) {
+      toast.success(driversMessage);
     }
 
     dispatch(resetDriverMessages());

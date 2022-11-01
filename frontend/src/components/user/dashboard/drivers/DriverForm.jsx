@@ -100,20 +100,10 @@ function DriverForm() {
   // #endregion
 
   useEffect(() => {
-    if (driversError) {
-      toast.error(driversMessage);
-    }
-
-    if (driversSuccess) {
-      toast.success(driversMessage);
-    }
-
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
-
-    dispatch(resetDriverMessages());
-  }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
+  }, [drivers, dispatch]);
 
   return (
     <section>

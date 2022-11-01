@@ -6,7 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import Spinner from "../../components/layout/Spinner";
-import { login, reset } from "../../features/auth/authSlice";
+import { login, resetMessages } from "../../features/auth/authSlice";
 import styles from "../../styles/user/Register.module.css";
 
 function Login() {
@@ -20,7 +20,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { user, authLoading, authError, authSuccess, authMessage } = useSelector(
     (state) => state.auth
   );
 
@@ -43,18 +43,18 @@ function Login() {
   };
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    if (authError) {
+      toast.error(authMessage);
     }
 
-    if (isSuccess || user) {
+    if (authSuccess || user) {
       navigate("/dashboard");
     }
 
-    dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+    dispatch(resetMessages());
+  }, [user, authError, authSuccess, authMessage, navigate, dispatch]);
 
-  if (isLoading) {
+  if (authLoading) {
     return <Spinner />;
   }
 
@@ -88,6 +88,7 @@ function Login() {
                 name="password"
                 value={password}
                 onChange={onChange}
+                feedback={false}
                 toggleMask
                 className={styles.passwordField}
               />
@@ -97,12 +98,7 @@ function Login() {
 
           {/* Submit Button */}
           <div className="field col-12">
-            <Button
-              type="submit"
-              label="Login"
-              icon="pi pi-sign-in"
-              iconPos="left"
-            />
+            <Button type="submit" label="Login" icon="pi pi-sign-in" iconPos="left" />
           </div>
         </div>
       </form>

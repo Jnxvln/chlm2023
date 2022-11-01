@@ -25,6 +25,19 @@ const createDriver = asyncHandler(async (req, res) => {
     throw new Error("Please provide all required fields");
   }
 
+  const driverExists = await Driver.findOne({
+    firstName: { $regex: req.body.firstName, $options: "i" },
+    lastName: { $regex: req.body.lastName, $options: "i" },
+    isActive: true,
+  });
+
+  if (driverExists) {
+    res.status(400);
+    throw new Error(
+      `An active driver named "${req.body.firstName} ${req.body.lastName}" already exists`
+    );
+  }
+
   const driver = await Driver.create({
     createdBy: req.user.id,
     firstName: req.body.firstName,
@@ -50,6 +63,19 @@ const updateDriver = asyncHandler(async (req, res) => {
   if (!driver) {
     res.status(400);
     throw new Error("Driver not found");
+  }
+
+  const driverExists = await Driver.findOne({
+    firstName: { $regex: req.body.firstName, $options: "i" },
+    lastName: { $regex: req.body.lastName, $options: "i" },
+    isActive: true,
+  });
+
+  if (driverExists) {
+    res.status(400);
+    throw new Error(
+      `An active driver named "${req.body.firstName} ${req.body.lastName}" already exists`
+    );
   }
 
   const updatedDriver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true });

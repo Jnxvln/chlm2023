@@ -19,20 +19,16 @@ const createMaterial = asyncHandler(async (req, res) => {
     throw new Error("Please provide all required fields");
   }
 
-  const material = await Material.create({
-    createdBy: req.user.id,
-    name: req.body.name,
-    category: req.body.category,
-    image: req.body.image,
-    binNumber: req.body.binNumber,
-    size: req.body.size,
-    stock: req.body.stock,
-    notes: req.body.notes,
-    description: req.body.description,
-    isFeatured: req.body.isFeatured,
-    isActive: req.body.isActive,
-    isTruckable: req.body.isTruckable,
-  });
+  const materialExists = await Material.findOne({ name: { $regex: req.body.name, $options: "i" } });
+
+  if (materialExists) {
+    res.status(400);
+    throw new Error("Material `name` already exists");
+  }
+
+  const materialData = { ...req.body, createdBy: req.user.id, updatedBy: req.user.id };
+
+  const material = await Material.create(materialData);
 
   res.status(200).json(material);
 });
@@ -48,11 +44,18 @@ const updateMaterial = asyncHandler(async (req, res) => {
     throw new Error("Material not found");
   }
 
-  const updatedMaterial = await Material.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
+  const materialExists = await Material.findOne({ name: { $regex: req.body.name, $options: "i" } });
+
+  if (materialExists) {
+    res.status(400);
+    throw new Error("Material `name` already exists");
+  }
+
+  const materialData = { ...req.body, updatedBy: req.user.id };
+
+  const updatedMaterial = await Material.findByIdAndUpdate(req.params.id, materialData, {
+    new: true,
+  });
 
   res.status(200).json(updatedMaterial);
 });
