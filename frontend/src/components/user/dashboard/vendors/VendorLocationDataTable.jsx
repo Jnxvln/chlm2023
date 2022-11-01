@@ -148,8 +148,8 @@ function VendorLocationDataTable({ vendors, vendorLocations, vendorLocationsLoad
           {/* VENDOR */}
           <Column field="vendorId" header="Vendor" body={vendorNameTemplate} sortable></Column>
 
-          {/* NAME */}
-          <Column field="name" header="Name" sortable></Column>
+          {/* LOCATION */}
+          <Column field="name" header="Location" sortable></Column>
 
           {/* IS ACTIVE */}
           <Column

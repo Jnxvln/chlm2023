@@ -19,6 +19,11 @@ const createFreightRoute = asyncHandler(async (req, res) => {
     throw new Error("Vendor is required");
   }
 
+  if (!req.body.vendorLocationId) {
+    res.status(400);
+    throw new Error("Vendor location is required");
+  }
+
   if (!req.body.destination) {
     res.status(400);
     throw new Error("Destination is required");
@@ -33,6 +38,7 @@ const createFreightRoute = asyncHandler(async (req, res) => {
     createdBy: req.user.id,
     updatedBy: req.user.id,
     vendorId: req.body.vendorId,
+    vendorLocationId: req.body.vendorLocationId,
     destination: req.body.destination,
     freightCost: req.body.freightCost,
     notes: req.body.notes,
@@ -55,7 +61,9 @@ const updateFreightRoute = asyncHandler(async (req, res) => {
 
   const updates = { ...req.body, updatedBy: req.user.id };
 
-  const updatedFreightRoute = await FreightRoute.findByIdAndUpdate(req.params.id, updates, { new: true });
+  const updatedFreightRoute = await FreightRoute.findByIdAndUpdate(req.params.id, updates, {
+    new: true,
+  });
 
   res.status(200).json(updatedFreightRoute);
 });

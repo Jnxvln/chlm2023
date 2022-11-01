@@ -48,8 +48,9 @@ function FreightRouteDataTable({ vendors, vendorLocations, freightRoutes, freigh
     return <>{vendors.find((v) => v._id === rowData.vendorId).name}</>;
   };
 
-  const vendorLocationTemplate = (rowData) => {
-    return <>{vendorLocations.find((loc) => loc._id === rowData.vendorLocationId).name}</>;
+  const routeVendorLocationTemplate = (rowData) => {
+    const location = vendorLocations.find((loc) => loc._id === rowData.vendorLocationId);
+    return <>{location.name}</>;
   };
 
   const freightRouteFreightCostTemplate = (rowData) => {
@@ -160,7 +161,7 @@ function FreightRouteDataTable({ vendors, vendorLocations, freightRoutes, freigh
           <Column
             field="vendorLocationId"
             header="Location"
-            body={vendorLocationTemplate}
+            body={routeVendorLocationTemplate}
             sortable
           />
 
@@ -181,7 +182,7 @@ function FreightRouteDataTable({ vendors, vendorLocations, freightRoutes, freigh
             sortable
           ></Column>
 
-          <Column field="notes" header="Notes" />
+          {/* <Column field="notes" header="Notes" /> */}
 
           {/* IS ACTIVE */}
           <Column

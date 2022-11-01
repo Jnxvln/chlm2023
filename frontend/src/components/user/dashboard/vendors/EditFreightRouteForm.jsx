@@ -215,7 +215,6 @@ function EditFreightRouteForm({ vendors, vendorLocations, freightRoute }) {
                   itemTemplate={vendorLocationOptionTemplate}
                   style={{ width: "100%" }}
                   required
-                  autoFocus
                 />
                 <label htmlFor="vendorLocationId">Location *</label>
               </div>

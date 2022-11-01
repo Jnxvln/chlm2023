@@ -17,6 +17,11 @@ const freightRouteSchema = mongoose.Schema(
       required: [true, "A vendor is required"],
       ref: "Vendor",
     },
+    vendorLocationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "A vendor location is required"],
+      ref: "VendorLocation",
+    },
     destination: {
       type: String,
       required: [true, "A destination is required"],
