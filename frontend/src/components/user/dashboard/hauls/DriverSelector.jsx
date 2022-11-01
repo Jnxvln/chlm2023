@@ -21,6 +21,7 @@ function DriverSelector({ drivers, onSelectDriver }) {
     const _driverId = e.value;
 
     localStorage.setItem("selectedDriverId", _driverId);
+    console.log('[DriverSelector.jsx] selectedDriverId: ' + localStorage.getItem('selectedDriverId'))
     setSelectedDriverId(_driverId);
     onSelectDriver(_driverId);
   };

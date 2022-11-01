@@ -51,7 +51,7 @@ function HaulsDashboard() {
             <DriverSelector drivers={drivers} onSelectDriver={onSelectDriver} />
           </div>
           <div style={{ marginRight: "4em" }}>
-            <HaulForm />
+            <HaulForm selectedDriverId={selectedDriverId} />
           </div>
           <div>
             <DateRangeSelector onDateRangeSelected={onDateRangeSelected} />
@@ -230,6 +230,10 @@ function HaulsDashboard() {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
+
+    // if (localStorage.getItem('selectedDriverId')) {
+    //   setSelectedDriverId(localStorage.getItem('selectedDriverId'))
+    // }
 
     if (localStorage.getItem("selectedHaulsDateRange")) {
       const _haulsDateRange = JSON.parse(localStorage.getItem("selectedHaulsDateRange"));
