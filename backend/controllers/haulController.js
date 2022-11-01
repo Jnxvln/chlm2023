@@ -112,6 +112,15 @@ const updateHaul = asyncHandler(async (req, res) => {
     throw new Error("Haul not found");
   }
 
+  const invoiceExists = await Haul.findOne({
+    invoice: { $regex: req.body.invoice, $options: "i" },
+  });
+
+  if (invoiceExists) {
+    res.status(400);
+    throw new Error(`Invoice ${req.body.invoice} already exists`);
+  }
+
   // Next, clear extraneous fields depending on loadType
   let overrides = {
     chInvoice: null,
