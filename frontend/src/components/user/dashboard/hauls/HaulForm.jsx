@@ -131,9 +131,7 @@ function HaulForm({ selectedDriverId }) {
   }, []);
 
   useEffect(() => {
-    // FIXME: Not quite working (not updating immediately, usually have to refresh page!)
     if (selectedDriverId) {
-      console.log('Driver ID passed in: ' + selectedDriverId)
       setFormData((prevState) => ({
         ...prevState,
         driver: selectedDriverId
