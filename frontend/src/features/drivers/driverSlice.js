@@ -126,7 +126,7 @@ export const driverSlice = createSlice({
       .addCase(updateDriver.fulfilled, (state, action) => {
         state.driversLoading = false;
         state.driversSuccess = true;
-        state.driversMessage = "Driver updated";
+        state.driversMessage = `Driver ${action.payload.firstName} ${action.payload.lastName} updated`;
         const index = state.drivers.map((driver) => driver._id).indexOf(action.payload._id);
         state.drivers.splice(index, 1, action.payload);
       })
@@ -142,7 +142,7 @@ export const driverSlice = createSlice({
       .addCase(deleteDriver.fulfilled, (state, action) => {
         state.driversLoading = false;
         state.driversSuccess = true;
-        state.driversMessage = "Driver deleted";
+        state.driversMessage = `Driver ${action.payload.firstName} ${action.payload.lastName} deleted`;
         const index = state.drivers.indexOf(action.payload);
         state.drivers.splice(index, 1);
       })
