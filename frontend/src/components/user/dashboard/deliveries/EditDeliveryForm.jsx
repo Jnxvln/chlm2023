@@ -174,10 +174,6 @@ function DeliveryForm({ delivery }) {
   // #endregion
 
   useEffect(() => {
-    if (deliveryClients.length === 0) {
-      dispatch(getDeliveryClients());
-    }
-
     // If a delivery is passed in as a prop, render its contents via FormData
     if (delivery) {
       setFormData((prevState) => ({
@@ -196,6 +192,12 @@ function DeliveryForm({ delivery }) {
         directionsReminder: delivery.directionsReminder,
         completed: delivery.completed,
       }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (deliveryClients.length === 0) {
+      dispatch(getDeliveryClients());
     }
 
     // If a deliveryClient is present, render its contents via FormData
@@ -309,7 +311,7 @@ function DeliveryForm({ delivery }) {
                     selectOtherMonths
                     required
                   ></Calendar>
-                  <label htmlFor="deliveryDate">Delivery Date</label>
+                  <label htmlFor="deliveryDate">Delivery Date *</label>
                 </span>
               </div>
             </div>

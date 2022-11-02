@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getDeliveryClients } from "../../../../features/deliveryClients/deliveryClientSlice";
 import { createDelivery } from "../../../../features/deliveries/deliverySlice";
 
-function DeliveryForm() {
+function DeliveryForm({ selectedClient }) {
   // #region VARS ------------------------
   const initialState = {
     deliveryClient: undefined,
@@ -39,8 +39,7 @@ function DeliveryForm() {
   const dispatch = useDispatch();
 
   // Select deliveryClients from store
-  const { deliveryClients } =
-    useSelector((state) => state.deliveryClients);
+  const { deliveryClients } = useSelector((state) => state.deliveryClients);
 
   // Destructure form data
   const {
@@ -169,9 +168,30 @@ function DeliveryForm() {
     }
   }, [deliveryClients, selectedDeliveryClient, dispatch]);
 
+  useEffect(() => {
+    if (selectedClient) {
+      setFormData((prevState) => ({
+        ...prevState,
+        deliveryClient: selectedClient,
+        contactName: selectedClient.firstName + " " + selectedClient.lastName,
+        contactPhone: selectedClient.phone,
+        address: selectedClient.address,
+        coordinates: selectedClient.coordinates,
+        directions: selectedClient.directions,
+      }));
+    }
+  }, []);
+
   return (
     <section>
-      <Button label="New Delivery" icon="pi pi-plus" onClick={() => setFormDialog(true)} />
+      <Button
+        label="New Delivery"
+        icon="pi pi-plus"
+        onClick={(e) => {
+          e.stopPropagation();
+          setFormDialog(true);
+        }}
+      />
 
       <Dialog
         id="newDeliveryDialog"
@@ -180,7 +200,9 @@ function DeliveryForm() {
         footer={deliveryDialogFooter}
         onHide={onClose}
         style={{ width: "900px" }}
+        onClick={(e) => e.stopPropagation()}
         blockScroll
+        modal
       >
         <form onSubmit={onSubmit}>
           {/* DELIVERY CLIENT, DELIVERY DATE */}
@@ -234,7 +256,7 @@ function DeliveryForm() {
                     selectOtherMonths
                     required
                   ></Calendar>
-                  <label htmlFor="deliveryDate">Delivery Date</label>
+                  <label htmlFor="deliveryDate">Delivery Date *</label>
                 </span>
               </div>
             </div>

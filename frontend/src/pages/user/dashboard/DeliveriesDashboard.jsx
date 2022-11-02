@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import DeliveryClientForm from "../../../components/user/dashboard/deliveries/DeliveryClientForm";
+import EditDeliveryClientForm from "../../../components/user/dashboard/deliveries/EditDeliveryClientForm";
 import DeliveryForm from "../../../components/user/dashboard/deliveries/DeliveryForm";
 import EditDeliveryForm from "../../../components/user/dashboard/deliveries/EditDeliveryForm";
+import ClientSearchInput from "../../../components/user/dashboard/deliveries/ClientSearchInput";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -45,6 +47,7 @@ function DeliveriesDashboard() {
     contactPhone: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const deliveryMapMarkerReference = useRef(null);
+  const clientAvatarContextMenuReference = useRef(null);
   const deliveryMarkerContextMenuItems = [
     {
       label: "Copy coordinates",
@@ -53,6 +56,44 @@ function DeliveriesDashboard() {
         const coords = `${copyCoordinates[0]},${copyCoordinates[1]}`;
         navigator.clipboard.writeText(coords);
         toast.success("Coordinates copied!");
+      },
+    },
+  ];
+
+  const clientAvatarContextMenuItems = [
+    {
+      label: "Copy Name",
+      icon: "pi pi-user",
+      command: () => {
+        const clientName = `${selectedClientAvatar.firstName} ${selectedClientAvatar.lastName}`;
+        navigator.clipboard.writeText(clientName);
+        toast.success(`${clientName} copied!`);
+      },
+    },
+    {
+      label: "Copy Phone(s)",
+      icon: "pi pi-phone",
+      command: () => {
+        navigator.clipboard.writeText(selectedClientAvatar.phone);
+        toast.success(`${selectedClientAvatar.phone} copied!`);
+      },
+    },
+    {
+      label: "Copy Address",
+      icon: "pi pi-map",
+      command: () => {
+        navigator.clipboard.writeText(selectedClientAvatar.address);
+        toast.success(`${selectedClientAvatar.address} copied!`);
+      },
+    },
+    {
+      label: "Copy Coordinates",
+      icon: "pi pi-globe",
+      command: () => {
+        const copyCoords = selectedClientAvatar.coordinates.split(", ");
+        const coords = `${copyCoords[0]},${copyCoords[1]}`;
+        navigator.clipboard.writeText(coords);
+        toast.success(`Coordinates copied!`);
       },
     },
   ];
@@ -67,11 +108,33 @@ function DeliveriesDashboard() {
   // #endregion
 
   // #region COMPONENT TEMPLATES
+  const dataTableHeaderTemplate = () => {
+    return (
+      <div className="flex justify-content-between">
+        <div>
+          <div className="flex" style={{ gap: "1em" }}>
+            <ClientSearchInput deliveryClients={deliveryClients} />
+          </div>
+        </div>
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Phone, address, or product name"
+          />
+        </span>
+      </div>
+    );
+  };
+
   const deliveryDateTemplate = (rowData) => {
     return <>{dayjs(rowData.deliveryDate).format("MM/DD/YY")}</>;
   };
 
   const deliveryClientTemplate = (rowData) => {
+    const _client = deliveryClients.find((client) => client._id === rowData.deliveryClient);
+
     return (
       <>
         <Avatar
@@ -81,12 +144,26 @@ function DeliveriesDashboard() {
             deliveryClientOverlayPanel.current.toggle(e);
           }}
         />
+        {_client && (
+          <span style={{ marginLeft: "0.5em" }}>
+            {_client.firstName} {_client.lastName}
+          </span>
+        )}
       </>
     );
   };
 
   const addressTemplate = (rowData) => {
-    return <div style={{ whiteSpace: "pre" }}>{rowData.address}</div>;
+    return (
+      <div style={{ whiteSpace: "pre", color: "#075689 !important" }}>
+        <a
+          href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(rowData.address)}`}
+          style={{ textDecoration: "none" }}
+        >
+          <span>{rowData.address}</span>
+        </a>
+      </div>
+    );
   };
 
   const contactNameTemplate = (rowData) => {
@@ -122,7 +199,7 @@ function DeliveriesDashboard() {
                 {coords[0]}, {coords[1]}
               </span>
             </Tooltip>
-            <i className="pi pi-map-marker deliveryMapMarker" tooltip="Enter your username" />
+            <i className="pi pi-map-marker deliveryMapMarker" tooltip="Coordinates" />
           </a>
         </>
       );
@@ -159,27 +236,6 @@ function DeliveriesDashboard() {
         ) : (
           <i className="pi pi-times" style={{ color: "red", fontWeight: "bold" }}></i>
         )}
-      </div>
-    );
-  };
-
-  const dataTableHeaderTemplate = () => {
-    return (
-      <div className="flex justify-content-between">
-        <div>
-          <div className="flex" style={{ gap: "1em" }}>
-            <DeliveryForm />
-            <DeliveryClientForm />
-          </div>
-        </div>
-        <span className="p-input-icon-left">
-          <i className="pi pi-search" />
-          <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
-            placeholder="Phone, address, or product name"
-          />
-        </span>
       </div>
     );
   };
@@ -297,18 +353,28 @@ function DeliveriesDashboard() {
       <ConfirmPopup />
 
       <OverlayPanel ref={deliveryClientOverlayPanel} showCloseIcon>
+        <ContextMenu
+          model={clientAvatarContextMenuItems}
+          ref={clientAvatarContextMenuReference}
+        ></ContextMenu>
         {selectedClientAvatar && (
-          <section>
+          <section
+            onContextMenu={(e) => {
+              clientAvatarContextMenuReference.current.show(e);
+            }}
+          >
             {/* Render First & Last Name */}
-            {selectedClientAvatar.firstName && selectedClientAvatar.lastName && (
-              <div style={{ marginBottom: "0.6em" }}>
-                <strong>Name:</strong> {selectedClientAvatar.firstName}{" "}
-                {selectedClientAvatar.lastName}
-              </div>
-            )}
+            {selectedClientAvatar &&
+              selectedClientAvatar.firstName &&
+              selectedClientAvatar.lastName && (
+                <div style={{ marginBottom: "0.6em" }}>
+                  <strong>Name:</strong> {selectedClientAvatar.firstName}{" "}
+                  {selectedClientAvatar.lastName}
+                </div>
+              )}
 
             {/* Render phone */}
-            {selectedClientAvatar.phone && (
+            {selectedClientAvatar && selectedClientAvatar.phone && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Phone(s):</strong>{" "}
                 <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.phone}</div>
@@ -316,15 +382,26 @@ function DeliveriesDashboard() {
             )}
 
             {/* Render address */}
-            {selectedClientAvatar.address && (
+            {selectedClientAvatar && selectedClientAvatar.address && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Address:</strong>{" "}
-                <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.address}</div>
+                <div style={{ whiteSpace: "pre" }}>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(
+                      selectedClientAvatar.address
+                    )}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span style={{ color: "#075689", fontWeight: "bold" }}>
+                      {selectedClientAvatar.address}
+                    </span>
+                  </a>
+                </div>
               </div>
             )}
 
             {/* Render company */}
-            {selectedClientAvatar.company && (
+            {selectedClientAvatar && selectedClientAvatar.company && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Company:</strong>{" "}
                 <div style={{ whiteSpace: "pre" }}>{selectedClientAvatar.company}</div>
@@ -332,7 +409,7 @@ function DeliveriesDashboard() {
             )}
 
             {/* Render coordinates */}
-            {selectedClientAvatar.coordinates && (
+            {selectedClientAvatar && selectedClientAvatar.coordinates && (
               <div style={{ marginBottom: "0.6em" }}>
                 <strong>Coords:</strong>{" "}
                 <div style={{ whiteSpace: "pre" }}>
@@ -345,6 +422,11 @@ function DeliveriesDashboard() {
                   </a>
                 </div>
               </div>
+            )}
+
+            {/* Render Edit Button */}
+            {selectedClientAvatar && (
+              <EditDeliveryClientForm deliveryClientToEdit={selectedClientAvatar} />
             )}
           </section>
         )}

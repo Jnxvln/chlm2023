@@ -9,11 +9,12 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 // Store data
 import { useDispatch } from "react-redux";
-import { createDeliveryClient } from "../../../../features/deliveryClients/deliveryClientSlice";
+import { updateDeliveryClient } from "../../../../features/deliveryClients/deliveryClientSlice";
 
-function DeliveryClientForm({ clientName }) {
+function EditDeliveryClientForm({ deliveryClientToEdit }) {
   // #region VARS ------------------------
   const initialState = {
+    _id: "",
     firstName: "",
     lastName: "",
     phone: "",
@@ -33,7 +34,13 @@ function DeliveryClientForm({ clientName }) {
 
   // #region COMPONENT RENDERERS
   const deliveryClientDialogHeader = () => {
-    return <DialogHeader resourceType="Delivery Client" isEdit={false} />;
+    return (
+      <DialogHeader
+        resourceType="Delivery Client"
+        resourceName={`${deliveryClientToEdit.firstName} ${deliveryClientToEdit.lastName}`}
+        isEdit
+      />
+    );
   };
 
   const deliveryClientDialogFooter = () => {
@@ -60,12 +67,25 @@ function DeliveryClientForm({ clientName }) {
       return toast.error("First name, last name, and phone number are required fields");
     }
 
-    dispatch(createDeliveryClient(formData));
+    dispatch(updateDeliveryClient(formData));
     onClose();
   };
 
   // Handle form reset
   const resetForm = () => {
+    if (deliveryClientToEdit) {
+      setFormData((prevState) => ({
+        ...prevState,
+        _id: deliveryClientToEdit._id,
+        firstName: deliveryClientToEdit.firstName,
+        lastName: deliveryClientToEdit.lastName,
+        phone: deliveryClientToEdit.phone,
+        companyName: deliveryClientToEdit.companyName,
+        address: deliveryClientToEdit.address,
+        coordinates: deliveryClientToEdit.coordinates,
+        directions: deliveryClientToEdit.directions,
+      }));
+    }
     setFormData(initialState);
   };
 
@@ -77,36 +97,46 @@ function DeliveryClientForm({ clientName }) {
   // #endregion
 
   useEffect(() => {
-    if (clientName) {
-      console.log("CLIENT NAME: ");
-      console.log(clientName);
-      const _firstName = clientName.split(" ")[0];
-      const _lastName = clientName.split(" ")[1];
+    if (deliveryClientToEdit) {
+      console.log("DELIVERY CLIENT TO EDIT: ");
+      console.log(deliveryClientToEdit);
       setFormData((prevState) => ({
         ...prevState,
-        firstName: _firstName,
-        lastName: _lastName,
+        _id: deliveryClientToEdit._id,
+        firstName: deliveryClientToEdit.firstName,
+        lastName: deliveryClientToEdit.lastName,
+        phone: deliveryClientToEdit.phone,
+        companyName: deliveryClientToEdit.companyName,
+        address: deliveryClientToEdit.address,
+        coordinates: deliveryClientToEdit.coordinates,
+        directions: deliveryClientToEdit.directions,
       }));
     }
-  }, [clientName]);
+  }, [deliveryClientToEdit]);
 
   return (
     <section>
       <Button
-        label="New Client"
-        icon="pi pi-plus"
+        label="Edit Client"
+        icon="pi pi-pencil"
         style={{ height: "100%" }}
-        onClick={() => setFormDialog(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setFormDialog(true);
+        }}
       />
 
       <Dialog
-        id="newDeliveryClientDialog"
+        id="editDeliveryClientDialog"
         visible={formDialog}
         header={deliveryClientDialogHeader}
         footer={deliveryClientDialogFooter}
         onHide={onClose}
         style={{ width: "50vw" }}
         blockScroll
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <form onSubmit={onSubmit}>
           {/* FIRST NAME, LAST NAME, COMPANY */}
@@ -251,4 +281,4 @@ function DeliveryClientForm({ clientName }) {
   );
 }
 
-export default DeliveryClientForm;
+export default EditDeliveryClientForm;
