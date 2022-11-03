@@ -232,12 +232,13 @@ function DeliveryClientForm({ clientName }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
+                  <InputTextarea
                     id="directions"
                     name="directions"
                     value={directions}
                     placeholder="Enter directions..."
                     onChange={onChange}
+                    rows={10}
                     style={{ width: "100%" }}
                   />
                   <label htmlFor="directions">Directions</label>

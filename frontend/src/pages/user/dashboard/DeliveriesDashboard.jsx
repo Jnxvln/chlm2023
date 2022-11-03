@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import EditDeliveryClientForm from "../../../components/user/dashboard/deliveries/EditDeliveryClientForm";
 import EditDeliveryForm from "../../../components/user/dashboard/deliveries/EditDeliveryForm";
 import ClientSearchInput from "../../../components/user/dashboard/deliveries/ClientSearchInput";
+import DeliveryTimeframeSelector from "../../../components/user/dashboard/deliveries/DeliveryTimeframeSelector";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -32,6 +33,8 @@ function DeliveriesDashboard() {
   // #region VARS ------------------------
   const dispatch = useDispatch();
   const deliveryClientOverlayPanel = useRef(null);
+  const [rangeDates, setRangeDates] = useState([]);
+  const [filteredDeliveries, setFilteredDeliveries] = useState([]);
   const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedClientAvatar, setSelectedClientAvatar] = useState(null);
   const [deliveryRowSelected, setDeliveryRowSelected] = useState(null);
@@ -112,6 +115,7 @@ function DeliveriesDashboard() {
         <div>
           <div className="flex" style={{ gap: "1em" }}>
             <ClientSearchInput deliveryClients={deliveryClients} />
+            <DeliveryTimeframeSelector onDateRangeSelected={onDateRangeSelected} />
           </div>
         </div>
         <span className="p-input-icon-left">
@@ -287,9 +291,52 @@ function DeliveriesDashboard() {
     });
   };
 
+  // Handle DateRangeSelector component operations
+  const onDateRangeSelected = (e) => {
+    let dateStart; // e.value[0]
+    let dateEnd; // e.value[1]
+
+    if (!e || !e.value) {
+      // Clear ranges and filteredDeliveries (DataTable will default to `deliveries`). Used when clear button pressed
+      setRangeDates([]);
+      setFilteredDeliveries([]);
+      return;
+    }
+
+    if (e.value[0] && e.value[1]) {
+      // Convert event values to dayjs dates
+      dateStart = dayjs(e.value[0]);
+      dateEnd = dayjs(e.value[1]);
+
+      // Get difference between start and end dates
+      const difference = dateEnd.diff(dateStart, "day");
+
+      // Create an array of dates including start and end dates
+      let dates = [];
+      for (let i = 0; i < difference + 1; i++) {
+        dates.push(new Date(dateStart.add(i, "day")).toDateString()); // toDateString format is used here for ease of comparing dates in another function
+      }
+
+      // Set rangeDates in state to this array
+      setRangeDates(dates);
+    }
+  };
+
   // RUN ONCE - INIT FILTERS
   useEffect(() => {
     initFilters();
+
+    if (localStorage.getItem("selectedDeliveriesDateRange")) {
+      const _deliveriesDateRange = JSON.parse(localStorage.getItem("selectedDeliveriesDateRange"));
+
+      if (_deliveriesDateRange.length > 0) {
+        // Manually call onDateRangeSelected, passing in a pseudo-event object based on localStorage values
+        let e = {
+          value: [new Date(_deliveriesDateRange[0]), new Date(_deliveriesDateRange[1])],
+        };
+        onDateRangeSelected(e);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -329,6 +376,17 @@ function DeliveriesDashboard() {
       setSelectedClientAvatar(client);
     }
 
+    if (rangeDates && rangeDates.length > 0) {
+      // Filter deliveries by date range (rangeDates)
+      // let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
+
+      // Filter deliveries within selected date range
+      let _filteredDeliveries = deliveries.filter((delivery) =>
+        rangeDates.includes(new Date(delivery.deliveryDate).toDateString())
+      );
+      setFilteredDeliveries(_filteredDeliveries);
+    }
+
     dispatch(resetDeliveryClientMessages());
     dispatch(resetDeliveryMessages());
   }, [
@@ -341,6 +399,8 @@ function DeliveriesDashboard() {
     deliveriesError,
     deliveriesSuccess,
     deliveriesMessage,
+    rangeDates,
+    rangeDates.length,
     dispatch,
   ]);
 
@@ -433,7 +493,7 @@ function DeliveriesDashboard() {
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={deliveries}
+            value={filteredDeliveries}
             loading={deliveriesLoading}
             header={dataTableHeaderTemplate}
             globalFilterFields={["productName", "address", "contactName", "contactPhone"]}

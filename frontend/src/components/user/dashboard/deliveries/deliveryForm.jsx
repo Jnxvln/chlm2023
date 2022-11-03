@@ -376,7 +376,7 @@ function DeliveryForm({ selectedClient }) {
                     value={directions}
                     placeholder="Enter directions"
                     onChange={onChange}
-                    rows={4}
+                    rows={10}
                     cols={30}
                     style={{ width: "100%" }}
                   />

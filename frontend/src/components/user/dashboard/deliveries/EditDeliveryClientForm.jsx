@@ -98,8 +98,6 @@ function EditDeliveryClientForm({ deliveryClientToEdit }) {
 
   useEffect(() => {
     if (deliveryClientToEdit) {
-      console.log("DELIVERY CLIENT TO EDIT: ");
-      console.log(deliveryClientToEdit);
       setFormData((prevState) => ({
         ...prevState,
         _id: deliveryClientToEdit._id,
@@ -262,12 +260,13 @@ function EditDeliveryClientForm({ deliveryClientToEdit }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText
+                  <InputTextarea
                     id="directions"
                     name="directions"
                     value={directions}
                     placeholder="Enter directions..."
                     onChange={onChange}
+                    rows={10}
                     style={{ width: "100%" }}
                   />
                   <label htmlFor="directions">Directions</label>
