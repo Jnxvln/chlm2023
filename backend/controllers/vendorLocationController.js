@@ -26,6 +26,7 @@ const createVendorLocation = asyncHandler(async (req, res) => {
 
   const vendorLocationExists = await VendorLocation.findOne({
     destination: { $regex: req.body.destination, $options: "i" },
+    vendorId: req.body.vendorId,
   });
 
   if (vendorLocationExists) {
