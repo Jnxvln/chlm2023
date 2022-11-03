@@ -51,15 +51,6 @@ const updateVendorLocation = asyncHandler(async (req, res) => {
     throw new Error("Vendor location not found");
   }
 
-  const vendorLocationExists = await VendorLocation.findOne({
-    destination: { $regex: req.body.destination, $options: "i" },
-  });
-
-  if (vendorLocationExists) {
-    res.status(400);
-    throw new Error("This location already exists");
-  }
-
   const updates = { ...req.body, updatedBy: req.user.id };
 
   const updatedVendorLocation = await VendorLocation.findByIdAndUpdate(req.params.id, updates, {

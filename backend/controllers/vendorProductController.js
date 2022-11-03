@@ -70,17 +70,6 @@ const updateVendorProduct = asyncHandler(async (req, res) => {
     throw new Error("Vendor Product not found");
   }
 
-  const vendorProductExists = await VendorProduct.findOne({
-    vendorId: req.body.vendorId,
-    vendorLocationId: req.body.vendorLocationId,
-    name: { $regex: req.body.name, $options: "i" },
-  });
-
-  if (vendorProductExists) {
-    res.status(400);
-    throw new Error("Product already exists");
-  }
-
   const updates = { ...req.body, updatedBy: req.user.id };
 
   const updatedVendorProduct = await VendorProduct.findByIdAndUpdate(req.params.id, updates, {

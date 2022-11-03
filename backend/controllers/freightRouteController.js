@@ -70,17 +70,6 @@ const updateFreightRoute = asyncHandler(async (req, res) => {
     throw new Error("Freight Route not found");
   }
 
-  const freightRouteExists = await FreightRoute.findOne({
-    vendorId: req.body.vendorId,
-    vendorLocationId: req.body.vendorLocationId,
-    destination: { $regex: req.body.destination, $options: "i" },
-  });
-
-  if (freightRouteExists) {
-    res.status(400);
-    throw new Error("Route already exists");
-  }
-
   const updates = { ...req.body, updatedBy: req.user.id };
 
   const updatedFreightRoute = await FreightRoute.findByIdAndUpdate(req.params.id, updates, {

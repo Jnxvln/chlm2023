@@ -44,13 +44,6 @@ const updateMaterial = asyncHandler(async (req, res) => {
     throw new Error("Material not found");
   }
 
-  const materialExists = await Material.findOne({ name: { $regex: req.body.name, $options: "i" } });
-
-  if (materialExists) {
-    res.status(400);
-    throw new Error("Material `name` already exists");
-  }
-
   const materialData = { ...req.body, updatedBy: req.user.id };
 
   const updatedMaterial = await Material.findByIdAndUpdate(req.params.id, materialData, {

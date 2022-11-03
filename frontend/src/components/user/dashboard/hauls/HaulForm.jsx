@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+import HaulFromSelector from "./HaulFromSelector";
+import HaulToSelector from "./HaulToSelector";
+import HaulLocationSelector from "./HaulLocationSelector";
+import HaulVendorProductSelector from "./HaulMaterialSelector";
+import { toast } from "react-toastify";
 // PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -11,12 +16,16 @@ import { Calendar } from "primereact/calendar";
 // Store data
 import { useSelector, useDispatch } from "react-redux";
 import { getHauls, createHaul } from "../../../../features/hauls/haulSlice";
+import { getVendors } from "../../../../features/vendors/vendorSlice";
+import { getVendorProducts } from "../../../../features/vendorProducts/vendorProductSlice";
+import { getVendorLocations } from "../../../../features/vendorLocations/vendorLocationSlice";
+import { getFreightRoutes } from "../../../../features/freightRoutes/freightRouteSlice";
 import { getDrivers } from "../../../../features/drivers/driverSlice";
 
 function HaulForm({ selectedDriverId }) {
   // #region VARS ------------------------
   const initialState = {
-    driver: localStorage.getItem('selectedDriverId') || undefined,
+    driver: localStorage.getItem("selectedDriverId") || undefined,
     dateHaul: undefined,
     truck: "",
     broker: "",
@@ -41,6 +50,9 @@ function HaulForm({ selectedDriverId }) {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
+  const [vendorSelected, setVendorSelected] = useState(null);
+  const [vendorProductSelected, setVendorProductSelected] = useState(null);
+  const [vendorLocationSelected, setVendorLocationSelected] = useState(null);
   const dispatch = useDispatch();
 
   // Select hauls from store
@@ -49,8 +61,36 @@ function HaulForm({ selectedDriverId }) {
   // Select drivers from store
   const { drivers } = useSelector((state) => state.drivers);
 
+  // Select vendors from store
+  const { vendors } = useSelector((state) => state.vendors);
+
+  // Select vendor products from store
+  const { vendorProducts } = useSelector((state) => state.vendorProducts);
+
+  // Select vendor locations from store
+  const { vendorLocations } = useSelector((state) => state.vendorLocations);
+
+  // Select freight routes from store
+  const { freightRoutes } = useSelector((state) => state.freightRoutes);
+
   // Destructure form data
-  const { driver, dateHaul, truck, broker, chInvoice, loadType, invoice, from, to, product, tons, rate, miles, payRate, driverPay } = formData;
+  const {
+    driver,
+    dateHaul,
+    truck,
+    broker,
+    chInvoice,
+    loadType,
+    invoice,
+    from,
+    to,
+    product,
+    tons,
+    rate,
+    miles,
+    payRate,
+    driverPay,
+  } = formData;
   // #endregion
 
   // #region COMPONENT RENDERERS
@@ -114,10 +154,76 @@ function HaulForm({ selectedDriverId }) {
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (!driver) {
+      return toast.error("Driver is required");
+    }
+
+    if (!dateHaul) {
+      return toast.error("Date is required");
+    }
+
+    if (!loadType) {
+      return toast.error("Load type is required");
+    }
+
+    if (!invoice) {
+      return toast.error("Load/Ref # is required");
+    }
+
+    if (!from) {
+      return toast.error("From field is required");
+    }
+
+    if (!to) {
+      return toast.error("To field is required");
+    }
+
+    if (!product) {
+      return toast.error("Material is required");
+    }
+
     dispatch(createHaul(formData));
     onClose();
   };
   // #endregion
+
+  const onVendorSelected = (selectedVendor) => {
+    // console.log("[HaulForm.jsx onVendorSelected] selectedVendor: ");
+    // console.log(selectedVendor);
+    setFormData((prevState) => ({
+      ...prevState,
+      from: selectedVendor.name,
+    }));
+    setVendorSelected(selectedVendor);
+  };
+
+  const onVendorLocationSelected = (selectedVendorLocation) => {
+    // console.log("[HaulForm.jsx onVendorLocationSelected] selectedVendorLocation: ");
+    // console.log(selectedVendorLocation);
+    setVendorLocationSelected(selectedVendorLocation);
+  };
+
+  const onVendorProductSelected = (selectedVendorProduct) => {
+    // console.log("[HaulForm.jsx onVendorProductSelected] selectedVendorProduct: ");
+    // console.log(selectedVendorProduct);
+    setFormData((prevState) => ({
+      ...prevState,
+      product: selectedVendorProduct.name,
+    }));
+    setVendorProductSelected(selectedVendorProduct);
+  };
+
+  const onFreightRouteSelected = (selectedFreightRoute) => {
+    console.log("[HaulForm.jsx onFreightRouteSelected] selectedFreightRoute: ");
+    console.log(selectedFreightRoute);
+    setFormData((prevState) => ({
+      ...prevState,
+      to: selectedFreightRoute.destination,
+      rate: selectedFreightRoute.freightCost,
+    }));
+    setVendorSelected(selectedFreightRoute);
+  };
 
   // RUN ONCE - FETCH DATA
   useEffect(() => {
@@ -128,16 +234,32 @@ function HaulForm({ selectedDriverId }) {
     if (drivers.length === 0) {
       dispatch(getDrivers());
     }
+
+    if (vendorProducts.length === 0) {
+      dispatch(getVendorProducts());
+    }
+
+    if (vendors.length === 0) {
+      dispatch(getVendors());
+    }
+
+    if (vendorLocations.length === 0) {
+      dispatch(getVendorLocations());
+    }
+
+    if (freightRoutes.length === 0) {
+      dispatch(getFreightRoutes());
+    }
   }, []);
 
   useEffect(() => {
     if (selectedDriverId) {
       setFormData((prevState) => ({
         ...prevState,
-        driver: selectedDriverId
-      }))
+        driver: selectedDriverId,
+      }));
     }
-  }, [selectedDriverId])
+  }, [selectedDriverId]);
 
   useEffect(() => {
     if (drivers && driver) {
@@ -166,11 +288,21 @@ function HaulForm({ selectedDriverId }) {
         }));
       }
     }
-  }, [hauls, driver, drivers, dispatch]);
+
+    // if (vendorSelected) {
+    //   console.log("[HaulForm.jsx useEffect vendorSelected]: ");
+    //   console.log(vendorSelected);
+    // }
+  }, [hauls, driver, drivers, vendorSelected, dispatch]);
 
   return (
     <section>
-      <Button label="New Haul" icon="pi pi-plus" onClick={() => setFormDialog(true)} style={{ height: "100% !important" }} />
+      <Button
+        label="New Haul"
+        icon="pi pi-plus"
+        onClick={() => setFormDialog(true)}
+        style={{ height: "100% !important" }}
+      />
 
       <Dialog
         id="newHaulDialog"
@@ -202,7 +334,7 @@ function HaulForm({ selectedDriverId }) {
                     required
                     autoFocus
                   />
-                  <label htmlFor="driver">Driver</label>
+                  <label htmlFor="driver">Driver *</label>
                 </span>
               </div>
             </div>
@@ -222,7 +354,7 @@ function HaulForm({ selectedDriverId }) {
                     placeholder="Choose..."
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="loadType">Load Type</label>
+                  <label htmlFor="loadType">Load Type *</label>
                 </span>
               </div>
             </div>
@@ -231,7 +363,14 @@ function HaulForm({ selectedDriverId }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="truck" name="truck" value={truck} placeholder="Truck" onChange={onChange} style={{ width: "100%" }} />
+                  <InputText
+                    id="truck"
+                    name="truck"
+                    value={truck}
+                    placeholder="Truck"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
                   <label htmlFor="truck">Truck</label>
                 </span>
               </div>
@@ -244,8 +383,17 @@ function HaulForm({ selectedDriverId }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <Calendar id="dateHaul" name="dateHaul" value={dateHaul} onChange={onChange} selectOtherMonths showTime hourFormat="12" style={{ width: "100%" }}></Calendar>
-                  <label htmlFor="dateHaul">Haul Date</label>
+                  <Calendar
+                    id="dateHaul"
+                    name="dateHaul"
+                    value={dateHaul}
+                    onChange={onChange}
+                    selectOtherMonths
+                    showTime
+                    hourFormat="12"
+                    style={{ width: "100%" }}
+                  ></Calendar>
+                  <label htmlFor="dateHaul">Haul Date *</label>
                 </span>
               </div>
             </div>
@@ -254,7 +402,14 @@ function HaulForm({ selectedDriverId }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="broker" name="broker" value={broker} placeholder="broker" onChange={onChange} style={{ width: "100%" }} />
+                  <InputText
+                    id="broker"
+                    name="broker"
+                    value={broker}
+                    placeholder="broker"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
                   <label htmlFor="broker">Customer</label>
                 </span>
               </div>
@@ -264,8 +419,15 @@ function HaulForm({ selectedDriverId }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="invoice" name="invoice" value={invoice} placeholder="invoice" onChange={onChange} style={{ width: "100%" }} />
-                  <label htmlFor="invoice">Load/Ref #</label>
+                  <InputText
+                    id="invoice"
+                    name="invoice"
+                    value={invoice}
+                    placeholder="invoice"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  />
+                  <label htmlFor="invoice">Load/Ref# *</label>
                 </span>
               </div>
             </div>
@@ -273,12 +435,19 @@ function HaulForm({ selectedDriverId }) {
 
           {/* CHINVOICE, FROM, TO */}
           <div className="formgrid grid">
-            {/* chInoice */}
+            {/* chInvoice */}
             {(loadType === "flatbedperc" || loadType === "flatbedmi") && (
               <div className="field col">
                 <div style={{ margin: "0.8em 0" }}>
                   <span className="p-float-label">
-                    <InputText id="chInvoice" name="chInvoice" value={chInvoice} placeholder="CH Invoice" onChange={onChange} style={{ width: "100%" }} />
+                    <InputText
+                      id="chInvoice"
+                      name="chInvoice"
+                      value={chInvoice}
+                      placeholder="CH Invoice"
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                    />
                     <label htmlFor="chInvoice">CH Invoice</label>
                   </span>
                 </div>
@@ -288,20 +457,42 @@ function HaulForm({ selectedDriverId }) {
             {/* From */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText id="from" name="from" value={from} placeholder="From" onChange={onChange} style={{ width: "100%" }} />
-                  <label htmlFor="from">From</label>
-                </span>
+                {/* <InputText id="from" name="from" value={from} placeholder="From" onChange={onChange} style={{ width: "100%" }} /> */}
+                <HaulFromSelector
+                  value={from}
+                  vendors={vendors}
+                  onVendorSelected={onVendorSelected}
+                />
+              </div>
+            </div>
+
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <HaulLocationSelector
+                  vendorLocations={vendorLocations}
+                  vendorSelected={vendorSelected}
+                  onVendorLocationSelected={onVendorLocationSelected}
+                />
               </div>
             </div>
 
             {/* To */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText id="to" name="to" value={to} placeholder="To" onChange={onChange} style={{ width: "100%" }} />
-                  <label htmlFor="to">To</label>
-                </span>
+                {/* <InputText
+                    id="to"
+                    name="to"
+                    value={to}
+                    placeholder="To"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  /> */}
+                <HaulToSelector
+                  value={to}
+                  freightRoutes={freightRoutes}
+                  vendorLocationSelected={vendorLocationSelected}
+                  onFreightRouteSelected={onFreightRouteSelected}
+                />
               </div>
             </div>
           </div>
@@ -310,10 +501,20 @@ function HaulForm({ selectedDriverId }) {
           <div className="formgrid grid">
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText id="product" name="product" value={product} placeholder="Material" onChange={onChange} style={{ width: "100%" }} />
-                  <label htmlFor="product">Material</label>
-                </span>
+                {/* <InputText
+                    id="product"
+                    name="product"
+                    value={product}
+                    placeholder="Material"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                  /> */}
+                <HaulVendorProductSelector
+                  value={product}
+                  vendorProducts={vendorProducts}
+                  vendorLocationSelected={vendorLocationSelected}
+                  onVendorProductSelected={onVendorProductSelected}
+                />
               </div>
             </div>
           </div>
@@ -335,7 +536,6 @@ function HaulForm({ selectedDriverId }) {
                     step={0.01}
                     onChange={onChangeNumber}
                     style={{ width: "100%" }}
-                    required
                   />
                 </div>
               </div>
@@ -356,7 +556,6 @@ function HaulForm({ selectedDriverId }) {
                     step={0.01}
                     onChange={onChangeNumber}
                     style={{ width: "100%" }}
-                    required
                   />
                 </div>
               </div>
@@ -376,7 +575,6 @@ function HaulForm({ selectedDriverId }) {
                   step={0.01}
                   onChange={onChangeNumber}
                   style={{ width: "100%" }}
-                  required
                 />
               </div>
             </div>
@@ -396,7 +594,6 @@ function HaulForm({ selectedDriverId }) {
                     step={0.01}
                     onChange={onChangeNumber}
                     style={{ width: "100%" }}
-                    required
                   />
                 </div>
               </div>
@@ -417,7 +614,6 @@ function HaulForm({ selectedDriverId }) {
                     step={0.01}
                     onChange={onChangeNumber}
                     style={{ width: "100%" }}
-                    required
                   />
                 </div>
               </div>

@@ -142,3 +142,9 @@ form {
 .field.col {
   margin-bottom: 0 !important;
 }
+
+#haulFromSelector input,
+#haulToSelector input,
+#haulVendorProductSelector input {
+  width: 100% !important;
+}

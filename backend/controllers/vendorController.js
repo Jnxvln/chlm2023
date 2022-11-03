@@ -59,22 +59,22 @@ const updateVendor = asyncHandler(async (req, res) => {
     throw new Error("Vendor not found");
   }
 
-  const vendorNameExists = await Vendor.findOne({ name: { $regex: req.body.name, $options: "i" } });
-  const vendorShortNameExists = await Vendor.findOne({
-    shortName: { $regex: req.body.shortName, $options: "i" },
-  });
+  // const vendorNameExists = await Vendor.findOne({ name: { $regex: req.body.name, $options: "i" } });
+  // const vendorShortNameExists = await Vendor.findOne({
+  //   shortName: { $regex: req.body.shortName, $options: "i" },
+  // });
 
-  if (vendorNameExists) {
-    res.status(400);
-    throw new Error("Vendor name already exists");
-  }
+  // if (vendorNameExists) {
+  //   res.status(400);
+  //   throw new Error("Vendor name already exists");
+  // }
 
-  if (vendorShortNameExists) {
-    res.status(400);
-    throw new Error("Vendor short name already exists");
-  }
+  // if (vendorShortNameExists) {
+  //   res.status(400);
+  //   throw new Error("Vendor short name already exists");
+  // }
 
-  const updates = { ...vendor, updatedBy: req.user.id };
+  const updates = { ...req.body, updatedBy: req.user.id };
 
   const updatedVendor = await Vendor.findByIdAndUpdate(req.params.id, updates, { new: true });
 

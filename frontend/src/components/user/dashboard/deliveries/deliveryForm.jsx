@@ -222,7 +222,7 @@ function DeliveryForm({ selectedClient }) {
                     optionLabel="firstName"
                     itemTemplate={clientOptionTemplate}
                     valueTemplate={selectedClientTemplate}
-                    filter
+                    filter="true"
                     filterBy="firstName"
                     onChange={(e) => {
                       setFormData((prevState) => ({

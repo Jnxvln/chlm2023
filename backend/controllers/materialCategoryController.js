@@ -48,15 +48,6 @@ const updateMaterialCategory = asyncHandler(async (req, res) => {
     throw new Error("Material category not found");
   }
 
-  const categoryExists = await MaterialCategory.findOne({
-    name: { $regex: req.body.name, $options: "i" },
-  });
-
-  if (categoryExists) {
-    res.status(400);
-    throw new Error("Category `name` already exists");
-  }
-
   const updatedMaterialCategory = await MaterialCategory.findByIdAndUpdate(
     req.params.id,
     req.body,
