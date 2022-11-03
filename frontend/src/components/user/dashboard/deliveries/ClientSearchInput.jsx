@@ -1,18 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DeliveryForm from "./DeliveryForm";
 import DeliveryClientForm from "./DeliveryClientForm";
 // PrimeReact Components
 import { AutoComplete } from "primereact/autocomplete";
-import { Button } from "primereact/button";
-// Store data
-import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 
 function ClientSearchInput({ deliveryClients }) {
+  // #region VARS -------------------------------
   const [searchInput, setSearchInput] = useState("");
   const [filteredClients, setFilteredClients] = useState([]);
+  // #endregion
 
-  // #region TEMPLATES
+  // #region TEMPLATES -------------------------------
   const searchItemTemplate = (option) => {
     return (
       <div className="flex flex-column gap-2" style={{ width: "100%" }}>
@@ -53,17 +51,6 @@ function ClientSearchInput({ deliveryClients }) {
     setFilteredClients(filteredClients);
   };
 
-  const onClearSearchInput = (e) => {
-    setFilteredClients([]);
-    setSearchInput("");
-  };
-
-  useEffect(() => {
-    if (filteredClients) {
-      console.log("Num filteredClients: " + filteredClients.length);
-    }
-  }, [filteredClients]);
-
   return (
     <>
       <AutoComplete
@@ -74,7 +61,7 @@ function ClientSearchInput({ deliveryClients }) {
         suggestions={filteredClients}
         completeMethod={searchDeliveryClient}
         onChange={(e) => setSearchInput(e.value)}
-        placeholder="Search customer"
+        placeholder="Customer search (name, phone, address)"
         style={{ width: "15vw" }}
       />
       {filteredClients.length <= 0 && searchInput.length > 0 ? (

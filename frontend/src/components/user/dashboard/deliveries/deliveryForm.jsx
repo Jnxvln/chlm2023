@@ -160,9 +160,6 @@ function DeliveryForm({ selectedClient }) {
         contactPhone: selectedDeliveryClient.phone,
         address: selectedDeliveryClient.address,
         coordinates: selectedDeliveryClient.coordinates,
-        productName,
-        productQuantity,
-        notes,
         directions: selectedDeliveryClient.directions,
       }));
     }
@@ -180,6 +177,7 @@ function DeliveryForm({ selectedClient }) {
         directions: selectedClient.directions,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

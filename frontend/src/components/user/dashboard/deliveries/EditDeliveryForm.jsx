@@ -193,6 +193,7 @@ function DeliveryForm({ delivery }) {
         completed: delivery.completed,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
