@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 
-function HaulToSelector({ freightRoutes, vendorLocationSelected, onFreightRouteSelected }) {
+function HaulToSelector({ freightRoutes, vendorLocationSelected, onFreightRouteSelected, value }) {
   const [freightRouteSelected, setFreightRouteSelected] = useState(null);
   const [filteredFreightRoutes, setFilteredFreightRoutes] = useState([]);
 
@@ -23,6 +23,12 @@ function HaulToSelector({ freightRoutes, vendorLocationSelected, onFreightRouteS
       setFilteredFreightRoutes(_filteredFreightRoutes);
     }
   };
+
+  useEffect(() => {
+    if (value) {
+      setFreightRouteSelected(value);
+    }
+  }, []);
 
   return (
     <div style={{ width: "100%" }}>

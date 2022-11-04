@@ -49,6 +49,10 @@ const haulSchema = mongoose.Schema(
       type: String,
       required: [true, "The `from` field is required"],
     },
+    vendorLocation: {
+      type: String,
+      required: [true, "The `vendor location` field is required"],
+    },
     to: {
       type: String,
       required: [true, "The `to` field is required"],

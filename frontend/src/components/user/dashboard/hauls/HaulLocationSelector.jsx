@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 
-function HaulLocationSelector({ vendorLocations, onVendorLocationSelected, vendorSelected }) {
+function HaulLocationSelector({
+  vendorLocations,
+  onVendorLocationSelected,
+  vendorSelected,
+  value,
+}) {
   const [vendorLocationSelected, setVendorLocationSelected] = useState(null);
   const [filteredVendorLocations, setFilteredVendorLocations] = useState([]);
 
@@ -22,6 +27,12 @@ function HaulLocationSelector({ vendorLocations, onVendorLocationSelected, vendo
       setFilteredVendorLocations(_filteredVendorLocations);
     }
   };
+
+  useEffect(() => {
+    if (value) {
+      setVendorLocationSelected(value);
+    }
+  }, []);
 
   return (
     <div style={{ width: "100%" }}>

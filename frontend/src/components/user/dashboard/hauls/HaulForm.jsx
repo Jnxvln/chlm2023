@@ -33,6 +33,7 @@ function HaulForm({ selectedDriverId }) {
     loadType: "enddump",
     invoice: "",
     from: "",
+    vendorLocation: "",
     to: "",
     product: "",
     tons: null,
@@ -83,6 +84,7 @@ function HaulForm({ selectedDriverId }) {
     loadType,
     invoice,
     from,
+    vendorLocation,
     to,
     product,
     tons,
@@ -189,8 +191,6 @@ function HaulForm({ selectedDriverId }) {
   // #endregion
 
   const onVendorSelected = (selectedVendor) => {
-    // console.log("[HaulForm.jsx onVendorSelected] selectedVendor: ");
-    // console.log(selectedVendor);
     setFormData((prevState) => ({
       ...prevState,
       from: selectedVendor.name,
@@ -199,14 +199,16 @@ function HaulForm({ selectedDriverId }) {
   };
 
   const onVendorLocationSelected = (selectedVendorLocation) => {
-    // console.log("[HaulForm.jsx onVendorLocationSelected] selectedVendorLocation: ");
-    // console.log(selectedVendorLocation);
+    console.log("selectedVendorLocation: ");
+    console.log(selectedVendorLocation);
+    setFormData((prevState) => ({
+      ...prevState,
+      vendorLocation: selectedVendorLocation.name,
+    }));
     setVendorLocationSelected(selectedVendorLocation);
   };
 
   const onVendorProductSelected = (selectedVendorProduct) => {
-    // console.log("[HaulForm.jsx onVendorProductSelected] selectedVendorProduct: ");
-    // console.log(selectedVendorProduct);
     setFormData((prevState) => ({
       ...prevState,
       product: selectedVendorProduct.name,
@@ -215,8 +217,6 @@ function HaulForm({ selectedDriverId }) {
   };
 
   const onFreightRouteSelected = (selectedFreightRoute) => {
-    console.log("[HaulForm.jsx onFreightRouteSelected] selectedFreightRoute: ");
-    console.log(selectedFreightRoute);
     setFormData((prevState) => ({
       ...prevState,
       to: selectedFreightRoute.destination,
@@ -288,12 +288,7 @@ function HaulForm({ selectedDriverId }) {
         }));
       }
     }
-
-    // if (vendorSelected) {
-    //   console.log("[HaulForm.jsx useEffect vendorSelected]: ");
-    //   console.log(vendorSelected);
-    // }
-  }, [hauls, driver, drivers, vendorSelected, dispatch]);
+  }, [hauls, driver, drivers, loadType, dispatch]);
 
   return (
     <section>
@@ -457,7 +452,6 @@ function HaulForm({ selectedDriverId }) {
             {/* From */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                {/* <InputText id="from" name="from" value={from} placeholder="From" onChange={onChange} style={{ width: "100%" }} /> */}
                 <HaulFromSelector
                   value={from}
                   vendors={vendors}
@@ -466,9 +460,11 @@ function HaulForm({ selectedDriverId }) {
               </div>
             </div>
 
+            {/* Vendor Location */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <HaulLocationSelector
+                  value={vendorLocation}
                   vendorLocations={vendorLocations}
                   vendorSelected={vendorSelected}
                   onVendorLocationSelected={onVendorLocationSelected}
@@ -479,14 +475,6 @@ function HaulForm({ selectedDriverId }) {
             {/* To */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                {/* <InputText
-                    id="to"
-                    name="to"
-                    value={to}
-                    placeholder="To"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  /> */}
                 <HaulToSelector
                   value={to}
                   freightRoutes={freightRoutes}
@@ -501,14 +489,6 @@ function HaulForm({ selectedDriverId }) {
           <div className="formgrid grid">
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                {/* <InputText
-                    id="product"
-                    name="product"
-                    value={product}
-                    placeholder="Material"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  /> */}
                 <HaulVendorProductSelector
                   value={product}
                   vendorProducts={vendorProducts}

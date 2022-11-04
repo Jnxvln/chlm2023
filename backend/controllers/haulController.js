@@ -35,6 +35,10 @@ const createHaul = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("The `from` field required");
   }
+  if (!req.body.vendorLocation) {
+    res.status(400);
+    throw new Error("The `vendor location` field required");
+  }
   if (!req.body.to) {
     res.status(400);
     throw new Error("The `to` field is required");
@@ -77,26 +81,14 @@ const createHaul = asyncHandler(async (req, res) => {
     (overrides.rate = req.body.rate), (overrides.miles = req.body.miles);
   }
 
-  const haul = await Haul.create({
+  const haulData = {
+    ...req.body,
+    timeHaul: req.body.dateHaul,
     createdBy: req.user.id,
     updatedBy: req.user.id,
-    driver: req.body.driver,
-    dateHaul: req.body.dateHaul,
-    timeHaul: req.body.dateHaul,
-    truck: req.body.truck,
-    broker: req.body.broker,
-    chInvoice: overrides.chInvoice,
-    loadType: req.body.loadType,
-    invoice: req.body.invoice,
-    from: req.body.from,
-    to: req.body.to,
-    product: req.body.product,
-    tons: req.body.tons,
-    rate: overrides.rate,
-    miles: overrides.miles,
-    payRate: overrides.payRate,
-    driverPay: overrides.driverPay,
-  });
+  };
+
+  const haul = await Haul.create(haulData);
 
   res.status(200).json(haul);
 });
@@ -135,29 +127,9 @@ const updateHaul = asyncHandler(async (req, res) => {
     (overrides.rate = req.body.rate), (overrides.miles = req.body.miles);
   }
 
-  const updatedHaul = await Haul.findByIdAndUpdate(
-    req.params.id,
-    {
-      updatedBy: req.user.id,
-      driver: req.body.driver,
-      dateHaul: req.body.dateHaul,
-      timeHaul: req.body.dateHaul,
-      truck: req.body.truck,
-      broker: req.body.broker,
-      chInvoice: overrides.chInvoice,
-      loadType: req.body.loadType,
-      invoice: req.body.invoice,
-      from: req.body.from,
-      to: req.body.to,
-      product: req.body.product,
-      tons: req.body.tons,
-      rate: overrides.rate,
-      miles: overrides.miles,
-      payRate: overrides.payRate,
-      driverPay: overrides.driverPay,
-    },
-    { new: true }
-  );
+  const updates = { ...req.body, timeHaul: req.body.dateHaul, updatedBy: req.user.id };
+
+  const updatedHaul = await Haul.findByIdAndUpdate(req.params.id, updates, { new: true });
 
   res.status(200).json(updatedHaul);
 });

@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
+import HaulFromSelector from "./HaulFromSelector";
+import HaulToSelector from "./HaulToSelector";
+import HaulLocationSelector from "./HaulLocationSelector";
+import HaulVendorProductSelector from "./HaulMaterialSelector";
 // PrimeReact Components
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -10,9 +14,14 @@ import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 // Store data
 import { useSelector, useDispatch } from "react-redux";
-import { updateHaul } from "../../../../features/hauls/haulSlice";
+import { getHauls, updateHaul } from "../../../../features/hauls/haulSlice";
+import { getVendors } from "../../../../features/vendors/vendorSlice";
+import { getVendorProducts } from "../../../../features/vendorProducts/vendorProductSlice";
+import { getVendorLocations } from "../../../../features/vendorLocations/vendorLocationSlice";
+import { getFreightRoutes } from "../../../../features/freightRoutes/freightRouteSlice";
+import { getDrivers } from "../../../../features/drivers/driverSlice";
 
-function EditHaulForm({ haul }) {
+function EditHaulForm({ haul, selectedDriverId }) {
   // #region VARS ------------------------
   const initialState = {
     _id: "",
@@ -24,6 +33,7 @@ function EditHaulForm({ haul }) {
     loadType: "",
     invoice: "",
     from: "",
+    vendorLocation: "",
     to: "",
     product: "",
     tons: null,
@@ -41,10 +51,28 @@ function EditHaulForm({ haul }) {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
+  const [vendorSelected, setVendorSelected] = useState(null);
+  const [vendorProductSelected, setVendorProductSelected] = useState(null);
+  const [vendorLocationSelected, setVendorLocationSelected] = useState(null);
   const dispatch = useDispatch();
+
+  // Select hauls from store
+  const { hauls } = useSelector((state) => state.hauls);
 
   // Select drivers from store
   const { drivers } = useSelector((state) => state.drivers);
+
+  // Select vendors from store
+  const { vendors } = useSelector((state) => state.vendors);
+
+  // Select vendor products from store
+  const { vendorProducts } = useSelector((state) => state.vendorProducts);
+
+  // Select vendor locations from store
+  const { vendorLocations } = useSelector((state) => state.vendorLocations);
+
+  // Select freight routes from store
+  const { freightRoutes } = useSelector((state) => state.freightRoutes);
 
   // Destructure form data
   const {
@@ -57,6 +85,7 @@ function EditHaulForm({ haul }) {
     loadType,
     invoice,
     from,
+    vendorLocation,
     to,
     product,
     tons,
@@ -155,6 +184,71 @@ function EditHaulForm({ haul }) {
   };
   // #endregion
 
+  const onVendorSelected = (selectedVendor) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      from: selectedVendor.name,
+    }));
+    setVendorSelected(selectedVendor);
+  };
+
+  const onVendorLocationSelected = (selectedVendorLocation) => {
+    setVendorLocationSelected(selectedVendorLocation);
+  };
+
+  const onVendorProductSelected = (selectedVendorProduct) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      product: selectedVendorProduct.name,
+    }));
+    setVendorProductSelected(selectedVendorProduct);
+  };
+
+  const onFreightRouteSelected = (selectedFreightRoute) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      to: selectedFreightRoute.destination,
+      rate: selectedFreightRoute.freightCost,
+    }));
+    setVendorSelected(selectedFreightRoute);
+  };
+
+  // Fetch data
+  useEffect(() => {
+    if (hauls.length === 0) {
+      dispatch(getHauls());
+    }
+
+    if (drivers.length === 0) {
+      dispatch(getDrivers());
+    }
+
+    if (vendorProducts.length === 0) {
+      dispatch(getVendorProducts());
+    }
+
+    if (vendors.length === 0) {
+      dispatch(getVendors());
+    }
+
+    if (vendorLocations.length === 0) {
+      dispatch(getVendorLocations());
+    }
+
+    if (freightRoutes.length === 0) {
+      dispatch(getFreightRoutes());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedDriverId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        driver: selectedDriverId,
+      }));
+    }
+  }, [selectedDriverId]);
+
   useEffect(() => {
     if (haul) {
       setFormData((prevState) => ({
@@ -168,6 +262,7 @@ function EditHaulForm({ haul }) {
         loadType: haul.loadType,
         invoice: haul.invoice,
         from: haul.from,
+        vendorLocation: haul.vendorLocation,
         to: haul.to,
         product: haul.product,
         tons: haul.tons,
@@ -205,7 +300,7 @@ function EditHaulForm({ haul }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [haul, driver, drivers, dispatch]);
+  }, [haul, driver, drivers, loadType, dispatch]);
 
   return (
     <section>
@@ -259,7 +354,7 @@ function EditHaulForm({ haul }) {
                     placeholder="Choose..."
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="driver">Driver</label>
+                  <label htmlFor="driver">Driver *</label>
                 </span>
               </div>
             </div>
@@ -279,7 +374,7 @@ function EditHaulForm({ haul }) {
                     placeholder="Choose..."
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="loadType">Load Type</label>
+                  <label htmlFor="loadType">Load Type *</label>
                 </span>
               </div>
             </div>
@@ -318,7 +413,7 @@ function EditHaulForm({ haul }) {
                     selectOtherMonths
                     style={{ width: "100%" }}
                   ></Calendar>
-                  <label htmlFor="dateHaul">Haul Date</label>
+                  <label htmlFor="dateHaul">Haul Date *</label>
                 </span>
               </div>
             </div>
@@ -352,7 +447,7 @@ function EditHaulForm({ haul }) {
                     onChange={onChange}
                     style={{ width: "100%" }}
                   />
-                  <label htmlFor="invoice">Load/Ref #</label>
+                  <label htmlFor="invoice">Load/Ref# *</label>
                 </span>
               </div>
             </div>
@@ -382,34 +477,35 @@ function EditHaulForm({ haul }) {
             {/* From */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="from"
-                    name="from"
-                    value={from}
-                    placeholder="From"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="from">From</label>
-                </span>
+                <HaulFromSelector
+                  value={from}
+                  vendors={vendors}
+                  onVendorSelected={onVendorSelected}
+                />
+              </div>
+            </div>
+
+            {/* Vendor Location */}
+            <div className="field col">
+              <div style={{ margin: "0.8em 0" }}>
+                <HaulLocationSelector
+                  value={vendorLocation}
+                  vendorLocations={vendorLocations}
+                  vendorSelected={vendorSelected}
+                  onVendorLocationSelected={onVendorLocationSelected}
+                />
               </div>
             </div>
 
             {/* To */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="to"
-                    name="to"
-                    value={to}
-                    placeholder="To"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="to">To</label>
-                </span>
+                <HaulToSelector
+                  value={to}
+                  freightRoutes={freightRoutes}
+                  vendorLocationSelected={vendorLocationSelected}
+                  onFreightRouteSelected={onFreightRouteSelected}
+                />
               </div>
             </div>
           </div>
@@ -418,17 +514,12 @@ function EditHaulForm({ haul }) {
           <div className="formgrid grid">
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <span className="p-float-label">
-                  <InputText
-                    id="product"
-                    name="product"
-                    value={product}
-                    placeholder="Material"
-                    onChange={onChange}
-                    style={{ width: "100%" }}
-                  />
-                  <label htmlFor="product">Material</label>
-                </span>
+                <HaulVendorProductSelector
+                  value={product}
+                  vendorProducts={vendorProducts}
+                  vendorLocationSelected={vendorLocationSelected}
+                  onVendorProductSelected={onVendorProductSelected}
+                />
               </div>
             </div>
           </div>

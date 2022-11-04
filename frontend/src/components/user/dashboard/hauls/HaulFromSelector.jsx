@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 
-function HaulFromSelector({ vendors, onVendorSelected }) {
+function HaulFromSelector({ vendors, onVendorSelected, value }) {
   const [vendorSelected, setVendorSelected] = useState(null);
   const [filteredVendors, setFilteredVendors] = useState([]);
 
@@ -21,6 +21,12 @@ function HaulFromSelector({ vendors, onVendorSelected }) {
       setFilteredVendors(_filteredVendors);
     }
   };
+
+  useEffect(() => {
+    if (value) {
+      setVendorSelected(value);
+    }
+  }, []);
 
   return (
     <div style={{ width: "100%" }}>
