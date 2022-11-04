@@ -268,6 +268,25 @@ function EditHaulForm({ haul, selectedDriverId }) {
   }, []);
 
   useEffect(() => {
+    if (formDialog) {
+      if (haul) {
+        const vendorObj = vendors.find((v) => v.name.toLowerCase() === haul.from.toLowerCase());
+        setVendorSelected(vendorObj);
+
+        const vendorLocationObj = vendorLocations.find(
+          (loc) => loc.name.toLowerCase() === haul.vendorLocation.toLowerCase()
+        );
+        setVendorLocationSelected(vendorLocationObj);
+
+        const productObj = vendorProducts.find(
+          (product) => product.name.toLowerCase() === haul.product.toLowerCase()
+        );
+        setVendorProductSelected(productObj);
+      }
+    }
+  }, [formDialog]);
+
+  useEffect(() => {
     if (selectedDriverId) {
       setFormData((prevState) => ({
         ...prevState,

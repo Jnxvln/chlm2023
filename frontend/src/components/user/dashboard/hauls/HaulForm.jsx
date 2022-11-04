@@ -468,6 +468,7 @@ function HaulForm({ selectedDriverId }) {
                   vendorLocations={vendorLocations}
                   vendorSelected={vendorSelected}
                   onVendorLocationSelected={onVendorLocationSelected}
+                  isDisabled={!from || from.length <= 0}
                 />
               </div>
             </div>
@@ -480,6 +481,7 @@ function HaulForm({ selectedDriverId }) {
                   freightRoutes={freightRoutes}
                   vendorLocationSelected={vendorLocationSelected}
                   onFreightRouteSelected={onFreightRouteSelected}
+                  isDisabled={!vendorLocation || vendorLocation.length <= 0}
                 />
               </div>
             </div>

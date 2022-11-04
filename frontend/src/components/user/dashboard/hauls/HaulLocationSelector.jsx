@@ -6,6 +6,7 @@ function HaulLocationSelector({
   onVendorLocationSelected,
   vendorSelected,
   value,
+  isDisabled,
 }) {
   const [vendorLocationSelected, setVendorLocationSelected] = useState(null);
   const [filteredVendorLocations, setFilteredVendorLocations] = useState([]);
@@ -51,6 +52,7 @@ function HaulLocationSelector({
         }}
         style={{ width: "100%" }}
         required
+        disabled={isDisabled}
       />
     </div>
   );

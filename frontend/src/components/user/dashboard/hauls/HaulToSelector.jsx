@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 
-function HaulToSelector({ freightRoutes, vendorLocationSelected, onFreightRouteSelected, value }) {
+function HaulToSelector({
+  freightRoutes,
+  vendorLocationSelected,
+  onFreightRouteSelected,
+  value,
+  isDisabled,
+}) {
   const [freightRouteSelected, setFreightRouteSelected] = useState(null);
   const [filteredFreightRoutes, setFilteredFreightRoutes] = useState([]);
 
@@ -46,6 +52,7 @@ function HaulToSelector({ freightRoutes, vendorLocationSelected, onFreightRouteS
           onFreightRouteSelected(e.value);
         }}
         style={{ width: "100%" }}
+        disabled={isDisabled}
         required
       />
     </div>
