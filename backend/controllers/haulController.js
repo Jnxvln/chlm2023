@@ -127,7 +127,7 @@ const updateHaul = asyncHandler(async (req, res) => {
     (overrides.rate = req.body.rate), (overrides.miles = req.body.miles);
   }
 
-  const updates = { ...req.body, timeHaul: req.body.dateHaul, updatedBy: req.user.id };
+  const updates = { ...req.body, updatedBy: req.user.id };
 
   const updatedHaul = await Haul.findByIdAndUpdate(req.params.id, updates, { new: true });
 

@@ -16,7 +16,12 @@ import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup m
 // Store data
 import { useSelector, useDispatch } from "react-redux";
 import { getDrivers, resetDriverMessages } from "../../../features/drivers/driverSlice";
-import { getHauls, createHaul, deleteHaul, resetHaulMessages } from "../../../features/hauls/haulSlice";
+import {
+  getHauls,
+  createHaul,
+  deleteHaul,
+  resetHaulMessages,
+} from "../../../features/hauls/haulSlice";
 
 function HaulsDashboard() {
   // #region VARS ------------------------
@@ -38,8 +43,12 @@ function HaulsDashboard() {
     product: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const dispatch = useDispatch();
-  const { hauls, haulsLoading, haulsError, haulsSuccess, haulsMessage } = useSelector((state) => state.hauls);
-  const { drivers, driversError, driversSuccess, driversMessage } = useSelector((state) => state.drivers);
+  const { hauls, haulsLoading, haulsError, haulsSuccess, haulsMessage } = useSelector(
+    (state) => state.hauls
+  );
+  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
+    (state) => state.drivers
+  );
   // #endregion
 
   // #region DATA TABLE TEMPLATES ------------------------
@@ -59,7 +68,11 @@ function HaulsDashboard() {
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
-          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Invoice, truck, from, to, etc." />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Invoice, truck, from, to, etc."
+          />
         </span>
       </div>
     );
@@ -70,7 +83,7 @@ function HaulsDashboard() {
   };
 
   const timeHaulTemplate = (rowData) => {
-    return <>{dayjs(rowData.timeHaul).format("hh:MM a")}</>;
+    return <>{dayjs(rowData.timeHaul).format("hh:mm a")}</>;
   };
 
   const brokerTemplate = (rowData) => {
@@ -121,8 +134,17 @@ function HaulsDashboard() {
     return (
       <div style={{ display: "flex", gap: "0.5em" }}>
         <EditHaulForm haul={rowData} />
-        <Button icon="pi pi-copy" className="p-button-info" style={{ backgroundColor: "#83B869" }} onClick={(e) => onDuplicate(e, rowData)} />
-        <Button icon="pi pi-trash" className="p-button-danger" onClick={(e) => onDelete(e, rowData)} />
+        <Button
+          icon="pi pi-copy"
+          className="p-button-info"
+          style={{ backgroundColor: "#83B869" }}
+          onClick={(e) => onDuplicate(e, rowData)}
+        />
+        <Button
+          icon="pi pi-trash"
+          className="p-button-danger"
+          onClick={(e) => onDelete(e, rowData)}
+        />
       </div>
     );
   };
@@ -272,7 +294,11 @@ function HaulsDashboard() {
 
       // Filter hauls within selected date range
       if (_selectedDriverId && _selectedDriverId.length > 0) {
-        let _filteredHauls = hauls.filter((haul) => haul.driver === _selectedDriverId && rangeDates.includes(new Date(haul.dateHaul).toDateString()));
+        let _filteredHauls = hauls.filter(
+          (haul) =>
+            haul.driver === _selectedDriverId &&
+            rangeDates.includes(new Date(haul.dateHaul).toDateString())
+        );
         setFilteredHauls(_filteredHauls);
       } else {
         console.log("No driver id found, no hauls to display");
@@ -309,7 +335,16 @@ function HaulsDashboard() {
             value={filteredHauls}
             loading={haulsLoading}
             header={dataTableHeaderTemplate}
-            globalFilterFields={["dateHaul", "broker", "invoice", "chInvoice", "invoice", "from", "to", "product"]}
+            globalFilterFields={[
+              "dateHaul",
+              "broker",
+              "invoice",
+              "chInvoice",
+              "invoice",
+              "from",
+              "to",
+              "product",
+            ]}
             scrollable
             autoLayout
             size="small"
@@ -334,10 +369,22 @@ function HaulsDashboard() {
           >
             {/* <Column field="driver" header="Driver" body={driverTemplate}></Column> */}
             {/* HAUL DATE */}
-            <Column field="dateHaul" header="Date" body={dateHaulTemplate} dataType="date" sortable></Column>
+            <Column
+              field="dateHaul"
+              header="Date"
+              body={dateHaulTemplate}
+              dataType="date"
+              sortable
+            ></Column>
 
             {/* TIME (DATE HAUL) */}
-            <Column field="timeHaul" header="Time" body={timeHaulTemplate} dataType="date" sortable></Column>
+            <Column
+              field="timeHaul"
+              header="Time"
+              body={timeHaulTemplate}
+              dataType="date"
+              sortable
+            ></Column>
 
             {/* BROKER */}
             <Column field="broker" header="Cust" body={brokerTemplate} sortable></Column>
