@@ -83,7 +83,7 @@ const deleteDriver = asyncHandler(async (req, res) => {
 
   driver.remove();
 
-  res.status(200).json({ id: req.params.id });
+  res.status(200).json(driver);
 });
 
 module.exports = {

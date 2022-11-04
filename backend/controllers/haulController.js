@@ -35,7 +35,7 @@ const createHaul = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("The `from` field required");
   }
-  if (!req.body.vendorLocation) {
+  if (!req.body.vendorLocation && req.body.loadType === "enddump") {
     res.status(400);
     throw new Error("The `vendor location` field required");
   }
@@ -49,13 +49,18 @@ const createHaul = asyncHandler(async (req, res) => {
   }
   // #endregion
 
-  const invoiceExists = await Haul.findOne({
-    invoice: { $regex: req.body.invoice, $options: "i" },
-  });
+  // console.log("REQ.BODY: ");
+  // console.log(req.body);
 
-  if (invoiceExists) {
-    res.status(400);
-    throw new Error(`Invoice ${req.body.invoice} already exists`);
+  if (req.body.isDuplicate === false) {
+    const invoiceExists = await Haul.findOne({
+      invoice: { $regex: req.body.invoice, $options: "i" },
+    });
+
+    if (invoiceExists) {
+      res.status(400);
+      throw new Error(`Invoice ${req.body.invoice} already exists`);
+    }
   }
 
   // Next, clear extraneous fields depending on loadType
@@ -81,12 +86,17 @@ const createHaul = asyncHandler(async (req, res) => {
     (overrides.rate = req.body.rate), (overrides.miles = req.body.miles);
   }
 
-  const haulData = {
+  let haulData = {
     ...req.body,
     timeHaul: req.body.dateHaul,
     createdBy: req.user.id,
     updatedBy: req.user.id,
   };
+
+  haulData = { isDuplicate, ...rest };
+
+  console.log("HAUL DATA:");
+  console.log(haulData);
 
   const haul = await Haul.create(haulData);
 

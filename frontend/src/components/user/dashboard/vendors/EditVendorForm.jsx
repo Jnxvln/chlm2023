@@ -77,7 +77,7 @@ function EditVendorForm({ vendor }) {
   const onChangeNumber = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.originalEvent.target.name]: e.originalEvent.target.value,
+      [e.originalEvent.target.name]: e.value,
     }));
   };
 
@@ -106,9 +106,21 @@ function EditVendorForm({ vendor }) {
 
   return (
     <section className="edit-vendor-form-section">
-      <Button icon="pi pi-pencil" iconPos="left" style={{ marginRight: "0.5em" }} onClick={() => setFormDialog(true)} />
+      <Button
+        icon="pi pi-pencil"
+        iconPos="left"
+        style={{ marginRight: "0.5em" }}
+        onClick={() => setFormDialog(true)}
+      />
 
-      <Dialog id="editVendorDialog" visible={formDialog} header={vendorDialogHeader} footer={vendorDialogFooter} onHide={onClose} blockScroll>
+      <Dialog
+        id="editVendorDialog"
+        visible={formDialog}
+        header={vendorDialogHeader}
+        footer={vendorDialogFooter}
+        onHide={onClose}
+        blockScroll
+      >
         <form onSubmit={onSubmit}>
           {/* ID, NAME, SHORT NAME */}
           <div className="formgrid grid">
@@ -116,7 +128,16 @@ function EditVendorForm({ vendor }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="_id" name="_id" value={_id} placeholder="ID" onChange={onChange} style={{ width: "100%" }} readOnly required />
+                  <InputText
+                    id="_id"
+                    name="_id"
+                    value={_id}
+                    placeholder="ID"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    readOnly
+                    required
+                  />
                   <label htmlFor="_id">ID</label>
                 </span>
               </div>
@@ -126,7 +147,16 @@ function EditVendorForm({ vendor }) {
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
                 <span className="p-float-label">
-                  <InputText id="name" name="name" value={name} placeholder="Name" onChange={onChange} style={{ width: "100%" }} autoFocus required />
+                  <InputText
+                    id="name"
+                    name="name"
+                    value={name}
+                    placeholder="Name"
+                    onChange={onChange}
+                    style={{ width: "100%" }}
+                    autoFocus
+                    required
+                  />
                   <label htmlFor="name">Name</label>
                 </span>
               </div>

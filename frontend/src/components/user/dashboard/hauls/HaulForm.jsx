@@ -149,7 +149,7 @@ function HaulForm({ selectedDriverId }) {
   const onChangeNumber = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.originalEvent.target.name]: e.originalEvent.target.value,
+      [e.originalEvent.target.name]: e.value,
     }));
   };
 
@@ -284,6 +284,7 @@ function HaulForm({ selectedDriverId }) {
       if (driverObj && loadType === "flatbedperc") {
         setFormData((prevState) => ({
           ...prevState,
+          tons: 24, // default tonnage for flatbeds
           driverPay: driverObj.flatBedPayRate,
         }));
       }
@@ -452,37 +453,67 @@ function HaulForm({ selectedDriverId }) {
             {/* From */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <HaulFromSelector
-                  value={from}
-                  vendors={vendors}
-                  onVendorSelected={onVendorSelected}
-                />
+                {loadType !== "flatbedperc" && loadType !== "flatbedmi" ? (
+                  <HaulFromSelector
+                    value={from}
+                    vendors={vendors}
+                    onVendorSelected={onVendorSelected}
+                  />
+                ) : (
+                  <span className="p-float-label">
+                    <InputText
+                      id="from"
+                      name="from"
+                      value={from}
+                      placeholder="From"
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                    />
+                    <label htmlFor="from">From *</label>
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Vendor Location */}
-            <div className="field col">
-              <div style={{ margin: "0.8em 0" }}>
-                <HaulLocationSelector
-                  value={vendorLocation}
-                  vendorLocations={vendorLocations}
-                  vendorSelected={vendorSelected}
-                  onVendorLocationSelected={onVendorLocationSelected}
-                  isDisabled={!from || from.length <= 0}
-                />
+            {loadType !== "flatbedperc" && loadType !== "flatbedmi" ? (
+              <div className="field col">
+                <div style={{ margin: "0.8em 0" }}>
+                  <HaulLocationSelector
+                    value={vendorLocation}
+                    vendorLocations={vendorLocations}
+                    vendorSelected={vendorSelected}
+                    onVendorLocationSelected={onVendorLocationSelected}
+                    isDisabled={!from || from.length <= 0}
+                  />
+                </div>
               </div>
-            </div>
+            ) : null}
 
             {/* To */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <HaulToSelector
-                  value={to}
-                  freightRoutes={freightRoutes}
-                  vendorLocationSelected={vendorLocationSelected}
-                  onFreightRouteSelected={onFreightRouteSelected}
-                  isDisabled={!vendorLocation || vendorLocation.length <= 0}
-                />
+                {loadType !== "flatbedperc" && loadType !== "flatbedmi" ? (
+                  <HaulToSelector
+                    value={to}
+                    freightRoutes={freightRoutes}
+                    vendorLocationSelected={vendorLocationSelected}
+                    onFreightRouteSelected={onFreightRouteSelected}
+                    isDisabled={!vendorLocation || vendorLocation.length <= 0}
+                  />
+                ) : (
+                  <span className="p-float-label">
+                    <InputText
+                      id="to"
+                      name="to"
+                      value={to}
+                      placeholder="to"
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                    />
+                    <label htmlFor="to">To *</label>
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -491,12 +522,26 @@ function HaulForm({ selectedDriverId }) {
           <div className="formgrid grid">
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <HaulVendorProductSelector
-                  value={product}
-                  vendorProducts={vendorProducts}
-                  vendorLocationSelected={vendorLocationSelected}
-                  onVendorProductSelected={onVendorProductSelected}
-                />
+                {loadType !== "flatbedperc" && loadType !== "flatbedmi" ? (
+                  <HaulVendorProductSelector
+                    value={product}
+                    vendorProducts={vendorProducts}
+                    vendorLocationSelected={vendorLocationSelected}
+                    onVendorProductSelected={onVendorProductSelected}
+                  />
+                ) : (
+                  <span className="p-float-label">
+                    <InputText
+                      id="product"
+                      name="product"
+                      value={product}
+                      placeholder="Material"
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                    />
+                    <label htmlFor="product">Material *</label>
+                  </span>
+                )}
               </div>
             </div>
           </div>

@@ -193,11 +193,14 @@ function HaulsDashboard() {
 
   // Handle duplicate haul
   const onDuplicate = (e, rowData) => {
+    const duplData = { ...rowData, isDuplicate: true };
+    console.log("duplData: ");
+    console.log(duplData);
     confirmPopup({
       target: e.target,
       message: `Copy haul invoice ${rowData.invoice}?`,
       icon: "pi pi-question-circle",
-      accept: () => dispatch(createHaul(rowData)),
+      accept: () => dispatch(createHaul(duplData)),
       reject: () => null,
     });
   };

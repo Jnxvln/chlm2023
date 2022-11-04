@@ -103,7 +103,7 @@ function EditDriverForm({ driver }) {
   const onChangeNumber = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.originalEvent.target.name]: e.originalEvent.target.value,
+      [e.originalEvent.target.name]: e.value,
     }));
   };
 

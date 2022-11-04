@@ -87,13 +87,34 @@ function DriverForm() {
   const onChangeNumber = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.originalEvent.target.name]: e.originalEvent.target.value,
+      [e.originalEvent.target.name]: e.value,
     }));
   };
 
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (!firstName) {
+      return toast.error("First name is required");
+    }
+
+    if (!lastName) {
+      return toast.error("First name is required");
+    }
+
+    if (!endDumpPayRate) {
+      return toast.error("End dump pay rate is required");
+    }
+
+    if (!flatBedPayRate) {
+      return toast.error("Flat bed pay rate is required");
+    }
+
+    if (!ncRate) {
+      return toast.error("Non-commission rate is required");
+    }
+
     dispatch(createDriver(formData));
     onClose();
   };
@@ -135,7 +156,7 @@ function DriverForm() {
                     autoFocus
                     required
                   />
-                  <label htmlFor="firstName">First Name</label>
+                  <label htmlFor="firstName">First Name *</label>
                 </span>
               </div>
             </div>
@@ -153,7 +174,7 @@ function DriverForm() {
                     style={{ width: "100%" }}
                     required
                   />
-                  <label htmlFor="lastName">Last Name</label>
+                  <label htmlFor="lastName">Last Name *</label>
                 </span>
               </div>
             </div>
@@ -181,7 +202,7 @@ function DriverForm() {
             {/* End Dump Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="endDumpPayRate">End Dump Pay Rate</label>
+                <label htmlFor="endDumpPayRate">End Dump Pay Rate *</label>
                 <InputNumber
                   id="endDumpPayRate"
                   name="endDumpPayRate"
@@ -200,7 +221,7 @@ function DriverForm() {
             {/* Flatbed Pay Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="flatBedPayRate">Flatbed Pay Rate</label>
+                <label htmlFor="flatBedPayRate">Flatbed Pay Rate *</label>
                 <InputNumber
                   id="flatBedPayRate"
                   name="flatBedPayRate"
@@ -219,12 +240,12 @@ function DriverForm() {
             {/* NC Rate */}
             <div className="field col">
               <div style={{ margin: "0.8em 0" }}>
-                <label htmlFor="ncRate">Non-commission Rate</label>
+                <label htmlFor="ncRate">Non-commission Rate *</label>
                 <InputNumber
                   id="ncRate"
                   name="ncRate"
                   value={ncRate}
-                  placeholder="NC Rate"
+                  placeholder="NC Rate *"
                   mode="decimal"
                   minFractionDigits={2}
                   step={0.01}

@@ -45,11 +45,16 @@ function VendorDataTable({ vendors, vendorsLoading }) {
     );
   };
 
-  const isActiveRowFilterTemplate = (options) => {
-    <TriStateCheckbox
-      value={options.value}
-      onChange={(e) => options.filterApplyCallback(e.value)}
-    />;
+  const vendorNameTemplate = (option) => {
+    return (
+      <>
+        <strong>{option.name}</strong>
+      </>
+    );
+  };
+
+  const isActiveRowFilterTemplate = (option) => {
+    <TriStateCheckbox value={option.value} onChange={(e) => option.filterApplyCallback(e.value)} />;
   };
 
   const isActiveTemplate = (rowData) => {
@@ -147,7 +152,7 @@ function VendorDataTable({ vendors, vendorsLoading }) {
           stripedRows
         >
           {/* NAME */}
-          <Column field="name" header="Name" style={{ minWidth: "12em" }} sortable></Column>
+          <Column field="name" header="Name" body={vendorNameTemplate} sortable></Column>
 
           {/* SHORT NAME */}
           <Column

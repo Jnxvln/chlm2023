@@ -45,6 +45,14 @@ function VendorProductDataTable({
     );
   };
 
+  const vendorProductTemplate = (option) => {
+    return (
+      <>
+        <strong>{option.name}</strong>
+      </>
+    );
+  };
+
   const vendorNameTemplate = (rowData) => {
     return <>{vendors.find((v) => v._id === rowData.vendorId).name}</>;
   };
@@ -57,11 +65,8 @@ function VendorProductDataTable({
     return <>${parseFloat(rowData.productCost).toFixed(2)}</>;
   };
 
-  const isActiveRowFilterTemplate = (options) => {
-    <TriStateCheckbox
-      value={options.value}
-      onChange={(e) => options.filterApplyCallback(e.value)}
-    />;
+  const isActiveRowFilterTemplate = (option) => {
+    <TriStateCheckbox value={option.value} onChange={(e) => option.filterApplyCallback(e.value)} />;
   };
 
   const isActiveTemplate = (rowData) => {
@@ -166,7 +171,7 @@ function VendorProductDataTable({
           />
 
           {/* NAME */}
-          <Column field="name" header="Name" style={{ minWidth: "12em" }} sortable></Column>
+          <Column field="name" header="Name" body={vendorProductTemplate} sortable></Column>
 
           {/* PRODUCT COST */}
           <Column
