@@ -96,7 +96,7 @@ function EditHaulForm({ haul, selectedDriverId }) {
   } = formData;
   // #endregion
 
-  // #region COMPONENT RENDERERS
+  // #region COMPONENT RENDERERS ------------------------
   const haulDialogHeader = () => {
     return <DialogHeader resourceType="Haul" resourceName={`Inv ${haul.invoice}`} isEdit />;
   };
@@ -106,7 +106,7 @@ function EditHaulForm({ haul, selectedDriverId }) {
   };
   // #endregion
 
-  // #region COMPONENT TEMPLATES
+  // #region COMPONENT TEMPLATES ------------------------
   const driversItemTemplate = (rowData) => {
     return (
       <>
@@ -124,7 +124,7 @@ function EditHaulForm({ haul, selectedDriverId }) {
   };
   // #endregion
 
-  // #region FORM HANDLERS
+  // #region FORM HANDLERS ------------------------
   // Handle form reset
   const resetForm = () => {
     if (haul) {
@@ -176,14 +176,6 @@ function EditHaulForm({ haul, selectedDriverId }) {
     }));
   };
 
-  // Handle form submit
-  const onSubmit = (e) => {
-    e.preventDefault();
-    dispatch(updateHaul(formData));
-    onClose();
-  };
-  // #endregion
-
   const onVendorSelected = (selectedVendor) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -213,6 +205,14 @@ function EditHaulForm({ haul, selectedDriverId }) {
     setVendorSelected(selectedFreightRoute);
   };
 
+  // Handle form submit
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateHaul(formData));
+    onClose();
+  };
+  // #endregion
+
   // Fetch data
   useEffect(() => {
     if (hauls.length === 0) {
@@ -238,18 +238,7 @@ function EditHaulForm({ haul, selectedDriverId }) {
     if (freightRoutes.length === 0) {
       dispatch(getFreightRoutes());
     }
-  }, []);
 
-  useEffect(() => {
-    if (selectedDriverId) {
-      setFormData((prevState) => ({
-        ...prevState,
-        driver: selectedDriverId,
-      }));
-    }
-  }, [selectedDriverId]);
-
-  useEffect(() => {
     if (haul) {
       setFormData((prevState) => ({
         ...prevState,
@@ -271,7 +260,45 @@ function EditHaulForm({ haul, selectedDriverId }) {
         payRate: haul.payRate,
         driverPay: haul.driverPay,
       }));
+      setVendorSelected(haul.from);
+      setVendorLocationSelected(haul.vendorLocation);
+      setVendorSelected(haul.to);
+      setVendorProductSelected(haul.product);
     }
+  }, []);
+
+  useEffect(() => {
+    if (selectedDriverId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        driver: selectedDriverId,
+      }));
+    }
+  }, [selectedDriverId]);
+
+  useEffect(() => {
+    // if (haul) {
+    //   setFormData((prevState) => ({
+    //     ...prevState,
+    //     _id: haul._id,
+    //     driver: haul.driver,
+    //     dateHaul: haul.dateHaul,
+    //     truck: haul.truck,
+    //     broker: haul.broker,
+    //     chInvoice: haul.chInvoice,
+    //     loadType: haul.loadType,
+    //     invoice: haul.invoice,
+    //     from: haul.from,
+    //     vendorLocation: haul.vendorLocation,
+    //     to: haul.to,
+    //     product: haul.product,
+    //     tons: haul.tons,
+    //     rate: haul.rate,
+    //     miles: haul.miles,
+    //     payRate: haul.payRate,
+    //     driverPay: haul.driverPay,
+    //   }));
+    // }
 
     if (drivers && driver) {
       // Get the current driver as an object
@@ -455,7 +482,7 @@ function EditHaulForm({ haul, selectedDriverId }) {
 
           {/* CHINVOICE, FROM, TO */}
           <div className="formgrid grid">
-            {/* chInoice */}
+            {/* chInvoice */}
             {(loadType === "flatbedperc" || loadType === "flatbedmi") && (
               <div className="field col">
                 <div style={{ margin: "0.8em 0" }}>
