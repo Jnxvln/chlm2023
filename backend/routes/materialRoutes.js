@@ -6,7 +6,7 @@ const {
   updateMaterial,
   deleteMaterial,
 } = require("../controllers/materialController");
-const { protect } = require("../middleware/authMiddleware")
+const { protect } = require("../middleware/authMiddleware");
 
 const express = require("express");
 const router = express.Router();

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DialogHeader from "../../../dialogComponents/DialogHeader";
 import DialogFooter from "../../../dialogComponents/DialogFooter_SubmitClose";
 import { toast } from "react-toastify";
@@ -9,12 +9,13 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { Dropdown } from "primereact/dropdown";
 import { InputTextarea } from "primereact/inputtextarea";
-// Store data
-import { useSelector, useDispatch } from "react-redux";
-import { createMaterial } from "../../../../features/materials/materialSlice";
-import { getMaterialCategories } from "../../../../features/materialCategory/materialCategorySlice";
+// Data
+import { getActiveMaterials, createMaterial } from "../../../../api/materials/materialsApi";
+import { getMaterialCategories } from "../../../../api/materialCategories/materialCategoriesApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function MaterialForm() {
+  const queryClient = useQueryClient();
   // #region VARS ------------------------
   const initialState = {
     category: "",
@@ -54,17 +55,31 @@ function MaterialForm() {
   ];
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // Select materials from store
-  const { materials, materialsError, materialsSuccess, materialsMessage } = useSelector(
-    (state) => state.materials
-  );
+  const materials = useQuery(["materials"], getActiveMaterials);
+  const materialCategories = useQuery(["materialCategories"], getMaterialCategories);
+  const user = useQuery(["user"], () => {
+    return JSON.parse(localStorage.getItem("user"));
+  });
 
-  // Select material categories from store
-  const { materialCategories, materialCategoriesError, materialCategoriesMessage } = useSelector(
-    (state) => state.materialCategories
-  );
+  const mutationAddMaterial = useMutation({
+    mutationKey: ["materials"],
+    mutationFn: (formData) => {
+      return createMaterial(formData, user.data.token);
+    },
+    onSuccess: (createdMaterial) => {
+      toast.success(createdMaterial.name + " created");
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["materials"] });
+    },
+    onError: (err) => {
+      console.log("ERROR CREATING MATERIAL:");
+      console.log(err);
+      toast.error("Error creating material, check logs!", { autoClose: false });
+    },
+  });
 
   const {
     category,
@@ -127,16 +142,13 @@ function MaterialForm() {
       return toast.error("Stock is required");
     }
 
-    dispatch(createMaterial(formData));
+    // dispatch(createMaterial(formData));
+    // alert("TODO: Submit material!");
+    mutationAddMaterial.mutate(formData);
+
     onClose();
   };
   // #endregion
-
-  useEffect(() => {
-    if (materialCategories.length === 0) {
-      dispatch(getMaterialCategories());
-    }
-  }, [materialCategories, dispatch]);
 
   return (
     <section>
@@ -182,7 +194,7 @@ function MaterialForm() {
                     optionLabel="name"
                     optionValue="_id"
                     value={category}
-                    options={materialCategories}
+                    options={materialCategories.data}
                     onChange={onChange}
                     filter
                     showClear

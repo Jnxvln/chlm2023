@@ -5,7 +5,7 @@ import { TabView, TabPanel } from "primereact/tabview";
 // import HaulsDashboard from "./HaulsDashboard";
 // import DeliveriesDashboard from "./DeliveriesDashboard";
 // import VendorsDashboard from "./VendorsDashboard";
-// import MaterialsDashboard from "./MaterialsDashboard";
+import MaterialsDashboard from "./MaterialsDashboard";
 import CarportsDashboard from "./CarportsDashboard";
 import DriversDashboard from "./DriversDashboard";
 // import { useQuery } from "@tanstack/react-query";
@@ -31,9 +31,9 @@ function Dashboard({ user }) {
         {/* <TabPanel header="Vendors">
           <VendorsDashboard />
         </TabPanel> */}
-        {/* <TabPanel header="Materials">
+        <TabPanel header="Materials">
           <MaterialsDashboard />
-        </TabPanel> */}
+        </TabPanel>
         <TabPanel header="Carports">
           <CarportsDashboard />
         </TabPanel>

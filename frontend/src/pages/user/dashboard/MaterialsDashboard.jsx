@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, { useState } from "react";
+// import { toast } from "react-toastify";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
-import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
-import Spinner from "../../../components/layout/Spinner";
+// import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
+// import Spinner from "../../../components/layout/Spinner";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
@@ -15,23 +15,16 @@ import { ProgressBar } from "primereact/progressbar";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { classNames } from "primereact/utils";
-// Store data
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getActiveMaterials,
-  deleteMaterial,
-  resetMaterialMessages,
-} from "../../../features/materials/materialSlice";
-import {
-  getMaterialCategories,
-  resetMaterialCategoryMessages,
-} from "../../../features/materialCategory/materialCategorySlice";
+// Data
+import { useQuery } from "@tanstack/react-query";
+import { getActiveMaterials } from "../../../api/materials/materialsApi";
+import { getMaterialCategories } from "../../../api/materialCategories/materialCategoriesApi";
 
 function MaterialsDashboard() {
   // #region VARS ------------------------
   const stockStatuses = ["new", "in", "low", "out", "notavail"];
-  const [matCategories, setMatCategories] = useState([]);
-  const [stateMaterials, setStateMaterials] = useState(null);
+  // const [matCategories, setMatCategories] = useState([]);
+  // const [stateMaterials, setStateMaterials] = useState(null);
   const [globalFilterValue2, setGlobalFilterValue2] = useState("");
   const [materialRowSelected, setMaterialRowSelected] = useState(null);
   const [filters2, setFilters2] = useState({
@@ -43,21 +36,16 @@ function MaterialsDashboard() {
     isActive: { value: null, matchMode: FilterMatchMode.EQUALS },
     isTruckable: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
-  const dispatch = useDispatch();
 
-  // Select Material data
-  const { materials, materialsLoading, materialsError, materialsSuccess, materialsMessage } =
-    useSelector((state) => state.materials);
+  const materials = useQuery({
+    queryKey: ["materials"],
+    queryFn: getActiveMaterials,
+  });
 
-  // Select MaterialCategory data
-  const {
-    materialCategories,
-    materialCategoriesLoading,
-    materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage,
-  } = useSelector((state) => state.materialCategories);
-  // #endregion
+  const materialCategories = useQuery({
+    queryKey: ["materialCategories"],
+    queryFn: getMaterialCategories,
+  });
 
   // #region DATA TABLE TEMPLATES
   const imageBodyTemplate = (rowData) => {
@@ -84,7 +72,7 @@ function MaterialsDashboard() {
     return (
       <Dropdown
         value={options.value}
-        options={matCategories}
+        options={materialCategories.data}
         onChange={(e) => {
           if (e && e.value && e.value._id) {
             return options.filterApplyCallback(e.value._id);
@@ -164,8 +152,8 @@ function MaterialsDashboard() {
 
   const categoryRowTemplate = (rowData) => {
     let mat;
-    if (matCategories.length > 0) {
-      mat = matCategories.find((cat) => cat._id === rowData.category);
+    if (materialCategories && materialCategories.data && materialCategories.data.length > 0) {
+      mat = materialCategories.data.find((cat) => cat._id === rowData.category);
       return <>{mat.name}</>;
     }
   };
@@ -177,11 +165,13 @@ function MaterialsDashboard() {
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        <EditMaterialForm material={rowData} />
+        {/* <EditMaterialForm material={rowData} /> */}
+        <Button icon="pi pi-pencil" />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
-          onClick={(e) => onDelete(e, rowData)}
+          // onClick={(e) => onDelete(e, rowData)}
+          onClick={(e) => console.log("TODO: Delete: " + JSON.stringify(rowData))}
         />
       </div>
     );
@@ -255,97 +245,22 @@ function MaterialsDashboard() {
       target: e.target,
       message: `Delete material ${rowData.name}?`,
       icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteMaterial(rowData._id)),
+      // accept: () => dispatch(deleteMaterial(rowData._id)),
+      accept: () => console.log("TODO: Delete id " + rowData._id),
       reject: () => null,
     });
   };
-  // useEffect for everything else
-  useEffect(() => {
-    if (materials.length === 0) {
-      dispatch(getActiveMaterials());
-    }
 
-    if (materialsError && materialsMessage && materialsMessage.length > 0) {
-      toast.error(materialsMessage);
-    }
-
-    if (materialsSuccess && materialsMessage && materialsMessage.length > 0) {
-      toast.success(materialsMessage);
-    }
-
-    // ?
-    if (materials.length > 0) {
-      let materialsListCopy = [];
-
-      for (let i = 0; i < materials.length; i++) {
-        let category = materialCategories.find((cat) => cat._id === materials[i].category);
-
-        let materialCopy = { ...materials[i] };
-        if (category && category.name) {
-          materialCopy.categoryName = category.name;
-        }
-        materialsListCopy.push(materialCopy);
-      }
-      setStateMaterials(materialsListCopy);
-    }
-
-    if (materialCategories.length === 0) {
-      dispatch(getMaterialCategories());
-    }
-
-    if (
-      materialCategoriesError &&
-      materialCategoriesMessage &&
-      materialCategoriesMessage.length > 0
-    ) {
-      toast.error(materialCategoriesMessage);
-    }
-
-    if (
-      materialCategoriesSuccess &&
-      materialCategoriesMessage &&
-      materialCategoriesMessage.length > 0
-    ) {
-      toast.success(materialCategoriesMessage);
-    }
-
-    dispatch(resetMaterialMessages());
-    dispatch(resetMaterialCategoryMessages());
-  }, [
-    materials,
-    materialsError,
-    materialsSuccess,
-    materialsMessage,
-    materialCategories,
-    materialCategoriesError,
-    materialCategoriesSuccess,
-    materialCategoriesMessage,
-    dispatch,
-  ]);
-
-  // Create a list of objects with material category names and id's used in categoryRowFilterTemplate
-  useEffect(() => {
-    if (materialCategories.length > 0) {
-      let cats = [];
-      for (let i = 0; i < materialCategories.length; i++) {
-        cats.push({
-          name: materialCategories[i].name,
-          _id: materialCategories[i]._id,
-        });
-      }
-      setMatCategories(cats);
-    }
-  }, [materialCategories]);
-
-  if (materialsLoading || materialCategoriesLoading) {
-    return <Spinner />;
-  }
+  // if (materialsLoading || materialCategoriesLoading) {
+  //   return <Spinner />;
+  // }
 
   const renderHeader = () => {
     return (
       <div className="flex justify-content-between">
         <div>
           <MaterialForm />
+          {/* <Button icon="pi pi-plus" iconPos="left" label="New Material" /> */}
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -371,7 +286,7 @@ function MaterialsDashboard() {
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={stateMaterials}
+            value={materials.data}
             header={renderHeader}
             globalFilterFields={[
               "name",
