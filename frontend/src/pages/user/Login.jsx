@@ -10,7 +10,7 @@ import Spinner from "../../components/layout/Spinner";
 import styles from "../../styles/user/Register.module.css";
 // Data
 import { login } from "../../api/users/usersApi";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function Login() {
   const queryClient = useQueryClient();
@@ -28,22 +28,15 @@ function Login() {
     mutationFn: () => login({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
+      localStorage.setItem("user", JSON.stringify(user));
+      toast.success("Welcome back!", { autoClose: 200 });
       navigate("/dashboard");
-      toast.success("Welcome back!");
     },
 
     onError: (err) => {
-      console.log("LOGIN ERROR!");
-      console.log(err);
       toast.error(err.response.data.message);
     },
   });
-
-  // const dispatch = useDispatch();
-
-  // const { user, authLoading, authError, authSuccess, authMessage } = useSelector(
-  //   (state) => state.auth
-  // );
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -56,14 +49,6 @@ function Login() {
     e.preventDefault();
     mutation.mutate();
   };
-
-  // useEffect(() => {
-  //   if (authError) {
-  //     toast.error(authMessage);
-  //   }
-
-  //   dispatch(resetMessages());
-  // }, [user, navigate]);
 
   // if (authLoading) {
   //   return <Spinner />;

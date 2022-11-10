@@ -5,11 +5,10 @@ import { Button } from "primereact/button";
 import { Menu } from "primereact/menu";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-function Header() {
+function Header({ user }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const user = useQuery({ queryKey: ["user"] });
-  // const userLocal = localStorage.getItem("user");
+
   const loggedInMenu = useRef(null);
   const loggedOutMenu = useRef(null);
 
@@ -19,28 +18,6 @@ function Header() {
     navigate("/login");
   };
 
-  // const mutation = useMutation({
-  //   mutationFn: () => {
-  //     if (userLocal) {
-  //       return JSON.parse(userLocal);
-  //     }
-  //   },
-  //   onSuccess: (user) => {
-  //     console.log("User from storage: ");
-  //     console.log(user);
-  //     queryClient.setQueryData(["user"], user);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   if (!user || !user.data) {
-  //     if (userLocal) {
-  //       console.log("[Header.jsx] User detected in local storage, fetching...");
-  //       mutation.mutate();
-  //     }
-  //   }
-  // }, []);
-
   const loggedInNavItems = [
     {
       items: [
@@ -48,7 +25,7 @@ function Header() {
           label: "Dashboard",
           icon: "pi pi-th-large",
           command: () => {
-            if (user && user.data) {
+            if (user) {
               navigate("/dashboard");
             }
           },
@@ -120,7 +97,7 @@ function Header() {
   const userFunctions = () => {
     return (
       <>
-        {user && user.data ? (
+        {user ? (
           <Button
             type="button"
             icon="pi pi-bars"

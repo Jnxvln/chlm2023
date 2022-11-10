@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useEffect } from "react";
 import Header from "./components/layout/Header";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -16,36 +17,40 @@ import Register from "./pages/user/Register";
 import Login from "./pages/user/Login";
 import Dashboard from "./pages/user/dashboard/Dashboard";
 
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 function App() {
+  const queryClient = useQueryClient();
 
-  const queryClient = useQueryClient()
+  const user = useQuery({
+    queryKey: ["user"],
+    queryFn: () => {
+      return JSON.parse(localStorage.getItem("user"));
+    },
+  });
 
   const mutation = useMutation({
-    mutationFn: () => {
-      return JSON.parse(localStorage.getItem('user'))
+    mutationKey: ["user"],
+    mutationFn: (userData) => {
+      return userData;
     },
-    onSuccess: (user) => {
-      console.log('[App.js mutation] user set: ')
-      console.log(user)
-      queryClient.setQueryData(['user'], user)
-    }
-  })
-  
+    onSuccess: (_userData) => {
+      queryClient.setQueryData(["user"], _userData);
+    },
+  });
+
   useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem('user'))
-  
-    if (localUser) {
-      console.log('[App.js useEffect] User detected in local storage, setting as `user`...')
-      mutation.mutate()
+    if (user && user.isSuccess) {
+      if (user.data) {
+        mutation.mutate(user.data);
+      }
     }
-  }, [])
+  }, [user, user.isSuccess, user.data]);
 
   return (
     <>
       <Router>
-        <Header />
+        <Header user={user.data || JSON.parse(localStorage.getItem("user"))} />
         <div>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -57,7 +62,14 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute user={user.data || JSON.parse(localStorage.getItem("user"))}>
+                  <Dashboard user={user.data || JSON.parse(localStorage.getItem("user"))} />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
       </Router>
