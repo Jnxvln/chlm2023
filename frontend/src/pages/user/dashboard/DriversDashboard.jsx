@@ -13,12 +13,12 @@ import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 // Data
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getDrivers } from "../../../api/drivers/driversApi";
 
 function DriversDashboard() {
-  const queryClient = useQueryClient();
-  const user = useQuery({ queryKey: ["user"] });
+  // const queryClient = useQueryClient();
+  // const user = useQuery({ queryKey: ["user"] });
 
   // #region VARS ------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");

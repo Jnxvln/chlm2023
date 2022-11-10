@@ -1,15 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import { Menu } from "primereact/menu";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 function Header() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useQuery({ queryKey: ["user"] });
-  const userLocal = localStorage.getItem("user");
+  // const userLocal = localStorage.getItem("user");
   const loggedInMenu = useRef(null);
   const loggedOutMenu = useRef(null);
 
@@ -19,27 +19,27 @@ function Header() {
     navigate("/login");
   };
 
-  const mutation = useMutation({
-    mutationFn: () => {
-      if (userLocal) {
-        return JSON.parse(userLocal);
-      }
-    },
-    onSuccess: (user) => {
-      console.log("User from storage: ");
-      console.log(user);
-      queryClient.setQueryData(["user"], user);
-    },
-  });
+  // const mutation = useMutation({
+  //   mutationFn: () => {
+  //     if (userLocal) {
+  //       return JSON.parse(userLocal);
+  //     }
+  //   },
+  //   onSuccess: (user) => {
+  //     console.log("User from storage: ");
+  //     console.log(user);
+  //     queryClient.setQueryData(["user"], user);
+  //   },
+  // });
 
-  useEffect(() => {
-    if (!user || !user.data) {
-      if (userLocal) {
-        console.log("[Header.jsx] User detected in local storage, fetching...");
-        mutation.mutate();
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user || !user.data) {
+  //     if (userLocal) {
+  //       console.log("[Header.jsx] User detected in local storage, fetching...");
+  //       mutation.mutate();
+  //     }
+  //   }
+  // }, []);
 
   const loggedInNavItems = [
     {

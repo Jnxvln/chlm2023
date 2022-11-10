@@ -15,9 +15,9 @@ function Dashboard() {
   const queryClient = useQueryClient();
 
   const [tabsActiveIndex, setTabsActiveIndex] = useState(0);
-  const user = useQuery({ queryKey: ["user"] });
-
-  // const user = true;
+  const user = useQuery({ queryKey: ["user"], queryFn: () => {
+    return JSON.parse(localStorage.getItem('user'))
+  } });
 
   // useEffect(() => {
   //   if (!user || !user.data) {
@@ -28,8 +28,8 @@ function Dashboard() {
   return (
     <section style={{ padding: "2em" }}>
       <h1>Dashboard</h1>
-      {/* <h4>Welcome, {user && user.firstName}</h4> */}
-      <h4>Welcome!</h4>
+      <h4>Welcome, {user && user.data && user.data.firstName}</h4>
+      {/* <h4>Welcome!</h4> */}
 
       <TabView activeIndex={tabsActiveIndex} onTabChange={(e) => setTabsActiveIndex(e.index)}>
         {/* <TabPanel header="Hauls">

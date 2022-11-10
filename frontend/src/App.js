@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./components/layout/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,7 +16,32 @@ import Register from "./pages/user/Register";
 import Login from "./pages/user/Login";
 import Dashboard from "./pages/user/dashboard/Dashboard";
 
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+
 function App() {
+
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: () => {
+      return JSON.parse(localStorage.getItem('user'))
+    },
+    onSuccess: (user) => {
+      console.log('[App.js mutation] user set: ')
+      console.log(user)
+      queryClient.setQueryData(['user'], user)
+    }
+  })
+  
+  useEffect(() => {
+    const localUser = JSON.parse(localStorage.getItem('user'))
+  
+    if (localUser) {
+      console.log('[App.js useEffect] User detected in local storage, setting as `user`...')
+      mutation.mutate()
+    }
+  }, [])
+
   return (
     <>
       <Router>
