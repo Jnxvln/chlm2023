@@ -29,7 +29,7 @@ function Login() {
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
       localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Welcome back!", { autoClose: 200 });
+      toast.success("Welcome!", { autoClose: 1000 });
       navigate("/dashboard");
     },
 
