@@ -45,7 +45,11 @@ function App() {
         mutation.mutate(user.data);
       }
     }
-  }, [user, user.isSuccess, user.data]);
+
+    if (user) {
+      console.log("user");
+    }
+  }, [user.isSuccess, user.data]);
 
   return (
     <>

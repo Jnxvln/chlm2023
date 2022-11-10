@@ -97,7 +97,7 @@ function Header({ user }) {
   const userFunctions = () => {
     return (
       <>
-        {user ? (
+        {JSON.parse(localStorage.getItem("user")) ? (
           <Button
             type="button"
             icon="pi pi-bars"
