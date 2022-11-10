@@ -1,33 +1,38 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { TabView, TabPanel } from "primereact/tabview";
-import HaulsDashboard from "./HaulsDashboard";
-import DeliveriesDashboard from "./DeliveriesDashboard";
-import VendorsDashboard from "./VendorsDashboard";
-import MaterialsDashboard from "./MaterialsDashboard";
-import CarportsDashboard from "./CarportsDashboard";
+// import HaulsDashboard from "./HaulsDashboard";
+// import DeliveriesDashboard from "./DeliveriesDashboard";
+// import VendorsDashboard from "./VendorsDashboard";
+// import MaterialsDashboard from "./MaterialsDashboard";
+// import CarportsDashboard from "./CarportsDashboard";
 import DriversDashboard from "./DriversDashboard";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [tabsActiveIndex, setTabsActiveIndex] = useState(0);
-  const { user } = useSelector((state) => state.auth);
+  const user = useQuery({ queryKey: ["user"] });
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+  // const user = true;
+
+  // useEffect(() => {
+  //   if (!user || !user.data) {
+  //     navigate("/login");
+  //   }
+  // }, [user, navigate]);
 
   return (
     <section style={{ padding: "2em" }}>
       <h1>Dashboard</h1>
-      <h4>Welcome, {user && user.firstName}</h4>
+      {/* <h4>Welcome, {user && user.firstName}</h4> */}
+      <h4>Welcome!</h4>
 
       <TabView activeIndex={tabsActiveIndex} onTabChange={(e) => setTabsActiveIndex(e.index)}>
-        <TabPanel header="Hauls">
+        {/* <TabPanel header="Hauls">
           <HaulsDashboard />
         </TabPanel>
         <TabPanel header="Deliveries">
@@ -41,7 +46,7 @@ function Dashboard() {
         </TabPanel>
         <TabPanel header="Carports">
           <CarportsDashboard />
-        </TabPanel>
+        </TabPanel> */}
         <TabPanel header="Drivers">
           <DriversDashboard />
         </TabPanel>

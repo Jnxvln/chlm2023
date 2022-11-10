@@ -3,8 +3,8 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
-import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
-import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
+// import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
+// import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -12,15 +12,14 @@ import { Button } from "primereact/button";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-// Store data
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getDrivers,
-  deleteDriver,
-  resetDriverMessages,
-} from "../../../features/drivers/driverSlice";
+// Data
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { getDrivers } from "../../../api/drivers/driversApi";
 
 function DriversDashboard() {
+  const queryClient = useQueryClient();
+  const user = useQuery({ queryKey: ["user"] });
+
   // #region VARS ------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [driverRowSelected, setDriverRowSelected] = useState(null);
@@ -30,12 +29,11 @@ function DriversDashboard() {
     lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
-  const dispatch = useDispatch();
 
-  // Select Drivers from store slice
-  const { drivers, driversLoading, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  const drivers = useQuery({
+    queryKey: ["drivers"],
+    queryFn: getDrivers,
+  });
   // #endregion
 
   // #region DATA TABLE TEMPLATES
@@ -43,7 +41,8 @@ function DriversDashboard() {
     return (
       <div className="flex justify-content-between">
         <div>
-          <DriverForm />
+          {/* <DriverForm /> */}
+          <Button icon="pi pi-plus" label="New Driver" />
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -102,7 +101,8 @@ function DriversDashboard() {
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        <EditDriverForm driver={rowData} />
+        {/* <EditDriverForm driver={rowData} /> */}
+        <Button icon="pi pi-pencil" />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
@@ -143,7 +143,8 @@ function DriversDashboard() {
       target: e.target,
       message: `Delete driver ${rowData.firstName} ${rowData.lastName}?`,
       icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteDriver(rowData._id)),
+      // accept: () => dispatch(deleteDriver(rowData._id)),
+      accept: () => console.log("TODO: Delete driver..."),
       reject: () => null,
     });
   };
@@ -154,23 +155,6 @@ function DriversDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // RUN EACH
-  useEffect(() => {
-    if (drivers.length === 0) {
-      dispatch(getDrivers());
-    }
-
-    if (driversError && driversMessage) {
-      toast.error(driversMessage);
-    }
-
-    if (driversSuccess && driversMessage) {
-      toast.success(driversMessage);
-    }
-
-    dispatch(resetDriverMessages());
-  }, [drivers, driversError, driversSuccess, driversMessage, dispatch]);
-
   return (
     <section>
       <h1 style={{ textAlign: "center", fontSize: "20pt" }}>C&H Drivers</h1>
@@ -180,8 +164,8 @@ function DriversDashboard() {
       <div className="datatable-templating-demo">
         <div className="card" style={{ height: "calc(100vh - 145px)" }}>
           <DataTable
-            value={drivers}
-            loading={driversLoading}
+            value={drivers.data}
+            loading={drivers.isLoading}
             header={dataTableHeaderTemplate}
             globalFilterFields={["firstName", "lastName", "defaultTruck"]}
             size="small"

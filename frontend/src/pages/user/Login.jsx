@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import Spinner from "../../components/layout/Spinner";
-import { login, resetMessages } from "../../features/auth/authSlice";
+// import { login, resetMessages } from "../../features/auth/authSlice";
 import styles from "../../styles/user/Register.module.css";
+// Data
+import { login } from "../../api/users/usersApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 function Login() {
+  const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,11 +23,27 @@ function Login() {
   const { email, password } = formData;
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const { user, authLoading, authError, authSuccess, authMessage } = useSelector(
-    (state) => state.auth
-  );
+  const mutation = useMutation({
+    mutationFn: () => login({ email, password }),
+    onSuccess: (user) => {
+      queryClient.setQueryData(["user"], user);
+      navigate("/dashboard");
+      toast.success("Welcome back!");
+    },
+
+    onError: (err) => {
+      console.log("LOGIN ERROR!");
+      console.log(err);
+      toast.error(err.response.data.message);
+    },
+  });
+
+  // const dispatch = useDispatch();
+
+  // const { user, authLoading, authError, authSuccess, authMessage } = useSelector(
+  //   (state) => state.auth
+  // );
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -31,32 +52,22 @@ function Login() {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
-    const userData = {
-      email,
-      password,
-    };
-
-    dispatch(login(userData));
+    mutation.mutate();
   };
 
-  useEffect(() => {
-    if (authError) {
-      toast.error(authMessage);
-    }
+  // useEffect(() => {
+  //   if (authError) {
+  //     toast.error(authMessage);
+  //   }
 
-    if (authSuccess || user) {
-      navigate("/dashboard");
-    }
+  //   dispatch(resetMessages());
+  // }, [user, navigate]);
 
-    dispatch(resetMessages());
-  }, [user, authError, authSuccess, authMessage, navigate, dispatch]);
-
-  if (authLoading) {
-    return <Spinner />;
-  }
+  // if (authLoading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <section>
@@ -75,6 +86,7 @@ function Login() {
                 onChange={onChange}
                 style={{ width: "100%" }}
                 autoFocus
+                required
               />
               <label htmlFor="email">E-mail</label>
             </span>
@@ -91,6 +103,7 @@ function Login() {
                 feedback={false}
                 toggleMask
                 className={styles.passwordField}
+                required
               />
               <label htmlFor="password">Password</label>
             </span>

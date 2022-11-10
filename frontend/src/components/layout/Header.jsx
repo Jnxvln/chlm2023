@@ -1,26 +1,45 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import { Menu } from "primereact/menu";
-
-import { useSelector, useDispatch } from "react-redux"
-import { logout, reset } from "../../features/auth/authSlice"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 function Header() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { user } = useSelector((state) => state.auth)
-
+  const queryClient = useQueryClient();
+  const user = useQuery({ queryKey: ["user"] });
+  const userLocal = localStorage.getItem("user");
   const loggedInMenu = useRef(null);
   const loggedOutMenu = useRef(null);
 
   const onLogout = () => {
-    dispatch(logout())
-    dispatch(reset())
-    navigate("/login")
-  }
+    queryClient.removeQueries({ queryKey: ["user"] });
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
+  const mutation = useMutation({
+    mutationFn: () => {
+      if (userLocal) {
+        return JSON.parse(userLocal);
+      }
+    },
+    onSuccess: (user) => {
+      console.log("User from storage: ");
+      console.log(user);
+      queryClient.setQueryData(["user"], user);
+    },
+  });
+
+  useEffect(() => {
+    if (!user || !user.data) {
+      if (userLocal) {
+        console.log("[Header.jsx] User detected in local storage, fetching...");
+        mutation.mutate();
+      }
+    }
+  }, []);
 
   const loggedInNavItems = [
     {
@@ -28,7 +47,11 @@ function Header() {
         {
           label: "Dashboard",
           icon: "pi pi-th-large",
-          command: () => navigate("/dashboard"),
+          command: () => {
+            if (user && user.data) {
+              navigate("/dashboard");
+            }
+          },
         },
         {
           label: "Logout",
@@ -55,10 +78,6 @@ function Header() {
       ],
     },
   ];
-
-  //   const UserNav = () => {
-  //     return <SlideMenu model={userNavItems} />;
-  //   };
 
   const publicNav = [
     {
@@ -97,27 +116,30 @@ function Header() {
       command: () => navigate("/contact"),
     },
   ];
-  
 
   const userFunctions = () => {
     return (
       <>
-      { user ? (<Button
-        type="button"
-        icon="pi pi-bars"
-        label="Users"
-        className="p-button-outlined p-button-primary"
-        onClick={(event) => loggedInMenu.current.toggle(event)}
-      ></Button>) : (<Button
-        type="button"
-        icon="pi pi-bars"
-        label="Users"
-        className="p-button-outlined p-button-primary"
-        onClick={(event) => loggedOutMenu.current.toggle(event)}
-      ></Button>) }
+        {user && user.data ? (
+          <Button
+            type="button"
+            icon="pi pi-bars"
+            label="Users"
+            className="p-button-outlined p-button-primary"
+            onClick={(event) => loggedInMenu.current.toggle(event)}
+          ></Button>
+        ) : (
+          <Button
+            type="button"
+            icon="pi pi-bars"
+            label="Users"
+            className="p-button-outlined p-button-primary"
+            onClick={(event) => loggedOutMenu.current.toggle(event)}
+          ></Button>
+        )}
       </>
-    )
-  }
+    );
+  };
 
   return (
     <header className="header">
@@ -129,7 +151,7 @@ function Header() {
         menuwidth={175}
       ></Menu>
 
-<Menu
+      <Menu
         ref={loggedOutMenu}
         model={loggedOutNavItems}
         popup
@@ -137,10 +159,7 @@ function Header() {
         menuwidth={175}
       ></Menu>
 
-      <Menubar
-        model={publicNav}
-        end={userFunctions}
-      />
+      <Menubar model={publicNav} end={userFunctions} />
     </header>
   );
 }
