@@ -8,12 +8,14 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 // Store data
-import { useSelector, useDispatch } from "react-redux";
-import { createVendor } from "../../../../features/vendors/vendorSlice";
-import { getVendorLocations } from "../../../../features/vendorLocations/vendorLocationSlice";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createVendor } from "../../../../api/vendors/vendorsApi";
+// import { getVendorLocations } from "../../../../api/vendorLocations/vendorLocationsApi";
+import { toast } from "react-toastify";
 
 function VendorForm() {
   // #region VARS ------------------------
+  const queryClient = useQueryClient();
   const initialState = {
     name: "",
     locations: [],
@@ -26,10 +28,27 @@ function VendorForm() {
   // const [vendorLocations, setVendorLocations] = useState([]);
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-  const dispatch = useDispatch();
+
+  const user = useQuery(["user"], JSON.parse(localStorage.getItem("user")));
 
   // Get VendorLocations from store
-  const { vendorLocations } = useSelector((state) => state.vendorLocations);
+  // const vendorLocations = useQuery(["vendorLocations"], getVendorLocations);
+
+  const mutation = useMutation({
+    mutationKey: ["vendors"],
+    mutationFn: (formData, token) => createVendor(formData, token),
+    onSuccess: (vendor) => {
+      if (vendor) {
+        toast.success("Vendor created", { autoClose: 1000 });
+        queryClient.invalidateQueries(["vendors"]);
+      }
+    },
+    onError: (err) => {
+      console.log("Error creating vendor: ");
+      console.log(err);
+      toast.error("Error creating vendor", { autoClose: false });
+    },
+  });
 
   // Destructure form data
   const { name, locations, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
@@ -76,17 +95,10 @@ function VendorForm() {
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createVendor(formData));
+    mutation.mutate({ formData, token: user.data.token });
     onClose();
   };
   // #endregion
-
-  useEffect(() => {
-    if (!vendorLocations || vendorLocations.length <= 0) {
-      dispatch(getVendorLocations());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <section>

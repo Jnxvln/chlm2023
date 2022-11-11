@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import VendorDataTable from "../../../components/user/dashboard/vendors/VendorDataTable";
 import VendorLocationDataTable from "../../../components/user/dashboard/vendors/VendorLocationDataTable";
@@ -7,135 +7,57 @@ import FreightRouteDataTable from "../../../components/user/dashboard/vendors/Fr
 // PrimeReact Components
 import { TabView, TabPanel } from "primereact/tabview";
 // Store data
-import { useSelector, useDispatch } from "react-redux";
-import { getVendors, resetVendorMessages } from "../../../features/vendors/vendorSlice";
-import {
-  getVendorProducts,
-  resetVendorProductMessages,
-} from "../../../features/vendorProducts/vendorProductSlice";
-import {
-  getFreightRoutes,
-  resetFreightRouteMessages,
-} from "../../../features/freightRoutes/freightRouteSlice";
-import {
-  getVendorLocations,
-  resetVendorLocationMessages,
-} from "../../../features/vendorLocations/vendorLocationSlice";
+import { useQuery } from "@tanstack/react-query";
+import { getVendors } from "../../../api/vendors/vendorsApi";
+import { getVendorProducts } from "../../../api/vendorProducts/vendorProductsApi";
+import { getFreightRoutes } from "../../../api/freightRoutes/freightRoutesApi";
+import { getVendorLocations } from "../../../api/vendorLocations/vendorLocationsApi";
 
 function VendorsDashboard() {
   // #region VARS ------------------------
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const dispatch = useDispatch();
 
-  // Select Vendors from store slice
-  const { vendors, vendorsLoading, vendorsError, vendorsSuccess, vendorsMessage } = useSelector(
-    (state) => state.vendors
-  );
+  const user = useQuery(["user"], JSON.parse(localStorage.getItem("user")));
 
-  // Select Vendor Locations from store slice
-  const {
-    vendorLocations,
-    vendorLocationsLoading,
-    vendorLocationsError,
-    vendorLocationsSuccess,
-    vendorLocationsMessage,
-  } = useSelector((state) => state.vendorLocations);
+  const vendors = useQuery({
+    queryKey: ["vendors"],
+    queryFn: () => getVendors(user.data.token),
+    onError: (err) => {
+      console.log("Error fetching vendors: ");
+      console.log(err);
+      toast.error("Error fetching vendors", { autoClose: false });
+    },
+  });
 
-  // Select Vendor Products from store slice
-  const {
-    vendorProducts,
-    vendorProductsLoading,
-    vendorProductsError,
-    vendorProductsSuccess,
-    vendorProductsMessage,
-  } = useSelector((state) => state.vendorProducts);
+  const vendorProducts = useQuery({
+    queryKey: ["vendorProducts"],
+    queryFn: () => getVendorProducts(user.data.token),
+    onError: (err) => {
+      console.log("Error fetching vendor products: ");
+      console.log(err);
+      toast.error("Error fetching vendor products", { autoClose: false });
+    },
+  });
 
-  // Select Freight Routes store slice
-  const {
-    freightRoutes,
-    freightRoutesLoading,
-    freightRoutesError,
-    freightRoutesSuccess,
-    freightRoutesMessage,
-  } = useSelector((state) => state.freightRoutes);
-  // #endregion
+  const freightRoutes = useQuery({
+    queryKey: ["freightRoutes"],
+    queryFn: () => getFreightRoutes(user.data.token),
+    onError: (err) => {
+      console.log("Error fetching freight routes: ");
+      console.log(err);
+      toast.error("Error fetching freight routes", { autoClose: false });
+    },
+  });
 
-  useEffect(() => {
-    // VENDORS
-    if (vendors.length === 0) {
-      dispatch(getVendors());
-    }
-
-    if (vendorsError && vendorsMessage && vendorsMessage.length > 0) {
-      toast.error(vendorsMessage);
-    }
-
-    if (vendorsSuccess && vendorsMessage && vendorsMessage.length > 0) {
-      toast.success(vendorsMessage);
-    }
-
-    // VENDOR LOCATIONS
-    if (vendorLocations.length === 0) {
-      dispatch(getVendorLocations());
-    }
-
-    if (vendorLocationsError && vendorLocationsMessage && vendorLocationsMessage.length > 0) {
-      toast.error(vendorLocationsMessage);
-    }
-
-    if (vendorLocationsSuccess && vendorLocationsMessage && vendorLocationsMessage.length > 0) {
-      toast.success(vendorLocationsMessage);
-    }
-
-    // VENDOR PRODUCTS
-    if (vendorProducts.length === 0) {
-      dispatch(getVendorProducts());
-    }
-
-    if (vendorProductsError && vendorProductsMessage && vendorProductsMessage.length > 0) {
-      toast.error(vendorProductsMessage);
-    }
-
-    if (vendorProductsSuccess && vendorProductsMessage && vendorProductsMessage.length > 0) {
-      toast.success(vendorProductsMessage);
-    }
-
-    // FREIGHT ROUTES
-    if (freightRoutes.length === 0) {
-      dispatch(getFreightRoutes());
-    }
-
-    if (freightRoutesError && freightRoutesMessage && freightRoutesMessage.length > 0) {
-      toast.error(freightRoutesMessage);
-    }
-
-    if (freightRoutesSuccess && freightRoutesMessage && freightRoutesMessage.length > 0) {
-      toast.success(freightRoutesMessage);
-    }
-
-    dispatch(resetVendorMessages());
-    dispatch(resetVendorProductMessages());
-    dispatch(resetFreightRouteMessages());
-    dispatch(resetVendorLocationMessages());
-  }, [
-    vendors,
-    vendorsError,
-    vendorsSuccess,
-    vendorsMessage,
-    vendorLocations,
-    vendorLocationsError,
-    vendorLocationsSuccess,
-    vendorLocationsMessage,
-    vendorProducts,
-    vendorProductsError,
-    vendorProductsSuccess,
-    vendorProductsMessage,
-    freightRoutes,
-    freightRoutesError,
-    freightRoutesSuccess,
-    freightRoutesMessage,
-    dispatch,
-  ]);
+  const vendorLocations = useQuery({
+    queryKey: ["vendorLocations"],
+    queryFn: () => getVendorLocations(user.data.token),
+    onError: (err) => {
+      console.log("Error fetching vendor locations: ");
+      console.log(err);
+      toast.error("Error fetching vendor locations", { autoClose: false });
+    },
+  });
 
   return (
     <section>
@@ -144,32 +66,32 @@ function VendorsDashboard() {
       <TabView activeIndex={activeTabIndex} onTabChange={(e) => setActiveTabIndex(e.index)}>
         <TabPanel header="Vendors">
           <VendorDataTable
-            vendors={vendors}
-            vendorLocations={vendorLocations}
-            vendorsLoading={vendorsLoading}
+            vendors={vendors.data}
+            vendorLocations={vendorLocations.data}
+            vendorsLoading={vendors.isLoading}
           />
         </TabPanel>
         <TabPanel header="Locations">
           <VendorLocationDataTable
-            vendors={vendors}
-            vendorLocations={vendorLocations}
-            vendorLocationsLoading={vendorLocationsLoading}
+            vendors={vendors.data}
+            vendorLocations={vendorLocations.data}
+            vendorLocationsLoading={vendorLocations.isLoading}
           />
         </TabPanel>
         <TabPanel header="Products">
           <VendorProductDataTable
-            vendors={vendors}
-            vendorLocations={vendorLocations}
-            vendorProducts={vendorProducts}
-            vendorProductsLoading={vendorProductsLoading}
+            vendors={vendors.data}
+            vendorLocations={vendorLocations.data}
+            vendorProducts={vendorProducts.data}
+            vendorProductsLoading={vendorProducts.isLoading}
           />
         </TabPanel>
         <TabPanel header="Routes">
           <FreightRouteDataTable
-            vendors={vendors}
-            vendorLocations={vendorLocations}
+            vendors={vendors.data}
+            vendorLocations={vendorLocations.data}
             freightRoutes={freightRoutes}
-            freightRoutesLoading={freightRoutesLoading}
+            freightRoutesLoading={freightRoutes.isLoading}
           />
         </TabPanel>
       </TabView>

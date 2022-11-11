@@ -11,11 +11,13 @@ import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 // Store data
-import { useDispatch } from "react-redux";
-import { deleteVendor } from "../../../../features/vendors/vendorSlice";
+import { deleteVendor } from "../../../../api/vendors/vendorsApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 function VendorDataTable({ vendors, vendorsLoading }) {
   // #region VARS -------------------------
+  const queryClient = useQueryClient();
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -23,7 +25,23 @@ function VendorDataTable({ vendors, vendorsLoading }) {
     shortName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const [vendorRowSelected, setVendorRowSelected] = useState(null);
-  const dispatch = useDispatch();
+  const user = useQuery(["user"], JSON.parse(localStorage.getItem("user")));
+
+  const mutationDeleteVendor = useMutation({
+    mutationKey: ["vendors"],
+    mutationFn: ({ vendorId, token }) => deleteVendor(vendorId, token),
+    onSuccess: (delId) => {
+      if (delId) {
+        toast.success("Vendor deleted", { autoClose: 1000 });
+        queryClient.invalidateQueries(["vendors"]);
+      }
+    },
+    onError: (err) => {
+      console.log("Error deleting vendor: ");
+      console.log(err);
+      toast.error("Error deleting vendor", { autoClose: false });
+    },
+  });
   // #endregion
 
   // #region TEMPLATES -------------------------
@@ -112,7 +130,7 @@ function VendorDataTable({ vendors, vendorsLoading }) {
       target: e.target,
       message: `Delete vendor ${rowData.name}?`,
       icon: "pi pi-exclamation-triangle",
-      accept: () => dispatch(deleteVendor(rowData._id)),
+      accept: () => mutationDeleteVendor.mutate({ vendorId: "", token: user.data.token }),
       reject: () => null,
     });
   };

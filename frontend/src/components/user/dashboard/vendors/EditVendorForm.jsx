@@ -8,11 +8,13 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 // Store data
-import { useDispatch } from "react-redux";
-import { updateVendor } from "../../../../features/vendors/vendorSlice";
+import { updateVendor } from "../../../../api/vendors/vendorsApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 function EditVendorForm({ vendor }) {
   // #region VARS ------------------------
+  const queryClient = useQueryClient();
   const initialState = {
     _id: "",
     name: "",
@@ -23,7 +25,24 @@ function EditVendorForm({ vendor }) {
   };
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-  const dispatch = useDispatch();
+
+  const user = useQuery(["user"], JSON.parse(localStorage.getItem("user")));
+
+  const mutation = useMutation({
+    mutationKey: ["vendors"],
+    mutationFn: (formData, token) => updateVendor(formData, token),
+    onSuccess: (updVendor) => {
+      if (updVendor) {
+        toast.success("Vendor updated", { autoClose: 1000 });
+        queryClient.invalidateQueries(["vendors"]);
+      }
+    },
+    onError: (err) => {
+      console.log("Error updating vendor: ");
+      console.log(err);
+      toast.error("Error updating vendor", { autoClose: false });
+    },
+  });
 
   // Destructure form data
   const { _id, name, shortName, chtFuelSurcharge, vendorFuelSurcharge, isActive } = formData;
@@ -84,7 +103,7 @@ function EditVendorForm({ vendor }) {
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateVendor(formData));
+    mutation.mutate({ formData, token: user.data.token });
     onClose();
   };
   // #endregion
