@@ -9,10 +9,12 @@ import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
 // Store data
-import { useDispatch } from "react-redux";
-import { updateDriver } from "../../../../features/drivers/driverSlice";
+import { updateDriver } from "../../../../api/drivers/driversApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 function EditDriverForm({ driver }) {
+  const queryClient = useQueryClient();
   // #region VARS ------------------------
   const initialState = {
     _id: "",
@@ -28,7 +30,23 @@ function EditDriverForm({ driver }) {
   };
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-  const dispatch = useDispatch();
+
+  const user = useQuery(["user"], JSON.parse(localStorage.getItem("user")));
+
+  const mutation = useMutation({
+    mutationKey: ["drivers"],
+    mutationFn: ({ formData, token }) => updateDriver(formData, token),
+    onSuccess: (updDriver) => {
+      if (updDriver) {
+        queryClient.invalidateQueries(["drivers"]);
+        toast.success(`${updDriver.firstName} ${updDriver.lastName} updated`, { autoClose: 1000 });
+      }
+    },
+    onError: (err) => {
+      console.log("Error updating driver: ");
+      console.log(err);
+    },
+  });
 
   // Destructure form data
   const {
@@ -110,7 +128,7 @@ function EditDriverForm({ driver }) {
   // Handle form submit
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateDriver(formData));
+    mutation.mutate({ formData, token: user.data.token });
     onClose();
   };
   // #endregion

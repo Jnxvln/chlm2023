@@ -3,8 +3,8 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
-// import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
-// import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
+import DriverForm from "../../../components/user/dashboard/drivers/DriverForm";
+import EditDriverForm from "../../../components/user/dashboard/drivers/EditDriverForm";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -13,12 +13,11 @@ import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 // Data
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getDrivers } from "../../../api/drivers/driversApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteDriver, getDrivers } from "../../../api/drivers/driversApi";
 
 function DriversDashboard() {
   const queryClient = useQueryClient();
-  // const user = useQuery({ queryKey: ["user"] });
 
   // #region VARS ------------------------
   const [globalFilterValue, setGlobalFilterValue] = useState("");
@@ -34,6 +33,28 @@ function DriversDashboard() {
     queryKey: ["drivers"],
     queryFn: getDrivers,
   });
+
+  const user = useQuery({
+    queryKey: ["user"],
+    queryFn: JSON.parse(localStorage.getItem("user")),
+  });
+
+  const mutationDeleteDriver = useMutation({
+    mutationKey: ["drivers"],
+    mutationFn: ({ id, token }) => deleteDriver(id, token),
+    onSuccess: (delId) => {
+      if (delId) {
+        queryClient.invalidateQueries(["drivers"]);
+        toast.success("Driver deleted");
+      }
+    },
+    onError: (err) => {
+      console.log("Error deleting driver: ");
+      console.log(err);
+      toast.error("Error deleting driver", { autoClose: false });
+    },
+  });
+
   // #endregion
 
   // #region DATA TABLE TEMPLATES
@@ -41,8 +62,7 @@ function DriversDashboard() {
     return (
       <div className="flex justify-content-between">
         <div>
-          {/* <DriverForm /> */}
-          <Button icon="pi pi-plus" label="New Driver" />
+          <DriverForm />
         </div>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
@@ -101,8 +121,7 @@ function DriversDashboard() {
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        {/* <EditDriverForm driver={rowData} /> */}
-        <Button icon="pi pi-pencil" />
+        <EditDriverForm driver={rowData} />
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
@@ -143,8 +162,7 @@ function DriversDashboard() {
       target: e.target,
       message: `Delete driver ${rowData.firstName} ${rowData.lastName}?`,
       icon: "pi pi-exclamation-triangle",
-      // accept: () => dispatch(deleteDriver(rowData._id)),
-      accept: () => console.log("TODO: Delete driver..."),
+      accept: () => mutationDeleteDriver.mutate({ id: rowData._id, token: user.data.token }),
       reject: () => null,
     });
   };

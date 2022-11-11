@@ -10,11 +10,11 @@ import { InputSwitch } from "primereact/inputswitch";
 import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
 // Store data
-import { useSelector, useDispatch } from "react-redux";
-import { createDriver, resetDriverMessages } from "../../../../features/drivers/driverSlice";
-import { getDrivers } from "../../../../features/drivers/driverSlice";
+import { createDriver } from "../../../../api/drivers/driversApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function DriverForm() {
+  const queryClient = useQueryClient();
   // #region VARS ------------------------
   const initialState = {
     firstName: "",
@@ -30,12 +30,22 @@ function DriverForm() {
 
   const [formDialog, setFormDialog] = useState(false);
   const [formData, setFormData] = useState(initialState);
-  const dispatch = useDispatch();
 
-  // Select drivers from store
-  const { drivers, driversError, driversSuccess, driversMessage } = useSelector(
-    (state) => state.drivers
-  );
+  const user = useQuery(["user"], () => JSON.parse(localStorage.getItem("user")));
+
+  const mutation = useMutation({
+    mutationKey: ["drivers"],
+    mutationFn: ({ formData, token }) => createDriver(formData, token),
+    onSuccess: () => {
+      toast.success("Driver created", { autoClose: 1000 });
+      queryClient.invalidateQueries(["drivers"]);
+    },
+    onError: (err) => {
+      console.log("Error while creating driver: ");
+      console.log(err);
+      toast.error("Error creating driver", { autoClose: false });
+    },
+  });
 
   // Destructure form data
   const {
@@ -115,16 +125,11 @@ function DriverForm() {
       return toast.error("Non-commission rate is required");
     }
 
-    dispatch(createDriver(formData));
+    // dispatch(createDriver(formData));
+    mutation.mutate({ formData, token: user.data.token });
     onClose();
   };
   // #endregion
-
-  useEffect(() => {
-    if (drivers.length === 0) {
-      dispatch(getDrivers());
-    }
-  }, [drivers, dispatch]);
 
   return (
     <section>
