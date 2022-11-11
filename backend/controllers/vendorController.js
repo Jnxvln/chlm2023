@@ -5,6 +5,10 @@ const Vendor = require("../models/vendorModel");
 // @route   GET /api/vendors
 // @access  Private
 const getVendors = asyncHandler(async (req, res) => {
+
+  console.log('REQ.BODY: ')
+  console.log(req.body)
+
   const vendors = await Vendor.find();
 
   res.status(200).send(vendors);

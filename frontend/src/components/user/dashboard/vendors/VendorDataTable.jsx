@@ -11,13 +11,15 @@ import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 // Store data
-import { deleteVendor } from "../../../../api/vendors/vendorsApi";
+import { getVendors, deleteVendor } from "../../../../api/vendors/vendorsApi";
+import { getVendorLocations } from "../../../../api/vendorLocations/vendorLocationsApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-function VendorDataTable({ vendors, vendorsLoading }) {
+function VendorDataTable() {
   // #region VARS -------------------------
   const queryClient = useQueryClient();
+  const [token, setToken ] = useState(null)
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -26,6 +28,44 @@ function VendorDataTable({ vendors, vendorsLoading }) {
   });
   const [vendorRowSelected, setVendorRowSelected] = useState(null);
   const user = useQuery(["user"], JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => {
+    if (user.isFetching) {
+      console.log('[VendorDataTable.jsx useEffect] Fetching user...')
+    }   
+    
+    if (user.data) {
+      console.log('[VendorDataTable useEffect] user loaded: ')
+      console.log(user.data)
+      setToken(user.data.token)
+    }
+  }, [user, user.isFetching, user.data])
+
+  const vendors = useQuery({
+    queryKey: ["vendors"],
+    queryFn: (token) => getVendors(token),
+    onError: (err) => {
+      console.log("Error fetching vendors: ");
+      console.log(err);
+      toast.error("Error fetching vendors", { autoClose: false });
+    },
+  });
+
+  const vendorLocations = useQuery({
+    queryKey: ['vendorLocations'],
+    queryFn: (token) => getVendorLocations(token)
+  })
+
+  useEffect(() => {
+    if (vendors.isFetching) {
+      console.log('Vendors fetching...')
+    }
+
+    if (vendors.data) {
+      console.log('Vendors fetched: ')
+      console.log(vendors)
+    }
+  }, [vendors, vendors.isFetching, vendors.data])
 
   const mutationDeleteVendor = useMutation({
     mutationKey: ["vendors"],
@@ -146,8 +186,8 @@ function VendorDataTable({ vendors, vendorsLoading }) {
       <ConfirmPopup />
       <div className="card" style={{ height: "calc(100vh - 145px)" }}>
         <DataTable
-          value={vendors}
-          loading={vendorsLoading}
+          value={vendors.data}
+          loading={vendors.isLoading}
           header={vendorsDataTableHeaderTemplate}
           globalFilterFields={["name", "shortName"]}
           size="small"

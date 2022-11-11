@@ -4,6 +4,9 @@ const API_URL = "/api/vendors/";
 
 // Get all vendors
 export const getVendors = async (token) => {
+
+  console.log('[vendorsApi getVendors()] token: ' + token)
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

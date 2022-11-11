@@ -65,11 +65,12 @@ function VendorsDashboard() {
 
       <TabView activeIndex={activeTabIndex} onTabChange={(e) => setActiveTabIndex(e.index)}>
         <TabPanel header="Vendors">
-          <VendorDataTable
+          {/* <VendorDataTable
             vendors={vendors.data}
             vendorLocations={vendorLocations.data}
             vendorsLoading={vendors.isLoading}
-          />
+          /> */}
+          <VendorDataTable />
         </TabPanel>
         <TabPanel header="Locations">
           <VendorLocationDataTable
