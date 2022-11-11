@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-// import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { ConfirmPopup } from "primereact/confirmpopup"; // To use <ConfirmPopup> tag
 import { confirmPopup } from "primereact/confirmpopup"; // To use confirmPopup method
 import MaterialForm from "../../../components/user/dashboard/materials/MaterialForm";
-// import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
+import EditMaterialForm from "../../../components/user/dashboard/materials/EditMaterialForm";
 // import Spinner from "../../../components/layout/Spinner";
 // PrimeReact Components
 import { DataTable } from "primereact/datatable";
@@ -16,15 +16,17 @@ import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import { FilterMatchMode } from "primereact/api";
 import { classNames } from "primereact/utils";
 // Data
-import { useQuery } from "@tanstack/react-query";
-import { getActiveMaterials } from "../../../api/materials/materialsApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getActiveMaterials, deleteMaterial } from "../../../api/materials/materialsApi";
 import { getMaterialCategories } from "../../../api/materialCategories/materialCategoriesApi";
 
 function MaterialsDashboard() {
+  const queryClient = useQueryClient();
   // #region VARS ------------------------
   const stockStatuses = ["new", "in", "low", "out", "notavail"];
   // const [matCategories, setMatCategories] = useState([]);
   // const [stateMaterials, setStateMaterials] = useState(null);
+  const [token, setToken] = useState(null);
   const [globalFilterValue2, setGlobalFilterValue2] = useState("");
   const [materialRowSelected, setMaterialRowSelected] = useState(null);
   const [filters2, setFilters2] = useState({
@@ -45,6 +47,32 @@ function MaterialsDashboard() {
   const materialCategories = useQuery({
     queryKey: ["materialCategories"],
     queryFn: getMaterialCategories,
+  });
+
+  const user = useQuery({
+    queryKey: ["user"],
+    queryFn: () => JSON.parse(localStorage.getItem("user")),
+    onSuccess: (user) => {
+      // console.log("Setting user token: " + user.token);
+      setToken(user.token);
+    },
+  });
+  // #endregion
+
+  const mutationDeleteMaterial = useMutation({
+    mutationKey: ["materials"],
+    mutationFn: ({ _id, token }) => deleteMaterial(_id, token),
+    onSuccess: (delId) => {
+      if (delId) {
+        toast.success("Material deleted");
+        queryClient.invalidateQueries(["materials"]);
+      }
+    },
+    onError: (err) => {
+      console.log("Error deleting material: ");
+      console.log(err);
+      toast.error("Error deleting material", { autoClose: false });
+    },
   });
 
   // #region DATA TABLE TEMPLATES
@@ -165,13 +193,12 @@ function MaterialsDashboard() {
   const actionsTemplate = (rowData) => {
     return (
       <div style={{ display: "flex" }}>
-        {/* <EditMaterialForm material={rowData} /> */}
-        <Button icon="pi pi-pencil" />
+        <EditMaterialForm material={rowData} />
+        {/* <Button icon="pi pi-pencil" /> */}
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
-          // onClick={(e) => onDelete(e, rowData)}
-          onClick={(e) => console.log("TODO: Delete: " + JSON.stringify(rowData))}
+          onClick={(e) => onDelete(e, rowData)}
         />
       </div>
     );
@@ -246,7 +273,7 @@ function MaterialsDashboard() {
       message: `Delete material ${rowData.name}?`,
       icon: "pi pi-exclamation-triangle",
       // accept: () => dispatch(deleteMaterial(rowData._id)),
-      accept: () => console.log("TODO: Delete id " + rowData._id),
+      accept: () => mutationDeleteMaterial.mutate({ _id: rowData._id, token }),
       reject: () => null,
     });
   };
@@ -273,6 +300,12 @@ function MaterialsDashboard() {
       </div>
     );
   };
+
+  // useEffect(() => {
+  //   if (token) {
+  //     console.log("Token set: " + token);
+  //   }
+  // }, [token]);
 
   return (
     <section>
