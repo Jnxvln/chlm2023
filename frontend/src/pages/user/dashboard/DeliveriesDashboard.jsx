@@ -166,9 +166,12 @@ function DeliveriesDashboard() {
     }
 
     const deliveryClientTemplate = (rowData) => {
-        const _client = deliveryClients.data.find(
-            (client) => client._id === rowData.deliveryClient
-        )
+        const _client =
+            deliveryClients &&
+            deliveryClients.data &&
+            deliveryClients.data.find(
+                (client) => client._id === rowData.deliveryClient
+            )
 
         return (
             <>
@@ -408,9 +411,12 @@ function DeliveriesDashboard() {
     useEffect(() => {
         // Check for selected client avatar (in Deliveries DataTable)
         if (selectedClientId) {
-            const client = deliveryClients.data.find(
-                (client) => client._id === selectedClientId
-            )
+            const client =
+                deliveryClients &&
+                deliveryClients.data &&
+                deliveryClients.data.find(
+                    (client) => client._id === selectedClientId
+                )
             setSelectedClientAvatar(client)
         }
 
