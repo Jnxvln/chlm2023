@@ -12,7 +12,7 @@ import { fetchUser } from '../../../../api/users/usersApi'
 import { updateDeliveryClient } from '../../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function EditDeliveryClientForm({ deliveryClientToEdit }) {
+function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -165,7 +165,7 @@ function EditDeliveryClientForm({ deliveryClientToEdit }) {
     return (
         <section>
             <Button
-                label="Edit Client"
+                label={iconButton ? null : 'Edit Client'}
                 icon="pi pi-pencil"
                 style={{ height: '100%' }}
                 onClick={(e) => {

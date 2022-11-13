@@ -12,7 +12,7 @@ import { fetchUser } from '../../../../api/users/usersApi'
 import { createDeliveryClient } from '../../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function DeliveryClientForm({ clientName }) {
+function DeliveryClientForm({ clientName, iconButton }) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -140,7 +140,7 @@ function DeliveryClientForm({ clientName }) {
     return (
         <section>
             <Button
-                label="New Client"
+                label={iconButton ? null : 'New Client'}
                 icon="pi pi-plus"
                 style={{ height: '100%' }}
                 onClick={() => setFormDialog(true)}

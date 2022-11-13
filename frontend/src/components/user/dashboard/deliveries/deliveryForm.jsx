@@ -16,7 +16,7 @@ import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClie
 import { createDelivery } from '../../../../api/deliveries/deliveriesApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function DeliveryForm({ selectedClient }) {
+function DeliveryForm({ selectedClient, iconButton }) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -222,8 +222,8 @@ function DeliveryForm({ selectedClient }) {
     return (
         <section>
             <Button
-                label="New Delivery"
-                icon="pi pi-plus"
+                label={iconButton ? null : 'New Delivery'}
+                icon={iconButton ? 'pi pi-truck' : 'pi pi-plus'}
                 onClick={(e) => {
                     e.stopPropagation()
                     setFormDialog(true)

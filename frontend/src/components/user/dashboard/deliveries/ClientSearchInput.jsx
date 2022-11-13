@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import DeliveryForm from './DeliveryForm'
 import DeliveryClientForm from './DeliveryClientForm'
+import EditDeliveryClientForm from './EditDeliveryClientForm'
 // PrimeReact Components
 import { AutoComplete } from 'primereact/autocomplete'
 // Store data
@@ -18,7 +19,6 @@ function ClientSearchInput() {
 
     const user = useQuery(['user'], fetchUser)
 
-    // Pull in delivery client state
     const deliveryClients = useQuery({
         queryKey: ['deliveryClients'],
         queryFn: () => getDeliveryClients(user.data.token),
@@ -45,8 +45,12 @@ function ClientSearchInput() {
                         {option.address}
                     </address>
                 </div>
-                <div>
-                    <DeliveryForm selectedClient={option} />
+                <div className="flex gap-2">
+                    <DeliveryForm selectedClient={option} iconButton />
+                    <EditDeliveryClientForm
+                        deliveryClientToEdit={option}
+                        iconButton
+                    />
                 </div>
             </div>
         )
