@@ -9,7 +9,7 @@ import { fetchUser } from '../../../../api/users/usersApi'
 import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-function ClientSearchInput() {
+function ClientSearchInput({ onClientSelected }) {
     // #region VARS -------------------------------
 
     const queryClient = useQueryClient()
@@ -77,6 +77,11 @@ function ClientSearchInput() {
         setFilteredClients(filteredClients)
     }
 
+    const onChange = (e) => {
+        onClientSelected(e.value)
+        setSearchInput(e.value)
+    }
+
     return (
         <>
             <AutoComplete
@@ -86,7 +91,7 @@ function ClientSearchInput() {
                 itemTemplate={searchItemTemplate}
                 suggestions={filteredClients}
                 completeMethod={searchDeliveryClient}
-                onChange={(e) => setSearchInput(e.value)}
+                onChange={onChange}
                 placeholder="Customer search (name, phone, address)"
                 style={{ width: '15vw' }}
             />

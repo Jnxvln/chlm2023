@@ -143,7 +143,9 @@ function DeliveriesDashboard() {
             <div className="flex justify-content-between">
                 <div>
                     <div className="flex" style={{ gap: '1em' }}>
-                        <ClientSearchInput />
+                        <ClientSearchInput
+                            onClientSelected={onClientSelected}
+                        />
                         <DeliveryTimeframeSelector
                             onDateRangeSelected={onDateRangeSelected}
                         />
@@ -382,12 +384,51 @@ function DeliveriesDashboard() {
             setRangeDates(dates)
         }
     }
+
+    const onClientSelected = (clientSelected) => {
+        // If the user clicks on a delivery client in the list, show all of this customer's deliveries
+        if (clientSelected && clientSelected.hasOwnProperty('_id')) {
+            const clientDeliveries =
+                deliveries && deliveries.data
+                    ? deliveries.data.filter(
+                          (dlv) => dlv.deliveryClient === clientSelected._id
+                      )
+                    : []
+            if (clientDeliveries && clientDeliveries.length > 0) {
+                setFilteredDeliveries(clientDeliveries)
+            } else {
+                return
+            }
+        } else {
+            // Otherwise set deliveries back to date range selected
+            if (!rangeDates || rangeDates.length <= 0) {
+                console.log("No range chosen, setting range to today's date")
+                setFilteredDeliveries([])
+            }
+            setFilteredDeliveriesToDateRange()
+        }
+    }
     // #endregion
 
-    // RUN ONCE - INIT FILTERS
-    useEffect(() => {
-        initFilters()
+    const setFilteredDeliveriesToDateRange = () => {
+        if (rangeDates && rangeDates.length > 0) {
+            // Filter deliveries by date range (rangeDates)
+            // let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
 
+            // Filter deliveries within selected date range
+            let _filteredDeliveries =
+                deliveries && deliveries.data
+                    ? deliveries.data.filter((delivery) =>
+                          rangeDates.includes(
+                              new Date(delivery.deliveryDate).toDateString()
+                          )
+                      )
+                    : []
+            setFilteredDeliveries(_filteredDeliveries)
+        }
+    }
+
+    const setFilteredDeliveriesToLocalStorageRange = () => {
         if (localStorage.getItem('selectedDeliveriesDateRange')) {
             const _deliveriesDateRange = JSON.parse(
                 localStorage.getItem('selectedDeliveriesDateRange')
@@ -404,6 +445,29 @@ function DeliveriesDashboard() {
                 onDateRangeSelected(e)
             }
         }
+    }
+
+    // RUN ONCE - INIT FILTERS
+    useEffect(() => {
+        initFilters()
+
+        setFilteredDeliveriesToLocalStorageRange()
+        // if (localStorage.getItem('selectedDeliveriesDateRange')) {
+        //     const _deliveriesDateRange = JSON.parse(
+        //         localStorage.getItem('selectedDeliveriesDateRange')
+        //     )
+
+        //     if (_deliveriesDateRange.length > 0) {
+        //         // Manually call onDateRangeSelected, passing in a pseudo-event object based on localStorage values
+        //         let e = {
+        //             value: [
+        //                 new Date(_deliveriesDateRange[0]),
+        //                 new Date(_deliveriesDateRange[1]),
+        //             ],
+        //         }
+        //         onDateRangeSelected(e)
+        //     }
+        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -420,21 +484,22 @@ function DeliveriesDashboard() {
             setSelectedClientAvatar(client)
         }
 
-        if (rangeDates && rangeDates.length > 0) {
-            // Filter deliveries by date range (rangeDates)
-            // let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
+        setFilteredDeliveriesToDateRange()
+        // if (rangeDates && rangeDates.length > 0) {
+        //     // Filter deliveries by date range (rangeDates)
+        //     // let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
 
-            // Filter deliveries within selected date range
-            let _filteredDeliveries =
-                deliveries && deliveries.data
-                    ? deliveries.data.filter((delivery) =>
-                          rangeDates.includes(
-                              new Date(delivery.deliveryDate).toDateString()
-                          )
-                      )
-                    : []
-            setFilteredDeliveries(_filteredDeliveries)
-        }
+        //     // Filter deliveries within selected date range
+        //     let _filteredDeliveries =
+        //         deliveries && deliveries.data
+        //             ? deliveries.data.filter((delivery) =>
+        //                   rangeDates.includes(
+        //                       new Date(delivery.deliveryDate).toDateString()
+        //                   )
+        //               )
+        //             : []
+        //     setFilteredDeliveries(_filteredDeliveries)
+        // }
     }, [
         deliveries.data,
         deliveryClients.data,
