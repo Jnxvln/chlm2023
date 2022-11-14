@@ -397,14 +397,11 @@ function DeliveriesDashboard() {
             if (clientDeliveries && clientDeliveries.length > 0) {
                 setFilteredDeliveries(clientDeliveries)
             } else {
-                return
+                toast.warning('No deliveries for this client')
+                return []
             }
         } else {
             // Otherwise set deliveries back to date range selected
-            if (!rangeDates || rangeDates.length <= 0) {
-                console.log("No range chosen, setting range to today's date")
-                setFilteredDeliveries([])
-            }
             setFilteredDeliveriesToDateRange()
         }
     }
