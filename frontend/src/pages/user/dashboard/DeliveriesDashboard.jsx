@@ -21,6 +21,7 @@ import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup me
 import { fetchUser } from '../../../api/users/usersApi'
 import {
     getDeliveries,
+    updateDelivery,
     deleteDelivery,
 } from '../../../api/deliveries/deliveriesApi'
 import { getDeliveryClients } from '../../../api/deliveryClients/deliveryClientsApi'
@@ -132,6 +133,38 @@ function DeliveriesDashboard() {
         onError: (err) => {
             console.log('Error deleting delivery: ')
             console.log(err)
+        },
+    })
+
+    const mutationToggleCompleted = useMutation({
+        mutationKey: ['deliveries'],
+        mutationFn: ({ data, token }) => updateDelivery(data, token),
+        onSuccess: (updDelivery) => {
+            if (updDelivery) {
+                toast.success('Delivery updated', { autoClose: 1000 })
+                queryClient.invalidateQueries(['deliveries'])
+            }
+        },
+        onError: (err) => {
+            console.log('Error updating delivery')
+            console.log(err)
+            toast.error('Error updating delivery', { autoClose: 8000 })
+        },
+    })
+
+    const mutationToggleHasPaid = useMutation({
+        mutationKey: ['deliveries'],
+        mutationFn: ({ data, token }) => updateDelivery(data, token),
+        onSuccess: (updDelivery) => {
+            if (updDelivery) {
+                toast.success('Delivery updated', { autoClose: 1000 })
+                queryClient.invalidateQueries(['deliveries'])
+            }
+        },
+        onError: (err) => {
+            console.log('Error updating delivery')
+            console.log(err)
+            toast.error('Error updating delivery', { autoClose: 8000 })
         },
     })
 
@@ -266,7 +299,7 @@ function DeliveriesDashboard() {
 
     const hasPaidTemplate = (rowData) => {
         return (
-            <div>
+            <div onClick={() => handleToggleHasPaid(rowData)}>
                 {Boolean(rowData.hasPaid) ? (
                     <i
                         className="pi pi-check"
@@ -284,7 +317,7 @@ function DeliveriesDashboard() {
 
     const completedTemplate = (rowData) => {
         return (
-            <div>
+            <div onClick={() => handleToggleCompleted(rowData)}>
                 {Boolean(rowData.completed) ? (
                     <i
                         className="pi pi-check"
@@ -313,6 +346,24 @@ function DeliveriesDashboard() {
         )
     }
     // #endregion
+
+    const handleToggleCompleted = (delivery) => {
+        const updDelivery = { ...delivery, completed: !delivery.completed }
+
+        mutationToggleCompleted.mutate({
+            data: updDelivery,
+            token: user.data.token,
+        })
+    }
+
+    const handleToggleHasPaid = (delivery) => {
+        const updDelivery = { ...delivery, hasPaid: !delivery.hasPaid }
+
+        mutationToggleHasPaid.mutate({
+            data: updDelivery,
+            token: user.data.token,
+        })
+    }
 
     // #region FILTERS
     const onGlobalFilterChange = (e) => {
