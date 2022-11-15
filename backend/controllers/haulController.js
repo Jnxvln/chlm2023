@@ -1,3 +1,4 @@
+const dayjs = require('dayjs')
 const asyncHandler = require('express-async-handler')
 const Haul = require('../models/haulModel')
 
@@ -7,6 +8,67 @@ const Haul = require('../models/haulModel')
 const getHauls = asyncHandler(async (req, res) => {
     const hauls = await Haul.find()
 
+    res.status(200).send(hauls)
+})
+
+// @desc    Get hauls by driverId
+// @route   GET /api/hauls/for/:driverId
+// @access  Private
+const getHaulsByDriverId = asyncHandler(async (req, res) => {
+    console.log('Checking for hauls on driverId: ' + req.params.driverId)
+    const hauls = await Haul.find({ driver: req.params.driverId })
+
+    res.status(200).send(hauls)
+})
+
+// @desc    Get hauls by driverId and date range
+// @route   GET /api/hauls/for/:driverId/:dateStart/:dateEnd
+// @access  Private
+const getHaulsByDriverIdAndDateRange = asyncHandler(async (req, res) => {
+    // #region ERROR CHECKS
+    if (!req.params.driverId) {
+        res.status(400)
+        throw new Error('Driver ID is required')
+    }
+
+    if (!req.params.dateStart) {
+        res.status(400)
+        throw new Error('A starting date is required')
+    }
+
+    if (!req.params.dateEnd) {
+        res.status(400)
+        throw new Error('An ending date is required')
+    }
+    // #endregion
+
+    const gte = new Date(
+        new Date(dayjs(req.params.dateStart).format('MM/DD/YYYY')).setHours(
+            00,
+            00,
+            00
+        )
+    )
+    const lte = new Date(
+        new Date(dayjs(req.params.dateEnd).format('MM/DD/YYYY')).setHours(
+            23,
+            59,
+            59
+        )
+    )
+    // console.log('Date Start: ' + gte)
+    // console.log('Date End: ' + lte)
+
+    // 2. Return hauls within this date range
+    const hauls = await Haul.find({
+        driver: req.params.driverId,
+        dateHaul: {
+            $gte: gte,
+            $lte: lte,
+        },
+    })
+
+    // 3. Return this list
     res.status(200).send(hauls)
 })
 
@@ -169,6 +231,8 @@ const deleteHaul = asyncHandler(async (req, res) => {
 
 module.exports = {
     getHauls,
+    getHaulsByDriverId,
+    getHaulsByDriverIdAndDateRange,
     createHaul,
     updateHaul,
     deleteHaul,
