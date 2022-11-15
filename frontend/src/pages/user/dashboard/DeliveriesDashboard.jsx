@@ -299,37 +299,51 @@ function DeliveriesDashboard() {
 
     const hasPaidTemplate = (rowData) => {
         return (
-            <div onClick={() => handleToggleHasPaid(rowData)}>
-                {Boolean(rowData.hasPaid) ? (
-                    <i
-                        className="pi pi-check"
-                        style={{ color: 'green', fontWeight: 'bold' }}
-                    ></i>
-                ) : (
-                    <i
-                        className="pi pi-dollar"
-                        style={{ color: 'red', fontWeight: 'bold' }}
-                    ></i>
-                )}
-            </div>
+            <>
+                <Tooltip target=".clickToToggle" />
+                <div
+                    onClick={() => handleToggleHasPaid(rowData)}
+                    className="clickToToggle"
+                    data-pr-tooltip="Click to toggle"
+                >
+                    {Boolean(rowData.hasPaid) ? (
+                        <i
+                            className="pi pi-check"
+                            style={{ color: 'green', fontWeight: 'bold' }}
+                        ></i>
+                    ) : (
+                        <i
+                            className="pi pi-dollar"
+                            style={{ color: 'red', fontWeight: 'bold' }}
+                        ></i>
+                    )}
+                </div>
+            </>
         )
     }
 
     const completedTemplate = (rowData) => {
         return (
-            <div onClick={() => handleToggleCompleted(rowData)}>
-                {Boolean(rowData.completed) ? (
-                    <i
-                        className="pi pi-check"
-                        style={{ color: 'green', fontWeight: 'bold' }}
-                    ></i>
-                ) : (
-                    <i
-                        className="pi pi-times"
-                        style={{ color: 'red', fontWeight: 'bold' }}
-                    ></i>
-                )}
-            </div>
+            <>
+                <Tooltip target=".clickToToggle" />
+                <div
+                    onClick={() => handleToggleCompleted(rowData)}
+                    className="clickToToggle"
+                    data-pr-tooltip="Click to toggle"
+                >
+                    {Boolean(rowData.completed) ? (
+                        <i
+                            className="pi pi-check"
+                            style={{ color: 'green', fontWeight: 'bold' }}
+                        ></i>
+                    ) : (
+                        <i
+                            className="pi pi-times"
+                            style={{ color: 'red', fontWeight: 'bold' }}
+                        ></i>
+                    )}
+                </div>
+            </>
         )
     }
 
