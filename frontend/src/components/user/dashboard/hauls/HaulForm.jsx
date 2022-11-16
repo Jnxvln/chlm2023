@@ -139,7 +139,7 @@ function HaulForm({ selectedDriverId }) {
 
     const mutationCreateHaul = useMutation({
         mutationKey: ['hauls'],
-        mutationFn: ({ data, token }) => createHaul(data, token),
+        mutationFn: ({ formData, token }) => createHaul(formData, token),
         onSuccess: (haul) => {
             console.log('HAUL CREATED: ')
             console.log(haul)
@@ -161,9 +161,9 @@ function HaulForm({ selectedDriverId }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: 8000 })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: 8000 })
             }
         },
     })
@@ -221,6 +221,7 @@ function HaulForm({ selectedDriverId }) {
     // Handle reset form
     const resetForm = () => {
         setFormData(initialState)
+        setDriverDefaults()
     }
 
     // Handle form closing
@@ -279,10 +280,7 @@ function HaulForm({ selectedDriverId }) {
             return toast.error('Material is required')
         }
 
-        mutationCreateHaul.mutate({
-            data: { ...formData, isDuplicate: false },
-            token: user.data.token,
-        })
+        mutationCreateHaul.mutate({ formData, token: user.data.token })
         onClose()
     }
     // #endregion
@@ -320,16 +318,7 @@ function HaulForm({ selectedDriverId }) {
         setVendorSelected(selectedFreightRoute)
     }
 
-    useEffect(() => {
-        if (selectedDriverId) {
-            setFormData((prevState) => ({
-                ...prevState,
-                driver: selectedDriverId,
-            }))
-        }
-    }, [selectedDriverId])
-
-    useEffect(() => {
+    const setDriverDefaults = () => {
         if (drivers.data && driver) {
             // Get the current driver as an object
             const driverObj = drivers.data.find((d) => d._id === driver)
@@ -357,6 +346,19 @@ function HaulForm({ selectedDriverId }) {
                 }))
             }
         }
+    }
+
+    useEffect(() => {
+        if (selectedDriverId) {
+            setFormData((prevState) => ({
+                ...prevState,
+                driver: selectedDriverId,
+            }))
+        }
+    }, [selectedDriverId])
+
+    useEffect(() => {
+        setDriverDefaults()
     }, [hauls.data, driver, drivers.data, loadType])
 
     return (
@@ -374,7 +376,6 @@ function HaulForm({ selectedDriverId }) {
                 header={haulDialogHeader}
                 footer={haulDialogFooter}
                 onHide={onClose}
-                style={{ width: '50vw' }}
                 blockScroll
             >
                 <form onSubmit={onSubmit}>

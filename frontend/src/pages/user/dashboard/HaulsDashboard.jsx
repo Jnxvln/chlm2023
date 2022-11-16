@@ -209,12 +209,7 @@ function HaulsDashboard() {
         return (
             <div style={{ display: 'flex', gap: '0.5em' }}>
                 <EditHaulForm haul={rowData} />
-                <Button
-                    icon="pi pi-copy"
-                    className="p-button-info"
-                    style={{ backgroundColor: '#83B869' }}
-                    onClick={(e) => onDuplicate(e, rowData)}
-                />
+                <EditHaulForm haul={rowData} isDuplicating />
                 <Button
                     icon="pi pi-trash"
                     className="p-button-danger"

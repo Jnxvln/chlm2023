@@ -76,11 +76,7 @@ const getHaulsByDriverIdAndDateRange = asyncHandler(async (req, res) => {
 // @route   POST /api/hauls
 // @access  Private
 const createHaul = asyncHandler(async (req, res) => {
-    // #region DATA CHECKS
-
-    console.log('HAUL REQ.BODY: ')
-    console.log(req.body)
-
+    // #region ERROR CHECKS
     if (!req.body.driver) {
         res.status(400)
         throw new Error('The `driver` field is required')
@@ -115,15 +111,13 @@ const createHaul = asyncHandler(async (req, res) => {
     }
     // #endregion
 
-    if (req.body.isDuplicate === false) {
-        const invoiceExists = await Haul.findOne({
-            invoice: { $regex: req.body.invoice, $options: 'i' },
-        })
+    const invoiceExists = await Haul.findOne({
+        invoice: { $regex: req.body.invoice, $options: 'i' },
+    })
 
-        if (invoiceExists) {
-            res.status(400)
-            throw new Error(`Invoice ${req.body.invoice} already exists`)
-        }
+    if (invoiceExists) {
+        res.status(400)
+        throw new Error(`Invoice ${req.body.invoice} already exists`)
     }
 
     // Next, clear extraneous fields depending on loadType
@@ -141,13 +135,14 @@ const createHaul = asyncHandler(async (req, res) => {
 
     if (req.body.loadType === 'flatbedperc') {
         overrides.chInvoice = req.body.chInvoice
-        ;(overrides.payRate = req.body.payRate),
-            (overrides.driverPay = req.body.driverPay)
+        overrides.payRate = req.body.payRate
+        overrides.driverPay = req.body.driverPay
     }
 
     if (req.body.loadType === 'flatbedmi') {
         overrides.chInvoice = req.body.chInvoice
-        ;(overrides.rate = req.body.rate), (overrides.miles = req.body.miles)
+        overrides.rate = req.body.rate
+        overrides.miles = req.body.miles
     }
 
     let haulData = {
@@ -157,14 +152,10 @@ const createHaul = asyncHandler(async (req, res) => {
         updatedBy: req.user.id,
     }
 
-    if (req.body.isDuplicate || req.body.isDuplicate === 'true') {
-        haulData = { isDuplicate, ...rest }
-    }
+    // Remove the _id field (bundled with formData) [only used for updateHaul]
+    let { _id, ...dataWithoutId } = haulData
 
-    console.log('HAUL DATA:')
-    console.log(haulData)
-
-    const haul = await Haul.create(haulData)
+    const haul = await Haul.create(dataWithoutId)
 
     res.status(200).json(haul)
 })

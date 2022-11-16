@@ -15,7 +15,11 @@ import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
-import { getHauls, updateHaul } from '../../../../api/hauls/haulsApi'
+import {
+    getHauls,
+    updateHaul,
+    createHaul,
+} from '../../../../api/hauls/haulsApi'
 import { getVendors } from '../../../../api/vendors/vendorsApi'
 import { getVendorProducts } from '../../../../api/vendorProducts/vendorProductsApi'
 import { getVendorLocations } from '../../../../api/vendorLocations/vendorLocationsApi'
@@ -23,7 +27,7 @@ import { getFreightRoutes } from '../../../../api/freightRoutes/freightRoutesApi
 import { getDrivers } from '../../../../api/drivers/driversApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function EditHaulForm({ haul, selectedDriverId }) {
+function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -163,6 +167,37 @@ function EditHaulForm({ haul, selectedDriverId }) {
         },
     })
 
+    const mutationCreateHaul = useMutation({
+        mutationKey: ['hauls'],
+        mutationFn: ({ formData, token }) => createHaul(formData, token),
+        onSuccess: (haul) => {
+            console.log('HAUL DUPLICATED: ')
+            console.log(haul)
+            if (haul) {
+                toast.success(`Haul invoice ${haul.invoice} duplicated`, {
+                    autoClose: 1000,
+                })
+                queryClient.invalidateQueries(['hauls'])
+            }
+        },
+        onError: (err) => {
+            const errMsg = 'Error duplicating haul'
+            console.log(errMsg)
+            console.log(err)
+
+            if (
+                err &&
+                err.response &&
+                err.response.data &&
+                err.response.data.message
+            ) {
+                toast.error(err.response.data.message, { autoClose: 8000 })
+            } else {
+                toast.error(errMsg, { autoClose: 8000 })
+            }
+        },
+    })
+
     // Destructure form data
     const {
         _id,
@@ -188,11 +223,21 @@ function EditHaulForm({ haul, selectedDriverId }) {
     // #region COMPONENT RENDERERS ------------------------
     const haulDialogHeader = () => {
         return (
-            <DialogHeader
-                resourceType="Haul"
-                resourceName={`Inv ${haul.invoice}`}
-                isEdit
-            />
+            <>
+                {isDuplicating ? (
+                    <DialogHeader
+                        resourceType="Haul"
+                        resourceName={`Inv ${haul.invoice}`}
+                        isDuplicating
+                    />
+                ) : (
+                    <DialogHeader
+                        resourceType="Haul"
+                        resourceName={`Inv ${haul.invoice}`}
+                        isEdit
+                    />
+                )}
+            </>
         )
     }
 
@@ -303,7 +348,43 @@ function EditHaulForm({ haul, selectedDriverId }) {
     // Handle form submit
     const onSubmit = (e) => {
         e.preventDefault()
-        mutationUpdateHaul.mutate({ formData, token: user.data.token })
+
+        if (!driver) {
+            return toast.error('Driver is required')
+        }
+
+        if (!dateHaul) {
+            return toast.error('Date is required')
+        }
+
+        if (!loadType) {
+            return toast.error('Load type is required')
+        }
+
+        if (!invoice) {
+            return toast.error('Load/Ref # is required')
+        }
+
+        if (!from) {
+            return toast.error('From field is required')
+        }
+
+        if (!to) {
+            return toast.error('To field is required')
+        }
+
+        if (!product) {
+            return toast.error('Material is required')
+        }
+
+        if (isDuplicating) {
+            console.log('Duplicating haul with following formData: ')
+            console.log(formData)
+            mutationCreateHaul.mutate({ formData, token: user.data.token })
+        } else {
+            console.log('Updating haul...')
+            mutationUpdateHaul.mutate({ formData, token: user.data.token })
+        }
         onClose()
     }
     // #endregion
@@ -404,11 +485,21 @@ function EditHaulForm({ haul, selectedDriverId }) {
 
     return (
         <section>
-            <Button
-                icon="pi pi-pencil"
-                iconPos="left"
-                onClick={() => setFormDialog(true)}
-            />
+            {isDuplicating ? (
+                <Button
+                    icon="pi pi-copy"
+                    iconPos="left"
+                    className="p-button-info"
+                    style={{ backgroundColor: '#83B869' }}
+                    onClick={() => setFormDialog(true)}
+                />
+            ) : (
+                <Button
+                    icon="pi pi-pencil"
+                    iconPos="left"
+                    onClick={() => setFormDialog(true)}
+                />
+            )}
 
             <Dialog
                 id="editHaulDialog"
@@ -419,8 +510,8 @@ function EditHaulForm({ haul, selectedDriverId }) {
                 blockScroll
             >
                 <form onSubmit={onSubmit}>
+                    {/* ID */}
                     <div className="formgrid grid">
-                        {/* ID */}
                         <div className="field col">
                             <div style={{ margin: '0.8em 0' }}>
                                 <span className="p-float-label">
