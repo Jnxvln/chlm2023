@@ -710,6 +710,7 @@ function DeliveriesDashboard() {
                             field="hasPaid"
                             header="Paid?"
                             body={hasPaidTemplate}
+                            style={{ maxWidth: '4em' }}
                         ></Column>
 
                         {/* Delivery Date */}
@@ -717,6 +718,7 @@ function DeliveriesDashboard() {
                             field="deliveryDate"
                             header="Deliver"
                             body={deliveryDateTemplate}
+                            style={{ maxWidth: '6em' }}
                             sortable
                         ></Column>
 
@@ -725,7 +727,6 @@ function DeliveriesDashboard() {
                             field="deliveryClient"
                             header="Client"
                             body={deliveryClientTemplate}
-                            sortable
                         ></Column>
 
                         {/* Product Name */}
@@ -733,7 +734,6 @@ function DeliveriesDashboard() {
                             field="productName"
                             header="Material"
                             body={productNameTemplate}
-                            sortable
                         ></Column>
 
                         {/* Product Quantity */}
@@ -741,6 +741,7 @@ function DeliveriesDashboard() {
                             field="productQuantity"
                             header="Qty"
                             body={productQuantityTemplate}
+                            style={{ maxWidth: '6em' }}
                         ></Column>
 
                         {/* Address */}
@@ -748,7 +749,6 @@ function DeliveriesDashboard() {
                             field="address"
                             header="Address"
                             body={addressTemplate}
-                            sortable
                         ></Column>
 
                         {/* Contact Name */}
@@ -756,7 +756,6 @@ function DeliveriesDashboard() {
                             field="contactName"
                             header="Contact Name"
                             body={contactNameTemplate}
-                            sortable
                         ></Column>
 
                         {/* Contact  Phone */}
@@ -764,7 +763,6 @@ function DeliveriesDashboard() {
                             field="contactPhone"
                             header="Contact Phone"
                             body={contactPhoneTemplate}
-                            sortable
                         ></Column>
 
                         {/* Coordinates */}
@@ -772,7 +770,7 @@ function DeliveriesDashboard() {
                             field="coordinates"
                             header="Coords"
                             body={coordinatesTemplate}
-                            sortable
+                            style={{ maxWidth: '6em' }}
                         ></Column>
 
                         {/* Completed */}
