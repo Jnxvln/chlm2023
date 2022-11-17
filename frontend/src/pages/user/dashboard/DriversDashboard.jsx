@@ -236,9 +236,6 @@ function DriversDashboard() {
                         <Column
                             field="firstName"
                             header="First"
-                            filter
-                            filterField="firstName"
-                            filterClear={filterClearTemplate}
                             style={{ minWidth: '12em' }}
                             sortable
                         ></Column>
@@ -247,9 +244,6 @@ function DriversDashboard() {
                         <Column
                             field="lastName"
                             header="Last"
-                            filter
-                            filterField="lastName"
-                            filterClear={filterClearTemplate}
                             style={{ minWidth: '12em' }}
                             sortable
                         ></Column>
