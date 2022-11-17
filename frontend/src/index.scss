@@ -1,150 +1,154 @@
-@import "./styles/_colors.scss";
+@import './styles/_colors.scss';
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: $body-background-primary;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: $body-background-primary;
 }
 
 body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 16px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
 }
 
 form {
-  padding: 1em;
+    padding: 1em;
 }
 
 .p-dialog-header {
-  background-color: $default-dialog-header-backgroundColor;
-  padding: 0;
-  border: none;
-  border-radius: none;
+    background-color: $default-dialog-header-backgroundColor;
+    padding: 0;
+    border: none;
+    border-radius: none;
 }
 
 // #region VENDOR DIALOG STYLES ===========================
 
 // Vendor Dialog Styles
 #editVendorDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newVendorDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Vendor Product Dialog Styles
 #editVendorProductDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newVendorProductDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Vendor Location Dialog Styles
 #editVendorLocationDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newVendorLocationDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Freight Route Dialog Styles
 #editFreightRouteDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newFreightRouteDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Material Dialog Styles
 #editMaterialDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newMaterialDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Driver Dialog Styles
 #editDriverDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newDriverDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Delivery Client Dialog Styles
 #editDeliveryClientDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newDeliveryClientDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Delivery Dialog Styles
 #editDeliveryDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newDeliveryDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 
 // Haul Dialog Styles
 #editHaulDialog .p-dialog-header {
-  background-color: $edit-dialog-header-backgroundColor;
+    background-color: $edit-dialog-header-backgroundColor;
 }
 #newHaulDialog .p-dialog-header {
-  background-color: $new-dialog-header-backgroundColor;
+    background-color: $new-dialog-header-backgroundColor;
 }
 // #endregion =========================================
 
 .dialog-header {
-  color: rgb(240, 240, 240);
-  padding: 0.6em;
+    color: rgb(240, 240, 240);
+    padding: 0.6em;
 }
 
 .dialog-header-editVendor {
-  background-color: orange;
-  padding: 0.6em;
+    background-color: orange;
+    padding: 0.6em;
 }
 
 .dialog-title {
-  margin: 0;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: normal;
-  font-size: 18pt;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 18pt;
 }
 
 .p-dialog-header-close-icon.pi.pi-times {
-  color: white;
-  font-weight: bold;
-  font-size: 14pt;
+    color: white;
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+.p-button-gray {
+    background-color: rgb(170, 170, 170) !important;
 }
 
 .vendors-dialog-header {
-  padding: 0.5em;
+    padding: 0.5em;
 }
 
 #deliveryClient {
-  width: 100% !important;
+    width: 100% !important;
 }
 
 #deliveryClient input {
-  width: 100% !important;
+    width: 100% !important;
 }
 
 .field.col {
-  margin-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 #haulFromSelector input,
 #haulToSelector input,
 #haulVendorProductSelector input {
-  width: 100% !important;
+    width: 100% !important;
 }

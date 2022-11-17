@@ -22,6 +22,7 @@ import {
     deleteHaul,
 } from '../../../api/hauls/haulsApi'
 import { getDrivers } from '../../../api/drivers/driversApi'
+import { getWorkdaysByDriverIdAndDateRange } from '../../../api/workdays/workdaysApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function HaulsDashboard() {
@@ -29,6 +30,7 @@ function HaulsDashboard() {
 
     const queryClient = useQueryClient()
 
+    // const [workdays, setWorkdays] = useState([])
     const [rangeDates, setRangeDates] = useState([])
     const [filteredHauls, setFilteredHauls] = useState([])
     const [haulRowSelected, setHaulRowSelected] = useState(null)
@@ -50,6 +52,25 @@ function HaulsDashboard() {
     })
 
     const user = useQuery(['user'], fetchUser)
+
+    const workdays = useQuery({
+        queryKey: ['workdays'],
+        queryFn: () =>
+            getWorkdaysByDriverIdAndDateRange(
+                selectedDriverId,
+                rangeDates[0],
+                rangeDates[rangeDates.length - 1],
+                user.data.token
+            ),
+        onSuccess: (workdays) => {
+            console.log('Workdays loaded: ')
+            console.log(workdays)
+        },
+        onError: (err) => {
+            console.log('Error fetching workdays: ')
+            console.log(err)
+        },
+    })
 
     const hauls = useQuery({
         queryKey: ['hauls'],
@@ -205,6 +226,42 @@ function HaulsDashboard() {
         return <>{rowData.truck}</>
     }
 
+    const workdayTemplate = (rowData) => {
+        return (
+            <>
+                {/* {workdays.data && workdays.data.length > 0 ? <>Yes</> : <>No</>} */}
+
+                {workdays && workdays.data && workdays.data.length > 0 ? (
+                    <>
+                        {workdays.data.find(
+                            (workday) =>
+                                workday.date.split('T')[0] ===
+                                rowData.dateHaul.split('T')[0]
+                        ) ? (
+                            <>
+                                <Button
+                                    icon="pi pi-calendar"
+                                    className="p-button-rounded p-button-warning"
+                                    onClick={() => handleViewWorkday()}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    icon="pi pi-calendar"
+                                    className="p-button-rounded p-button-gray"
+                                    onClick={() => handleCreateWorkday()}
+                                />
+                            </>
+                        )}
+                    </>
+                ) : (
+                    <></>
+                )}
+            </>
+        )
+    }
+
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex', gap: '0.5em' }}>
@@ -328,6 +385,16 @@ function HaulsDashboard() {
 
         setSelectedDriverId(driverId)
     }
+
+    const handleCreateWorkday = () => {
+        console.log('TODO: Create a workday...')
+        alert('TODO: Create a workday...')
+    }
+
+    const handleViewWorkday = () => {
+        console.log('TODO: View workday...')
+        alert('TODO: View workday...')
+    }
     // #endregion
 
     // RUN ONCE
@@ -349,6 +416,10 @@ function HaulsDashboard() {
                 }
                 onDateRangeSelected(e)
             }
+        }
+
+        if (localStorage.getItem('selectedDriverId')) {
+            setSelectedDriverId(localStorage.getItem('selectedDriverId'))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -529,6 +600,11 @@ function HaulsDashboard() {
                             field="truck"
                             header="Truck"
                             body={truckTemplate}
+                        ></Column>
+
+                        <Column
+                            header="Workday"
+                            body={workdayTemplate}
                         ></Column>
 
                         {/* ACTIONS */}
