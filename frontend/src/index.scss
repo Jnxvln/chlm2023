@@ -102,6 +102,14 @@ form {
 #newHaulDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+
+// Workday Styles
+#editWorkday .p-dialog-header {
+    background-color: $edit-dialog-header-backgroundColor;
+}
+#newWorkday .p-dialog-header {
+    background-color: $new-dialog-header-backgroundColor;
+}
 // #endregion =========================================
 
 .dialog-header {

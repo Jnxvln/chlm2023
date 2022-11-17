@@ -31,12 +31,6 @@ export const getWorkdaysByDriverIdAndDateRange = async (
     rangeEnd,
     token
 ) => {
-    // console.log('[workdaysApi.js] getWorkdaysByDriverIdAndDateRange')
-    // console.log('Driver ID: ' + driverId)
-    // console.log('rangeStart: ' + rangeStart)
-    // console.log('rangeEnd: ' + rangeEnd)
-    // console.log('token: ' + token)
-
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,

@@ -5,6 +5,8 @@ import HaulForm from '../../../components/user/dashboard/hauls/HaulForm'
 import EditHaulForm from '../../../components/user/dashboard/hauls/EditHaulForm'
 import DateRangeSelector from '../../../components/user/dashboard/hauls/DateRangeSelector'
 import DriverSelector from '../../../components/user/dashboard/hauls/DriverSelector'
+import WorkdayForm from '../../../components/user/dashboard/workdays/WorkdayForm'
+import EditWorkdayForm from '../../../components/user/dashboard/workdays/EditWorkdayForm'
 // PrimeReact Components
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -30,7 +32,6 @@ function HaulsDashboard() {
 
     const queryClient = useQueryClient()
 
-    // const [workdays, setWorkdays] = useState([])
     const [rangeDates, setRangeDates] = useState([])
     const [filteredHauls, setFilteredHauls] = useState([])
     const [haulRowSelected, setHaulRowSelected] = useState(null)
@@ -50,6 +51,14 @@ function HaulsDashboard() {
         to: { value: null, matchMode: FilterMatchMode.CONTAINS },
         product: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
+    const workdaySelectedDriver =
+        selectedDriverId || localStorage.getItem('selectedDriverId')
+    const workdayDateStart =
+        rangeDates[0] ||
+        JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[0]
+    const workdayDateEnd =
+        rangeDates[rangeDates.length - 1] ||
+        JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[1]
 
     const user = useQuery(['user'], fetchUser)
 
@@ -57,15 +66,11 @@ function HaulsDashboard() {
         queryKey: ['workdays'],
         queryFn: () =>
             getWorkdaysByDriverIdAndDateRange(
-                selectedDriverId,
-                rangeDates[0],
-                rangeDates[rangeDates.length - 1],
+                workdaySelectedDriver,
+                workdayDateStart,
+                workdayDateEnd,
                 user.data.token
             ),
-        onSuccess: (workdays) => {
-            console.log('Workdays loaded: ')
-            console.log(workdays)
-        },
         onError: (err) => {
             console.log('Error fetching workdays: ')
             console.log(err)
@@ -227,36 +232,43 @@ function HaulsDashboard() {
     }
 
     const workdayTemplate = (rowData) => {
+        let _workday
+
         return (
             <>
                 {/* {workdays.data && workdays.data.length > 0 ? <>Yes</> : <>No</>} */}
 
                 {workdays && workdays.data && workdays.data.length > 0 ? (
                     <>
-                        {workdays.data.find(
-                            (workday) =>
+                        {workdays.data.find((workday) => {
+                            _workday = { ...workday }
+                            return (
                                 workday.date.split('T')[0] ===
                                 rowData.dateHaul.split('T')[0]
-                        ) ? (
+                            )
+                        }) ? (
                             <>
-                                <Button
-                                    icon="pi pi-calendar"
-                                    className="p-button-rounded p-button-warning"
-                                    onClick={() => handleViewWorkday()}
-                                />
+                                <EditWorkdayForm workday={_workday} />
                             </>
                         ) : (
                             <>
-                                <Button
+                                {/* <Button
                                     icon="pi pi-calendar"
                                     className="p-button-rounded p-button-gray"
                                     onClick={() => handleCreateWorkday()}
-                                />
+                                /> */}
+                                <WorkdayForm />
                             </>
                         )}
                     </>
                 ) : (
-                    <></>
+                    <>
+                        <Button
+                            icon="pi pi-calendar"
+                            className="p-button-rounded p-button-gray"
+                            onClick={() => handleCreateWorkday()}
+                        />
+                    </>
                 )}
             </>
         )
@@ -443,6 +455,7 @@ function HaulsDashboard() {
                             )
                     )
                 setFilteredHauls(_filteredHauls)
+                workdays.refetch()
             } else {
                 console.log('No driver id found, no hauls to display')
                 setFilteredHauls([])
@@ -459,7 +472,6 @@ function HaulsDashboard() {
     return (
         <section>
             <h1 style={{ textAlign: 'center', fontSize: '20pt' }}>C&H Hauls</h1>
-
             <ConfirmPopup />
 
             <div className="datatable-templating-demo">
@@ -602,6 +614,7 @@ function HaulsDashboard() {
                             body={truckTemplate}
                         ></Column>
 
+                        {/* WORKDAY */}
                         <Column
                             header="Workday"
                             body={workdayTemplate}
