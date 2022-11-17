@@ -21,11 +21,6 @@ const workdaySchema = mongoose.Schema(
             ref: 'Driver',
             required: [true, 'A driver is required'],
         },
-        haulIds: {
-            type: [mongoose.Schema.Types.ObjectId],
-            ref: 'Haul',
-            required: false,
-        },
         chhours: {
             type: Number,
             required: false,

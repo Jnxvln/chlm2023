@@ -5,6 +5,8 @@ import HaulForm from '../../../components/user/dashboard/hauls/HaulForm'
 import EditHaulForm from '../../../components/user/dashboard/hauls/EditHaulForm'
 import DateRangeSelector from '../../../components/user/dashboard/hauls/DateRangeSelector'
 import DriverSelector from '../../../components/user/dashboard/hauls/DriverSelector'
+import WorkdayForm from '../../../components/user/dashboard/workdays/WorkdayForm'
+import EditWorkdayForm from '../../../components/user/dashboard/workdays/EditWorkdayForm'
 // PrimeReact Components
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -22,6 +24,7 @@ import {
     deleteHaul,
 } from '../../../api/hauls/haulsApi'
 import { getDrivers } from '../../../api/drivers/driversApi'
+import { getWorkdaysByDriverIdAndDateRange } from '../../../api/workdays/workdaysApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function HaulsDashboard() {
@@ -48,8 +51,31 @@ function HaulsDashboard() {
         to: { value: null, matchMode: FilterMatchMode.CONTAINS },
         product: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
+    const workdaySelectedDriver =
+        selectedDriverId || localStorage.getItem('selectedDriverId')
+    const workdayDateStart =
+        rangeDates[0] ||
+        JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[0]
+    const workdayDateEnd =
+        rangeDates[rangeDates.length - 1] ||
+        JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[1]
 
     const user = useQuery(['user'], fetchUser)
+
+    const workdays = useQuery({
+        queryKey: ['workdays'],
+        queryFn: () =>
+            getWorkdaysByDriverIdAndDateRange(
+                workdaySelectedDriver,
+                workdayDateStart,
+                workdayDateEnd,
+                user.data.token
+            ),
+        onError: (err) => {
+            console.log('Error fetching workdays: ')
+            console.log(err)
+        },
+    })
 
     const hauls = useQuery({
         queryKey: ['hauls'],
@@ -205,6 +231,49 @@ function HaulsDashboard() {
         return <>{rowData.truck}</>
     }
 
+    const workdayTemplate = (rowData) => {
+        let _workday
+
+        return (
+            <>
+                {/* {workdays.data && workdays.data.length > 0 ? <>Yes</> : <>No</>} */}
+
+                {workdays && workdays.data && workdays.data.length > 0 ? (
+                    <>
+                        {workdays.data.find((workday) => {
+                            _workday = { ...workday }
+                            return (
+                                workday.date.split('T')[0] ===
+                                rowData.dateHaul.split('T')[0]
+                            )
+                        }) ? (
+                            <>
+                                <EditWorkdayForm workday={_workday} />
+                            </>
+                        ) : (
+                            <>
+                                {/* <Button
+                                    icon="pi pi-calendar"
+                                    className="p-button-rounded p-button-gray"
+                                    onClick={() => handleCreateWorkday()}
+                                /> */}
+                                <WorkdayForm />
+                            </>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        <Button
+                            icon="pi pi-calendar"
+                            className="p-button-rounded p-button-gray"
+                            onClick={() => handleCreateWorkday()}
+                        />
+                    </>
+                )}
+            </>
+        )
+    }
+
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex', gap: '0.5em' }}>
@@ -323,6 +392,16 @@ function HaulsDashboard() {
 
         setSelectedDriverId(driverId)
     }
+
+    const handleCreateWorkday = () => {
+        console.log('TODO: Create a workday...')
+        alert('TODO: Create a workday...')
+    }
+
+    const handleViewWorkday = () => {
+        console.log('TODO: View workday...')
+        alert('TODO: View workday...')
+    }
     // #endregion
 
     // RUN ONCE
@@ -344,6 +423,10 @@ function HaulsDashboard() {
                 }
                 onDateRangeSelected(e)
             }
+        }
+
+        if (localStorage.getItem('selectedDriverId')) {
+            setSelectedDriverId(localStorage.getItem('selectedDriverId'))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -367,6 +450,7 @@ function HaulsDashboard() {
                             )
                     )
                 setFilteredHauls(_filteredHauls)
+                workdays.refetch()
             } else {
                 console.log('No driver id found, no hauls to display')
                 setFilteredHauls([])
@@ -383,7 +467,6 @@ function HaulsDashboard() {
     return (
         <section>
             <h1 style={{ textAlign: 'center', fontSize: '20pt' }}>C&H Hauls</h1>
-
             <ConfirmPopup />
 
             <div className="datatable-templating-demo">
@@ -518,6 +601,12 @@ function HaulsDashboard() {
                             field="truck"
                             header="Truck"
                             body={truckTemplate}
+                        ></Column>
+
+                        {/* WORKDAY */}
+                        <Column
+                            header="Workday"
+                            body={workdayTemplate}
                         ></Column>
 
                         {/* ACTIONS */}
