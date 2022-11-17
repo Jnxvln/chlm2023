@@ -24,7 +24,10 @@ import {
     deleteHaul,
 } from '../../../api/hauls/haulsApi'
 import { getDrivers } from '../../../api/drivers/driversApi'
-import { getWorkdaysByDriverIdAndDateRange } from '../../../api/workdays/workdaysApi'
+import {
+    getWorkdaysByDriverIdAndDateRange,
+    updateWorkday,
+} from '../../../api/workdays/workdaysApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function HaulsDashboard() {
@@ -143,6 +146,45 @@ function HaulsDashboard() {
         },
     })
 
+    const mutationUpdateWorkday = useMutation({
+        mutationKey: ['workdays'],
+        mutationFn: ({ formData, token }) => updateWorkday(formData, token),
+        onSuccess: (workday) => {
+            if (workday) {
+                toast.success(`Workday updated`, {
+                    autoClose: 1000,
+                })
+                queryClient.invalidateQueries(['workdays'])
+            }
+        },
+        onError: (err) => {
+            const errMsg = 'Error updating workday'
+            console.log(errMsg)
+            console.log(err)
+
+            if (
+                err &&
+                err.response &&
+                err.response.data &&
+                err.response.data.message
+            ) {
+                toast.error(err.response.data.message, { autoClose: false })
+            } else {
+                toast.error(errMsg, { autoClose: false })
+            }
+        },
+    })
+
+    const handleSubmitEditWorkday = (_, data) => {
+        console.log('handleSubmitEditWorkday data: ')
+        console.log(data)
+    }
+
+    const onUpdateWorkdays = () => {
+        console.log('[HaulsDashboard.jsx] Running onUpdateWorkdays')
+        queryClient.invalidateQueries({ queryKey: ['workdays'] })
+    }
+
     // #endregion
 
     // #region DATA TABLE TEMPLATES ------------------------
@@ -233,6 +275,10 @@ function HaulsDashboard() {
 
     const workdayTemplate = (rowData) => {
         let _workday
+        const _driver =
+            drivers &&
+            drivers.data &&
+            drivers.data.find((driver) => driver._id === rowData.driver)
 
         return (
             <>
@@ -248,7 +294,11 @@ function HaulsDashboard() {
                             )
                         }) ? (
                             <>
-                                <EditWorkdayForm workday={_workday} />
+                                <EditWorkdayForm
+                                    workday={_workday}
+                                    driver={_driver}
+                                    onUpdateWorkdays={onUpdateWorkdays}
+                                />
                             </>
                         ) : (
                             <>
