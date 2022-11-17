@@ -406,14 +406,14 @@ function HaulsDashboard() {
                         autoLayout
                         size="small"
                         scrollHeight="flex"
-                        sortMode="multiple"
                         removableSort
-                        multiSortMeta={multiSortMeta}
                         onSort={(e) => setMultiSortMeta(e.multiSortMeta)}
                         responsiveLayout="scroll"
                         filter="true"
                         filters={filters}
                         filterDisplay="row"
+                        sortField="dateHaul"
+                        sortOrder={1}
                         onFilter={(e) => setFilters(e.filters)}
                         selectionMode="single"
                         selection={haulRowSelected}
@@ -448,7 +448,6 @@ function HaulsDashboard() {
                             field="broker"
                             header="Cust"
                             body={brokerTemplate}
-                            sortable
                         ></Column>
 
                         {/* INVOICE */}
@@ -456,7 +455,6 @@ function HaulsDashboard() {
                             field="invoice"
                             header="Inv"
                             body={invoiceTemplate}
-                            sortable
                         ></Column>
 
                         {/* CHINVOICE */}
@@ -464,7 +462,6 @@ function HaulsDashboard() {
                             field="chInvoice"
                             header="CH Inv"
                             body={chInvoiceTemplate}
-                            sortable
                         ></Column>
 
                         {/* FROM */}
@@ -472,7 +469,6 @@ function HaulsDashboard() {
                             field="from"
                             header="From"
                             body={fromTemplate}
-                            sortable
                         ></Column>
 
                         {/* TO */}
@@ -480,7 +476,6 @@ function HaulsDashboard() {
                             field="to"
                             header="To"
                             body={toTemplate}
-                            sortable
                         ></Column>
 
                         {/* PRODUCT */}
@@ -488,7 +483,6 @@ function HaulsDashboard() {
                             field="product"
                             header="Mat"
                             body={productTemplate}
-                            sortable
                         ></Column>
 
                         {/* TONS */}

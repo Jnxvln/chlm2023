@@ -186,16 +186,21 @@ const updateHaul = asyncHandler(async (req, res) => {
 
     if (req.body.loadType === 'flatbedperc') {
         overrides.chInvoice = req.body.chInvoice
-        ;(overrides.payRate = req.body.payRate),
-            (overrides.driverPay = req.body.driverPay)
+        overrides.payRate = req.body.payRate
+        overrides.driverPay = req.body.driverPay
     }
 
     if (req.body.loadType === 'flatbedmi') {
         overrides.chInvoice = req.body.chInvoice
-        ;(overrides.rate = req.body.rate), (overrides.miles = req.body.miles)
+        overrides.rate = req.body.rate
+        overrides.miles = req.body.miles
     }
 
-    const updates = { ...req.body, updatedBy: req.user.id }
+    const updates = {
+        ...req.body,
+        timeHaul: req.body.dateHaul,
+        updatedBy: req.user.id,
+    }
 
     const updatedHaul = await Haul.findByIdAndUpdate(req.params.id, updates, {
         new: true,
