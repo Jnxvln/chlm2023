@@ -141,6 +141,10 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     const mutationUpdateHaul = useMutation({
         mutationKey: ['hauls'],
         mutationFn: ({ formData, token }) => updateHaul(formData, token),
+        onMutate: ({ formData }) => {
+            formData.timeHaul = new Date(formData.timeHaul)
+            formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+        },
         onSuccess: (updHaul) => {
             if (updHaul) {
                 toast.success(`Haul invoice ${updHaul.invoice} updated`, {
@@ -206,6 +210,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     const {
         _id,
         driver,
+        timeHaul,
         dateHaul,
         truck,
         broker,
@@ -276,6 +281,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 ...prevState,
                 _id: haul._id,
                 driver: haul.driver,
+                timeHaul: haul.timeHaul,
                 dateHaul: haul.dateHaul,
                 truck: haul.truck,
                 broker: haul.broker,
@@ -404,6 +410,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 ...prevState,
                 _id: haul._id,
                 driver: haul.driver,
+                timeHaul: haul.timeHaul,
                 dateHaul: haul.timeHaul,
                 truck: haul.truck,
                 broker: haul.broker,
@@ -431,6 +438,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 ...prevState,
                 _id: haul._id,
                 driver: haul.driver,
+                timeHaul: haul.timeHaul,
                 dateHaul: haul.timeHaul,
                 truck: haul.truck,
                 broker: haul.broker,

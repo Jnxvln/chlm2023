@@ -197,7 +197,6 @@ const updateHaul = asyncHandler(async (req, res) => {
 
     const updates = {
         ...req.body,
-        timeHaul: req.body.dateHaul,
         updatedBy: req.user.id,
     }
 

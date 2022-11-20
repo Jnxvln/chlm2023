@@ -280,8 +280,14 @@ function WorkdayForm({ workDate, driver }) {
                             </div>
                             <small style={{ fontStyle: 'italic' }}>
                                 (If blank, defaults to NC Rate in{' '}
-                                {driver.firstName}'s profile, $
-                                {parseFloat(driver.ncRate).toFixed(2)})
+                                {driver ? (
+                                    <>
+                                        {driver.firstName}'s profile, $
+                                        {parseFloat(driver.ncRate).toFixed(2)})
+                                    </>
+                                ) : (
+                                    <>driver's profile</>
+                                )}
                             </small>
                         </div>
                     </div>

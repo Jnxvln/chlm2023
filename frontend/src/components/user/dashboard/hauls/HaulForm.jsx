@@ -34,6 +34,7 @@ function HaulForm({ selectedDriverId }) {
 
     const initialState = {
         driver: localStorage.getItem('selectedDriverId') || undefined,
+        timeHaul: undefined,
         dateHaul: undefined,
         truck: '',
         broker: '',
@@ -176,6 +177,7 @@ function HaulForm({ selectedDriverId }) {
     const {
         driver,
         dateHaul,
+        timeHaul,
         truck,
         broker,
         chInvoice,

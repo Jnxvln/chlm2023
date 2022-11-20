@@ -210,7 +210,7 @@ function HaulsDashboard() {
     }
 
     const dateHaulTemplate = (rowData) => {
-        return <>{dayjs(rowData.dateHaul).format('MM/DD/YY')}</>
+        return <>{dayjs(rowData.timeHaul).format('MM/DD/YY')}</>
     }
 
     const timeHaulTemplate = (rowData) => {
