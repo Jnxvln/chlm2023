@@ -175,16 +175,6 @@ function HaulsDashboard() {
         },
     })
 
-    const handleSubmitEditWorkday = (_, data) => {
-        console.log('handleSubmitEditWorkday data: ')
-        console.log(data)
-    }
-
-    const onUpdateWorkdays = () => {
-        console.log('[HaulsDashboard.jsx] Running onUpdateWorkdays')
-        queryClient.invalidateQueries({ queryKey: ['workdays'] })
-    }
-
     // #endregion
 
     // #region DATA TABLE TEMPLATES ------------------------
@@ -275,6 +265,8 @@ function HaulsDashboard() {
 
     const workdayTemplate = (rowData) => {
         let _workday
+
+        // Create a driver object based on each haul's `driver` id
         const _driver =
             drivers &&
             drivers.data &&
@@ -282,10 +274,10 @@ function HaulsDashboard() {
 
         return (
             <>
-                {/* {workdays.data && workdays.data.length > 0 ? <>Yes</> : <>No</>} */}
-
+                {/* If there are workdays... */}
                 {workdays && workdays.data && workdays.data.length > 0 ? (
                     <>
+                        {/* If the current haul's `dateHaul` matches an existing Workday... */}
                         {workdays.data.find((workday) => {
                             _workday = { ...workday }
                             return (
@@ -294,6 +286,7 @@ function HaulsDashboard() {
                             )
                         }) ? (
                             <>
+                                {/* ... then show the Edit Workday form */}
                                 <EditWorkdayForm
                                     workday={_workday}
                                     driver={_driver}
@@ -302,21 +295,20 @@ function HaulsDashboard() {
                             </>
                         ) : (
                             <>
-                                {/* <Button
-                                    icon="pi pi-calendar"
-                                    className="p-button-rounded p-button-gray"
-                                    onClick={() => handleCreateWorkday()}
-                                /> */}
-                                <WorkdayForm />
+                                {/* ... otherwise show the New Workday form */}
+                                <WorkdayForm
+                                    workDate={rowData.dateHaul}
+                                    driver={_driver}
+                                />
                             </>
                         )}
                     </>
                 ) : (
                     <>
-                        <Button
-                            icon="pi pi-calendar"
-                            className="p-button-rounded p-button-gray"
-                            onClick={() => handleCreateWorkday()}
+                        {/* If there are no workdays (workdays data variable empty) */}
+                        <WorkdayForm
+                            workDate={rowData.dateHaul}
+                            driver={_driver}
                         />
                     </>
                 )}
@@ -384,25 +376,6 @@ function HaulsDashboard() {
         })
     }
 
-    // Handle duplicate haul
-    const onDuplicate = (e, rowData) => {
-        const duplData = { ...rowData, isDuplicate: true }
-        console.log('duplData: ')
-        console.log(duplData)
-        confirmPopup({
-            target: e.target,
-            message: `Copy haul invoice ${rowData.invoice}?`,
-            icon: 'pi pi-question-circle',
-            // accept: () => dispatch(createHaul(duplData)),
-            accept: () =>
-                mutationCreateHaul.mutate({
-                    formData: { ...duplData },
-                    token: user.data.token,
-                }),
-            reject: () => null,
-        })
-    }
-
     // Handle DateRangeSelector component operations
     const onDateRangeSelected = (e) => {
         let dateStart // e.value[0]
@@ -443,14 +416,16 @@ function HaulsDashboard() {
         setSelectedDriverId(driverId)
     }
 
-    const handleCreateWorkday = () => {
-        console.log('TODO: Create a workday...')
-        alert('TODO: Create a workday...')
+    const handleNoWorkdays = () => {
+        console.log('ERROR: Could not load workdays from the database')
+        toast.error(
+            '"Workdays" is empty, possibly could not fetch from database?',
+            { autoClose: 8000 }
+        )
     }
 
-    const handleViewWorkday = () => {
-        console.log('TODO: View workday...')
-        alert('TODO: View workday...')
+    const onUpdateWorkdays = () => {
+        queryClient.invalidateQueries({ queryKey: ['workdays'] })
     }
     // #endregion
 

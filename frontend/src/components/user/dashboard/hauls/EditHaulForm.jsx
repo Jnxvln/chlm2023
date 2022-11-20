@@ -169,6 +169,10 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
 
     const mutationCreateHaul = useMutation({
         mutationKey: ['hauls'],
+        onMutate: ({ formData }) => {
+            formData.timeHaul = new Date(formData.dateHaul)
+            formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+        },
         mutationFn: ({ formData, token }) => createHaul(formData, token),
         onSuccess: (haul) => {
             console.log('HAUL DUPLICATED: ')
@@ -325,6 +329,10 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     }
 
     const onVendorLocationSelected = (selectedVendorLocation) => {
+        setFormData((prevState) => ({
+            ...prevState,
+            vendorLocation: selectedVendorLocation.name,
+        }))
         setVendorLocationSelected(selectedVendorLocation)
     }
 
@@ -391,12 +399,39 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
 
     // Prefill form
     useEffect(() => {
-        if (haul) {
+        if (haul && isDuplicating) {
             setFormData((prevState) => ({
                 ...prevState,
                 _id: haul._id,
                 driver: haul.driver,
-                dateHaul: haul.dateHaul,
+                dateHaul: haul.timeHaul,
+                truck: haul.truck,
+                broker: haul.broker,
+                chInvoice: '',
+                loadType: haul.loadType,
+                invoice: '',
+                from: haul.from,
+                vendorLocation: null,
+                to: null,
+                product: null,
+                tons: null,
+                rate: null,
+                miles: null,
+                payRate: null,
+                driverPay: haul.driverPay,
+            }))
+            setVendorSelected(haul.from)
+            setVendorLocationSelected(null)
+            setVendorSelected(null)
+            setVendorProductSelected(null)
+        }
+
+        if (haul && !isDuplicating) {
+            setFormData((prevState) => ({
+                ...prevState,
+                _id: haul._id,
+                driver: haul.driver,
+                dateHaul: haul.timeHaul,
                 truck: haul.truck,
                 broker: haul.broker,
                 chInvoice: haul.chInvoice,
@@ -432,6 +467,8 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                         loc.name.toLowerCase() ===
                         haul.vendorLocation.toLowerCase()
                 )
+                console.log('Vendor location object: ')
+                console.log(vendorLocationObj)
                 setVendorLocationSelected(vendorLocationObj)
 
                 const productObj = vendorProducts.data.find(

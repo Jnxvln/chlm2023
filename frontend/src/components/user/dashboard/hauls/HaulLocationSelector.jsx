@@ -1,61 +1,62 @@
-import { useState, useEffect } from "react";
-import { AutoComplete } from "primereact/autocomplete";
+import { useState, useEffect } from 'react'
+import { AutoComplete } from 'primereact/autocomplete'
 
 function HaulLocationSelector({
-  vendorLocations,
-  onVendorLocationSelected,
-  vendorSelected,
-  value,
-  isDisabled,
+    vendorLocations,
+    onVendorLocationSelected,
+    vendorSelected,
+    value,
+    isDisabled,
 }) {
-  const [vendorLocationSelected, setVendorLocationSelected] = useState(null);
-  const [filteredVendorLocations, setFilteredVendorLocations] = useState([]);
+    const [vendorLocationSelected, setVendorLocationSelected] = useState(null)
+    const [filteredVendorLocations, setFilteredVendorLocations] = useState([])
 
-  // #region TEMPLATES -------------------------------------
-  const vendorLocationItemTemplate = (option) => {
-    return <>{option.name}</>;
-  };
-  // #endregion
-
-  const searchVendorLocation = (e) => {
-    const { query } = e;
-
-    if (vendorLocations && vendorLocations.length > 0) {
-      const _filteredVendorLocations = vendorLocations.filter(
-        (v) =>
-          v.name.toLowerCase().includes(query.toLowerCase()) && v.vendorId === vendorSelected._id
-      );
-      setFilteredVendorLocations(_filteredVendorLocations);
+    // #region TEMPLATES -------------------------------------
+    const vendorLocationItemTemplate = (option) => {
+        return <>{option.name}</>
     }
-  };
+    // #endregion
 
-  useEffect(() => {
-    if (value) {
-      setVendorLocationSelected(value);
+    const searchVendorLocation = (e) => {
+        const { query } = e
+
+        if (vendorLocations && vendorLocations.length > 0) {
+            const _filteredVendorLocations = vendorLocations.filter(
+                (v) =>
+                    v.name.toLowerCase().includes(query.toLowerCase()) &&
+                    v.vendorId === vendorSelected._id
+            )
+            setFilteredVendorLocations(_filteredVendorLocations)
+        }
     }
-  }, []);
 
-  return (
-    <div style={{ width: "100%" }}>
-      <AutoComplete
-        dropdown
-        id="haulFromSelector"
-        field="name"
-        value={vendorLocationSelected}
-        suggestions={filteredVendorLocations}
-        completeMethod={searchVendorLocation}
-        itemTemplate={vendorLocationItemTemplate}
-        placeholder="Location *"
-        onChange={(e) => {
-          setVendorLocationSelected(e.value);
-          onVendorLocationSelected(e.value);
-        }}
-        style={{ width: "100%" }}
-        required
-        disabled={isDisabled}
-      />
-    </div>
-  );
+    useEffect(() => {
+        if (value) {
+            setVendorLocationSelected(value)
+        }
+    }, [])
+
+    return (
+        <div style={{ width: '100%' }}>
+            <AutoComplete
+                dropdown
+                id="haulFromSelector"
+                field="name"
+                value={vendorLocationSelected}
+                suggestions={filteredVendorLocations}
+                completeMethod={searchVendorLocation}
+                itemTemplate={vendorLocationItemTemplate}
+                placeholder="Location *"
+                onChange={(e) => {
+                    setVendorLocationSelected(e.value)
+                    onVendorLocationSelected(e.value)
+                }}
+                style={{ width: '100%' }}
+                required
+                disabled={isDisabled}
+            />
+        </div>
+    )
 }
 
-export default HaulLocationSelector;
+export default HaulLocationSelector

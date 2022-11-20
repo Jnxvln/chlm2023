@@ -9,9 +9,14 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import { InputSwitch } from 'primereact/inputswitch'
 import { InputNumber } from 'primereact/inputnumber'
 import { Calendar } from 'primereact/calendar'
+import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> tag
+import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
-import { updateWorkday } from '../../../../api/workdays/workdaysApi'
+import {
+    updateWorkday,
+    deleteWorkday,
+} from '../../../../api/workdays/workdaysApi'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
@@ -37,6 +42,10 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
 
     const mutationUpdateWorkday = useMutation({
         mutationKey: ['workdays'],
+        onMutate: ({ formData }) => {
+            formData.date = new Date(workday.date).setHours(0, 0, 0, 0)
+            formData.driverId = driver._id
+        },
         mutationFn: ({ formData, token }) => updateWorkday(formData, token),
         onSuccess: (updWorkday) => {
             if (updWorkday) {
@@ -60,6 +69,35 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
                 toast.error(err.response.data.message, { autoClose: 8000 })
             } else {
                 toast.error(errMsg, { autoClose: 8000 })
+            }
+        },
+    })
+
+    const mutationDeleteWorkday = useMutation({
+        mutationKey: ['workdays'],
+        mutationFn: ({ id, token }) => deleteWorkday(id, token),
+        onSuccess: (delId) => {
+            if (delId) {
+                toast.success('Workday deleted', { autoClose: 1000 })
+                queryClient.invalidateQueries(['workdays'])
+            }
+        },
+        onError: (err) => {
+            const errMsg = 'Error deleting workday'
+            console.log(errMsg)
+            console.log(err)
+
+            if (
+                err &&
+                err.response &&
+                err.response.data &&
+                err.response.data.message
+            ) {
+                return toast.error(err.response.data.message, {
+                    autoClose: 8000,
+                })
+            } else {
+                return toast.error(errMsg, { autoClose: 8000 })
             }
         },
     })
@@ -117,8 +155,40 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
         }))
     }
 
+    const handleConfirmDelete = (e) => {
+        confirmPopup({
+            target: e.target,
+            message: `Delete this workday?`,
+            icon: 'pi pi-exclamation-triangle',
+            accept: () =>
+                mutationDeleteWorkday.mutate({
+                    id: formData._id,
+                    token: user.data.token,
+                }),
+            reject: () => null,
+        })
+    }
+
     const onSubmit = (e) => {
         e.preventDefault()
+
+        const hasNCHours = nchours && parseFloat(nchours) > 0
+        const hasNCReasons = ncReasons && ncReasons.length > 0
+        const hasNCOverride = ncRateOverride && parseFloat(ncRateOverride) > 0
+
+        if (!hasNCHours && hasNCReasons) {
+            return toast.error('NC Reasons is provided but NC Hours is blank')
+        }
+
+        if (hasNCHours && !hasNCReasons) {
+            return toast.error('NC Hours is provided but NC Reasons is blank')
+        }
+
+        if (hasNCOverride && (!hasNCHours || !hasNCReasons)) {
+            return toast.error(
+                'NC Override requires values for both NC Hours and NC Reasons'
+            )
+        }
 
         mutationUpdateWorkday.mutate({ formData, token: user.data.token })
     }
@@ -135,10 +205,11 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
                 notes: workday.notes,
             }))
         }
-    }, [])
+    }, [formDialog])
 
     return (
         <section>
+            <ConfirmPopup />
             <Button
                 icon="pi pi-calendar"
                 className="p-button-rounded p-button-warning"
@@ -155,24 +226,21 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
                 blockScroll
             >
                 <form onSubmit={onSubmit}>
-                    {/* DATE */}
-                    {/* <div className="formgrid grid">
-                        <div className="field col">
-                            <div style={{ margin: '0.8em 0' }}>
-                                <span className="p-float-label">
-                                    <Calendar
-                                        id="date"
-                                        name="date"
-                                        value={date}
-                                        onChange={onChange}
-                                        selectOtherMonths
-                                        style={{ width: '100%' }}
-                                    />
-                                    <label htmlFor="date">Date</label>
-                                </span>
-                            </div>
+                    {/* ID */}
+                    <div className="field col">
+                        <div style={{ margin: '0.8em 0' }}>
+                            <span className="p-float-label">
+                                <InputText
+                                    id="_id"
+                                    name="_id"
+                                    value={_id}
+                                    readOnly
+                                    style={{ width: '100%' }}
+                                />
+                                <label htmlFor="_id">ID</label>
+                            </span>
                         </div>
-                    </div> */}
+                    </div>
 
                     {/* CHHOURS, NCHOURS */}
                     <div className="formgrid grid">
@@ -224,7 +292,7 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
                                 <span className="p-float-label">
                                     <InputTextarea
                                         id="ncreasons"
-                                        name="ncreasons"
+                                        name="ncReasons"
                                         value={ncReasons}
                                         onChange={onChange}
                                         rows={4}
@@ -282,6 +350,16 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
                                 {parseFloat(driver.ncRate).toFixed(2)})
                             </small>
                         </div>
+                    </div>
+
+                    <div className="flex justify-content-end">
+                        <Button
+                            type="button"
+                            icon="pi pi-trash"
+                            className="p-button-danger p-button-text"
+                            tabIndex={-1}
+                            onClick={(e) => handleConfirmDelete(e)}
+                        ></Button>
                     </div>
                 </form>
             </Dialog>

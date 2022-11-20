@@ -139,6 +139,10 @@ function HaulForm({ selectedDriverId }) {
 
     const mutationCreateHaul = useMutation({
         mutationKey: ['hauls'],
+        onMutate: ({ formData }) => {
+            formData.timeHaul = new Date(formData.dateHaul)
+            formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+        },
         mutationFn: ({ formData, token }) => createHaul(formData, token),
         onSuccess: (haul) => {
             console.log('HAUL CREATED: ')
@@ -252,6 +256,7 @@ function HaulForm({ selectedDriverId }) {
     const onSubmit = (e) => {
         e.preventDefault()
 
+        // #region ERROR CHECKS
         if (!driver) {
             return toast.error('Driver is required')
         }
@@ -279,6 +284,7 @@ function HaulForm({ selectedDriverId }) {
         if (!product) {
             return toast.error('Material is required')
         }
+        // #endregion
 
         mutationCreateHaul.mutate({ formData, token: user.data.token })
         onClose()
@@ -294,6 +300,10 @@ function HaulForm({ selectedDriverId }) {
     }
 
     const onVendorLocationSelected = (selectedVendorLocation) => {
+        console.log(
+            '[HaulForm onVendorLocationSelected]: selectedVendorLocation: '
+        )
+        console.log(selectedVendorLocation)
         setFormData((prevState) => ({
             ...prevState,
             vendorLocation: selectedVendorLocation.name,
@@ -347,6 +357,13 @@ function HaulForm({ selectedDriverId }) {
             }
         }
     }
+
+    useEffect(() => {
+        if (formDialog && vendorLocation) {
+            console.log('Vendor Location changed: ')
+            console.log(vendorLocation)
+        }
+    }, [formDialog, vendorLocation])
 
     useEffect(() => {
         if (selectedDriverId) {

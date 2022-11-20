@@ -147,7 +147,6 @@ const createHaul = asyncHandler(async (req, res) => {
 
     let haulData = {
         ...req.body,
-        timeHaul: req.body.dateHaul,
         createdBy: req.user.id,
         updatedBy: req.user.id,
     }
