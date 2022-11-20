@@ -109,17 +109,23 @@ function VendorProductDataTable() {
     }
 
     const vendorNameTemplate = (rowData) => {
-        return <>{vendors.data.find((v) => v._id === rowData.vendorId).name}</>
+        return (
+            <>
+                {vendors &&
+                    vendors.data &&
+                    vendors.data.find((v) => v._id === rowData.vendorId)?.name}
+            </>
+        )
     }
 
     const vendorLocationTemplate = (rowData) => {
         return (
             <>
-                {
+                {vendorLocations &&
+                    vendorLocations.data &&
                     vendorLocations.data.find(
                         (loc) => loc._id === rowData.vendorLocationId
-                    ).name
-                }
+                    ).name}
             </>
         )
     }
