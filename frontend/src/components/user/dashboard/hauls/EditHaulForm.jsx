@@ -475,8 +475,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                         loc.name.toLowerCase() ===
                         haul.vendorLocation.toLowerCase()
                 )
-                console.log('Vendor location object: ')
-                console.log(vendorLocationObj)
                 setVendorLocationSelected(vendorLocationObj)
 
                 const productObj = vendorProducts.data.find(
