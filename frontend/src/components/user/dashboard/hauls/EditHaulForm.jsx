@@ -277,26 +277,50 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     // Handle form reset
     const resetForm = () => {
         if (haul) {
-            setFormData((prevState) => ({
-                ...prevState,
-                _id: haul._id,
-                driver: haul.driver,
-                timeHaul: haul.timeHaul,
-                dateHaul: haul.dateHaul,
-                truck: haul.truck,
-                broker: haul.broker,
-                chInvoice: haul.chInvoice,
-                loadType: haul.loadType,
-                invoice: haul.invoice,
-                from: haul.from,
-                to: haul.to,
-                product: haul.product,
-                tons: haul.tons,
-                rate: haul.rate,
-                miles: haul.miles,
-                payRate: haul.payRate,
-                driverPay: haul.driverPay,
-            }))
+            if (isDuplicating) {
+                setFormData((prevState) => ({
+                    ...prevState,
+                    _id: haul._id,
+                    driver: haul.driver,
+                    timeHaul: haul.timeHaul,
+                    dateHaul: haul.dateHaul,
+                    truck: haul.truck,
+                    broker: haul.broker,
+                    chInvoice: null,
+                    loadType: haul.loadType,
+                    vendorLocation: null,
+                    invoice: null,
+                    from: null,
+                    to: null,
+                    product: null,
+                    tons: null,
+                    rate: null,
+                    miles: null,
+                    payRate: null,
+                    driverPay: haul.driverPay,
+                }))
+            } else {
+                setFormData((prevState) => ({
+                    ...prevState,
+                    _id: haul._id,
+                    driver: haul.driver,
+                    timeHaul: haul.timeHaul,
+                    dateHaul: haul.dateHaul,
+                    truck: haul.truck,
+                    broker: haul.broker,
+                    chInvoice: haul.chInvoice,
+                    loadType: haul.loadType,
+                    invoice: haul.invoice,
+                    from: haul.from,
+                    to: haul.to,
+                    product: haul.product,
+                    tons: haul.tons,
+                    rate: haul.rate,
+                    miles: haul.miles,
+                    payRate: haul.payRate,
+                    driverPay: haul.driverPay,
+                }))
+            }
         } else {
             setFormData(initialState)
         }
@@ -414,9 +438,9 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 dateHaul: haul.timeHaul,
                 truck: haul.truck,
                 broker: haul.broker,
-                chInvoice: '',
+                chInvoice: null,
                 loadType: haul.loadType,
-                invoice: '',
+                invoice: null,
                 from: haul.from,
                 vendorLocation: null,
                 to: null,
