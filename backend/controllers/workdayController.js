@@ -20,6 +20,42 @@ const getWorkdaysByDriverId = asyncHandler(async (req, res) => {
     res.status(200).send(driverWorkdays)
 })
 
+// @desc    Get all workdays within a date range (dateStart, dateEnd)
+// @route   GET /api/workdays/range/:dateStart/:dateEnd
+// @access  Private
+const getAllWorkdaysByDateRange = asyncHandler(async (req, res) => {
+    if (!req.params.dateStart) {
+        res.status(400)
+        throw new Error('Date start is required')
+    }
+
+    if (!req.params.dateEnd) {
+        res.status(400)
+        throw new Error('Date end is required')
+    }
+
+    const gte = new Date(
+        dayjs(req.params.dateStart).format('MM/DD/YYYY')
+    ).setHours(00, 00, 00)
+
+    const lte = new Date(
+        new Date(dayjs(req.params.dateEnd).format('MM/DD/YYYY')).setHours(
+            23,
+            59,
+            59
+        )
+    )
+
+    const workdaysRange = await Workday.find({
+        date: {
+            $gte: gte,
+            $lte: lte,
+        },
+    })
+
+    res.status(200).send(workdaysRange)
+})
+
 // @desc    Get workdays by driver id and date range
 // @route   GET /api/workdays/for/:driverId/:dateStart/:dateEnd
 // @access  Private
@@ -158,6 +194,7 @@ const deleteWorkday = asyncHandler(async (req, res) => {
 module.exports = {
     getAllWorkdays,
     getWorkdaysByDriverId,
+    getAllWorkdaysByDateRange,
     getWorkdaysByDriverIdAndDateRange,
     createWorkday,
     updateWorkday,

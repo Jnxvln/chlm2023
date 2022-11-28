@@ -24,6 +24,20 @@ export const getWorkdaysByDriverId = async (driverId, token) => {
     return response.data
 }
 
+export const getAllWorkdaysByDateRange = async (dateStart, dateEnd, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.get(
+        `${API_URL}range/${dateStart}/${dateEnd}`,
+        config
+    )
+    return response
+}
+
 // Get all workdays for specified driver during specified date range
 export const getWorkdaysByDriverIdAndDateRange = async (
     driverId,

@@ -3,6 +3,7 @@
 const {
     getAllWorkdays,
     getWorkdaysByDriverId,
+    getAllWorkdaysByDateRange,
     getWorkdaysByDriverIdAndDateRange,
     createWorkday,
     updateWorkday,
@@ -22,5 +23,6 @@ router.get(
     protect,
     getWorkdaysByDriverIdAndDateRange
 )
+router.get('/range/:dateStart/:dateEnd', protect, getAllWorkdaysByDateRange)
 
 module.exports = router
