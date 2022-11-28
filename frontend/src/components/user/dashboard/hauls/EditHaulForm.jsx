@@ -175,12 +175,10 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         mutationKey: ['hauls'],
         onMutate: ({ formData }) => {
             formData.timeHaul = new Date(formData.dateHaul)
-            formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+            formData.dateHaul = new Date(formData.dateHaul)
         },
         mutationFn: ({ formData, token }) => createHaul(formData, token),
         onSuccess: (haul) => {
-            console.log('HAUL DUPLICATED: ')
-            console.log(haul)
             if (haul) {
                 toast.success(`Haul invoice ${haul.invoice} duplicated`, {
                     autoClose: 1000,
@@ -416,11 +414,8 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         }
 
         if (isDuplicating) {
-            console.log('Duplicating haul with following formData: ')
-            console.log(formData)
             mutationCreateHaul.mutate({ formData, token: user.data.token })
         } else {
-            console.log('Updating haul...')
             mutationUpdateHaul.mutate({ formData, token: user.data.token })
         }
         onClose()
