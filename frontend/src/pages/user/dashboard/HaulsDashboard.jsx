@@ -194,7 +194,7 @@ function HaulsDashboard() {
                         <DriverSelector
                             drivers={drivers.data}
                             onSelectDriver={onSelectDriver}
-                            dateRange={rangeDates}
+                            rangeDates={rangeDates}
                         />
                     </div>
                     <div style={{ marginRight: '4em' }}>

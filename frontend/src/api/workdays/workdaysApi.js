@@ -35,7 +35,7 @@ export const getAllWorkdaysByDateRange = async (dateStart, dateEnd, token) => {
         `${API_URL}range/${dateStart}/${dateEnd}`,
         config
     )
-    return response
+    return response.data
 }
 
 // Get all workdays for specified driver during specified date range
