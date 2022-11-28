@@ -24,9 +24,6 @@ const getWorkdaysByDriverId = asyncHandler(async (req, res) => {
 // @route   GET /api/workdays/for/:driverId/:dateStart/:dateEnd
 // @access  Private
 const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
-    // console.log('[backend/workdayController.js] req.params:')
-    // console.log(req.params)
-
     // #region ERROR CHECKS
     if (!req.params.driverId) {
         res.status(400)
@@ -45,12 +42,9 @@ const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
     // #endregion
 
     const gte = new Date(
-        new Date(dayjs(req.params.dateStart).format('MM/DD/YYYY')).setHours(
-            00,
-            00,
-            00
-        )
-    )
+        dayjs(req.params.dateStart).format('MM/DD/YYYY')
+    ).setHours(00, 00, 00)
+
     const lte = new Date(
         new Date(dayjs(req.params.dateEnd).format('MM/DD/YYYY')).setHours(
             23,
@@ -59,9 +53,6 @@ const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
         )
     )
 
-    // console.log('GTE: ' + gte)
-    // console.log('LTE: ' + lte)
-
     const driverWorkdaysRange = await Workday.find({
         driverId: req.params.driverId,
         date: {
@@ -69,9 +60,6 @@ const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
             $lte: lte,
         },
     })
-
-    // console.log('Workdays found: ')
-    // console.log(driverWorkdaysRange)
 
     res.status(200).send(driverWorkdaysRange)
 })

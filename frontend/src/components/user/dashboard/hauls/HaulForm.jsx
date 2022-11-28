@@ -142,7 +142,7 @@ function HaulForm({ selectedDriverId }) {
         mutationKey: ['hauls'],
         onMutate: ({ formData }) => {
             formData.timeHaul = new Date(formData.dateHaul)
-            formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+            formData.dateHaul = new Date(formData.dateHaul)
         },
         mutationFn: ({ formData, token }) => createHaul(formData, token),
         onSuccess: (haul) => {

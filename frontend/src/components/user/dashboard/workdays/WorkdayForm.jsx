@@ -36,7 +36,7 @@ function WorkdayForm({ workDate, driver }) {
     const mutationCreateWorkday = useMutation({
         mutationKey: ['workdays'],
         onMutate: ({ formData }) => {
-            formData.date = new Date(workDate).setHours(0, 0, 0, 0)
+            formData.date = new Date(workDate)
             formData.driverId = driver._id
 
             console.log('Inside onMutate with workDate: ')

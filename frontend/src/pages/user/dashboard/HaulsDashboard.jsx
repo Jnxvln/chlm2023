@@ -93,6 +93,10 @@ function HaulsDashboard() {
     const mutationCreateHaul = useMutation({
         mutationKey: ['hauls'],
         mutationFn: ({ formData, token }) => createHaul(formData, token),
+        onMutate: ({ formData }) => {
+            formData.timeHaul = new Date(formData.dateHaul)
+            formData.dateHaul = new Date(formData.dateHaul)
+        },
         onSuccess: (haul) => {
             if (haul) {
                 toast.success(`Haul invoice ${haul.invoice} created`, {
@@ -149,6 +153,10 @@ function HaulsDashboard() {
     const mutationUpdateWorkday = useMutation({
         mutationKey: ['workdays'],
         mutationFn: ({ formData, token }) => updateWorkday(formData, token),
+        onMutate: ({ formData }) => {
+            formData.timeHaul = new Date(formData.dateHaul)
+            formData.dateHaul = new Date(formData.dateHaul)
+        },
         onSuccess: (workday) => {
             if (workday) {
                 toast.success(`Workday updated`, {
@@ -275,6 +283,7 @@ function HaulsDashboard() {
         return (
             <>
                 {/* If there are workdays... */}
+
                 {workdays && workdays.data && workdays.data.length > 0 ? (
                     <>
                         {/* If the current haul's `dateHaul` matches an existing Workday... */}

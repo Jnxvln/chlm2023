@@ -43,7 +43,7 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
     const mutationUpdateWorkday = useMutation({
         mutationKey: ['workdays'],
         onMutate: ({ formData }) => {
-            formData.date = new Date(workday.date).setHours(0, 0, 0, 0)
+            formData.date = new Date(workday.date)
             formData.driverId = driver._id
         },
         mutationFn: ({ formData, token }) => updateWorkday(formData, token),

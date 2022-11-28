@@ -13,7 +13,7 @@ const workdaySchema = mongoose.Schema(
             ref: 'User',
         },
         date: {
-            type: Date,
+            type: String,
             required: [true, 'The workday date is required'],
         },
         driverId: {
