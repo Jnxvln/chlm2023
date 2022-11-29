@@ -565,13 +565,13 @@ function HaulsDashboard() {
                     >
                         {/* <Column field="driver" header="Driver" body={driverTemplate}></Column> */}
                         {/* HAUL DATE */}
-                        <Column
+                        {/* <Column
                             field="dateHaul"
                             header="Date"
                             body={dateHaulTemplate}
                             dataType="date"
                             sortable
-                        ></Column>
+                        ></Column> */}
 
                         {/* TIME (DATE HAUL) */}
                         <Column
@@ -579,7 +579,6 @@ function HaulsDashboard() {
                             header="Time"
                             body={timeHaulTemplate}
                             dataType="date"
-                            sortable
                         ></Column>
 
                         {/* BROKER */}
