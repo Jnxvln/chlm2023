@@ -1,6 +1,7 @@
 import { useState } from 'react'
 // PrimeReact Components
 import { Dropdown } from 'primereact/dropdown'
+import { Badge } from 'primereact/badge'
 
 function DriverSelector({ drivers, onSelectDriver }) {
     const [selectedDriverId, setSelectedDriverId] = useState(
@@ -17,6 +18,10 @@ function DriverSelector({ drivers, onSelectDriver }) {
                     <div className="flex justify-content-between">
                         <>
                             {_driver.firstName} {_driver.lastName}
+                            <Badge
+                                value={_driver.defaultTruck}
+                                style={{ marginLeft: '0.5em' }}
+                            />
                         </>
                     </div>
                 </>
@@ -49,7 +54,15 @@ function DriverSelector({ drivers, onSelectDriver }) {
                 optionLabel={driverOptionLabel}
                 optionValue="_id"
                 options={
-                    drivers ? drivers.filter((d) => d.isActive === true) : []
+                    drivers
+                        ? drivers
+                              .filter((d) => d.isActive === true)
+                              .sort(
+                                  (a, b) =>
+                                      parseInt(a.defaultTruck) -
+                                      parseInt(b.defaultTruck)
+                              )
+                        : []
                 }
                 value={selectedDriverId}
                 onChange={onChange}
