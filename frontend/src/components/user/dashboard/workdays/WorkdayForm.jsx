@@ -144,7 +144,7 @@ function WorkdayForm({ workDate, driver }) {
         <section>
             <Button
                 icon="pi pi-calendar"
-                className="p-button-rounded p-button-gray"
+                className="p-button-rounded p-button-gray p-button-sm"
                 onClick={() => setFormDialog(true)}
             />
 
