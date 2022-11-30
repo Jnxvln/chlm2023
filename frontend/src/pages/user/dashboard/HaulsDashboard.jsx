@@ -54,7 +54,6 @@ function HaulsDashboard() {
         to: { value: null, matchMode: FilterMatchMode.CONTAINS },
         product: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
-    const [expandedRows, setExpandedRows] = useState([])
     const workdaySelectedDriver =
         selectedDriverId || localStorage.getItem('selectedDriverId')
     const workdayDateStart =
@@ -326,19 +325,6 @@ function HaulsDashboard() {
         )
     }
 
-    const rowHeaderTemplate = (rowData) => {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'between' }}>
-                <span style={{ fontWeight: 'bold' }}>
-                    {dayjs(rowData.dateHaul).format('MM/DD/YYYY')}
-                </span>
-                <span style={{ marginLeft: '1em' }}>
-                    {workdayTemplate(rowData)}
-                </span>
-            </div>
-        )
-    }
-
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex', gap: '0.5em' }}>
@@ -537,14 +523,14 @@ function HaulsDashboard() {
                         autoLayout
                         size="small"
                         scrollHeight="flex"
-                        removableSort
-                        onSort={(e) => setMultiSortMeta(e.multiSortMeta)}
                         responsiveLayout="scroll"
                         filter="true"
                         filters={filters}
                         filterDisplay="row"
                         sortField="dateHaul"
                         sortOrder={1}
+                        onSort={(e) => setMultiSortMeta(e.multiSortMeta)}
+                        removableSort
                         onFilter={(e) => setFilters(e.filters)}
                         selectionMode="single"
                         selection={haulRowSelected}
@@ -554,24 +540,16 @@ function HaulsDashboard() {
                         stateKey="dt-hauls-session"
                         emptyMessage="No hauls found"
                         stripedRows
-                        rowGroupMode="subheader"
-                        groupRowsBy={(option) =>
-                            dayjs(option.dateHaul).format('MM/DD/YYYY')
-                        }
-                        expandableRowGroups
-                        expandedRows={expandedRows}
-                        onRowToggle={(e) => setExpandedRows(e.data)}
-                        rowGroupHeaderTemplate={rowHeaderTemplate}
                     >
                         {/* <Column field="driver" header="Driver" body={driverTemplate}></Column> */}
                         {/* HAUL DATE */}
-                        {/* <Column
+                        <Column
                             field="dateHaul"
                             header="Date"
                             body={dateHaulTemplate}
                             dataType="date"
                             sortable
-                        ></Column> */}
+                        ></Column>
 
                         {/* TIME (DATE HAUL) */}
                         <Column
@@ -659,10 +637,10 @@ function HaulsDashboard() {
                         ></Column>
 
                         {/* WORKDAY */}
-                        {/* <Column
+                        <Column
                             header="Workday"
                             body={workdayTemplate}
-                        ></Column> */}
+                        ></Column>
 
                         {/* ACTIONS */}
                         <Column
