@@ -21,6 +21,43 @@ const getHaulsByDriverId = asyncHandler(async (req, res) => {
     res.status(200).send(hauls)
 })
 
+// @desc    Get all hauls within a date range (dateStart, dateEnd)
+// @route   GET /api/hauls/range/:dateStart/:dateEnd
+// @access  Private
+const getAllHaulsByDateRange = asyncHandler(async (req, res) => {
+    console.log('Running getAllHaulsByDateRange...')
+
+    if (!req.params.dateStart) {
+        res.status(400)
+        throw new Error('Date start is required')
+    }
+
+    if (!req.params.dateEnd) {
+        res.status(400)
+        throw new Error('Date end is required')
+    }
+
+    console.log('PARAM dateStart: ' + req.params.dateStart)
+    console.log('PARAM dateEnd: ' + req.params.dateEnd)
+
+    const haulsFrom = new Date(req.params.dateStart).setHours(0, 0, 0, 0)
+    const haulsTo = new Date(req.params.dateEnd).setHours(23, 59, 59)
+
+    console.log('FROM: ')
+    console.log(dayjs(haulsFrom).format('MM/DD/YYYY HH:mm:ss'))
+    console.log('TO: ')
+    console.log(dayjs(haulsTo).format('MM/DD/YYYY HH:mm:ss'))
+
+    const haulsRange = await Haul.find({
+        dateHaul: {
+            $gte: haulsFrom,
+            $lte: haulsTo,
+        },
+    })
+
+    res.status(200).send(haulsRange)
+})
+
 // @desc    Get hauls by driverId and date range
 // @route   GET /api/hauls/for/:driverId/:dateStart/:dateEnd
 // @access  Private
@@ -226,6 +263,7 @@ const deleteHaul = asyncHandler(async (req, res) => {
 module.exports = {
     getHauls,
     getHaulsByDriverId,
+    getAllHaulsByDateRange,
     getHaulsByDriverIdAndDateRange,
     createHaul,
     updateHaul,

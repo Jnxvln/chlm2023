@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, createSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
 import HaulForm from '../../../components/user/dashboard/hauls/HaulForm'
@@ -34,6 +35,7 @@ function HaulsDashboard() {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
 
     const [rangeDates, setRangeDates] = useState([])
     const [filteredHauls, setFilteredHauls] = useState([])
@@ -57,11 +59,15 @@ function HaulsDashboard() {
     const workdaySelectedDriver =
         selectedDriverId || localStorage.getItem('selectedDriverId')
     const workdayDateStart =
-        rangeDates[0] ||
-        JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[0]
+        rangeDates && rangeDates.length > 0
+            ? rangeDates[0] ||
+              JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[0]
+            : null
     const workdayDateEnd =
-        rangeDates[rangeDates.length - 1] ||
-        JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[1]
+        rangeDates && rangeDates.length > 0
+            ? rangeDates[rangeDates.length - 1] ||
+              JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[1]
+            : null
 
     const user = useQuery(['user'], fetchUser)
 
@@ -182,7 +188,27 @@ function HaulsDashboard() {
             }
         },
     })
+    // #endregion
 
+    // #region ACTION HANDLERS ------------------------------------
+    const handleHaulSummary = (e) => {
+        // navigate('/hauls/summary', {
+        //     state: {
+        //         driverId: selectedDriverId,
+        //     },
+        // })
+
+        const params = {
+            driverId: selectedDriverId,
+            dateStart: rangeDates[0],
+            dateEnd: rangeDates[rangeDates.length - 1],
+        }
+
+        navigate({
+            pathname: '/hauls/summary',
+            search: `?${createSearchParams(params)}`,
+        })
+    }
     // #endregion
 
     // #region DATA TABLE TEMPLATES ------------------------
@@ -203,6 +229,15 @@ function HaulsDashboard() {
                         <DateRangeSelector
                             onDateRangeSelected={onDateRangeSelected}
                         />
+                    </div>
+                    <div>
+                        <Button
+                            style={{ padding: '0.75em', marginLeft: '1em' }}
+                            disabled={!rangeDates || rangeDates.length <= 0}
+                            onClick={handleHaulSummary}
+                        >
+                            Haul Summary
+                        </Button>
                     </div>
                 </div>
                 <span className="p-input-icon-left">

@@ -3,6 +3,7 @@
 const {
     getHauls,
     getHaulsByDriverId,
+    getAllHaulsByDateRange,
     getHaulsByDriverIdAndDateRange,
     createHaul,
     updateHaul,
@@ -22,5 +23,6 @@ router.get(
     protect,
     getHaulsByDriverIdAndDateRange
 )
+router.get('/range/:dateStart/:dateEnd', protect, getAllHaulsByDateRange)
 
 module.exports = router

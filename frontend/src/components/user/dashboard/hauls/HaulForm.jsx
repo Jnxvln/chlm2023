@@ -386,7 +386,7 @@ function HaulForm({ selectedDriverId }) {
                 label="New Haul"
                 icon="pi pi-plus"
                 onClick={() => setFormDialog(true)}
-                style={{ height: '100% !important' }}
+                style={{ height: '100% !important', padding: '0.94em' }}
             />
 
             <Dialog

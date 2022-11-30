@@ -2,6 +2,7 @@
 
 const {
     getDrivers,
+    getDriverById,
     createDriver,
     updateDriver,
     deleteDriver,
@@ -13,6 +14,10 @@ const router = express.Router()
 
 // ROUTE HANDLERS
 router.route('/').get(protect, getDrivers).post(protect, createDriver)
-router.route('/:id').delete(protect, deleteDriver).put(protect, updateDriver)
+router
+    .route('/:id')
+    .get(protect, getDriverById)
+    .delete(protect, deleteDriver)
+    .put(protect, updateDriver)
 
 module.exports = router
