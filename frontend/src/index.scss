@@ -160,3 +160,17 @@ form {
 #haulVendorProductSelector input {
     width: 100% !important;
 }
+
+#haulSummaryDataTable,
+#haulSummaryDataTable *,
+#haulSummaryHeader,
+#haulSummaryHeader * {
+    font-size: 10pt !important;
+}
+
+@media print {
+    .noPrint,
+    .noPrint * {
+        display: none !important;
+    }
+}

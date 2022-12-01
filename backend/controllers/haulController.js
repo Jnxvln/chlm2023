@@ -79,31 +79,22 @@ const getHaulsByDriverIdAndDateRange = asyncHandler(async (req, res) => {
     }
     // #endregion
 
-    const gte = new Date(
-        new Date(dayjs(req.params.dateStart).format('MM/DD/YYYY')).setHours(
-            00,
-            00,
-            00
-        )
-    )
-    const lte = new Date(
-        new Date(dayjs(req.params.dateEnd).format('MM/DD/YYYY')).setHours(
-            23,
-            59,
-            59
-        )
-    )
-    // console.log('Date Start: ' + gte)
-    // console.log('Date End: ' + lte)
+    const dateStart = dayjs(req.params.dateStart)
+    const dateEnd = dayjs(req.params.dateEnd)
+    const diff = Math.abs(dateStart.diff(dateEnd, 'day')) + 1
 
-    // 2. Return hauls within this date range
-    const hauls = await Haul.find({
-        driver: req.params.driverId,
-        dateHaul: {
-            $gte: gte,
-            $lte: lte,
-        },
-    })
+    let dates = []
+
+    for (let i = 0; i < diff; i++) {
+        dates.push(dayjs(dateStart).add(i, 'day').format('YYYY-MM-DD'))
+    }
+
+    // Return hauls within this date range
+    const driverHauls = await Haul.find({ driver: req.params.driverId })
+
+    const hauls = driverHauls.filter((h) =>
+        dates.includes(h.dateHaul.split('T')[0])
+    )
 
     // 3. Return this list
     res.status(200).send(hauls)

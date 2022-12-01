@@ -87,25 +87,50 @@ const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
     }
     // #endregion
 
-    const gte = new Date(
-        dayjs(req.params.dateStart).format('MM/DD/YYYY')
-    ).setHours(00, 00, 00)
+    // console.log(
+    //     '\nDate Start: ' + dayjs(req.params.dateStart).format('MM/DD/YY')
+    // )
+    // console.log('\nDate End: ' + dayjs(req.params.dateEnd).format('MM/DD/YY'))
 
-    const lte = new Date(
-        new Date(dayjs(req.params.dateEnd).format('MM/DD/YYYY')).setHours(
-            23,
-            59,
-            59
-        )
+    // const gte = new Date(
+    //     dayjs(req.params.dateStart).format('MM/DD/YYYY')
+    // ).setHours(00, 00, 00)
+
+    // const lte = new Date(
+    //     new Date(dayjs(req.params.dateEnd).format('MM/DD/YYYY')).setHours(
+    //         23,
+    //         59,
+    //         59
+    //     )
+    // )
+
+    // const driverWorkdaysRange = await Workday.find({
+    //     driverId: req.params.driverId,
+    //     date: {
+    //         $gte: gte,
+    //         $lte: lte,
+    //     },
+    // })
+
+    const dateStart = dayjs(req.params.dateStart)
+    const dateEnd = dayjs(req.params.dateEnd)
+    const diff = Math.abs(dateStart.diff(dateEnd, 'day')) + 1
+
+    let dates = []
+
+    for (let i = 0; i < diff; i++) {
+        dates.push(dayjs(dateStart).add(i, 'day').format('YYYY-MM-DD'))
+    }
+
+    // console.log('Dates: ')
+    // console.log(dates)
+
+    // Return workdays within this date range
+    const driverWorkdays = await Workday.find({ driverId: req.params.driverId })
+
+    const driverWorkdaysRange = driverWorkdays.filter((w) =>
+        dates.includes(w.date.split('T')[0])
     )
-
-    const driverWorkdaysRange = await Workday.find({
-        driverId: req.params.driverId,
-        date: {
-            $gte: gte,
-            $lte: lte,
-        },
-    })
 
     res.status(200).send(driverWorkdaysRange)
 })

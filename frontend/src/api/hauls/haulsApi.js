@@ -29,6 +29,26 @@ export const getAllHaulsByDateRange = async (dateStart, dateEnd, token) => {
     return response.data
 }
 
+// Get hauls by driver ID within date range
+export const getHaulsByDriverIdAndDateRange = async (
+    driverId,
+    dateStart,
+    dateEnd,
+    token
+) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.get(
+        `${API_URL}for/${driverId}/${dateStart}/${dateEnd}`,
+        config
+    )
+    return response.data
+}
+
 // Create haul
 export const createHaul = async (haulData, token) => {
     const config = {

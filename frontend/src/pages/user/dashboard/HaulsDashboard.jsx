@@ -80,6 +80,7 @@ function HaulsDashboard() {
                 workdayDateEnd,
                 user.data.token
             ),
+        enabled: !!workdayDateStart && !!workdayDateEnd,
         onError: (err) => {
             console.log('Error fetching workdays: ')
             console.log(err)
