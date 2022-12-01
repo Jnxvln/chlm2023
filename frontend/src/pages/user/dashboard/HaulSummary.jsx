@@ -16,10 +16,13 @@ function HaulSummary() {
     // #region VARS ----------------------------------------------------
     let [searchParams, setSearchParams] = useSearchParams()
     const [dates, setDates] = useState([])
+    const [data, setData] = useState(null)
     const queryClient = useQueryClient()
     const _driverId = searchParams.get('driverId')
     const _dateStart = searchParams.get('dateStart')
     const _dateEnd = searchParams.get('dateEnd')
+    const chDatesPrinted = []
+    const ncDatesPrinted = []
 
     const user = useQuery({
         queryKey: ['user'],
@@ -143,12 +146,80 @@ function HaulSummary() {
     const rateTemplate = (rowData) => {
         return <>{parseFloat(rowData.rate).toFixed(2)}</>
     }
+
+    const chHoursTemplate = (rowData) => {
+        if (!chDatesPrinted.includes(rowData.dateHaul.split('T')[0])) {
+            const wday = workdays.data.find((w) => {
+                chDatesPrinted.push(w.date.split('T')[0])
+                return w.date.split('T')[0] === rowData.dateHaul.split('T')[0]
+            })
+
+            const _chhours = parseFloat(wday.chhours)
+            return _chhours ? _chhours.toFixed(2) : parseFloat(0).toFixed(2)
+        }
+    }
+
+    const ncHoursTemplate = (rowData) => {
+        if (!ncDatesPrinted.includes(rowData.dateHaul.split('T')[0])) {
+            const wday = workdays.data.find((w) => {
+                ncDatesPrinted.push(w.date.split('T')[0])
+                return w.date.split('T')[0] === rowData.dateHaul.split('T')[0]
+            })
+
+            const _nchours = parseFloat(wday.nchours)
+            return _nchours ? _nchours.toFixed(2) : parseFloat(0).toFixed(2)
+        }
+    }
+
+    const freightPayTemplate = (rowData) => {
+        let _freightPay
+        let driverEndDumpRate = parseFloat(driver.data.endDumpPayRate)
+        let driverFlatBedRate = parseFloat(driver.data.flatBedPayRate)
+        let tons = parseFloat(rowData.tons)
+        let rate = parseFloat(rowData.rate)
+
+        if (rowData.loadType === 'enddump') {
+            _freightPay = tons * rate
+        }
+
+        return parseFloat(_freightPay).toFixed(2)
+    }
+
+    const driverPayTemplate = (rowData) => {
+        let driverEndDumpRate = parseFloat(driver.data.endDumpPayRate)
+        let driverFlatBedRate = parseFloat(driver.data.flatBedPayRate)
+        let _freightPay = freightPayTemplate(rowData)
+        let _driverPay
+
+        if (rowData.loadType === 'enddump') {
+            _driverPay = _freightPay * driverEndDumpRate
+        }
+
+        return parseFloat(_driverPay).toFixed(2)
+    }
     // #endregion
 
     // #region useEffect
     useEffect(() => {
         generateDates()
     }, [])
+
+    useEffect(() => {
+        if (workdays.data && hauls.data) {
+            setData((prevState) => ({
+                ...prevState,
+                hauls: hauls.data,
+                workdays: workdays.data,
+            }))
+        }
+    }, [workdays.data, hauls.data])
+
+    useEffect(() => {
+        if (data) {
+            console.log('Data loaded...')
+            console.log(data)
+        }
+    }, [data])
 
     // useEffect(() => {
     //     if (dates) {
@@ -248,8 +319,49 @@ function HaulSummary() {
                         header="Rate"
                         body={rateTemplate}
                     ></Column>
+                    <Column header="CH Hrs" body={chHoursTemplate}></Column>
+                    <Column header="NC Hrs" body={ncHoursTemplate}></Column>
+                    <Column
+                        header="Freight Pay"
+                        body={freightPayTemplate}
+                    ></Column>
+                    <Column
+                        header="Driver Pay"
+                        body={driverPayTemplate}
+                    ></Column>
                 </DataTable>
             </div>
+
+            {/* NC Summary Section */}
+            <section className="flex justify-content-between flex-wrap ncSummarySection">
+                <div style={{ border: '2px dashed red' }}>
+                    <div style={{ border: '1px dotted black' }}>
+                        <table>
+                            <tr>
+                                <td>C&H Hours: </td>
+                                <td>0.00</td>
+                            </tr>
+                            <tr>
+                                <td>NC Hours: </td>
+                                <td>-1.00</td>
+                            </tr>
+                            <tr>
+                                <td>NC Rate: </td>
+                                <td>$20.00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div style={{ border: '1px dotted blue' }}>
+                    <div>
+                        <strong>NC Reasons: </strong>
+                    </div>
+                    <div>11/24: HOlidaaaay</div>
+                </div>
+
+                <div style={{ border: '1px dotted orange' }}>Totals Area</div>
+            </section>
         </section>
     )
 }

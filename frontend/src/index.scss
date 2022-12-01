@@ -168,6 +168,11 @@ form {
     font-size: 10pt !important;
 }
 
+.ncSummarySection,
+.ncSummarySection * {
+    font-size: 10pt;
+}
+
 @media print {
     .noPrint,
     .noPrint * {
