@@ -1,5 +1,7 @@
 @import './styles/_colors.scss';
 
+$haulSummaryFontSize: 10pt;
+
 * {
     box-sizing: border-box;
 }
@@ -165,12 +167,21 @@ form {
 #haulSummaryDataTable *,
 #haulSummaryHeader,
 #haulSummaryHeader * {
-    font-size: 10pt !important;
+    font-size: $haulSummaryFontSize !important;
 }
 
 .ncSummarySection,
 .ncSummarySection * {
-    font-size: 10pt;
+    font-size: $haulSummaryFontSize;
+}
+
+.ncSummarySection {
+    margin-top: 1em;
+}
+
+.tdSpacer {
+    padding-left: 0.5em;
+    // border: 1px dotted black;
 }
 
 @media print {

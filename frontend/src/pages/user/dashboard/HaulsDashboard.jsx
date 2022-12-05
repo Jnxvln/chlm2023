@@ -193,11 +193,33 @@ function HaulsDashboard() {
 
     // #region ACTION HANDLERS ------------------------------------
     const handleHaulSummary = (e) => {
-        // navigate('/hauls/summary', {
-        //     state: {
-        //         driverId: selectedDriverId,
-        //     },
-        // })
+        // TODO: Before navigating, check workdays
+        let _datesMissingWorkday = []
+
+        for (let i = 0; i < filteredHauls.length; i++) {
+            let _date = filteredHauls[i].dateHaul.split('T')[0]
+
+            console.log('Checking workdays for date: ' + _date)
+
+            let _wdayDateMatch = workdays.data.find(
+                (day) => day.date.split('T')[0] === _date
+            )
+
+            console.log('MATCH: ')
+            console.log(_wdayDateMatch)
+
+            if (!_wdayDateMatch) {
+                _datesMissingWorkday.push(dayjs(_date).format('MM/DD/YY'))
+            }
+        }
+
+        let datesMissingWorkday = [...new Set(_datesMissingWorkday)]
+
+        if (_datesMissingWorkday.length > 0) {
+            return toast.error(
+                `Workdays are missing for the following dates: \n${datesMissingWorkday}`
+            )
+        }
 
         const params = {
             driverId: selectedDriverId,

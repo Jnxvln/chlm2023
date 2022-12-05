@@ -1,9 +1,11 @@
 import dayjs from 'dayjs'
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSearchParams } from 'react-router-dom'
 // PrimeReact Components
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
+import { Button } from 'primereact/button'
 // Store data
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchUser } from '../../../api/users/usersApi'
@@ -14,6 +16,8 @@ import { toast } from 'react-toastify'
 
 function HaulSummary() {
     // #region VARS ----------------------------------------------------
+    const navigate = useNavigate()
+
     let [searchParams, setSearchParams] = useSearchParams()
     const [dates, setDates] = useState([])
     const [data, setData] = useState(null)
@@ -27,10 +31,6 @@ function HaulSummary() {
     const user = useQuery({
         queryKey: ['user'],
         queryFn: () => fetchUser(),
-        // onSuccess: (user) => {
-        //     console.log('User fetched: ')
-        //     console.log(user)
-        // },
     })
 
     const userId = user?.data?._id
@@ -39,10 +39,6 @@ function HaulSummary() {
         queryKey: ['driver', userId],
         queryFn: () => getDriverById(_driverId, user.data.token),
         enabled: !!userId,
-        // onSuccess: (driver) => {
-        //     console.log('Driver Fetched: ')
-        //     console.log(driver)
-        // },
         onError: (err) => {
             console.log('AN ERROR OCCURRED: ')
             console.log(err)
@@ -61,10 +57,10 @@ function HaulSummary() {
                 user.data.token
             ),
         enabled: !!driverId,
-        onSuccess: (workdays) => {
-            console.log('Workdays fetched: ')
-            console.log(workdays)
-        },
+        // onSuccess: (workdays) => {
+        //     console.log('Workdays fetched: ')
+        //     console.log(workdays)
+        // },
         onError: (err) => {
             const errMsg = 'Error fetching workdays'
             console.log(errMsg)
@@ -92,8 +88,7 @@ function HaulSummary() {
                 _dateEnd,
                 token: user.data.token,
             }
-            // console.log('Running getHaulsByDriverIdAndDateRange with data: ')
-            // console.log(data)
+
             return getHaulsByDriverIdAndDateRange(
                 driverId,
                 _dateStart,
@@ -112,6 +107,11 @@ function HaulSummary() {
         },
     })
     // #endregion
+
+    const roundPrecise = (num) => {
+        // return +(Math.round(num + 'e+2') + 'e-2')
+        return Math.round(num * 100 + Number.EPSILON) / 100
+    }
 
     const generateDates = (d) => {
         if (_dateStart && _dateEnd) {
@@ -134,68 +134,207 @@ function HaulSummary() {
         }
     }
 
+    const calculateCHHours = () => {
+        if (data && data.workdays) {
+            let _chHours = 0
+
+            for (let i = 0; i < data.workdays.length; i++) {
+                _chHours += parseFloat(data.workdays[i].chhours)
+            }
+            return _chHours.toFixed(2)
+        } else return -1
+    }
+
+    const calculateNCHours = () => {
+        if (data && data.workdays) {
+            let _ncHours = 0
+            for (let i = 0; i < data.workdays.length; i++) {
+                if (data.workdays[i].nchours) {
+                    _ncHours += parseFloat(data.workdays[i].nchours)
+                }
+            }
+            return _ncHours.toFixed(2)
+        } else return -1
+    }
+
+    const calculateTotalFreightPay = () => {
+        if (data && data.hauls) {
+            let _totalFreightPay = 0
+
+            for (let i = 0; i < data.hauls.length; i++) {
+                if (data.hauls[i].loadType === 'enddump') {
+                    _totalFreightPay +=
+                        parseFloat(data.hauls[i].tons) *
+                        parseFloat(data.hauls[i].rate)
+                }
+
+                if (data.hauls[i].loadType === 'flatbedperc') {
+                    _totalFreightPay += parseFloat(data.hauls[i].payRate)
+                }
+            }
+
+            return roundPrecise(_totalFreightPay).toFixed(2)
+        } else return -1
+    }
+
+    const calculateDriverSubtotal = () => {
+        if (data && data.driver && data.hauls) {
+            let _totalDriverPay = 0
+            const _driverEndDumpPayRate = parseFloat(data.driver.endDumpPayRate)
+            const _driverFlatBedPayRate = parseFloat(data.driver.flatBedPayRate)
+
+            for (let i = 0; i < data.hauls.length; i++) {
+                if (data.hauls[i].loadType === 'enddump') {
+                    let _add = roundPrecise(
+                        parseFloat(data.hauls[i].tons) *
+                            parseFloat(data.hauls[i].rate) *
+                            _driverEndDumpPayRate
+                    )
+                    _totalDriverPay += _add
+                }
+                if (data.hauls[i].loadType === 'flatbedperc') {
+                    let _add = roundPrecise(
+                        parseFloat(data.hauls[i].payRate) *
+                            _driverFlatBedPayRate
+                    )
+                    _totalDriverPay += _add
+                }
+            }
+
+            return roundPrecise(_totalDriverPay).toFixed(2)
+        } else return -1
+    }
+
+    const calculateNCTotal = () => {
+        if (data && data.workdays && data.driver) {
+            let _nctotal = 0
+            let _driverNCRate = parseFloat(data.driver.ncRate)
+
+            for (let i = 0; i < data.workdays.length; i++) {
+                if (data.workdays[i].nchours) {
+                    _nctotal += roundPrecise(
+                        parseFloat(data.workdays[i].nchours) * _driverNCRate
+                    )
+                }
+            }
+
+            return roundPrecise(_nctotal).toFixed(2)
+        } else return -1
+    }
+
     // #region TEMPLATES ------------------------------------------------------
     const dateHaulTemplate = (rowData) => {
-        return <>{dayjs(rowData.dateHaul).format('MM/DD/YY')}</>
+        if (rowData) {
+            return <>{dayjs(rowData.dateHaul).format('MM/DD/YY')}</>
+        } else {
+            return <>Loading...</>
+        }
     }
 
     const tonsTemplate = (rowData) => {
-        return <>{parseFloat(rowData.tons).toFixed(2)}</>
+        if (rowData) {
+            return <>{parseFloat(rowData.tons).toFixed(2)}</>
+        } else {
+            return <>Loading...</>
+        }
     }
 
     const rateTemplate = (rowData) => {
-        return <>{parseFloat(rowData.rate).toFixed(2)}</>
+        if (rowData) {
+            if (rowData.loadType === 'enddump') {
+                return <>{parseFloat(rowData.rate).toFixed(2)}</>
+            } else {
+                return <>-</>
+            }
+        } else {
+            return <>Loading...</>
+        }
     }
 
     const chHoursTemplate = (rowData) => {
-        if (!chDatesPrinted.includes(rowData.dateHaul.split('T')[0])) {
-            const wday = workdays.data.find((w) => {
-                chDatesPrinted.push(w.date.split('T')[0])
-                return w.date.split('T')[0] === rowData.dateHaul.split('T')[0]
-            })
+        if (rowData && data && data.workdays) {
+            const _dateHaul = rowData.dateHaul.split('T')[0]
 
-            const _chhours = parseFloat(wday.chhours)
-            return _chhours ? _chhours.toFixed(2) : parseFloat(0).toFixed(2)
+            if (!chDatesPrinted.includes(_dateHaul)) {
+                const wday = data.workdays.find((w) => {
+                    const _date = w.date.split('T')[0]
+                    if (_dateHaul === _date) {
+                        chDatesPrinted.push(w.date.split('T')[0])
+                    }
+                    return w.date.split('T')[0] === _dateHaul
+                })
+
+                const _chhours =
+                    wday && wday.chhours
+                        ? parseFloat(wday.chhours).toFixed(2)
+                        : -1
+                return _chhours
+            }
+        } else {
+            return <>Loading....</>
         }
     }
 
     const ncHoursTemplate = (rowData) => {
-        if (!ncDatesPrinted.includes(rowData.dateHaul.split('T')[0])) {
-            const wday = workdays.data.find((w) => {
-                ncDatesPrinted.push(w.date.split('T')[0])
-                return w.date.split('T')[0] === rowData.dateHaul.split('T')[0]
-            })
+        if (rowData && data && data.workdays) {
+            if (!ncDatesPrinted.includes(rowData.dateHaul.split('T')[0])) {
+                const wday = data.workdays.find((w) => {
+                    ncDatesPrinted.push(w.date.split('T')[0])
+                    return (
+                        w.date.split('T')[0] === rowData.dateHaul.split('T')[0]
+                    )
+                })
 
-            const _nchours = parseFloat(wday.nchours)
-            return _nchours ? _nchours.toFixed(2) : parseFloat(0).toFixed(2)
+                const _nchours = parseFloat(wday?.nchours)
+                return _nchours ? _nchours.toFixed(2) : parseFloat(0).toFixed(2)
+            }
+        } else {
+            return <>Loading...</>
         }
     }
 
     const freightPayTemplate = (rowData) => {
-        let _freightPay
-        let driverEndDumpRate = parseFloat(driver.data.endDumpPayRate)
-        let driverFlatBedRate = parseFloat(driver.data.flatBedPayRate)
-        let tons = parseFloat(rowData.tons)
-        let rate = parseFloat(rowData.rate)
+        if (rowData && driver && driver.data) {
+            let _freightPay
+            let tons = parseFloat(rowData.tons)
+            let rate = parseFloat(rowData.rate)
+            let payRate = parseFloat(rowData.payRate)
 
-        if (rowData.loadType === 'enddump') {
-            _freightPay = tons * rate
+            if (rowData.loadType === 'enddump') {
+                _freightPay = roundPrecise(tons * rate)
+            }
+
+            if (rowData.loadType === 'flatbedperc') {
+                _freightPay = roundPrecise(payRate)
+            }
+
+            return roundPrecise(parseFloat(_freightPay)).toFixed(2)
+        } else {
+            return <>Loading...</>
         }
-
-        return parseFloat(_freightPay).toFixed(2)
     }
 
     const driverPayTemplate = (rowData) => {
-        let driverEndDumpRate = parseFloat(driver.data.endDumpPayRate)
-        let driverFlatBedRate = parseFloat(driver.data.flatBedPayRate)
-        let _freightPay = freightPayTemplate(rowData)
-        let _driverPay
+        if (rowData && driver && driver.data) {
+            let driverEndDumpRate = parseFloat(driver.data.endDumpPayRate)
+            let driverFlatBedRate = parseFloat(driver.data.flatBedPayRate)
+            let _tons = parseFloat(rowData.tons)
+            let _rate = parseFloat(rowData.rate)
+            let _payRate = parseFloat(rowData.payRate)
+            let _driverPay
 
-        if (rowData.loadType === 'enddump') {
-            _driverPay = _freightPay * driverEndDumpRate
+            if (rowData.loadType === 'enddump') {
+                _driverPay = roundPrecise(_tons * _rate * driverEndDumpRate)
+            }
+
+            if (rowData.loadType === 'flatbedperc') {
+                _driverPay = roundPrecise(_payRate * driverFlatBedRate)
+            }
+
+            return roundPrecise(_driverPay).toFixed(2)
+        } else {
+            return <>Loading...</>
         }
-
-        return parseFloat(_driverPay).toFixed(2)
     }
     // #endregion
 
@@ -208,18 +347,19 @@ function HaulSummary() {
         if (workdays.data && hauls.data) {
             setData((prevState) => ({
                 ...prevState,
+                driver: driver.data,
                 hauls: hauls.data,
                 workdays: workdays.data,
             }))
         }
     }, [workdays.data, hauls.data])
 
-    useEffect(() => {
-        if (data) {
-            console.log('Data loaded...')
-            console.log(data)
-        }
-    }, [data])
+    // useEffect(() => {
+    //     if (data) {
+    //         console.log('Data loaded...')
+    //         console.log(data)
+    //     }
+    // }, [data])
 
     // useEffect(() => {
     //     if (dates) {
@@ -251,6 +391,24 @@ function HaulSummary() {
                 </h4>
                 <h1 style={{ margin: '0' }}>Haul Summary</h1>
             </header>
+
+            <Button
+                icon="pi pi-arrow-left"
+                iconPos="left"
+                label="Back"
+                style={{ backgroundColor: '#595959', marginRight: '0.5em' }}
+                onClick={() => navigate('/dashboard')}
+            />
+
+            <Button
+                icon="pi pi-print"
+                iconPos="left"
+                label="Print"
+                className="noPrint"
+                onClick={() => {
+                    window.print()
+                }}
+            />
 
             {/* Subheader */}
             <div
@@ -293,7 +451,8 @@ function HaulSummary() {
             {/* Data Table */}
             <div id="haulSummaryDataTable">
                 <DataTable
-                    value={hauls.data}
+                    value={data && data.hauls}
+                    loading={hauls && hauls.isLoading}
                     responsiveLayout="scroll"
                     size="small"
                     stripedRows
@@ -334,33 +493,101 @@ function HaulSummary() {
 
             {/* NC Summary Section */}
             <section className="flex justify-content-between flex-wrap ncSummarySection">
-                <div style={{ border: '2px dashed red' }}>
-                    <div style={{ border: '1px dotted black' }}>
+                {/* TOTAL HOURS */}
+                <div>
+                    <div>
                         <table>
-                            <tr>
-                                <td>C&H Hours: </td>
-                                <td>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>NC Hours: </td>
-                                <td>-1.00</td>
-                            </tr>
-                            <tr>
-                                <td>NC Rate: </td>
-                                <td>$20.00</td>
-                            </tr>
+                            <tbody className="ncSummaryTableBody">
+                                <tr>
+                                    <td>
+                                        <strong>C&H Hours:</strong>{' '}
+                                    </td>
+                                    <td className="tdSpacer">
+                                        {calculateCHHours()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>NC Hours:</strong>{' '}
+                                    </td>
+                                    <td className="tdSpacer">
+                                        {calculateNCHours()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>NC Rate:</strong>{' '}
+                                    </td>
+                                    <td className="tdSpacer">
+                                        $
+                                        {data &&
+                                        data.driver &&
+                                        data.driver.ncRate ? (
+                                            parseFloat(
+                                                data.driver.ncRate
+                                            ).toFixed(2)
+                                        ) : (
+                                            <>...</>
+                                        )}
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div style={{ border: '1px dotted blue' }}>
+                {/* NC REASONS */}
+                <div>
                     <div>
                         <strong>NC Reasons: </strong>
                     </div>
-                    <div>11/24: HOlidaaaay</div>
+                    {data &&
+                        data.workdays &&
+                        data.workdays.map((day) => (
+                            <div key={day._id}>
+                                {day && day.ncReasons ? (
+                                    <>
+                                        {dayjs(day.date).format('MM/DD')}:{' '}
+                                        {day.ncReasons} ({day.nchours} hrs)
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
+                            </div>
+                        ))}
                 </div>
 
-                <div style={{ border: '1px dotted orange' }}>Totals Area</div>
+                {/* PAY TOTALS */}
+                <div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>Total Freight Pay: </strong>
+                                </td>
+                                <td className="tdSpacer">
+                                    $ {calculateTotalFreightPay()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Driver Subtotal: </strong>
+                                </td>
+                                <td className="tdSpacer">
+                                    $ {calculateDriverSubtotal()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>NC Total: </strong>
+                                </td>
+                                <td className="tdSpacer">
+                                    $ {calculateNCTotal()}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </section>
     )
