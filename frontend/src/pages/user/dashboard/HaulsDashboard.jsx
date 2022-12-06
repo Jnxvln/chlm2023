@@ -32,7 +32,7 @@ import {
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function HaulsDashboard() {
-    // #region VARS ------------------------
+    // #region VARS -----------------------------------------------
 
     const queryClient = useQueryClient()
     const navigate = useNavigate()
@@ -234,7 +234,7 @@ function HaulsDashboard() {
     }
     // #endregion
 
-    // #region DATA TABLE TEMPLATES ------------------------
+    // #region DATA TABLE TEMPLATES -------------------------------
     const dataTableHeaderTemplate = () => {
         return (
             <div className="flex justify-content-between">
@@ -398,7 +398,7 @@ function HaulsDashboard() {
     }
     // #endregion
 
-    // #region FILTERS ------------------------
+    // #region FILTERS --------------------------------------------
     const onGlobalFilterChange = (e) => {
         const value = e.target.value
         let _filters = { ...filters }
@@ -426,7 +426,7 @@ function HaulsDashboard() {
     }
     // #endregion
 
-    // #region HANDLERS ------------------------
+    // #region HANDLERS -------------------------------------------
 
     // Handle Delete haul confirmation
     const onDelete = (e, rowData) => {
@@ -496,7 +496,7 @@ function HaulsDashboard() {
     }
     // #endregion
 
-    // RUN ONCE
+    // #region USE EFFECTS ----------------------------------------
     useEffect(() => {
         initFilters()
 
@@ -555,6 +555,7 @@ function HaulsDashboard() {
         rangeDates.length,
         selectedDriverId,
     ])
+    // #endregion
 
     return (
         <section>
