@@ -15,7 +15,7 @@ import { getHaulsByDriverIdAndDateRange } from '../../../api/hauls/haulsApi'
 import { toast } from 'react-toastify'
 
 function HaulSummary() {
-    // #region VARS ----------------------------------------------------
+    // #region VARS -----------------------------------------------------------
     const navigate = useNavigate()
 
     let [searchParams, setSearchParams] = useSearchParams()
@@ -57,10 +57,6 @@ function HaulSummary() {
                 user.data.token
             ),
         enabled: !!driverId,
-        // onSuccess: (workdays) => {
-        //     console.log('Workdays fetched: ')
-        //     console.log(workdays)
-        // },
         onError: (err) => {
             const errMsg = 'Error fetching workdays'
             console.log(errMsg)
@@ -108,6 +104,7 @@ function HaulSummary() {
     })
     // #endregion
 
+    // #region ACTION HANDLERS ------------------------------------------------
     const roundPrecise = (num) => {
         // return +(Math.round(num + 'e+2') + 'e-2')
         return Math.round(num * 100 + Number.EPSILON) / 100
@@ -221,6 +218,7 @@ function HaulSummary() {
             return roundPrecise(_nctotal).toFixed(2)
         } else return -1
     }
+    // #endregion
 
     // #region TEMPLATES ------------------------------------------------------
     const dateHaulTemplate = (rowData) => {
@@ -338,7 +336,7 @@ function HaulSummary() {
     }
     // #endregion
 
-    // #region useEffect
+    // #region useEffect ------------------------------------------------------
     useEffect(() => {
         generateDates()
     }, [])
@@ -353,28 +351,6 @@ function HaulSummary() {
             }))
         }
     }, [workdays.data, hauls.data])
-
-    // useEffect(() => {
-    //     if (data) {
-    //         console.log('Data loaded...')
-    //         console.log(data)
-    //     }
-    // }, [data])
-
-    // useEffect(() => {
-    //     if (dates) {
-    //         console.log('Dates set: ')
-    //         console.log(dates)
-    //     }
-
-    //     if (userId) {
-    //         console.log(`User ID: ${userId}`)
-    //     }
-
-    //     if (driverId) {
-    //         console.log(`Driver ID: ${driverId}`)
-    //     }
-    // }, [dates, userId, driverId])
     // #endregion
 
     return (
