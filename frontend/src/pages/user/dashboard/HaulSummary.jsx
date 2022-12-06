@@ -378,7 +378,7 @@ function HaulSummary() {
     // #endregion
 
     return (
-        <section>
+        <section style={{ padding: '1em' }}>
             {/* Page Header */}
             <header
                 style={{
@@ -396,6 +396,7 @@ function HaulSummary() {
                 icon="pi pi-arrow-left"
                 iconPos="left"
                 label="Back"
+                className="noPrint"
                 style={{ backgroundColor: '#595959', marginRight: '0.5em' }}
                 onClick={() => navigate('/dashboard')}
             />
