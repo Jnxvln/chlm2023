@@ -6,6 +6,7 @@ import VendorsDashboard from './VendorsDashboard'
 import MaterialsDashboard from './MaterialsDashboard'
 import CarportsDashboard from './CarportsDashboard'
 import DriversDashboard from './DriversDashboard'
+import CostCalculator from './CostCalculator'
 
 function Dashboard({ user }) {
     const [tabsActiveIndex, setTabsActiveIndex] = useState(0)
@@ -40,6 +41,9 @@ function Dashboard({ user }) {
                 </TabPanel>
                 <TabPanel header="Drivers">
                     <DriversDashboard />
+                </TabPanel>
+                <TabPanel header="Cost Calculator">
+                    <CostCalculator />
                 </TabPanel>
             </TabView>
         </section>
