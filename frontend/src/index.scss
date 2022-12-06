@@ -183,6 +183,14 @@ form {
     padding-left: 0.5em;
     // border: 1px dotted black;
 }
+.tdBold {
+    font-weight: bold;
+}
+
+#cc_material,
+#cc_material input {
+    width: 100%;
+}
 
 @media print {
     .noPrint,
