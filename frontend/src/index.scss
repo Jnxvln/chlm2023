@@ -203,6 +203,14 @@ tr.spacer td {
     background-color: #f1f1f1;
 }
 
+#costCalculatorPrintBtn {
+    background-color: #2c6b90;
+}
+
+#costCalculatorPrintBtn:hover {
+    background-color: #3789b9;
+}
+
 @media print {
     .noPrint,
     .noPrint * {

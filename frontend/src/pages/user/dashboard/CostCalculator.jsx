@@ -1,30 +1,29 @@
-import { AutoComplete } from 'primereact/autocomplete'
-
-// PrimeReact Components
 import { useState, useEffect } from 'react'
-import { Card } from 'primereact/card'
-import { InputText } from 'primereact/inputtext'
+import { toast } from 'react-toastify'
+// PrimeReact Components
+import { AutoComplete } from 'primereact/autocomplete'
+import { Panel } from 'primereact/panel'
 import { InputNumber } from 'primereact/inputnumber'
 import { Button } from 'primereact/button'
 // Store data
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { fetchUser } from '../../../api/users/usersApi'
 import { getVendors } from '../../../api/vendors/vendorsApi'
 import { getVendorProducts } from '../../../api/vendorProducts/vendorProductsApi'
 import { getFreightRoutes } from '../../../api/freightRoutes/freightRoutesApi'
-import { toast } from 'react-toastify'
 
 function CostCalculator() {
-    // #region VARS --------------------------------------------------------------------------
-
-    const [filteredProducts, setFilteredProducts] = useState([])
-    const [breakdownData, setBreakdownData] = useState(null)
-    const [formData, setFormData] = useState({
+    // #region VARS -----------------------------------------------------------------------------
+    const initialState = {
         tons: null,
         material: '',
         costPerTon: null,
         totalCostTons: null,
-    })
+    }
+    const [filteredProducts, setFilteredProducts] = useState([])
+    const [breakdownData, setBreakdownData] = useState(null)
+    const [formData, setFormData] = useState(initialState)
+    const [isComplete, setIsComplete] = useState(false)
 
     const user = useQuery(['user'], fetchUser)
     const userId = user?.data._id
@@ -32,10 +31,6 @@ function CostCalculator() {
     const vendors = useQuery({
         queryKey: ['vendors'],
         queryFn: () => getVendors(user.data.token),
-        onSuccess: (vendors) => {
-            console.log('Vendors fetched: ')
-            console.log(vendors)
-        },
         onError: (err) => {
             const errMsg = 'Error fetching vendors'
             console.log(errMsg)
@@ -56,10 +51,6 @@ function CostCalculator() {
         queryKey: ['vendorProducts'],
         queryFn: () => getVendorProducts(user.data.token),
         enabled: !!userId,
-        // onSuccess: (products) => {
-        //     console.log('Vendor Products fetched: ')
-        //     console.log(products)
-        // },
         onError: (err) => {
             const errMsg = 'Error fetching vendor products'
             console.log(errMsg)
@@ -80,10 +71,6 @@ function CostCalculator() {
         queryKey: ['freightRoutes'],
         queryFn: () => getFreightRoutes(user.data.token),
         enabled: !!userId,
-        onSuccess: (freightRoutes) => {
-            console.log('Routes fetched: ')
-            console.log(freightRoutes)
-        },
         onError: (err) => {
             const errMsg = 'Error fetching routes'
             console.log(errMsg)
@@ -101,6 +88,7 @@ function CostCalculator() {
     })
     // #endregion
 
+    // #region ACTION HANDLERS ------------------------------------------------------------------
     const onChange = (e) => {
         if (e.hasOwnProperty('target')) {
             setFormData((prevState) => ({
@@ -194,8 +182,56 @@ function CostCalculator() {
 
         return _costPerTon
     }
-    // #region USE EFFECT
 
+    const resetFormData = () => {
+        setFormData(initialState)
+    }
+
+    const resetBreakdownData = () => {
+        setBreakdownData(null)
+    }
+
+    // #endregion
+
+    // #region TEMPLATES ------------------------------------------------------------------------
+    const inputHeaderTemplate = () => {
+        return (
+            <div
+                style={{
+                    backgroundColor: '#124f77',
+                    padding: '1em',
+                    borderTopLeftRadius: '5px',
+                    borderTopRightRadius: '5px',
+                    marginBottom: '1em',
+                }}
+            >
+                <h1 style={{ margin: 0, color: 'white', fontWeight: 'bold' }}>
+                    Input
+                </h1>
+            </div>
+        )
+    }
+
+    const breakdownHeaderTemplate = () => {
+        return (
+            <div
+                style={{
+                    backgroundColor: '#826736',
+                    padding: '1em',
+                    borderTopLeftRadius: '5px',
+                    borderTopRightRadius: '5px',
+                    marginBottom: '1em',
+                }}
+            >
+                <h1 style={{ margin: 0, color: 'white', fontWeight: 'bold' }}>
+                    Breakdown
+                </h1>
+            </div>
+        )
+    }
+    // #endregion
+
+    // #region USE EFFECT -----------------------------------------------------------------------
     useEffect(() => {
         if (
             formData.tons &&
@@ -203,25 +239,31 @@ function CostCalculator() {
             formData.material._id &&
             formData.material._id.length > 0
         ) {
-            console.log('Running calculations...')
             performCalculations()
+        }
+
+        if (formData.tons && formData.material) {
+            setIsComplete(true)
+        } else {
+            setIsComplete(false)
         }
     }, [formData.tons, formData.material])
 
     useEffect(() => {
-        if (breakdownData) {
-            console.log('Breakdown Data: ')
-            console.log(breakdownData)
+        if (!isComplete) {
+            resetBreakdownData()
+            resetFormData()
         }
-    }, [breakdownData])
+    }, [isComplete])
     // #endregion
 
     return (
         <section className="flex gap-4">
-            <Card
-                title="Input"
+            {/* INPUT PANEL */}
+            <Panel
+                header="Input"
+                headerTemplate={inputHeaderTemplate}
                 className="flex-grow-1"
-                style={{ backgroundColor: '' }}
             >
                 <form className="flex flex-column gap-3">
                     {/* TONAGE */}
@@ -330,138 +372,248 @@ function CostCalculator() {
                         </span>
                     </div>
 
-                    <Button type="button" icon="pi pi-print" label="Print" />
+                    <Button
+                        type="button"
+                        id="costCalculatorPrintBtn"
+                        icon="pi pi-print"
+                        label="Print"
+                        disabled={
+                            !formData.tons ||
+                            !formData.material ||
+                            !formData.costPerTon ||
+                            !formData.totalCostTons
+                        }
+                    />
                 </form>
-            </Card>
+            </Panel>
 
-            <Card
-                title="Breakdown"
+            {/* BREAKDOWN PANEL */}
+            <Panel
+                header="Breakdown"
+                headerTemplate={breakdownHeaderTemplate}
                 className="flex-grow-1"
-                style={{ backgroundColor: '#E0E9F0' }}
             >
                 <div className="flex flex-column gap-4">
-                    {/* PRODUCT, FREIGHT, TONS */}
-                    <table style={{ borderCollapse: 'collapse' }} border="1">
+                    <div
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: '1.5rem',
+                            textAlign: 'center',
+                        }}
+                    >
+                        {formData && formData.material ? (
+                            <>{formData.material.name}</>
+                        ) : (
+                            ''
+                        )}
+                    </div>
+
+                    {/* BREAKDOWN TABLES */}
+                    <table
+                        style={{
+                            borderCollapse: 'collapse',
+                            borderColor: '#AAAAAA',
+                        }}
+                        border="1"
+                    >
                         <tbody>
-                            {/* PRODUCT, FREIGHT, TONS */}
+                            {/* PRODUCT, FREIGHT ---------------------------------- */}
+
+                            {/* Product */}
                             <tr>
                                 <td className="tdBold">Product:</td>
-                                <td>
-                                    ${breakdownData && breakdownData.product} /T
-                                </td>
+                                {breakdownData && breakdownData.product ? (
+                                    <td>
+                                        $
+                                        {breakdownData && breakdownData.product}{' '}
+                                        /T
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
+
+                            {/* Freight */}
                             <tr>
                                 <td className="tdBold ">Freight:</td>
-                                <td>
-                                    $
-                                    {breakdownData &&
-                                        breakdownData.freightToYard}{' '}
-                                    /T
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="tdBold ">Tons:</td>
-                                <td>{formData.tons} Tons</td>
-                            </tr>
-
-                            <tr class="spacer">
-                                <td colspan="4">&nbsp;</td>
+                                {breakdownData &&
+                                breakdownData.freightToYard ? (
+                                    <td>
+                                        $
+                                        {breakdownData &&
+                                            breakdownData.freightToYard}{' '}
+                                        /T
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
 
-                            {/* FUEL SURCHARGES */}
+                            <tr className="spacer">
+                                <td colSpan="4">&nbsp;</td>
+                            </tr>
+
+                            {/* FUEL SURCHARGES ----------------------------------------- */}
+
+                            {/* Vendor FSC */}
                             <tr>
                                 <td className="tdBold">Vendor FSC:</td>
-                                <td>
-                                    $
-                                    {breakdownData &&
-                                        breakdownData.vendorFuelSurcharge}{' '}
-                                    /T ($
-                                    {(
-                                        parseFloat(
-                                            breakdownData &&
+                                {breakdownData &&
+                                breakdownData.vendorFuelSurcharge ? (
+                                    <td>
+                                        ${breakdownData.vendorFuelSurcharge} /T
+                                        ($
+                                        {(
+                                            parseFloat(
                                                 breakdownData.vendorFuelSurcharge
-                                        ) * parseFloat(formData.tons)
-                                    ).toFixed(2)}
-                                    )
-                                </td>
+                                            ) * parseFloat(formData.tons)
+                                        ).toFixed(2)}
+                                        )
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
 
+                            {/* CHT FSC */}
                             <tr>
                                 <td className="tdBold">CHT FSC:</td>
-                                <td>
-                                    $
-                                    {breakdownData &&
-                                        breakdownData.chtFuelSurcharge}{' '}
-                                    /T ($
-                                    {(
-                                        parseFloat(
-                                            breakdownData &&
-                                                breakdownData.chtFuelSurcharge
-                                        ) * parseFloat(formData.tons)
-                                    ).toFixed(2)}
-                                    )
-                                </td>
+                                {breakdownData &&
+                                breakdownData.chtFuelSurcharge ? (
+                                    <td>
+                                        $
+                                        {breakdownData &&
+                                            breakdownData.chtFuelSurcharge}{' '}
+                                        /T ($
+                                        {(
+                                            parseFloat(
+                                                breakdownData &&
+                                                    breakdownData.chtFuelSurcharge
+                                            ) * parseFloat(formData.tons)
+                                        ).toFixed(2)}
+                                        )
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
 
+                            {/* Total FSC */}
                             <tr>
                                 <td className="tdBold">Total FSC:</td>
-                                <td className="tdBold">
-                                    $
-                                    {(
-                                        parseFloat(
-                                            breakdownData &&
-                                                breakdownData.vendorFuelSurcharge
-                                        ) +
-                                        parseFloat(
-                                            breakdownData &&
-                                                breakdownData.chtFuelSurcharge
+
+                                {breakdownData &&
+                                breakdownData.vendorFuelSurcharge &&
+                                breakdownData.chtFuelSurcharge ? (
+                                    <td className="tdBold">
+                                        $
+                                        {(
+                                            parseFloat(
+                                                breakdownData &&
+                                                    breakdownData.vendorFuelSurcharge
+                                            ) +
+                                            parseFloat(
+                                                breakdownData &&
+                                                    breakdownData.chtFuelSurcharge
+                                            )
+                                        ).toFixed(2)}{' '}
+                                        /T ($
+                                        {(
+                                            parseFloat(
+                                                breakdownData &&
+                                                    breakdownData.vendorFuelSurcharge
+                                            ) *
+                                                parseFloat(formData.tons) +
+                                            parseFloat(
+                                                breakdownData &&
+                                                    breakdownData.chtFuelSurcharge
+                                            ) *
+                                                parseFloat(formData.tons)
+                                        ).toFixed(2)}
                                         )
-                                    ).toFixed(2)}{' '}
-                                    /T ($
-                                    {(
-                                        parseFloat(
-                                            breakdownData &&
-                                                breakdownData.vendorFuelSurcharge
-                                        ) *
-                                            parseFloat(formData.tons) +
-                                        parseFloat(
-                                            breakdownData &&
-                                                breakdownData.chtFuelSurcharge
-                                        ) *
-                                            parseFloat(formData.tons)
-                                    ).toFixed(2)}
-                                    )
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
+                            </tr>
+
+                            <tr className="spacer">
+                                <td colSpan="4">&nbsp;</td>
+                            </tr>
+
+                            {/* TONS, COST PER TON ----------------------------------- */}
+
+                            {/* Tons */}
+                            <tr>
+                                <td className="tdBold ">Tons:</td>
+                                {formData && formData.tons ? (
+                                    <td>{formData.tons} Tons</td>
+                                ) : (
+                                    <td></td>
+                                )}
+                            </tr>
+
+                            {/* Cost Per Ton */}
+                            <tr>
+                                <td className="tdBold ">
+                                    Cost Per Ton (w FSC):
                                 </td>
+                                {breakdownData && breakdownData.costPerTon ? (
+                                    <td>${breakdownData.costPerTon} /T</td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
 
-                            <tr class="spacer">
-                                <td colspan="4">&nbsp;</td>
-                            </tr>
-
-                            {/* TOTALS */}
+                            {/* Qty (yds) */}
                             <tr>
                                 <td className="tdBold">Qty (yds):</td>
-                                <td>
-                                    {breakdownData && breakdownData.yards} cu
-                                    yds
-                                </td>
+                                {breakdownData && breakdownData.yards ? (
+                                    <td>
+                                        {breakdownData && breakdownData.yards}{' '}
+                                        cu yds
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
+
+                            {/* Cost Per Yard */}
                             <tr>
                                 <td className="tdBold">Cost Per Yard:</td>
-                                <td>
-                                    $
-                                    {breakdownData && breakdownData.costPerYard}{' '}
-                                    /yd
-                                </td>
+                                {breakdownData && breakdownData.costPerYard ? (
+                                    <td>
+                                        $
+                                        {breakdownData &&
+                                            breakdownData.costPerYard}{' '}
+                                        /yd
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
+
+                            <tr className="spacer">
+                                <td colSpan="4">&nbsp;</td>
+                            </tr>
+
+                            {/* TOTALS ----------------------------------------- */}
+
+                            {/* Total Cost (w FSC) */}
                             <tr>
                                 <td className="tdBold">Total Cost (w FSC):</td>
-                                <td>${formData.totalCostTons}</td>
+                                {formData && formData.totalCostTons ? (
+                                    <td style={{ fontWeight: 'bold' }}>
+                                        ${formData.totalCostTons}
+                                    </td>
+                                ) : (
+                                    <td></td>
+                                )}
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </Card>
+            </Panel>
         </section>
     )
 }
