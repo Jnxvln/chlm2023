@@ -365,6 +365,7 @@ function HaulSummary() {
                 <h4 style={{ margin: '0', marginBottom: '0.25em' }}>
                     C&H Trucking
                 </h4>
+
                 <h1 style={{ margin: '0' }}>Haul Summary</h1>
             </header>
 
@@ -539,27 +540,44 @@ function HaulSummary() {
                     <table>
                         <tbody>
                             <tr>
-                                <td>
-                                    <strong>Total Freight Pay: </strong>
+                                <td style={{ fontWeight: 'bold' }}>
+                                    Total Freight Pay:
                                 </td>
                                 <td className="tdSpacer">
                                     $ {calculateTotalFreightPay()}
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <strong>Driver Subtotal: </strong>
+                                <td style={{ fontWeight: 'bold' }}>
+                                    Driver Subtotal:
                                 </td>
                                 <td className="tdSpacer">
                                     $ {calculateDriverSubtotal()}
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <strong>NC Total: </strong>
+                                <td style={{ fontWeight: 'bold' }}>
+                                    NC Total:
                                 </td>
                                 <td className="tdSpacer">
                                     $ {calculateNCTotal()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    style={{
+                                        fontWeight: 'bold',
+                                        paddingTop: '1em',
+                                    }}
+                                >
+                                    Driver Total:{' '}
+                                </td>
+                                <td className="tdSpacer">
+                                    ${'     '}
+                                    {(
+                                        parseFloat(calculateDriverSubtotal()) +
+                                        parseFloat(calculateNCTotal())
+                                    ).toFixed(2)}
                                 </td>
                             </tr>
                         </tbody>

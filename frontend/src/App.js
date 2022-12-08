@@ -17,6 +17,7 @@ import Register from './pages/user/Register'
 import Login from './pages/user/Login'
 import Dashboard from './pages/user/dashboard/Dashboard'
 import HaulSummary from './pages/user/dashboard/HaulSummary'
+import CostCalculatorPrint from './pages/user/dashboard/CostCalculatorPrint'
 
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
@@ -85,6 +86,7 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+
                         <Route
                             path="/dashboard"
                             element={
@@ -95,6 +97,27 @@ function App() {
                                     }
                                 >
                                     <Dashboard
+                                        user={
+                                            user.data ||
+                                            JSON.parse(
+                                                localStorage.getItem('user')
+                                            )
+                                        }
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        <Route
+                            path="/dashboard/cost-calculator/print"
+                            element={
+                                <ProtectedRoute
+                                    user={
+                                        user.data ||
+                                        JSON.parse(localStorage.getItem('user'))
+                                    }
+                                >
+                                    <CostCalculatorPrint
                                         user={
                                             user.data ||
                                             JSON.parse(

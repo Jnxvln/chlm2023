@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate, createSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 // PrimeReact Components
 import { AutoComplete } from 'primereact/autocomplete'
@@ -15,6 +16,7 @@ import { getFreightRoutes } from '../../../api/freightRoutes/freightRoutesApi'
 function CostCalculator() {
     // #region VARS -----------------------------------------------------------------------------
     const initialState = {
+        vendor: null,
         tons: null,
         material: '',
         costPerTon: null,
@@ -24,6 +26,8 @@ function CostCalculator() {
     const [breakdownData, setBreakdownData] = useState(null)
     const [formData, setFormData] = useState(initialState)
     const [isComplete, setIsComplete] = useState(false)
+
+    const navigate = useNavigate()
 
     const user = useQuery(['user'], fetchUser)
     const userId = user?.data._id
@@ -160,6 +164,9 @@ function CostCalculator() {
 
         // Set Breakdown Data
         setBreakdownData({
+            vendor,
+            material: formData.material,
+            tons: parseFloat(formData.tons).toFixed(2),
             product: parseFloat(_product).toFixed(2),
             freightToYard: parseFloat(_freightToYard).toFixed(2),
             chtFuelSurcharge: vendor.chtFuelSurcharge
@@ -191,6 +198,16 @@ function CostCalculator() {
         setBreakdownData(null)
     }
 
+    const handlePrint = () => {
+        const params = {
+            breakdownData: JSON.stringify(breakdownData),
+        }
+
+        navigate({
+            pathname: '/dashboard/cost-calculator/print',
+            search: `?${createSearchParams(params)}`,
+        })
+    }
     // #endregion
 
     // #region TEMPLATES ------------------------------------------------------------------------
@@ -383,6 +400,7 @@ function CostCalculator() {
                             !formData.costPerTon ||
                             !formData.totalCostTons
                         }
+                        onClick={handlePrint}
                     />
                 </form>
             </Panel>
