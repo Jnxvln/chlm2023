@@ -12,6 +12,7 @@ function CostCalculatorPrint() {
     const [totalWithFSC, setTotalWithFSC] = useState(0)
     const [totalWithoutFSC, setTotalWithoutFSC] = useState(0)
 
+    // UseEffect - Perform calculations and set data
     useEffect(() => {
         if (breakdownData) {
             console.log('Breakdown Data: ')
@@ -47,88 +48,132 @@ function CostCalculatorPrint() {
                         parseFloat(breakdownData.tons)
                 ).toFixed(2)
             )
+
+            setTotalWithoutFSC(
+                (
+                    parseFloat(breakdownData.product) *
+                        parseFloat(breakdownData.tons) +
+                    parseFloat(breakdownData.freightToYard) *
+                        parseFloat(breakdownData.tons)
+                ).toFixed(2)
+            )
         }
     }, [breakdownData])
 
     return (
         <section>
-            <h1>CostCalculatorPrint</h1>
-            <div style={{ border: '1px dashed black' }}>
-                {/* Cost-Per Breakdowns */}
-                <div>
-                    <strong>{breakdownData.material.name}</strong> (
-                    {breakdownData.vendor.name})
+            <div className="flex justify-space-between">
+                {/* LEFT COLUMN */}
+                <div className="flex-grow-1">
+                    {/* Cost-Per Breakdowns */}
+                    <div style={{ marginBottom: '1em', fontSize: '1.2rem' }}>
+                        <strong>{breakdownData.material.name}</strong> (
+                        {breakdownData.vendor.name})
+                    </div>
+                    <div>${breakdownData.costPerTon} /t</div>
+                    <div>${breakdownData.costPerYard} /yd</div>
+
+                    <br />
+
+                    {/* Fuel Surcharge Table */}
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Vendor FSC:</td>
+                                <td>${breakdownData.vendorFuelSurcharge} /t</td>
+                            </tr>
+                            <tr>
+                                <td>CHT FSC:</td>
+                                <td>${breakdownData.chtFuelSurcharge} /t</td>
+                            </tr>
+                            <tr>
+                                <td className="tdBold">Total FSC:</td>
+                                <td className="tdBold">
+                                    $
+                                    {(
+                                        parseFloat(
+                                            breakdownData.vendorFuelSurcharge
+                                        ) +
+                                        parseFloat(
+                                            breakdownData.chtFuelSurcharge
+                                        )
+                                    ).toFixed(2)}{' '}
+                                    /t
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br />
+
+                    {/* Product & Freight Breakdown */}
+                    <table>
+                        <tbody>
+                            {/* Product */}
+                            <tr>
+                                <td>
+                                    P: $
+                                    {parseFloat(breakdownData.product).toFixed(
+                                        2
+                                    )}
+                                </td>
+                                <td>
+                                    <span style={{ paddingLeft: '1.3em' }}>
+                                        ${productTotal}
+                                    </span>
+                                </td>
+                            </tr>
+                            {/* Freight */}
+                            <tr>
+                                <td>
+                                    F: $
+                                    {parseFloat(
+                                        breakdownData.freightToYard
+                                    ).toFixed(2)}
+                                </td>
+                                <td>
+                                    <span style={{ paddingLeft: '1.3em' }}>
+                                        ${freightTotal}
+                                    </span>
+                                </td>
+                            </tr>
+                            {/* Plus FSC */}
+                            <tr>
+                                <td></td>
+                                <td>+ ${totalFSC} FSC</td>
+                            </tr>
+                            {/* Totals */}
+                            <br />
+                            <tr style={{ paddingTop: '1em' }}>
+                                <td className="tdBold">Total: </td>
+                                <td style={{ paddingLeft: '1.2em' }}>
+                                    <span style={{ fontWeight: 'bold' }}>
+                                        ${totalWithFSC} &nbsp;&nbsp;
+                                    </span>
+                                    <span>
+                                        ($
+                                        {totalWithoutFSC} w/o FSC)
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div>${breakdownData.costPerTon} /t</div>
-                <div>${breakdownData.costPerYard} /yd</div>
 
-                <br />
+                {/* MIDDLE COLUMN */}
+                <div className="flex-grow-1">
+                    <div style={{ marginTop: '2em' }}>
+                        <div>{breakdownData.tons} T</div>
+                        <div>= {breakdownData.yards} yds</div>
+                    </div>
+                </div>
 
-                {/* Fuel Surcharge Table */}
-                <table border={1} style={{ borderCollapse: 'collapse' }}>
-                    <tbody>
-                        <tr>
-                            <td>Vendor FSC:</td>
-                            <td>${breakdownData.vendorFuelSurcharge} /t</td>
-                        </tr>
-                        <tr>
-                            <td>CHT FSC:</td>
-                            <td>${breakdownData.chtFuelSurcharge} /t</td>
-                        </tr>
-                        <tr>
-                            <td>Total FSC:</td>
-                            <td>
-                                $
-                                {(
-                                    parseFloat(
-                                        breakdownData.vendorFuelSurcharge
-                                    ) +
-                                    parseFloat(breakdownData.chtFuelSurcharge)
-                                ).toFixed(2)}{' '}
-                                /t
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <br />
-
-                {/* Product & Freight Breakdown */}
-                <table border={1} style={{ borderCollapse: 'collapse' }}>
-                    <tbody>
-                        {/* Product */}
-                        <tr>
-                            <td>
-                                P: $
-                                {parseFloat(breakdownData.product).toFixed(2)}
-                            </td>
-                            <td>${productTotal}</td>
-                        </tr>
-
-                        {/* Freight */}
-                        <tr>
-                            <td>
-                                F: $
-                                {parseFloat(
-                                    breakdownData.freightToYard
-                                ).toFixed(2)}
-                            </td>
-                            <td>${freightTotal}</td>
-                        </tr>
-
-                        {/* Plus FSC */}
-                        <tr>
-                            <td></td>
-                            <td>+ ${totalFSC} FSC</td>
-                        </tr>
-
-                        {/* Totals */}
-                        <tr>
-                            <td>=</td>
-                            <td>$ {totalWithFSC}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                {/* RIGHT COLUMN */}
+                <div className="flex-grow-1">
+                    <div style={{ marginTop: '2em' }}>
+                        <strong>Total Cost: </strong>${totalWithFSC}
+                    </div>
+                </div>
             </div>
         </section>
     )
