@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchUser } from '../../../api/users/usersApi'
 import { getVendors } from '../../../api/vendors/vendorsApi'
 import { getVendorProducts } from '../../../api/vendorProducts/vendorProductsApi'
+import { getVendorLocations } from '../../../api/vendorLocations/vendorLocationsApi'
 import { getFreightRoutes } from '../../../api/freightRoutes/freightRoutesApi'
 
 function CostCalculator() {
@@ -57,6 +58,26 @@ function CostCalculator() {
         enabled: !!userId,
         onError: (err) => {
             const errMsg = 'Error fetching vendor products'
+            console.log(errMsg)
+            console.log(err)
+
+            if (
+                err &&
+                err.response &&
+                err.response.data &&
+                err.response.data.message
+            ) {
+                toast.error(err.response.data.message)
+            }
+        },
+    })
+
+    const vendorLocations = useQuery({
+        queryKey: ['vendorLocations'],
+        queryFn: () => getVendorLocations(user.data.token),
+        enabled: !!userId,
+        onError: (err) => {
+            const errMsg = 'Error fetching vendor locations'
             console.log(errMsg)
             console.log(err)
 
@@ -141,6 +162,9 @@ function CostCalculator() {
         )
 
         // Calculations
+        const _location = vendorLocations.data.filter(
+            (loc) => loc._id === formData.material.vendorLocationId
+        )
         const _product = parseFloat(formData.material.productCost)
         const _freightToYard = parseFloat(
             routesMatchingVendorLocationId.freightCost
@@ -166,6 +190,7 @@ function CostCalculator() {
         setBreakdownData({
             vendor,
             material: formData.material,
+            location: _location.name,
             tons: parseFloat(formData.tons).toFixed(2),
             product: parseFloat(_product).toFixed(2),
             freightToYard: parseFloat(_freightToYard).toFixed(2),
@@ -180,6 +205,9 @@ function CostCalculator() {
             costPerTon: _costPerTon,
             totalCostTons: _totalCostTons,
         })
+
+        console.log('BREAK DOWN DATA: ')
+        console.log(breakdownData)
 
         setFormData((prevState) => ({
             ...prevState,

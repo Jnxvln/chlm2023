@@ -211,6 +211,11 @@ tr.spacer td {
     background-color: #3789b9;
 }
 
+#costCalculatorPrintPage,
+#costCalculatorPrintPage * {
+    font-size: 12px;
+}
+
 @media print {
     .noPrint,
     .noPrint * {

@@ -61,14 +61,30 @@ function CostCalculatorPrint() {
     }, [breakdownData])
 
     return (
-        <section>
+        <section id="costCalculatorPrintPage">
             <div className="flex justify-space-between">
                 {/* LEFT COLUMN */}
                 <div className="flex-grow-1">
                     {/* Cost-Per Breakdowns */}
-                    <div style={{ marginBottom: '1em', fontSize: '1.2rem' }}>
-                        <strong>{breakdownData.material.name}</strong> (
-                        {breakdownData.vendor.name})
+                    <div style={{ marginBottom: '1em' }}>
+                        <div>
+                            <span
+                                style={{
+                                    fontSize: '1.3em',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                {breakdownData.material.name}
+                            </span>{' '}
+                            <span
+                                style={{
+                                    fontSize: '1.3em',
+                                }}
+                            >
+                                ({breakdownData.vendor.name}:{' '}
+                                {breakdownData.location})
+                            </span>
+                        </div>
                     </div>
                     <div>${breakdownData.costPerTon} /t</div>
                     <div>${breakdownData.costPerYard} /yd</div>
@@ -171,7 +187,44 @@ function CostCalculatorPrint() {
                 {/* RIGHT COLUMN */}
                 <div className="flex-grow-1">
                     <div style={{ marginTop: '2em' }}>
-                        <strong>Total Cost: </strong>${totalWithFSC}
+                        <div style={{ marginBottom: '1em' }}>
+                            <strong style={{ fontSize: '1rem' }}>
+                                BILLING
+                            </strong>
+                        </div>
+
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td className="tdBold">Vendor:</td>
+                                    <td style={{ paddingLeft: '1em' }}>
+                                        ${productTotal}
+                                    </td>
+                                </tr>
+
+                                <div style={{ marginBottom: '0.5em' }}></div>
+
+                                <tr>
+                                    <td className="tdBold">CHT:</td>
+                                    <td style={{ paddingLeft: '1em' }}>
+                                        $
+                                        {(
+                                            parseFloat(freightTotal) +
+                                            parseFloat(totalFSC)
+                                        ).toFixed(2)}
+                                    </td>
+                                </tr>
+
+                                <div style={{ marginBottom: '0.5em' }}></div>
+
+                                <tr>
+                                    <td className="tdBold">Total Cost:</td>
+                                    <td style={{ paddingLeft: '1em' }}>
+                                        ${totalWithFSC}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
