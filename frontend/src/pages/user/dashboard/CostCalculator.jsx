@@ -162,9 +162,11 @@ function CostCalculator() {
         )
 
         // Calculations
-        const _location = vendorLocations.data.filter(
+        const _location = vendorLocations.data.find(
             (loc) => loc._id === formData.material.vendorLocationId
         )
+        console.log('Location found: ')
+        console.log(_location)
         const _product = parseFloat(formData.material.productCost)
         const _freightToYard = parseFloat(
             routesMatchingVendorLocationId.freightCost

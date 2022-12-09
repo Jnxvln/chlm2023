@@ -61,10 +61,21 @@ function CostCalculatorPrint() {
     }, [breakdownData])
 
     return (
-        <section id="costCalculatorPrintPage">
+        <section
+            id="costCalculatorPrintPage"
+            style={{
+                position: 'fixed',
+                bottom: '0.5em',
+                width: '100%',
+                padding: '0 1em 1em 1em',
+            }}
+        >
             <div className="flex justify-space-between">
                 {/* LEFT COLUMN */}
-                <div className="flex-grow-1">
+                <div
+                    className="flex-grow-1"
+                    style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
+                >
                     {/* Cost-Per Breakdowns */}
                     <div style={{ marginBottom: '1em' }}>
                         <div>
@@ -177,7 +188,10 @@ function CostCalculatorPrint() {
                 </div>
 
                 {/* MIDDLE COLUMN */}
-                <div className="flex-grow-1">
+                <div
+                    className="flex-grow-1"
+                    style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
+                >
                     <div style={{ marginTop: '2em' }}>
                         <div>{breakdownData.tons} T</div>
                         <div>= {breakdownData.yards} yds</div>
@@ -185,7 +199,10 @@ function CostCalculatorPrint() {
                 </div>
 
                 {/* RIGHT COLUMN */}
-                <div className="flex-grow-1">
+                <div
+                    className="flex-grow-1"
+                    style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
+                >
                     <div style={{ marginTop: '2em' }}>
                         <div style={{ marginBottom: '1em' }}>
                             <strong style={{ fontSize: '1rem' }}>
