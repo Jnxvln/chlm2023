@@ -61,7 +61,7 @@ function DriversDashboard() {
     // #region DATA TABLE TEMPLATES
     const dataTableHeaderTemplate = () => {
         return (
-            <div className="flex justify-content-between">
+            <div className="flex gap-4">
                 <div>
                     <DriverForm />
                 </div>
@@ -206,7 +206,8 @@ function DriversDashboard() {
                         size="small"
                         scrollable
                         scrollHeight="flex"
-                        sortMode="multiple"
+                        sortField="isActive"
+                        sortOrder={-1}
                         responsiveLayout="scroll"
                         filter="true"
                         filters={filters}
