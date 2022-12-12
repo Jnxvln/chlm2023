@@ -138,7 +138,16 @@ function HaulSummary() {
             for (let i = 0; i < data.workdays.length; i++) {
                 _chHours += parseFloat(data.workdays[i].chhours)
             }
-            return _chHours.toFixed(2)
+
+            // return _chHours.toFixed(2) > 0 ? _chHours.toFixed(2) : -1
+
+            if (_chHours > 0) {
+                return _chHours.toFixed(2)
+            } else if (_chHours == '0' || _chHours === 0) {
+                return parseFloat(0).toFixed(2)
+            } else {
+                return -1
+            }
         } else return -1
     }
 
@@ -262,11 +271,27 @@ function HaulSummary() {
                     return w.date.split('T')[0] === _dateHaul
                 })
 
-                const _chhours =
-                    wday && wday.chhours
-                        ? parseFloat(wday.chhours).toFixed(2)
-                        : -1
-                return _chhours
+                // const _chhours =
+                //     wday && wday.chhours
+                //         ? parseFloat(wday.chhours).toFixed(2)
+                //         : -1
+
+                const _chhours = parseFloat(wday && wday.chhours)
+
+                // console.log('_chhours: ' + _chhours)
+
+                if (_chhours == '0' || _chhours === 0) {
+                    return parseFloat(0)
+                } else if (_chhours > 0) {
+                    return parseFloat(_chhours).toFixed(2)
+                } else {
+                    console.log(
+                        "[HaulSummary chHoursTemplate] Workday's chhours is either NaN, undefined, or null"
+                    )
+                    return 0
+                }
+
+                // return _chhours
             }
         } else {
             return <>Loading....</>
