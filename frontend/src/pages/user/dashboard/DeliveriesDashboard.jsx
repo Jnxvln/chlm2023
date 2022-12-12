@@ -35,7 +35,9 @@ function DeliveriesDashboard() {
 
     const deliveryClientOverlayPanel = useRef(null)
     const [toggleShowCompleted, setToggleShowCompleted] = useState(
-        localStorage.getItem('toggleShowDeliveriesCompleted')
+        localStorage.getItem('toggleShowDeliveriesCompleted') === 'true'
+            ? true
+            : false
     )
     const [rangeDates, setRangeDates] = useState([])
     const [filteredDeliveries, setFilteredDeliveries] = useState([])
@@ -553,7 +555,11 @@ function DeliveriesDashboard() {
                           )
                       )
                     : []
-            setFilteredDeliveries(_filteredDeliveries)
+            setFilteredDeliveries(
+                !toggleShowCompleted
+                    ? _filteredDeliveries.filter((dlv) => !dlv.completed)
+                    : _filteredDeliveries
+            )
         }
     }
 
@@ -576,38 +582,11 @@ function DeliveriesDashboard() {
         }
     }
 
+    // #region USE EFFECTS
     // RUN ONCE - INIT FILTERS
     useEffect(() => {
         initFilters()
         setFilteredDeliveriesToLocalStorageRange()
-
-        // Check toggle status
-        let _toggleShowCompleted = localStorage.getItem(
-            'toggleShowDeliveriesCompleted'
-        )
-
-        if (_toggleShowCompleted === 'true') {
-            _toggleShowCompleted = true
-        }
-
-        if (_toggleShowCompleted === 'false') {
-            _toggleShowCompleted = false
-        }
-
-        console.log(
-            '_toggleShowCompleted: ' +
-                _toggleShowCompleted +
-                ' (' +
-                typeof _toggleShowCompleted +
-                ')'
-        )
-
-        console.log(
-            'toggleShowCompleted from localStorage: ' + _toggleShowCompleted
-        )
-        setToggleShowCompleted(_toggleShowCompleted)
-        console.log('current status: ' + toggleShowCompleted)
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -634,7 +613,15 @@ function DeliveriesDashboard() {
     ])
 
     useEffect(() => {
+        // Set localStorage value
+        localStorage.setItem(
+            'toggleShowDeliveriesCompleted',
+            toggleShowCompleted
+        )
+
         if (toggleShowCompleted) {
+            // console.log('toggle: SHOWING COMPLETED DLVS...')
+
             if (selectedClientId) {
                 const client =
                     deliveryClients &&
@@ -646,16 +633,14 @@ function DeliveriesDashboard() {
             }
 
             setFilteredDeliveriesToDateRange()
-            localStorage.setItem('toggleShowDeliveriesCompleted', false)
         } else {
-            console.log('HIDING')
-            const testDeliveries = filteredDeliveries.filter(
+            const _dlvsNotCompleted = filteredDeliveries.filter(
                 (dlv) => !dlv.completed
             )
-            setFilteredDeliveries(testDeliveries)
-            localStorage.setItem('toggleShowDeliveriesCompleted', true)
+            setFilteredDeliveries(_dlvsNotCompleted)
         }
     }, [toggleShowCompleted])
+    // #endregion
 
     return (
         <section>
