@@ -14,23 +14,38 @@ function DriverSelector({ drivers, onSelectDriver }) {
             const _driver = { ...option }
 
             return (
-                <>
-                    <div className="flex justify-content-between">
-                        <>
-                            {_driver.firstName} {_driver.lastName}
-                            <Badge
-                                value={_driver.defaultTruck}
-                                style={{ marginLeft: '0.5em' }}
-                            />
-                        </>
-                    </div>
-                </>
+                <div className="flex justify-content-between">
+                    <>
+                        {_driver.firstName} {_driver.lastName}
+                    </>
+                    <Badge
+                        value={_driver.defaultTruck}
+                        style={{ marginLeft: '0.5em' }}
+                    />
+                </div>
             )
         } else {
-            return <span>{props.placeholder}</span>
+            return <>{props.placeholder}</>
         }
     }
 
+    const driverItemTemplate = (option, props) => {
+        if (option) {
+            const _driver = { ...option }
+
+            return (
+                <div className="flex justify-content-between">
+                    {_driver.firstName} {_driver.lastName}
+                    <Badge
+                        value={_driver.defaultTruck}
+                        style={{ marginLeft: '0.5em' }}
+                    />
+                </div>
+            )
+        } else {
+            return <>{props.placeholder}</>
+        }
+    }
     // #endregion
 
     const onChange = (e) => {
@@ -51,7 +66,9 @@ function DriverSelector({ drivers, onSelectDriver }) {
     return (
         <>
             <Dropdown
+                className="driver-selector-dropdown"
                 optionLabel={driverOptionLabel}
+                itemTemplate={driverItemTemplate}
                 optionValue="_id"
                 options={
                     drivers
