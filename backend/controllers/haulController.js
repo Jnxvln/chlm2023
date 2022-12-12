@@ -143,7 +143,7 @@ const createHaul = asyncHandler(async (req, res) => {
         invoice: { $regex: req.body.invoice, $options: 'i' },
     })
 
-    if (invoiceExists) {
+    if (invoiceExists && !invoiceExists.invoice === '-') {
         res.status(400)
         throw new Error(`Invoice ${req.body.invoice} already exists`)
     }

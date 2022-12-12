@@ -489,11 +489,18 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 )
                 setVendorSelected(vendorObj)
 
-                const vendorLocationObj = vendorLocations.data.find(
+                console.log('[EditHaulForm useEffect] vendorLocations: ')
+                console.log(vendorLocations.data)
+
+                const vendorLocationObj = vendorLocations?.data?.find(
                     (loc) =>
-                        loc.name.toLowerCase() ===
-                        haul.vendorLocation.toLowerCase()
+                        loc?.name?.toLowerCase() ===
+                        haul?.vendorLocation?.toLowerCase()
                 )
+
+                console.log('[EditHaulForm.jsx useEffect] vendorLocationObj: ')
+                console.log(vendorLocationObj)
+
                 setVendorLocationSelected(vendorLocationObj)
 
                 const productObj = vendorProducts.data.find(
