@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
+// PrimeReact Components
+import { Button } from 'primereact/button'
 
 function CostCalculatorPrint() {
     let [searchParams, setSearchParams] = useSearchParams()
@@ -76,6 +78,14 @@ function CostCalculatorPrint() {
                     className="flex-grow-1"
                     style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
                 >
+                    <Button
+                        label="Print"
+                        icon="pi pi-print"
+                        iconPos="left"
+                        className="noPrint"
+                        onClick={() => window.print()}
+                    />
+
                     {/* Cost-Per Breakdowns */}
                     <div style={{ marginBottom: '1em' }}>
                         <div>
