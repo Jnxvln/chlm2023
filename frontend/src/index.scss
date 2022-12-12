@@ -216,6 +216,16 @@ tr.spacer td {
     font-size: 12px;
 }
 
+// Delivery past-due
+.dlv-past-due {
+    color: red;
+    // font-weight: bold;
+}
+.dlv-completed {
+    color: green;
+    // font-weight: bold;
+}
+
 @media print {
     .noPrint,
     .noPrint * {

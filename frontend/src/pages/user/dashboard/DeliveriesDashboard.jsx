@@ -17,6 +17,7 @@ import { ContextMenu } from 'primereact/contextmenu'
 import { FilterMatchMode } from 'primereact/api'
 import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> tag
 import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
+import { ToggleButton } from 'primereact/togglebutton'
 // Store data
 import { fetchUser } from '../../../api/users/usersApi'
 import {
@@ -33,6 +34,9 @@ function DeliveriesDashboard() {
     const queryClient = useQueryClient()
 
     const deliveryClientOverlayPanel = useRef(null)
+    const [toggleShowCompleted, setToggleShowCompleted] = useState(
+        localStorage.getItem('toggleShowDeliveriesCompleted')
+    )
     const [rangeDates, setRangeDates] = useState([])
     const [filteredDeliveries, setFilteredDeliveries] = useState([])
     const [selectedClientId, setSelectedClientId] = useState('')
@@ -167,8 +171,38 @@ function DeliveriesDashboard() {
             toast.error('Error updating delivery', { autoClose: 8000 })
         },
     })
-
     // #endregion
+
+    // Class style based on delivery completed or not
+    const pastDueClass = (rowData) => {
+        // Determine difference between today and deliveryDate
+        const today = dayjs()
+        const deliveryDate =
+            rowData && rowData.deliveryDate ? dayjs(rowData.deliveryDate) : null
+
+        const diff = deliveryDate.diff(today, 'second')
+
+        // If past due or completed, apply class style accordingly
+
+        if (
+            today.format('MM/DD/YYYY') ===
+            dayjs(rowData.deliveryDate).format('MM/DD/YYYY')
+        ) {
+            // Delivery is today, return no styling
+            return ''
+        }
+
+        if (diff <= 0) {
+            if (!rowData.completed) {
+                return 'dlv-past-due'
+            } else {
+                // Already completed
+                return 'dlv-completed'
+            }
+        } else {
+            return ''
+        }
+    }
 
     // #region COMPONENT TEMPLATES
     const dataTableHeaderTemplate = () => {
@@ -181,6 +215,14 @@ function DeliveriesDashboard() {
                         />
                         <DeliveryTimeframeSelector
                             onDateRangeSelected={onDateRangeSelected}
+                        />
+                        <ToggleButton
+                            checked={toggleShowCompleted}
+                            onChange={(e) => setToggleShowCompleted(e.value)}
+                            onIcon="pi pi-eye"
+                            offIcon="pi pi-eye-slash"
+                            onLabel="Showing Completed"
+                            offLabel="Hiding Completed"
                         />
                     </div>
                 </div>
@@ -197,7 +239,11 @@ function DeliveriesDashboard() {
     }
 
     const deliveryDateTemplate = (rowData) => {
-        return <>{dayjs(rowData.deliveryDate).format('MM/DD/YY')}</>
+        return (
+            <div className={pastDueClass(rowData)}>
+                {dayjs(rowData.deliveryDate).format('MM/DD/YY')}
+            </div>
+        )
     }
 
     const deliveryClientTemplate = (rowData) => {
@@ -218,7 +264,10 @@ function DeliveriesDashboard() {
                     }}
                 />
                 {_client && (
-                    <span style={{ marginLeft: '0.5em' }}>
+                    <span
+                        className={pastDueClass(rowData)}
+                        style={{ marginLeft: '0.5em' }}
+                    >
                         {_client.firstName} {_client.lastName}
                     </span>
                 )}
@@ -242,11 +291,20 @@ function DeliveriesDashboard() {
     }
 
     const contactNameTemplate = (rowData) => {
-        return <>{rowData.contactName}</>
+        return (
+            <div className={pastDueClass(rowData)}>{rowData.contactName}</div>
+        )
     }
 
     const contactPhoneTemplate = (rowData) => {
-        return <div style={{ whiteSpace: 'pre' }}>{rowData.contactPhone}</div>
+        return (
+            <div
+                style={{ whiteSpace: 'pre' }}
+                className={pastDueClass(rowData)}
+            >
+                {rowData.contactPhone}
+            </div>
+        )
     }
 
     const coordinatesTemplate = (rowData) => {
@@ -290,11 +348,17 @@ function DeliveriesDashboard() {
     }
 
     const productNameTemplate = (rowData) => {
-        return <>{rowData.productName}</>
+        return (
+            <div className={pastDueClass(rowData)}>{rowData.productName}</div>
+        )
     }
 
     const productQuantityTemplate = (rowData) => {
-        return <>{rowData.productQuantity}</>
+        return (
+            <div className={pastDueClass(rowData)}>
+                {rowData.productQuantity}
+            </div>
+        )
     }
 
     const hasPaidTemplate = (rowData) => {
@@ -361,24 +425,6 @@ function DeliveriesDashboard() {
     }
     // #endregion
 
-    const handleToggleCompleted = (delivery) => {
-        const updDelivery = { ...delivery, completed: !delivery.completed }
-
-        mutationToggleCompleted.mutate({
-            data: updDelivery,
-            token: user.data.token,
-        })
-    }
-
-    const handleToggleHasPaid = (delivery) => {
-        const updDelivery = { ...delivery, hasPaid: !delivery.hasPaid }
-
-        mutationToggleHasPaid.mutate({
-            data: updDelivery,
-            token: user.data.token,
-        })
-    }
-
     // #region FILTERS
     const onGlobalFilterChange = (e) => {
         const value = e.target.value
@@ -419,6 +465,26 @@ function DeliveriesDashboard() {
         })
     }
 
+    // Toggle delivery completed
+    const handleToggleCompleted = (delivery) => {
+        const updDelivery = { ...delivery, completed: !delivery.completed }
+
+        mutationToggleCompleted.mutate({
+            data: updDelivery,
+            token: user.data.token,
+        })
+    }
+
+    // Toggle delivery paid
+    const handleToggleHasPaid = (delivery) => {
+        const updDelivery = { ...delivery, hasPaid: !delivery.hasPaid }
+
+        mutationToggleHasPaid.mutate({
+            data: updDelivery,
+            token: user.data.token,
+        })
+    }
+
     // Handle DateRangeSelector component operations
     const onDateRangeSelected = (e) => {
         let dateStart // e.value[0]
@@ -450,6 +516,7 @@ function DeliveriesDashboard() {
         }
     }
 
+    // Handle client selected, show client's deliveries
     const onClientSelected = (clientSelected) => {
         // If the user clicks on a delivery client in the list, show all of this customer's deliveries
         if (clientSelected && clientSelected.hasOwnProperty('_id')) {
@@ -512,28 +579,39 @@ function DeliveriesDashboard() {
     // RUN ONCE - INIT FILTERS
     useEffect(() => {
         initFilters()
-
         setFilteredDeliveriesToLocalStorageRange()
-        // if (localStorage.getItem('selectedDeliveriesDateRange')) {
-        //     const _deliveriesDateRange = JSON.parse(
-        //         localStorage.getItem('selectedDeliveriesDateRange')
-        //     )
 
-        //     if (_deliveriesDateRange.length > 0) {
-        //         // Manually call onDateRangeSelected, passing in a pseudo-event object based on localStorage values
-        //         let e = {
-        //             value: [
-        //                 new Date(_deliveriesDateRange[0]),
-        //                 new Date(_deliveriesDateRange[1]),
-        //             ],
-        //         }
-        //         onDateRangeSelected(e)
-        //     }
-        // }
+        // Check toggle status
+        let _toggleShowCompleted = localStorage.getItem(
+            'toggleShowDeliveriesCompleted'
+        )
+
+        if (_toggleShowCompleted === 'true') {
+            _toggleShowCompleted = true
+        }
+
+        if (_toggleShowCompleted === 'false') {
+            _toggleShowCompleted = false
+        }
+
+        console.log(
+            '_toggleShowCompleted: ' +
+                _toggleShowCompleted +
+                ' (' +
+                typeof _toggleShowCompleted +
+                ')'
+        )
+
+        console.log(
+            'toggleShowCompleted from localStorage: ' + _toggleShowCompleted
+        )
+        setToggleShowCompleted(_toggleShowCompleted)
+        console.log('current status: ' + toggleShowCompleted)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // Check for messages
+    // Watch for selectedClientId in order to show said client's deliveries
     useEffect(() => {
         // Check for selected client avatar (in Deliveries DataTable)
         if (selectedClientId) {
@@ -547,21 +625,6 @@ function DeliveriesDashboard() {
         }
 
         setFilteredDeliveriesToDateRange()
-        // if (rangeDates && rangeDates.length > 0) {
-        //     // Filter deliveries by date range (rangeDates)
-        //     // let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
-
-        //     // Filter deliveries within selected date range
-        //     let _filteredDeliveries =
-        //         deliveries && deliveries.data
-        //             ? deliveries.data.filter((delivery) =>
-        //                   rangeDates.includes(
-        //                       new Date(delivery.deliveryDate).toDateString()
-        //                   )
-        //               )
-        //             : []
-        //     setFilteredDeliveries(_filteredDeliveries)
-        // }
     }, [
         deliveries.data,
         deliveryClients.data,
@@ -569,6 +632,30 @@ function DeliveriesDashboard() {
         rangeDates,
         rangeDates.length,
     ])
+
+    useEffect(() => {
+        if (toggleShowCompleted) {
+            if (selectedClientId) {
+                const client =
+                    deliveryClients &&
+                    deliveryClients.data &&
+                    deliveryClients.data.find(
+                        (client) => client._id === selectedClientId
+                    )
+                setSelectedClientAvatar(client)
+            }
+
+            setFilteredDeliveriesToDateRange()
+            localStorage.setItem('toggleShowDeliveriesCompleted', false)
+        } else {
+            console.log('HIDING')
+            const testDeliveries = filteredDeliveries.filter(
+                (dlv) => !dlv.completed
+            )
+            setFilteredDeliveries(testDeliveries)
+            localStorage.setItem('toggleShowDeliveriesCompleted', true)
+        }
+    }, [toggleShowCompleted])
 
     return (
         <section>
@@ -578,6 +665,7 @@ function DeliveriesDashboard() {
 
             <ConfirmPopup />
 
+            {/* Client right-click overlay panel */}
             <OverlayPanel ref={deliveryClientOverlayPanel} showCloseIcon>
                 <ContextMenu
                     model={clientAvatarContextMenuItems}
@@ -611,38 +699,40 @@ function DeliveriesDashboard() {
                         )}
 
                         {/* Render address */}
-                        {selectedClientAvatar && selectedClientAvatar.address && (
-                            <div style={{ marginBottom: '0.6em' }}>
-                                <strong>Address:</strong>{' '}
-                                <div style={{ whiteSpace: 'pre' }}>
-                                    <a
-                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(
-                                            selectedClientAvatar.address
-                                        )}`}
-                                        style={{ textDecoration: 'none' }}
-                                    >
-                                        <span
-                                            style={{
-                                                color: '#075689',
-                                                fontWeight: 'bold',
-                                            }}
+                        {selectedClientAvatar &&
+                            selectedClientAvatar.address && (
+                                <div style={{ marginBottom: '0.6em' }}>
+                                    <strong>Address:</strong>{' '}
+                                    <div style={{ whiteSpace: 'pre' }}>
+                                        <a
+                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(
+                                                selectedClientAvatar.address
+                                            )}`}
+                                            style={{ textDecoration: 'none' }}
                                         >
-                                            {selectedClientAvatar.address}
-                                        </span>
-                                    </a>
+                                            <span
+                                                style={{
+                                                    color: '#075689',
+                                                    fontWeight: 'bold',
+                                                }}
+                                            >
+                                                {selectedClientAvatar.address}
+                                            </span>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
                         {/* Render company */}
-                        {selectedClientAvatar && selectedClientAvatar.company && (
-                            <div style={{ marginBottom: '0.6em' }}>
-                                <strong>Company:</strong>{' '}
-                                <div style={{ whiteSpace: 'pre' }}>
-                                    {selectedClientAvatar.company}
+                        {selectedClientAvatar &&
+                            selectedClientAvatar.company && (
+                                <div style={{ marginBottom: '0.6em' }}>
+                                    <strong>Company:</strong>{' '}
+                                    <div style={{ whiteSpace: 'pre' }}>
+                                        {selectedClientAvatar.company}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
                         {/* Render coordinates */}
                         {selectedClientAvatar &&
@@ -688,7 +778,6 @@ function DeliveriesDashboard() {
                         responsiveLayout="scroll"
                         size="small"
                         scrollHeight="flex"
-                        sortMode="multiple"
                         removableSort
                         filter="true"
                         filters={filters}
@@ -696,6 +785,8 @@ function DeliveriesDashboard() {
                         onFilter={(e) => setFilters(e.filters)}
                         selectionMode="single"
                         selection={deliveryRowSelected}
+                        sortField="deliveryDate"
+                        sortOrder={1}
                         onSelectionChange={(e) =>
                             setDeliveryRowSelected(e.value)
                         }
