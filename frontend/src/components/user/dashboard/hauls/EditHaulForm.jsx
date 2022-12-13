@@ -249,7 +249,16 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     }
 
     const haulDialogFooter = () => {
-        return <DialogFooter onClose={onClose} onSubmit={onSubmit} />
+        return (
+            <DialogFooter
+                onClose={onClose}
+                onSubmit={onSubmit}
+                isHaulDialog
+                loadType={formData.loadType}
+                onDrivingTime={onDrivingTime}
+                onOffDuty={onOffDuty}
+            />
+        )
     }
     // #endregion
 
@@ -271,7 +280,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     }
     // #endregion
 
-    // #region FORM HANDLERS ------------------------
+    // #region ACTION HANDLERS ------------------------
     // Handle form reset
     const resetForm = () => {
         if (haul) {
@@ -379,6 +388,25 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             rate: selectedFreightRoute.freightCost,
         }))
         setVendorSelected(selectedFreightRoute)
+    }
+
+    const onDrivingTime = () => {
+        setFormData((prevState) => ({
+            ...prevState,
+            broker: '-',
+            invoice: '-',
+            chInvoice: '-',
+            from: 'Driving',
+            to: 'Driving',
+            product: '-',
+            payRate: 0,
+            tons: 0,
+            driverPay: 0,
+        }))
+    }
+
+    const onOffDuty = () => {
+        console.log('onOffDuty')
     }
 
     // Handle form submit

@@ -55,7 +55,7 @@ function HaulForm({ selectedDriverId }) {
     const loadTypeOptions = [
         { label: 'End Dump', value: 'enddump' },
         { label: 'Flatbed (%)', value: 'flatbedperc' },
-        { label: 'Flatbed (mi)', value: 'flatbedmi' },
+        // { label: 'Flatbed (mi)', value: 'flatbedmi' },
     ]
 
     const [formDialog, setFormDialog] = useState(false)
@@ -63,6 +63,7 @@ function HaulForm({ selectedDriverId }) {
     const [vendorSelected, setVendorSelected] = useState(null)
     const [vendorProductSelected, setVendorProductSelected] = useState(null)
     const [vendorLocationSelected, setVendorLocationSelected] = useState(null)
+    const [offDuty, setOffDuty] = useState(false)
 
     const user = useQuery(['user'], fetchUser)
 
@@ -201,7 +202,16 @@ function HaulForm({ selectedDriverId }) {
     }
 
     const haulDialogFooter = () => {
-        return <DialogFooter onClose={onClose} onSubmit={onSubmit} />
+        return (
+            <DialogFooter
+                onClose={onClose}
+                onSubmit={onSubmit}
+                isHaulDialog
+                loadType={formData.loadType}
+                onDrivingTime={onDrivingTime}
+                onOffDuty={onOffDuty}
+            />
+        )
     }
     // #endregion
 
@@ -330,6 +340,108 @@ function HaulForm({ selectedDriverId }) {
         setVendorSelected(selectedFreightRoute)
     }
 
+    const onDrivingTime = () => {
+        setFormData((prevState) => ({
+            ...prevState,
+            broker: '-',
+            invoice: '-',
+            chInvoice: '-',
+            from: 'Driving',
+            to: 'Driving',
+            product: '-',
+            payRate: 0,
+            tons: 0,
+            driverPay: 0,
+        }))
+    }
+
+    const onOffDuty = (val) => {
+        console.log('[HaulForm onOffDuty] val: ' + val)
+
+        setOffDuty(val)
+
+        let _from
+        let _to
+
+        switch (val) {
+            case 'maintenance':
+                _from = 'Off Duty'
+                _to = 'Maintenance'
+                break
+
+            case 'sick':
+                _from = 'Off Duty'
+                _to = 'Sick'
+                break
+
+            case 'holiday':
+                _from = 'Off Duty'
+                _to = prompt(
+                    'Holiday name',
+                    'Enter holiday name, keep it brief'
+                )
+                break
+
+            case 'vacation':
+                _from = 'Off Duty'
+                _to = 'Vacation'
+                break
+
+            case 'weather':
+                _from = 'Off Duty'
+                _to = 'Weather'
+                break
+
+            case 'personal':
+                _from = 'Off Duty'
+                _to = 'Personal'
+                break
+
+            case 'bereavement':
+                _from = 'Off Duty'
+                _to = 'Bereavement'
+                break
+
+            case 'custom':
+                _from = 'Off Duty'
+                _to = prompt('Reason', 'Enter reason, keep it brief')
+                break
+        }
+
+        if (loadType === 'flatbedperc' || loadType === 'flatbedmi') {
+            setFormData((prevState) => ({
+                ...prevState,
+                broker: '-',
+                invoice: '-',
+                chInvoice: '-',
+                from: _from,
+                to: _to,
+                product: '-',
+                payRate: 0,
+                tons: 0,
+                driverPay: 0,
+            }))
+        } else if (loadType === 'enddump') {
+            setFormData((prevState) => ({
+                ...prevState,
+                broker: '-',
+                invoice: '-',
+                chInvoice: '-',
+                from: _from,
+                to: _to,
+                product: '-',
+                rate: 0,
+                tons: 0,
+                driverPay: 0,
+            }))
+        } else {
+            toast.error(
+                "Unknown loadType selected, expecting 'enddump' or 'flatbed'",
+                { autoClose: 8000 }
+            )
+        }
+    }
+
     const setDriverDefaults = () => {
         if (drivers.data && driver) {
             // Get the current driver as an object
@@ -375,6 +487,10 @@ function HaulForm({ selectedDriverId }) {
             }))
         }
     }, [selectedDriverId])
+
+    useEffect(() => {
+        console.log('[HaulForm useEffect] Off Duty: ' + offDuty)
+    }, [offDuty])
 
     useEffect(() => {
         setDriverDefaults()
@@ -556,7 +672,8 @@ function HaulForm({ selectedDriverId }) {
                         <div className="field col">
                             <div style={{ margin: '0.8em 0' }}>
                                 {loadType !== 'flatbedperc' &&
-                                loadType !== 'flatbedmi' ? (
+                                loadType !== 'flatbedmi' &&
+                                (!offDuty || offDuty.length <= 0) ? (
                                     <HaulFromSelector
                                         value={from}
                                         vendors={vendors.data}
@@ -580,7 +697,8 @@ function HaulForm({ selectedDriverId }) {
 
                         {/* Vendor Location */}
                         {loadType !== 'flatbedperc' &&
-                        loadType !== 'flatbedmi' ? (
+                        loadType !== 'flatbedmi' &&
+                        (!offDuty || offDuty.length <= 0) ? (
                             <div className="field col">
                                 <div style={{ margin: '0.8em 0' }}>
                                     <HaulLocationSelector
@@ -600,7 +718,8 @@ function HaulForm({ selectedDriverId }) {
                         <div className="field col">
                             <div style={{ margin: '0.8em 0' }}>
                                 {loadType !== 'flatbedperc' &&
-                                loadType !== 'flatbedmi' ? (
+                                loadType !== 'flatbedmi' &&
+                                (!offDuty || offDuty.length <= 0) ? (
                                     <HaulToSelector
                                         value={to}
                                         freightRoutes={freightRoutes.data}
@@ -637,7 +756,8 @@ function HaulForm({ selectedDriverId }) {
                         <div className="field col">
                             <div style={{ margin: '0.8em 0' }}>
                                 {loadType !== 'flatbedperc' &&
-                                loadType !== 'flatbedmi' ? (
+                                loadType !== 'flatbedmi' &&
+                                (!offDuty || offDuty.length <= 0) ? (
                                     <HaulVendorProductSelector
                                         value={product}
                                         vendorProducts={vendorProducts.data}
