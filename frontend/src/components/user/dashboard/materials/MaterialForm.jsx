@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DialogHeader from '../../../dialogComponents/DialogHeader'
 import DialogFooter from '../../../dialogComponents/DialogFooter_SubmitClose'
 import { toast } from 'react-toastify'
+import { uploadFile } from 'react-s3'
+import axios from 'axios'
+import { Buffer } from 'buffer'
 // PrimeReact Components
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
@@ -9,6 +12,9 @@ import { InputText } from 'primereact/inputtext'
 import { InputSwitch } from 'primereact/inputswitch'
 import { Dropdown } from 'primereact/dropdown'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { Image } from 'primereact/image'
+import { FileUpload } from 'primereact/fileupload'
+
 // Data
 import {
     getActiveMaterials,
@@ -17,8 +23,22 @@ import {
 import { getMaterialCategories } from '../../../../api/materialCategories/materialCategoriesApi'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+window.Buffer = window.Buffer || require('buffer').Buffer
+
 function MaterialForm() {
     const queryClient = useQueryClient()
+
+    // const S3_BUCKET = 'your_bucket_name'
+    // const REGION = 'us-east-1'
+    // const dispatch = useDispatch()
+    // const config = {
+    //     bucketName: S3_BUCKET,
+    //     dirName: 'images',
+    //     region: REGION,
+    //     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
+    //     secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY,
+    //     s3Url: 'your_bucket_url_from_static_website_hosting',
+    // }
 
     // #region VARS ---------------------------------------------------------
 
@@ -91,6 +111,8 @@ function MaterialForm() {
         },
     })
 
+    const [keys, setKeys] = useState(null)
+
     const {
         category,
         name,
@@ -158,6 +180,65 @@ function MaterialForm() {
 
         onClose()
     }
+
+    const getAwsKeys = async () => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user?.data?.token}`,
+            },
+        }
+
+        const response = await axios.get('/api/awsKeys', config)
+        console.log('Response data: ')
+        console.log(response.data)
+        response && response.data ? setKeys(response.data) : setKeys()
+    }
+
+    const handleImageUpload = (e) => {
+        // e.files == files to upload
+        console.log('e.files: ')
+        console.log(e.files)
+
+        if (keys) {
+            let config = {
+                bucketName: keys.bucketName,
+                dirName: 'materials',
+                region: keys.awsRegion,
+                accessKeyId: keys.accessKeyId,
+                secretAccessKey: keys.accessKey,
+                s3Url: 's3://django-chlmweb-files/materials/',
+            }
+
+            uploadFile(e.files[0], config)
+                .then((data) => {
+                    console.log('AWS Upload data.location: ')
+                    console.log(data.location)
+                    if (data && data.location) {
+                        setFormData((prevState) => ({
+                            ...prevState,
+                            image: data.location,
+                        }))
+                    }
+                })
+                .catch((err) => console.log(err))
+        }
+    }
+
+    // #endregion
+
+    // #region USE EFFECTS =====================================================
+    useEffect(() => {
+        if (!keys) {
+            getAwsKeys()
+        }
+    }, [])
+
+    useEffect(() => {
+        if (keys) {
+            console.log('Keys set: ')
+            console.log(keys)
+        }
+    }, [keys])
     // #endregion
 
     return (
@@ -178,6 +259,27 @@ function MaterialForm() {
                 blockScroll
             >
                 <form onSubmit={onSubmit}>
+                    <div className="formgrid grid">
+                        <div className="field col">
+                            {/* Image */}
+                            <div className="field col">
+                                <div style={{ margin: '0.8em 0' }}>
+                                    <span className="p-float-label">
+                                        <FileUpload
+                                            name="image"
+                                            url=""
+                                            mode="advanced"
+                                            accept="image/*"
+                                            customUpload
+                                            uploadHandler={handleImageUpload}
+                                        />
+                                        <label htmlFor="image">Image</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* NAME, CATEGORY, BIN NUMBER */}
                     <div className="formgrid grid">
                         {/* Name */}
@@ -242,7 +344,7 @@ function MaterialForm() {
                     {/* IMAGE, SIZE, STOCK */}
                     <div className="formgrid grid">
                         {/* Image */}
-                        <div className="field col">
+                        {/* <div className="field col">
                             <div style={{ margin: '0.8em 0' }}>
                                 <span className="p-float-label">
                                     <InputText
@@ -256,7 +358,7 @@ function MaterialForm() {
                                     <label htmlFor="image">Image</label>
                                 </span>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Size */}
                         <div className="field col">
