@@ -208,9 +208,6 @@ function CostCalculator() {
             totalCostTons: _totalCostTons,
         })
 
-        console.log('BREAK DOWN DATA: ')
-        console.log(breakdownData)
-
         setFormData((prevState) => ({
             ...prevState,
             costPerTon: _costPerTon,
@@ -291,7 +288,7 @@ function CostCalculator() {
 
         if (formData.tons && formData.material) {
             setIsComplete(true)
-        } else {
+        } else if (!formData.tons && !formData.material) {
             setIsComplete(false)
         }
     }, [formData.tons, formData.material])
@@ -365,6 +362,7 @@ function CostCalculator() {
                                 mode="decimal"
                                 minFractionDigits={2}
                                 maxFractionDigits={2}
+                                tabIndex={-1}
                                 readOnly
                                 className={
                                     formData.costPerTon &&
@@ -397,6 +395,7 @@ function CostCalculator() {
                                 mode="decimal"
                                 minFractionDigits={2}
                                 maxFractionDigits={2}
+                                tabIndex={-1}
                                 readOnly
                                 className={
                                     formData.totalCost &&
