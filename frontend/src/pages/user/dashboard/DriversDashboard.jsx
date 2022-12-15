@@ -208,7 +208,7 @@ function DriversDashboard() {
                 <div className="card" style={{ height: 'calc(100vh - 145px)' }}>
                     <DataTable
                         value={
-                            showingActive
+                            drivers && drivers.data && showingActive
                                 ? drivers.data.filter((d) => d.isActive)
                                 : drivers.data
                         }
