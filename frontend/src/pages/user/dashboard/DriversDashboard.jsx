@@ -12,6 +12,7 @@ import { Button } from 'primereact/button'
 import { TriStateCheckbox } from 'primereact/tristatecheckbox'
 import { FilterMatchMode } from 'primereact/api'
 import { InputText } from 'primereact/inputtext'
+import { ToggleButton } from 'primereact/togglebutton'
 // Data
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteDriver, getDrivers } from '../../../api/drivers/driversApi'
@@ -29,6 +30,7 @@ function DriversDashboard() {
         lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
         defaultTruck: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
+    const [showingActive, setShowingActive] = useState(true)
 
     const user = useQuery({
         queryKey: ['user'],
@@ -73,6 +75,16 @@ function DriversDashboard() {
                         placeholder="First, last, or truck #"
                     />
                 </span>
+                <div>
+                    <ToggleButton
+                        onLabel="Showing Active"
+                        offLabel="Showing All"
+                        onIcon="pi pi-check"
+                        offIcon="pi pi-globe"
+                        checked={showingActive}
+                        onChange={(e) => setShowingActive(e.value)}
+                    />
+                </div>
             </div>
         )
     }
@@ -195,7 +207,11 @@ function DriversDashboard() {
             <div className="datatable-templating-demo">
                 <div className="card" style={{ height: 'calc(100vh - 145px)' }}>
                     <DataTable
-                        value={drivers.data}
+                        value={
+                            showingActive
+                                ? drivers.data.filter((d) => d.isActive)
+                                : drivers.data
+                        }
                         loading={drivers.isLoading}
                         header={dataTableHeaderTemplate}
                         globalFilterFields={[
