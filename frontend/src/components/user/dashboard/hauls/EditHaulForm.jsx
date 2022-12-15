@@ -13,6 +13,8 @@ import { InputText } from 'primereact/inputtext'
 import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
+import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
+
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
 import {
@@ -63,6 +65,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     const [vendorSelected, setVendorSelected] = useState(null)
     const [vendorProductSelected, setVendorProductSelected] = useState(null)
     const [vendorLocationSelected, setVendorLocationSelected] = useState(null)
+    const [offDuty, setOffDuty] = useState(false)
 
     const user = useQuery(['user'], fetchUser)
 
@@ -391,22 +394,112 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
     }
 
     const onDrivingTime = () => {
-        setFormData((prevState) => ({
-            ...prevState,
-            broker: '-',
-            invoice: '-',
-            chInvoice: '-',
-            from: 'Driving',
-            to: 'Driving',
-            product: '-',
-            payRate: 0,
-            tons: 0,
-            driverPay: 0,
-        }))
+        // Confirm erase previous data
+        confirmPopup({
+            target: document.getElementById('showDrivingBtn'),
+            message: 'Override existing data?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                setFormData((prevState) => ({
+                    ...prevState,
+                    broker: '-',
+                    invoice: '-',
+                    chInvoice: '-',
+                    from: 'Driving',
+                    to: 'Driving',
+                    product: '-',
+                    payRate: 0,
+                    tons: 0,
+                    driverPay: 0,
+                }))
+            },
+            reject: () => console.log('Rejected...'),
+        })
     }
 
-    const onOffDuty = () => {
-        console.log('onOffDuty')
+    const onOffDuty = (val) => {
+        setOffDuty(val)
+
+        let _from
+        let _to
+
+        switch (val) {
+            case 'maintenance':
+                _from = 'Off Duty'
+                _to = 'Maintenance'
+                break
+
+            case 'sick':
+                _from = 'Off Duty'
+                _to = 'Sick'
+                break
+
+            case 'holiday':
+                _from = 'Off Duty'
+                _to = prompt(
+                    'Holiday name',
+                    'Enter holiday name, keep it brief'
+                )
+                break
+
+            case 'vacation':
+                _from = 'Off Duty'
+                _to = 'Vacation'
+                break
+
+            case 'weather':
+                _from = 'Off Duty'
+                _to = 'Weather'
+                break
+
+            case 'personal':
+                _from = 'Off Duty'
+                _to = 'Personal'
+                break
+
+            case 'bereavement':
+                _from = 'Off Duty'
+                _to = 'Bereavement'
+                break
+
+            case 'custom':
+                _from = 'Off Duty'
+                _to = prompt('Reason', 'Enter reason, keep it brief')
+                break
+        }
+
+        if (loadType === 'flatbedperc' || loadType === 'flatbedmi') {
+            setFormData((prevState) => ({
+                ...prevState,
+                broker: '-',
+                invoice: '-',
+                chInvoice: '-',
+                from: _from,
+                to: _to,
+                product: '-',
+                payRate: 0,
+                tons: 0,
+                driverPay: 0,
+            }))
+        } else if (loadType === 'enddump') {
+            setFormData((prevState) => ({
+                ...prevState,
+                broker: '-',
+                invoice: '-',
+                chInvoice: '-',
+                from: _from,
+                to: _to,
+                product: '-',
+                rate: 0,
+                tons: 0,
+                driverPay: 0,
+            }))
+        } else {
+            toast.error(
+                "Unknown loadType selected, expecting 'enddump' or 'flatbed'",
+                { autoClose: 8000 }
+            )
+        }
     }
 
     // Handle form submit
@@ -586,8 +679,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 <Button
                     icon="pi pi-copy"
                     iconPos="left"
-                    className="p-button-info"
-                    style={{ backgroundColor: '#83B869' }}
+                    className="duplicateHaulBtn"
                     onClick={() => setFormDialog(true)}
                 />
             ) : (

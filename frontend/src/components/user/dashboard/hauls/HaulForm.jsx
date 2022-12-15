@@ -13,6 +13,7 @@ import { InputText } from 'primereact/inputtext'
 import { InputNumber } from 'primereact/inputnumber'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
+import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
 import {
@@ -341,23 +342,30 @@ function HaulForm({ selectedDriverId }) {
     }
 
     const onDrivingTime = () => {
-        setFormData((prevState) => ({
-            ...prevState,
-            broker: '-',
-            invoice: '-',
-            chInvoice: '-',
-            from: 'Driving',
-            to: 'Driving',
-            product: '-',
-            payRate: 0,
-            tons: 0,
-            driverPay: 0,
-        }))
+        // Confirm erase previous data
+        confirmPopup({
+            target: document.getElementById('showDrivingBtn'),
+            message: 'Override existing data?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                setFormData((prevState) => ({
+                    ...prevState,
+                    broker: '-',
+                    invoice: '-',
+                    chInvoice: '-',
+                    from: 'Driving',
+                    to: 'Driving',
+                    product: '-',
+                    payRate: 0,
+                    tons: 0,
+                    driverPay: 0,
+                }))
+            },
+            reject: () => console.log('Rejected...'),
+        })
     }
 
     const onOffDuty = (val) => {
-        console.log('[HaulForm onOffDuty] val: ' + val)
-
         setOffDuty(val)
 
         let _from

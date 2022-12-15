@@ -255,7 +255,11 @@ function HaulsDashboard() {
                     </div>
                     <div>
                         <Button
-                            style={{ padding: '0.75em', marginLeft: '1em' }}
+                            style={{
+                                padding: '0.75em',
+                                marginLeft: '1em',
+                            }}
+                            id="haulSummaryBtn"
                             disabled={!rangeDates || rangeDates.length <= 0}
                             onClick={handleHaulSummary}
                         >
@@ -263,14 +267,14 @@ function HaulsDashboard() {
                         </Button>
                     </div>
                 </div>
-                <span className="p-input-icon-left">
+                {/* <span className="p-input-icon-left">
                     <i className="pi pi-search" />
                     <InputText
                         value={globalFilterValue}
                         onChange={onGlobalFilterChange}
                         placeholder="Invoice, truck, from, to, etc."
                     />
-                </span>
+                </span> */}
             </div>
         )
     }
@@ -390,7 +394,7 @@ function HaulsDashboard() {
                 <EditHaulForm haul={rowData} isDuplicating />
                 <Button
                     icon="pi pi-trash"
-                    className="p-button-danger"
+                    className="deleteHaulBtn"
                     onClick={(e) => onDelete(e, rowData)}
                 />
             </div>

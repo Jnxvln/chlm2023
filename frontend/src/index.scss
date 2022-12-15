@@ -138,7 +138,7 @@ form {
 }
 
 .p-button-gray {
-    background-color: rgb(170, 170, 170) !important;
+    background-color: #aaaaaa !important;
 }
 
 .vendors-dialog-header {
@@ -219,11 +219,34 @@ tr.spacer td {
 // Delivery past-due
 .dlv-past-due {
     color: red;
-    // font-weight: bold;
 }
 .dlv-completed {
     color: green;
-    // font-weight: bold;
+}
+
+#haulSummaryBtn {
+    background-color: #63584f;
+}
+#haulSummaryBtn:hover {
+    background-color: #75695e;
+}
+
+.duplicateHaulBtn {
+    background-color: #616161 !important;
+}
+.duplicateHaulBtn:hover {
+    background-color: #727272 !important;
+}
+
+.deleteHaulBtn {
+    background-color: #c24545 !important;
+}
+.deleteHaulBtn:hover {
+    background-color: #e05050 !important;
+}
+
+.editWorkdayBtn {
+    background-color: #83a83f !important;
 }
 
 @media print {

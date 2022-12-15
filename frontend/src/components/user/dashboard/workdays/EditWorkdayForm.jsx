@@ -221,7 +221,7 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
             <ConfirmPopup />
             <Button
                 icon="pi pi-calendar"
-                className="p-button-rounded p-button-success p-button-sm"
+                className="p-button-rounded editWorkdayBtn p-button-sm"
                 onClick={() => setFormDialog(true)}
             />
 

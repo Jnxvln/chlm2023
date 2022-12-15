@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
+import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 
 const DialogFooter_SubmitClose = ({
     onSubmit,
@@ -54,42 +55,40 @@ const DialogFooter_SubmitClose = ({
     // #endregion
 
     const handleOffDutySelected = (value) => {
-        // console.log('inside handleOffDutySelected, value: ' + value)
         setOffDutySelected(value)
         onOffDuty(value)
     }
 
     useEffect(() => {
-        // if (loadType) {
-        //     console.log('LOAD TYPE: ' + loadType)
-        // }
-
-        onOffDuty(offDutySelected)
+        if (onOffDuty && offDutySelected) {
+            onOffDuty(offDutySelected)
+        }
     }, [loadType, offDutySelected])
 
     return (
         <footer className="dialog-footer flex justify-content-between">
             <div className="flex justify-content-evenly gap-3">
-                <div>
-                    <span className="p-float-label">
-                        <Dropdown
-                            id="dialogOffDuty"
-                            type="button"
-                            label="Off Duty"
-                            icon="pi pi-times"
-                            className="p-button-text"
-                            value={offDutySelected}
-                            options={offDutyOptions}
-                            optionLabel="name"
-                            optionValue="value"
-                            placeholder="Off Duty"
-                            onChange={(e) => handleOffDutySelected(e.value)}
-                            tabIndex={-1}
-                            // onClick={onOffDuty}
-                        />
-                        <label htmlFor="dialogOffDuty">Off Duty</label>
-                    </span>
-                </div>
+                {onOffDuty && (
+                    <div>
+                        <span className="p-float-label">
+                            <Dropdown
+                                id="dialogOffDuty"
+                                type="button"
+                                label="Off Duty"
+                                icon="pi pi-times"
+                                className="p-button-text"
+                                value={offDutySelected}
+                                options={offDutyOptions}
+                                optionLabel="name"
+                                optionValue="value"
+                                placeholder="Off Duty"
+                                onChange={(e) => handleOffDutySelected(e.value)}
+                                tabIndex={-1}
+                            />
+                            <label htmlFor="dialogOffDuty">Off Duty</label>
+                        </span>
+                    </div>
+                )}
 
                 {isHaulDialog &&
                     loadType &&
@@ -97,6 +96,7 @@ const DialogFooter_SubmitClose = ({
                         loadType === 'flatbedmi') && (
                         <div>
                             <Button
+                                id="showDrivingBtn"
                                 type="button"
                                 label="Show Driving"
                                 icon="pi pi-truck"
