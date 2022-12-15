@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> tag
-import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
+import axios from 'axios'
 import MaterialForm from '../../../components/user/dashboard/materials/MaterialForm'
 import EditMaterialForm from '../../../components/user/dashboard/materials/EditMaterialForm'
 // import Spinner from "../../../components/layout/Spinner";
@@ -13,6 +12,8 @@ import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
 import { ProgressBar } from 'primereact/progressbar'
 import { TriStateCheckbox } from 'primereact/tristatecheckbox'
+import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> tag
+import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 import { FilterMatchMode } from 'primereact/api'
 import { classNames } from 'primereact/utils'
 // Data
@@ -60,6 +61,23 @@ function MaterialsDashboard() {
             // console.log("Setting user token: " + user.token);
             setToken(user.token)
         },
+    })
+
+    const keys = useQuery({
+        queryKey: ['awsKeys'],
+        queryFn: () => getAwsKeys(),
+        enabled: !!user?.data?._id,
+        onSuccess: (keys) => {
+            console.log('[MaterialsDashboard] Keys fetched: ')
+            console.log(keys)
+        },
+        onError: (err) => {
+            toast.error('[MaterialsDashboard] Error settings AWS keys', {
+                autoClose: 8000,
+            })
+            console.log(err)
+        },
+        refetchOnWindowFocus: false,
     })
     // #endregion
 
@@ -220,7 +238,7 @@ function MaterialsDashboard() {
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex' }}>
-                <EditMaterialForm material={rowData} />
+                <EditMaterialForm material={rowData} keys={keys.data} />
                 {/* <Button icon="pi pi-pencil" /> */}
                 <Button
                     icon="pi pi-trash"
@@ -310,7 +328,7 @@ function MaterialsDashboard() {
         return (
             <div className="flex gap-4">
                 <div>
-                    <MaterialForm />
+                    <MaterialForm keys={keys.data} />
                 </div>
                 <span className="p-input-icon-left">
                     <i className="pi pi-search" />
@@ -324,11 +342,16 @@ function MaterialsDashboard() {
         )
     }
 
-    // useEffect(() => {
-    //   if (token) {
-    //     console.log("Token set: " + token);
-    //   }
-    // }, [token]);
+    const getAwsKeys = async () => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user?.data?.token}`,
+            },
+        }
+
+        const response = await axios.get('/api/awsKeys', config)
+        return response.data
+    }
 
     return (
         <section>
