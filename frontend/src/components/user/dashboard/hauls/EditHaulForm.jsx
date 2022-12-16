@@ -604,6 +604,16 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
 
     useEffect(() => {
         if (formDialog) {
+            if (formDialog) {
+                setTimeout(() => {
+                    let dropdowns = document
+                        .querySelectorAll('.p-autocomplete-dropdown')
+                        .forEach((dropdown) => {
+                            dropdown.tabIndex = -1
+                        })
+                }, 10)
+            }
+
             if (haul) {
                 const vendorObj = vendors.data.find(
                     (v) => v.name.toLowerCase() === haul.from.toLowerCase()

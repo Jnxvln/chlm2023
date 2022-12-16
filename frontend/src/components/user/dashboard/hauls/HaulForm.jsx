@@ -481,6 +481,16 @@ function HaulForm({ selectedDriverId }) {
     }
 
     useEffect(() => {
+        if (formDialog) {
+            setTimeout(() => {
+                let dropdowns = document
+                    .querySelectorAll('.p-autocomplete-dropdown')
+                    .forEach((dropdown) => {
+                        dropdown.tabIndex = -1
+                    })
+            }, 10)
+        }
+
         if (formDialog && vendorLocation) {
             console.log('Vendor Location changed: ')
             console.log(vendorLocation)
