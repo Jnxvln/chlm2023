@@ -326,6 +326,7 @@ function CostCalculator() {
                                         : ''
                                 }
                                 style={{ width: '100%' }}
+                                autoFocus
                             />
                             <label htmlFor="cc_tons">Tons</label>
                         </span>
