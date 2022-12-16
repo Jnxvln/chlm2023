@@ -38,9 +38,6 @@ function WorkdayForm({ workDate, driver }) {
         onMutate: ({ formData }) => {
             formData.date = new Date(workDate)
             formData.driverId = driver._id
-
-            console.log('Inside onMutate with workDate: ')
-            console.log(workDate)
         },
         mutationFn: ({ formData, token }) => createWorkday(formData, token),
         onSuccess: (workday) => {
@@ -117,10 +114,6 @@ function WorkdayForm({ workDate, driver }) {
         const hasNCReasons = ncReasons && ncReasons.length > 0
         const hasNCOverride = ncRateOverride && parseFloat(ncRateOverride) > 0
 
-        console.log(
-            'hasCHHours: ' + hasCHHours + ' (' + typeof hasCHHours + ')'
-        )
-
         if (!hasCHHours && hasCHHours != '0') {
             return toast.error('CH Hours is required (enter 0 if not needed)')
         }
@@ -143,12 +136,6 @@ function WorkdayForm({ workDate, driver }) {
     }
     // #endregion
 
-    useEffect(() => {
-        if (formDialog && workDate) {
-            console.log('workDate received: ' + workDate)
-        }
-    }, [formDialog])
-
     return (
         <section>
             <Button
@@ -166,25 +153,6 @@ function WorkdayForm({ workDate, driver }) {
                 blockScroll
             >
                 <form onSubmit={onSubmit}>
-                    {/* DATE */}
-                    {/* <div className="formgrid grid">
-                        <div className="field col">
-                            <div style={{ margin: '0.8em 0' }}>
-                                <span className="p-float-label">
-                                    <Calendar
-                                        id="date"
-                                        name="date"
-                                        value={date}
-                                        onChange={onChange}
-                                        selectOtherMonths
-                                        style={{ width: '100%' }}
-                                    />
-                                    <label htmlFor="date">Date</label>
-                                </span>
-                            </div>
-                        </div>
-                    </div> */}
-
                     {/* CHHOURS, NCHOURS */}
                     <div className="formgrid grid">
                         {/* chhours */}

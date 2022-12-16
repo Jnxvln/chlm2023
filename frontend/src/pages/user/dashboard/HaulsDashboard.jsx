@@ -199,14 +199,9 @@ function HaulsDashboard() {
         for (let i = 0; i < filteredHauls.length; i++) {
             let _date = filteredHauls[i].dateHaul.split('T')[0]
 
-            console.log('Checking workdays for date: ' + _date)
-
             let _wdayDateMatch = workdays.data.find(
                 (day) => day.date.split('T')[0] === _date
             )
-
-            console.log('MATCH: ')
-            console.log(_wdayDateMatch)
 
             if (!_wdayDateMatch) {
                 _datesMissingWorkday.push(dayjs(_date).format('MM/DD/YY'))
@@ -488,7 +483,6 @@ function HaulsDashboard() {
     }
 
     const handleNoWorkdays = () => {
-        console.log('ERROR: Could not load workdays from the database')
         toast.error(
             '"Workdays" is empty, possibly could not fetch from database?',
             { autoClose: 8000 }
@@ -548,7 +542,7 @@ function HaulsDashboard() {
                 setFilteredHauls(_filteredHauls)
                 workdays.refetch()
             } else {
-                console.log('No driver id found, no hauls to display')
+                // console.log('No driver id found, no hauls to display')
                 setFilteredHauls([])
             }
         }

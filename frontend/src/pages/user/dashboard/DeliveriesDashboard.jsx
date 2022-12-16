@@ -620,8 +620,6 @@ function DeliveriesDashboard() {
         )
 
         if (toggleShowCompleted) {
-            // console.log('toggle: SHOWING COMPLETED DLVS...')
-
             if (selectedClientId) {
                 const client =
                     deliveryClients &&

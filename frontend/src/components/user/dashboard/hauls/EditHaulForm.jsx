@@ -30,7 +30,7 @@ import { getDrivers } from '../../../../api/drivers/driversApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
-    // #region VARS ------------------------
+    // #region VARS --------------------------------------------------------------------
 
     const queryClient = useQueryClient()
 
@@ -413,7 +413,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                     driverPay: 0,
                 }))
             },
-            reject: () => console.log('Rejected...'),
+            reject: () => {},
         })
     }
 
@@ -620,17 +620,11 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 )
                 setVendorSelected(vendorObj)
 
-                console.log('[EditHaulForm useEffect] vendorLocations: ')
-                console.log(vendorLocations.data)
-
                 const vendorLocationObj = vendorLocations?.data?.find(
                     (loc) =>
                         loc?.name?.toLowerCase() ===
                         haul?.vendorLocation?.toLowerCase()
                 )
-
-                console.log('[EditHaulForm.jsx useEffect] vendorLocationObj: ')
-                console.log(vendorLocationObj)
 
                 setVendorLocationSelected(vendorLocationObj)
 

@@ -29,8 +29,6 @@ function MaterialsDashboard() {
     const queryClient = useQueryClient()
     // #region VARS ------------------------
     const stockStatuses = ['new', 'in', 'low', 'out', 'notavail']
-    // const [matCategories, setMatCategories] = useState([]);
-    // const [stateMaterials, setStateMaterials] = useState(null);
     const [categoryFilter, setCategoryFilter] = useState(null)
     const [token, setToken] = useState(null)
     const [globalFilterValue2, setGlobalFilterValue2] = useState('')
@@ -59,7 +57,6 @@ function MaterialsDashboard() {
         queryKey: ['user'],
         queryFn: () => JSON.parse(localStorage.getItem('user')),
         onSuccess: (user) => {
-            // console.log("Setting user token: " + user.token);
             setToken(user.token)
         },
     })
@@ -68,10 +65,6 @@ function MaterialsDashboard() {
         queryKey: ['awsKeys'],
         queryFn: () => getAwsKeys(),
         enabled: !!user?.data?._id,
-        onSuccess: (keys) => {
-            console.log('[MaterialsDashboard] Keys fetched: ')
-            console.log(keys)
-        },
         onError: (err) => {
             toast.error('[MaterialsDashboard] Error settings AWS keys', {
                 autoClose: 8000,
@@ -241,7 +234,6 @@ function MaterialsDashboard() {
         return (
             <div style={{ display: 'flex' }}>
                 <EditMaterialForm material={rowData} keys={keys.data} />
-                {/* <Button icon="pi pi-pencil" /> */}
                 <Button
                     icon="pi pi-trash"
                     className="p-button-danger"
@@ -278,17 +270,6 @@ function MaterialsDashboard() {
                     'true-icon pi-check-circle': rowData.isTruckable,
                 })}
             ></i>
-        )
-    }
-
-    const filterClearTemplate = (options) => {
-        return (
-            <Button
-                type="button"
-                icon="pi pi-times"
-                onClick={options.filterClearCallback}
-                className="p-button-secondary"
-            ></Button>
         )
     }
 

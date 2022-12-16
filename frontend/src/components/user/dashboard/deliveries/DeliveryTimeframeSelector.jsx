@@ -22,9 +22,6 @@ function DeliveryTimeframeSelector({ onDateRangeSelected }) {
 
     const onChange = (e) => {
         if (!e || !e.value) {
-            console.log(
-                '[DeliveryTimeframeSelector onChange(e)]: No event found OR no value property exists on event'
-            )
             setDate(null)
             localStorage.removeItem('selectedDeliveriesDateRange')
             return

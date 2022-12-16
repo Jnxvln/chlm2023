@@ -42,11 +42,11 @@ function DriverWorkdaysCompleted({ drivers, currentDriver }) {
         },
     })
 
-    useEffect(() => {
-        console.log(
-            JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[1]
-        )
-    }, [])
+    // useEffect(() => {
+    //     console.log(
+    //         JSON.parse(localStorage.getItem('selectedHaulsDateRange'))[1]
+    //     )
+    // }, [])
 
     useEffect(() => {
         if (workdays.data) {
@@ -57,8 +57,6 @@ function DriverWorkdaysCompleted({ drivers, currentDriver }) {
                 dateEnd: dateEnd || null,
                 workdays: workdays.data || [],
             }
-            console.log('[DriverWorkdaysCompleted useEffect()] load data: ')
-            console.log(loadData)
         }
     }, [drivers, currentDriver, dateStart, dateEnd, workdays.data])
 

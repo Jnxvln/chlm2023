@@ -202,10 +202,6 @@ function EditMaterialForm({ material, keys }) {
                 .then((data) => {
                     setUploading(false)
                     if (data && data.location) {
-                        console.log(
-                            '[EditMaterialForm] AWS Upload data.location: '
-                        )
-                        console.log(data.location)
                         toast.success('Image uploaded successfully!')
                         setFormData((prevState) => ({
                             ...prevState,
@@ -213,7 +209,7 @@ function EditMaterialForm({ material, keys }) {
                         }))
                     } else if (data) {
                         console.log(
-                            '[EditMaterialForm] ERROR: Expected `location` property on `data`. Printing `data`: '
+                            '[EditMaterialForm] ERROR: Expected `location` property on `data`.'
                         )
                         console.log(data)
                         toast.error(

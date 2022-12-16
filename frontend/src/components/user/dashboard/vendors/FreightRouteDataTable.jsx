@@ -82,7 +82,7 @@ function FreightRouteDataTable() {
     // #region TEMPLATES -------------------------------
     const freightRoutesDataTableHeaderTemplate = () => {
         return (
-            <div className="flex justify-content-between">
+            <div className="flex gap-4">
                 <div>
                     <FreightRouteForm />
                 </div>

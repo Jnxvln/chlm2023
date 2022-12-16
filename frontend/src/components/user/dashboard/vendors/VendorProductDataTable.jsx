@@ -84,7 +84,7 @@ function VendorProductDataTable() {
     // #region TEMPLATES -------------------------------
     const vendorProductsDataTableHeaderTemplate = () => {
         return (
-            <div className="flex justify-content-between">
+            <div className="flex gap-4">
                 <div>
                     <VendorProductForm />
                 </div>

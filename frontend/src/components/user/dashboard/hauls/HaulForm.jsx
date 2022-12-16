@@ -313,10 +313,6 @@ function HaulForm({ selectedDriverId }) {
     }
 
     const onVendorLocationSelected = (selectedVendorLocation) => {
-        console.log(
-            '[HaulForm onVendorLocationSelected]: selectedVendorLocation: '
-        )
-        console.log(selectedVendorLocation)
         setFormData((prevState) => ({
             ...prevState,
             vendorLocation: selectedVendorLocation.name,
@@ -361,7 +357,7 @@ function HaulForm({ selectedDriverId }) {
                     driverPay: 0,
                 }))
             },
-            reject: () => console.log('Rejected...'),
+            reject: () => {},
         })
     }
 
@@ -490,12 +486,7 @@ function HaulForm({ selectedDriverId }) {
                     })
             }, 10)
         }
-
-        if (formDialog && vendorLocation) {
-            console.log('Vendor Location changed: ')
-            console.log(vendorLocation)
-        }
-    }, [formDialog, vendorLocation])
+    }, [formDialog])
 
     useEffect(() => {
         if (selectedDriverId) {
@@ -506,9 +497,9 @@ function HaulForm({ selectedDriverId }) {
         }
     }, [selectedDriverId])
 
-    useEffect(() => {
-        console.log('[HaulForm useEffect] Off Duty: ' + offDuty)
-    }, [offDuty])
+    // useEffect(() => {
+    //     console.log('[HaulForm useEffect] Off Duty: ' + offDuty)
+    // }, [offDuty])
 
     useEffect(() => {
         setDriverDefaults()

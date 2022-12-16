@@ -50,9 +50,6 @@ function DriverSelector({ drivers, onSelectDriver }) {
 
     const onChange = (e) => {
         if (!e || !e.value) {
-            console.log(
-                '[DriverSelector onChange(e)]: No event found OR no value property exists on event'
-            )
             return
         }
 

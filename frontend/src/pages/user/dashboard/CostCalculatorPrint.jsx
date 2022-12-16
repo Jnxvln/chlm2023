@@ -17,9 +17,6 @@ function CostCalculatorPrint() {
     // UseEffect - Perform calculations and set data
     useEffect(() => {
         if (breakdownData) {
-            console.log('Breakdown Data: ')
-            console.log(breakdownData)
-
             setProductTotal(
                 (
                     parseFloat(breakdownData.product) *

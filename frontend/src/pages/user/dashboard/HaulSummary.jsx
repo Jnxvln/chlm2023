@@ -285,9 +285,6 @@ function HaulSummary() {
                 } else if (_chhours > 0) {
                     return parseFloat(_chhours).toFixed(2)
                 } else {
-                    console.log(
-                        "[HaulSummary chHoursTemplate] Workday's chhours is either NaN, undefined, or null"
-                    )
                     return 0
                 }
 

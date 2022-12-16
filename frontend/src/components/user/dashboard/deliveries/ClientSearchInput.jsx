@@ -63,7 +63,7 @@ function ClientSearchInput({ onClientSelected }) {
 
     const searchDeliveryClient = (e) => {
         const { query } = e
-        console.log(query)
+        // console.log(query)
         let filteredClients = deliveryClients.data.filter(
             (client) =>
                 client.firstName.toLowerCase().includes(query.toLowerCase()) ||

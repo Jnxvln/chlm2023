@@ -177,10 +177,6 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
         const hasNCReasons = ncReasons && ncReasons.length > 0
         const hasNCOverride = ncRateOverride && parseFloat(ncRateOverride) > 0
 
-        console.log(
-            'hasCHHours: ' + hasCHHours + ' (' + typeof hasCHHours + ')'
-        )
-
         if (!hasCHHours && hasCHHours != '0') {
             return toast.error('CH Hours is required (enter 0 if not needed)')
         }
