@@ -16,6 +16,7 @@ import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> 
 import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 import { FilterMatchMode } from 'primereact/api'
 import { classNames } from 'primereact/utils'
+import { Image } from 'primereact/image'
 // Data
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
@@ -100,12 +101,13 @@ function MaterialsDashboard() {
     // #region DATA TABLE TEMPLATES
     const imageBodyTemplate = (rowData) => {
         return (
-            <img
+            <Image
                 src={`${rowData.image}`}
-                width="80%"
+                width="100%"
                 height="auto"
                 alt={rowData.name}
                 className="material-img"
+                preview
             />
         )
     }
