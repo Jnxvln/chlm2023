@@ -13,6 +13,7 @@ import { Dropdown } from 'primereact/dropdown'
 import { InputTextarea } from 'primereact/inputtextarea'
 import { FileUpload } from 'primereact/fileupload'
 import { ProgressSpinner } from 'primereact/progressspinner'
+import { Image } from 'primereact/image'
 
 // Data
 import {
@@ -238,6 +239,20 @@ function MaterialForm({ keys }) {
             >
                 <form onSubmit={onSubmit}>
                     <div className="formgrid grid">
+                        <div className="field col">
+                            {/* Existing Image */}
+                            {image && image.length > 0 && (
+                                <div>
+                                    <Image
+                                        src={image}
+                                        alt={name}
+                                        width="200"
+                                        height="200"
+                                        preview
+                                    />
+                                </div>
+                            )}
+                        </div>
                         <div className="field col">
                             {/* Image */}
                             {keys && (
