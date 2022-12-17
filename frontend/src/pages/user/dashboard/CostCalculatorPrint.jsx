@@ -199,7 +199,7 @@ function CostCalculatorPrint() {
                     className="flex-grow-1"
                     style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
                 >
-                    <div style={{ marginTop: '2em' }}>
+                    <div>
                         <div>{breakdownData.tons} T</div>
                         <div>= {breakdownData.yards} yds</div>
                     </div>
@@ -210,11 +210,9 @@ function CostCalculatorPrint() {
                     className="flex-grow-1"
                     style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
                 >
-                    <div style={{ marginTop: '2em' }}>
+                    <div>
                         <div style={{ marginBottom: '1em' }}>
-                            <strong style={{ fontSize: '1rem' }}>
-                                BILLING
-                            </strong>
+                            <strong style={{ fontSize: '1rem' }}>TOTALS</strong>
                         </div>
 
                         <table>
