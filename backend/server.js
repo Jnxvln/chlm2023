@@ -29,6 +29,11 @@ app.use('/api/hauls', require('./routes/haulRoutes'))
 app.use('/api/freight-routes', require('./routes/freightRouteRoutes'))
 app.use('/api/workdays', require('./routes/workdayRoutes'))
 
+app.use(express.static(path.join(__dirname, '../frontend/build')))
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'))
+})
+
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler)
 
