@@ -33,15 +33,18 @@ function Register() {
 
     const mutationRegisterUser = useMutation({
         mutationKey: ['user'],
-        mutationFn: () => register(formData),
+        mutationFn: (data) => register(data),
         onSuccess: (user) => {
             if (user) {
                 formik.resetForm()
-                queryClient.invalidateQueries(['user'])
                 navigate('/dashboard')
-                toast.success(`${user.firstName} ${user.lastName} registered`, {
-                    autoClose: 3000,
-                })
+                toast.success(
+                    `${user.firstName} ${user.lastName} registered. Welcome!`,
+                    {
+                        autoClose: 3000,
+                    }
+                )
+                queryClient.invalidateQueries(['user'])
             }
         },
         onError: (err) => {
@@ -101,6 +104,8 @@ function Register() {
             return errors
         },
         onSubmit: (data) => {
+            console.log('FORMIK DATA: ')
+            console.log(data)
             setFormData(data)
             mutationRegisterUser.mutate(data)
         },
