@@ -145,8 +145,10 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         mutationKey: ['hauls'],
         mutationFn: ({ formData, token }) => updateHaul(formData, token),
         onMutate: ({ formData }) => {
-            formData.timeHaul = new Date(formData.timeHaul)
-            formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+            // formData.timeHaul = new Date(formData.timeHaul)
+            // formData.dateHaul = new Date(formData.dateHaul).setHours(0, 0, 0, 0)
+            formData.timeHaul = new Date(formData.dateHaul)
+            formData.dateHaul = new Date(formData.dateHaul)
         },
         onSuccess: (updHaul) => {
             if (updHaul) {
