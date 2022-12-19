@@ -3,6 +3,7 @@ const dotenv = require('dotenv').config()
 const colors = require('colors')
 const connectDB = require('./config/db')
 const errorHandler = require('./middleware/errorMiddleware')
+const path = require('path')
 
 connectDB()
 
@@ -28,6 +29,14 @@ app.use('/api/deliveries', require('./routes/deliveryRoutes'))
 app.use('/api/hauls', require('./routes/haulRoutes'))
 app.use('/api/freight-routes', require('./routes/freightRouteRoutes'))
 app.use('/api/workdays', require('./routes/workdayRoutes'))
+
+// Service static
+app.use(express.static(path.resolve(__dirname, '../frontend/build')))
+app.get('*', function (request, response) {
+    response.sendFile(
+        path.resolve(__dirname, '../frontend/build', 'index.html')
+    )
+})
 
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler)
