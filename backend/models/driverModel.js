@@ -2,16 +2,6 @@ const mongoose = require('mongoose')
 
 const driverSchema = mongoose.Schema(
     {
-        createdBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: [true, 'A user is required'],
-            ref: 'User',
-        },
-        updatedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: [true, 'A user is required'],
-            ref: 'User',
-        },
         firstName: {
             type: String,
             required: [true, 'First name field required'],
@@ -19,6 +9,10 @@ const driverSchema = mongoose.Schema(
         lastName: {
             type: String,
             required: [true, 'Last name field required'],
+        },
+        defaultTruck: {
+            type: String,
+            required: false,
         },
         endDumpPayRate: {
             type: String,
@@ -32,10 +26,6 @@ const driverSchema = mongoose.Schema(
             type: String,
             required: [true, 'NC rate required'],
         },
-        defaultTruck: {
-            type: String,
-            required: false,
-        },
         dateHired: {
             type: String,
             required: false,
@@ -43,6 +33,16 @@ const driverSchema = mongoose.Schema(
         dateReleased: {
             type: String,
             required: false,
+        },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: [true, 'A user is required'],
+            ref: 'User',
+        },
+        updatedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: [true, 'A user is required'],
+            ref: 'User',
         },
         isActive: {
             type: Boolean,
