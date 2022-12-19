@@ -49,6 +49,6 @@
         ]
     },
     "devDependencies": {
-        "@tanstack/react-query-devtools": "^4.14.5"
+        "@tanstack/react-query-devtools": "^4.20.4"
     }
 }
