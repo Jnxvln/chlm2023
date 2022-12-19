@@ -41,6 +41,7 @@ function DeliveryForm({ selectedClient, iconButton }) {
     const [formData, setFormData] = useState(initialState)
     const [selectedDeliveryClient, setSelectedDeliveryClient] = useState(null)
 
+    // User state
     const user = useQuery(['user'], fetchUser)
 
     // Select deliveryClients from store
