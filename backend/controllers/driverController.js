@@ -48,15 +48,16 @@ const createDriver = asyncHandler(async (req, res) => {
     }
 
     const driver = await Driver.create({
-        createdBy: req.user.id,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        defaultTruck: req.body.defaultTruck,
         endDumpPayRate: req.body.endDumpPayRate,
         flatBedPayRate: req.body.flatBedPayRate,
         ncRate: req.body.ncRate,
-        defaultTruck: req.body.defaultTruck,
         dateHired: req.body.dateHired,
         dateReleased: req.body.dateReleased,
+        createdBy: req.user.id,
+        updatedBy: req.user.id,
         isActive: req.body.isActive,
     })
 
@@ -74,9 +75,11 @@ const updateDriver = asyncHandler(async (req, res) => {
         throw new Error('Driver not found')
     }
 
+    const updates = { ...req.body, updatedBy: req.user.id }
+
     const updatedDriver = await Driver.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        updates,
         { new: true }
     )
 
