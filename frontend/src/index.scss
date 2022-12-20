@@ -1,4 +1,4 @@
-@import './styles/_colors.scss';
+@import './styles/_variables.scss';
 
 $haulSummaryFontSize: 10pt;
 
@@ -24,6 +24,8 @@ form {
     padding: 1em;
 }
 
+// #region DIALOG STYLES ===============================================================================
+
 .p-dialog-header {
     background-color: $default-dialog-header-backgroundColor;
     padding: 0;
@@ -31,88 +33,95 @@ form {
     border-radius: none;
 }
 
-// #region VENDOR DIALOG STYLES ===========================
-
-// Vendor Dialog Styles
+// #region Vendor Dialog Styles
 #editVendorDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newVendorDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Vendor Product Dialog Styles
+// #region Vendor Product Dialog Styles
 #editVendorProductDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newVendorProductDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Vendor Location Dialog Styles
+// #region Vendor Location Dialog Styles
 #editVendorLocationDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newVendorLocationDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Freight Route Dialog Styles
+// #region Freight Route Dialog Styles
 #editFreightRouteDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newFreightRouteDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Material Dialog Styles
+// #region Material Dialog Styles
 #editMaterialDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newMaterialDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Driver Dialog Styles
+// #region Driver Dialog Styles
 #editDriverDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newDriverDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Delivery Client Dialog Styles
+// #region Delivery Client Dialog Styles
 #editDeliveryClientDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newDeliveryClientDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Delivery Dialog Styles
+// #region Delivery Dialog Styles
 #editDeliveryDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newDeliveryDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Haul Dialog Styles
+// #region Haul Dialog Styles
 #editHaulDialog .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newHaulDialog .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
+// #endregion
 
-// Workday Styles
+// #region Workday Dialog Styles
 #editWorkday .p-dialog-header {
     background-color: $edit-dialog-header-backgroundColor;
 }
 #newWorkday .p-dialog-header {
     background-color: $new-dialog-header-backgroundColor;
 }
-// #endregion =========================================
+// #endregion
 
 .dialog-header {
     color: rgb(240, 240, 240);
@@ -136,6 +145,8 @@ form {
     font-weight: bold;
     font-size: 14pt;
 }
+
+// #endregion =======================================================================================
 
 .p-button-gray {
     background-color: #aaaaaa !important;
@@ -181,7 +192,6 @@ form {
 
 .tdSpacer {
     padding-left: 0.5em;
-    // border: 1px dotted black;
 }
 .tdBold {
     font-weight: bold;
@@ -218,10 +228,10 @@ tr.spacer td {
 
 // Delivery past-due
 .dlv-past-due {
-    color: red;
+    color: #d62222;
 }
 .dlv-completed {
-    color: green;
+    color: #379937;
 }
 
 #haulSummaryBtn {

@@ -28,6 +28,7 @@ app.use('/api/deliveries', require('./routes/deliveryRoutes'))
 app.use('/api/hauls', require('./routes/haulRoutes'))
 app.use('/api/freight-routes', require('./routes/freightRouteRoutes'))
 app.use('/api/workdays', require('./routes/workdayRoutes'))
+app.use('/api/bulletin/articles', require('./routes/bulletinArticles'))
 
 // OVERRIDE ERROR HANDLER
 app.use(errorHandler)

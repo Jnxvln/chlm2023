@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { TabView, TabPanel } from 'primereact/tabview'
+import WelcomeDashboard from './WelcomeDashboard'
 import HaulsDashboard from './HaulsDashboard'
 import DeliveriesDashboard from './DeliveriesDashboard'
 import VendorsDashboard from './VendorsDashboard'
@@ -13,16 +14,12 @@ function Dashboard({ user }) {
 
     return (
         <section style={{ padding: '2em' }}>
-            <h1>Dashboard</h1>
-            <h4>Welcome, {user && user.firstName}</h4>
-
             <TabView
                 activeIndex={tabsActiveIndex}
                 onTabChange={(e) => setTabsActiveIndex(e.index)}
             >
                 <TabPanel header="Welcome">
-                    <h3>Welcome</h3>
-                    <p>Choose any tab to get started</p>
+                    <WelcomeDashboard />
                 </TabPanel>
                 <TabPanel header="Hauls">
                     <HaulsDashboard />

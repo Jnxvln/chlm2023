@@ -1,0 +1,33 @@
+// #region =COLORS=
+$body-background-primary: rgb(255, 255, 255);
+
+// #region Dialog Colors
+$default-dialog-header-backgroundColor: rgb(59, 80, 177);
+$new-dialog-header-backgroundColor: rgb(34, 39, 109);
+$edit-dialog-header-backgroundColor: rgb(109, 34, 80);
+// #endregion
+
+// #region -LANDING COLORS
+
+// #region --Bulletin Board Colors
+$bulletin-article-title-color: #bc8156;
+$bulletin-article-posted-color: #83786f;
+$bulletin-title-color: #753e16;
+// #endregion
+
+// #region --Materials Section Colors
+$landing-materials-bkg-gradientTop: rgba(96, 74, 62, 1);
+$landing-materials-bkg-gradientBottom: rgba(35, 19, 10, 1);
+$landing-materials-title-color: #e1c098;
+// #endregion
+// #endregion
+
+// #endregion
+
+// #region =FONTS=
+$haulSummaryFontSize: 10pt;
+// #endregion
+
+// #REGION =MARGIN, PADDING, ETC.=
+$default-container-padding: 1em;
+// #endregion
