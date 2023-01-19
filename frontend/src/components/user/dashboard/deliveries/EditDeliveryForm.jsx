@@ -273,7 +273,6 @@ function DeliveryForm({ delivery }) {
             <Button
                 icon="pi pi-pencil"
                 iconPos="left"
-                style={{ marginRight: '0.5em' }}
                 onClick={() => setFormDialog(true)}
             />
 

@@ -2,6 +2,7 @@
 
 const {
     getDeliveryClients,
+    getDeliveryClientById,
     createDeliveryClient,
     updateDeliveryClient,
     deleteDeliveryClient,
@@ -12,9 +13,13 @@ const express = require('express')
 const router = express.Router()
 
 // ROUTE HANDLERS
-router.route('/').get(getDeliveryClients).post(protect, createDeliveryClient)
+router
+    .route('/')
+    .get(protect, getDeliveryClients)
+    .post(protect, createDeliveryClient)
 router
     .route('/:id')
+    .get(protect, getDeliveryClientById)
     .delete(protect, deleteDeliveryClient)
     .put(protect, updateDeliveryClient)
 

@@ -222,6 +222,11 @@ function HaulsDashboard() {
             dateEnd: rangeDates[rangeDates.length - 1],
         }
 
+        // console.log('HAUL SUMMARY REPORT VARIABLES: ')
+        // console.log('DriverID: ' + selectedDriverId)
+        // console.log('Date Start: ' + rangeDates[0])
+        // console.log('Date End: ' + rangeDates[rangeDates.length - 1])
+
         navigate({
             pathname: '/hauls/summary',
             search: `?${createSearchParams(params)}`,

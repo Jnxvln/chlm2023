@@ -89,15 +89,22 @@ const getHaulsByDriverIdAndDateRange = asyncHandler(async (req, res) => {
         dates.push(dayjs(dateStart).add(i, 'day').format('YYYY-MM-DD'))
     }
 
+    let startDateFormat = dayjs(req.params.dateStart).format('YYYY-MM-DD')
+    let endDateFormat = dayjs(req.params.dateEnd).format('YYYY-MM-DD')
+
     // Return hauls within this date range
-    const driverHauls = await Haul.find({ driver: req.params.driverId })
 
-    const hauls = driverHauls.filter((h) =>
-        dates.includes(h.dateHaul.split('T')[0])
-    )
+    const hauls = await Haul.find({
+        driver: req.params.driverId,
+        dateHaul: {
+            $gte: startDateFormat,
+            $lte: endDateFormat,
+        },
+    })
 
-    // 3. Return this list
-    res.status(200).send(hauls)
+    // console.log(hauls)
+
+    res.status(200).json(hauls)
 })
 
 // @desc    Create haul
@@ -125,7 +132,10 @@ const createHaul = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('The `from` field required')
     }
-    if (!req.body.vendorLocation && req.body.loadType === 'enddump') {
+    if (
+        !req.body.vendorLocation &&
+        req.body.from.toLowerCase() !== 'off duty'
+    ) {
         res.status(400)
         throw new Error('The `vendor location` field required')
     }
@@ -154,7 +164,6 @@ const createHaul = asyncHandler(async (req, res) => {
         rate: null,
         miles: null,
         payRate: null,
-        driverPay: null,
     }
 
     if (req.body.loadType === 'enddump') {
@@ -164,7 +173,6 @@ const createHaul = asyncHandler(async (req, res) => {
     if (req.body.loadType === 'flatbedperc') {
         overrides.chInvoice = req.body.chInvoice
         overrides.payRate = req.body.payRate
-        overrides.driverPay = req.body.driverPay
     }
 
     if (req.body.loadType === 'flatbedmi') {
@@ -204,7 +212,6 @@ const updateHaul = asyncHandler(async (req, res) => {
         rate: null,
         miles: null,
         payRate: null,
-        driverPay: null,
     }
 
     if (req.body.loadType === 'enddump') {
@@ -214,7 +221,6 @@ const updateHaul = asyncHandler(async (req, res) => {
     if (req.body.loadType === 'flatbedperc') {
         overrides.chInvoice = req.body.chInvoice
         overrides.payRate = req.body.payRate
-        overrides.driverPay = req.body.driverPay
     }
 
     if (req.body.loadType === 'flatbedmi') {

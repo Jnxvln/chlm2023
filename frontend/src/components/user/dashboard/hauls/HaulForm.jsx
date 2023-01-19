@@ -50,7 +50,6 @@ function HaulForm({ selectedDriverId }) {
         rate: null,
         miles: null,
         payRate: null,
-        driverPay: null,
     }
 
     const loadTypeOptions = [
@@ -193,7 +192,6 @@ function HaulForm({ selectedDriverId }) {
         rate,
         miles,
         payRate,
-        driverPay,
     } = formData
     // #endregion
 
@@ -354,7 +352,6 @@ function HaulForm({ selectedDriverId }) {
                     product: '-',
                     payRate: 0,
                     tons: 0,
-                    driverPay: 0,
                 }))
             },
             reject: () => {},
@@ -423,7 +420,6 @@ function HaulForm({ selectedDriverId }) {
                 product: '-',
                 payRate: 0,
                 tons: 0,
-                driverPay: 0,
             }))
         } else if (loadType === 'enddump') {
             setFormData((prevState) => ({
@@ -436,7 +432,6 @@ function HaulForm({ selectedDriverId }) {
                 product: '-',
                 rate: 0,
                 tons: 0,
-                driverPay: 0,
             }))
         } else {
             toast.error(
@@ -459,18 +454,19 @@ function HaulForm({ selectedDriverId }) {
                 }))
             }
 
-            if (driverObj && loadType === 'enddump') {
-                setFormData((prevState) => ({
-                    ...prevState,
-                    driverPay: driverObj.endDumpPayRate,
-                }))
-            }
+            // FEATURE NOT NEEDED AT THIS TIME, (PULL DRIVER PAY *ONLY* FROM DRIVER PROFILE)
+            // if (driverObj && loadType === 'enddump') {
+            //     setFormData((prevState) => ({
+            //         ...prevState,
+            //         driverPay: driverObj.endDumpPayRate,
+            //     }))
+            // }
 
             if (driverObj && loadType === 'flatbedperc') {
                 setFormData((prevState) => ({
                     ...prevState,
                     tons: 24, // default tonnage for flatbeds
-                    driverPay: driverObj.flatBedPayRate,
+                    // driverPay: driverObj.flatBedPayRate,
                 }))
             }
         }
@@ -877,8 +873,8 @@ function HaulForm({ selectedDriverId }) {
                             </div>
                         )}
 
-                        {/* Driver Pay */}
-                        {loadType !== 'flatbedmi' && (
+                        {/* Driver Pay : FEATURE NOT NEEDED, PULL ONLY FROM DRIVER PROFILE! */}
+                        {/* {loadType !== 'flatbedmi' && (
                             <div className="field col">
                                 <div style={{ margin: '0.8em 0' }}>
                                     <label htmlFor="driverPay">
@@ -897,7 +893,7 @@ function HaulForm({ selectedDriverId }) {
                                     />
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </form>
             </Dialog>

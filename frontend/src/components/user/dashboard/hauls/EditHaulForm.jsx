@@ -51,7 +51,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         rate: null,
         miles: null,
         payRate: null,
-        driverPay: null,
     }
 
     const loadTypeOptions = [
@@ -228,7 +227,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         rate,
         miles,
         payRate,
-        driverPay,
     } = formData
     // #endregion
 
@@ -309,7 +307,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                     rate: null,
                     miles: null,
                     payRate: null,
-                    driverPay: haul.driverPay,
                 }))
             } else {
                 setFormData((prevState) => ({
@@ -330,7 +327,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                     rate: haul.rate,
                     miles: haul.miles,
                     payRate: haul.payRate,
-                    driverPay: haul.driverPay,
                 }))
             }
         } else {
@@ -412,7 +408,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                     product: '-',
                     payRate: 0,
                     tons: 0,
-                    driverPay: 0,
                 }))
             },
             reject: () => {},
@@ -481,7 +476,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 product: '-',
                 payRate: 0,
                 tons: 0,
-                driverPay: 0,
             }))
         } else if (loadType === 'enddump') {
             setFormData((prevState) => ({
@@ -494,7 +488,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 product: '-',
                 rate: 0,
                 tons: 0,
-                driverPay: 0,
             }))
         } else {
             toast.error(
@@ -567,7 +560,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 rate: null,
                 miles: null,
                 payRate: null,
-                driverPay: haul.driverPay,
             }))
             setVendorSelected(haul.from)
             setVendorLocationSelected(null)
@@ -595,7 +587,6 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 rate: haul.rate,
                 miles: haul.miles,
                 payRate: haul.payRate,
-                driverPay: haul.driverPay,
             }))
             setVendorSelected(haul.from)
             setVendorLocationSelected(haul.vendorLocation)
@@ -661,19 +652,20 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                     truck: driverObj.defaultTruck,
                 }))
 
-                if (loadType === 'enddump') {
-                    setFormData((prevState) => ({
-                        ...prevState,
-                        driverPay: driverObj.endDumpPayRate,
-                    }))
-                }
-
-                if (loadType === 'flatbedperc') {
-                    setFormData((prevState) => ({
-                        ...prevState,
-                        driverPay: driverObj.flatBedPayRate,
-                    }))
-                }
+                // FEATURE NOT NEEDED - ONLY PULL DRIVER PAY FROM DRIVER PROFILE!
+                // if (loadType === 'enddump' && isDuplicating) {
+                //     setFormData((prevState) => ({
+                //         ...prevState,
+                //         driverPay: driverObj.endDumpPayRate,
+                //     }))
+                // }
+                //
+                // if (loadType === 'flatbedperc' && isDuplicating) {
+                //     setFormData((prevState) => ({
+                //         ...prevState,
+                //         driverPay: driverObj.flatBedPayRate,
+                //     }))
+                // }
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1073,8 +1065,8 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                             </div>
                         )}
 
-                        {/* Driver Pay */}
-                        {loadType !== 'flatbedmi' && (
+                        {/* Driver Pay - FEATURE NOT NEEDED, ONLY PULL DRIVER PAY FROM DRIVER PROFILE! */}
+                        {/* {loadType !== 'flatbedmi' && (
                             <div className="field col">
                                 <div style={{ margin: '0.8em 0' }}>
                                     <label htmlFor="driverPay">
@@ -1094,7 +1086,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                                     />
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </form>
             </Dialog>

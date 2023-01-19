@@ -77,10 +77,6 @@ const haulSchema = mongoose.Schema(
             type: Number,
             required: false,
         },
-        driverPay: {
-            type: Number,
-            required: false,
-        },
     },
     {
         timestamps: true,

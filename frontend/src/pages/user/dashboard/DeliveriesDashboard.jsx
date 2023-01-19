@@ -27,11 +27,13 @@ import {
 } from '../../../api/deliveries/deliveriesApi'
 import { getDeliveryClients } from '../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 
 function DeliveriesDashboard() {
-    // #region VARS ------------------------
+    // #region VARS ==============================================================
 
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
 
     const deliveryClientOverlayPanel = useRef(null)
     const [toggleShowCompleted, setToggleShowCompleted] = useState(
@@ -206,7 +208,7 @@ function DeliveriesDashboard() {
         }
     }
 
-    // #region COMPONENT TEMPLATES
+    // #region COMPONENT TEMPLATES ==============================================================
     const dataTableHeaderTemplate = () => {
         return (
             <div className="flex justify-content-between">
@@ -415,8 +417,13 @@ function DeliveriesDashboard() {
 
     const actionsTemplate = (rowData) => {
         return (
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', gap: 10 }}>
                 <EditDeliveryForm delivery={rowData} />
+                <Button
+                    icon="pi pi-print"
+                    className="p-button-darkGray"
+                    onClick={(e) => printDelivery(rowData)}
+                />
                 <Button
                     icon="pi pi-trash"
                     className="p-button-danger"
@@ -427,7 +434,7 @@ function DeliveriesDashboard() {
     }
     // #endregion
 
-    // #region FILTERS
+    // #region FILTERS ==============================================================
     const onGlobalFilterChange = (e) => {
         const value = e.target.value
         let _filters = { ...filters }
@@ -451,7 +458,7 @@ function DeliveriesDashboard() {
     }
     // #endregion
 
-    // #region ACTION HANDLERS
+    // #region ACTION HANDLERS ==============================================================
     // Delete delivery confirmation
     const onDelete = (e, rowData) => {
         confirmPopup({
@@ -539,6 +546,17 @@ function DeliveriesDashboard() {
             setFilteredDeliveriesToDateRange()
         }
     }
+
+    // Print delivery
+    const printDelivery = (rowData) => {
+        console.log('Printing data: ')
+        console.log(rowData)
+
+        navigate({
+            pathname: '/deliveries/print',
+            search: `?${createSearchParams(rowData)}`,
+        })
+    }
     // #endregion
 
     const setFilteredDeliveriesToDateRange = () => {
@@ -582,7 +600,7 @@ function DeliveriesDashboard() {
         }
     }
 
-    // #region USE EFFECTS
+    // #region USE EFFECTS ==============================================================
     // RUN ONCE - INIT FILTERS
     useEffect(() => {
         initFilters()

@@ -18,13 +18,14 @@ function HaulSummary() {
     // #region VARS -----------------------------------------------------------
     const navigate = useNavigate()
 
-    let [searchParams, setSearchParams] = useSearchParams()
+    let [searchParams] = useSearchParams()
     const [dates, setDates] = useState([])
     const [data, setData] = useState(null)
-    const queryClient = useQueryClient()
-    const _driverId = searchParams.get('driverId')
-    const _dateStart = searchParams.get('dateStart')
-    const _dateEnd = searchParams.get('dateEnd')
+    // const queryClient = useQueryClient()
+    let _driverId = searchParams.get('driverId')
+    let _dateStart = searchParams.get('dateStart')
+    let _dateEnd = searchParams.get('dateEnd')
+    // let _hauls = JSON.parse(searchParams.get('filteredHauls'))
     const chDatesPrinted = []
     const ncDatesPrinted = []
 
@@ -33,7 +34,7 @@ function HaulSummary() {
         queryFn: () => fetchUser(),
     })
 
-    const userId = user?.data?._id
+    const userId = user.data._id
 
     const driver = useQuery({
         queryKey: ['driver', userId],
@@ -44,11 +45,9 @@ function HaulSummary() {
             console.log(err)
         },
     })
-
     const driverId = driver?.data?._id
-
     const workdays = useQuery({
-        queryKey: ['workdays'],
+        queryKey: ['summaryWorkdays'],
         queryFn: () =>
             getWorkdaysByDriverIdAndDateRange(
                 driverId,
@@ -74,32 +73,19 @@ function HaulSummary() {
             }
         },
     })
-
-    const hauls = useQuery({
-        queryKey: ['hauls'],
-        queryFn: () => {
-            const data = {
-                driverId,
-                _dateStart,
-                _dateEnd,
-                token: user.data.token,
-            }
-
-            return getHaulsByDriverIdAndDateRange(
+    const filteredHauls = useQuery({
+        queryKey: ['summaryHauls'],
+        queryFn: () =>
+            getHaulsByDriverIdAndDateRange(
                 driverId,
                 _dateStart,
                 _dateEnd,
                 user.data.token
-            )
-        },
+            ),
         enabled: !!driverId,
-        // onSuccess: (_hauls) => {
-        //     console.log('Hauls Fetched: ')
-        //     console.log(_hauls)
-        // },
         onError: (err) => {
-            console.log('ERROR FETCHING HAULS: ')
-            console.log(err)
+            console.log('Error occurred while fetching hauls, check logs!')
+            toast.error('Error occurred while fetching hauls, check logs!')
         },
     })
     // #endregion
@@ -132,11 +118,11 @@ function HaulSummary() {
     }
 
     const calculateCHHours = () => {
-        if (data && data.workdays) {
+        if (workdays && workdays.data) {
             let _chHours = 0
 
-            for (let i = 0; i < data.workdays.length; i++) {
-                _chHours += parseFloat(data.workdays[i].chhours)
+            for (let i = 0; i < workdays.data.length; i++) {
+                _chHours += parseFloat(workdays.data[i].chhours)
             }
 
             // return _chHours.toFixed(2) > 0 ? _chHours.toFixed(2) : -1
@@ -152,11 +138,11 @@ function HaulSummary() {
     }
 
     const calculateNCHours = () => {
-        if (data && data.workdays) {
+        if (workdays && workdays.data) {
             let _ncHours = 0
-            for (let i = 0; i < data.workdays.length; i++) {
-                if (data.workdays[i].nchours) {
-                    _ncHours += parseFloat(data.workdays[i].nchours)
+            for (let i = 0; i < workdays.data.length; i++) {
+                if (workdays.data[i].nchours) {
+                    _ncHours += parseFloat(workdays.data[i].nchours)
                 }
             }
             return _ncHours.toFixed(2)
@@ -164,18 +150,21 @@ function HaulSummary() {
     }
 
     const calculateTotalFreightPay = () => {
-        if (data && data.hauls) {
+        // if (data && data.hauls) {
+        if (filteredHauls && filteredHauls.data) {
             let _totalFreightPay = 0
 
-            for (let i = 0; i < data.hauls.length; i++) {
-                if (data.hauls[i].loadType === 'enddump') {
+            for (let i = 0; i < filteredHauls.data.length; i++) {
+                if (filteredHauls.data[i].loadType === 'enddump') {
                     _totalFreightPay +=
-                        parseFloat(data.hauls[i].tons) *
-                        parseFloat(data.hauls[i].rate)
+                        parseFloat(filteredHauls.data[i].tons) *
+                        parseFloat(filteredHauls.data[i].rate)
                 }
 
-                if (data.hauls[i].loadType === 'flatbedperc') {
-                    _totalFreightPay += parseFloat(data.hauls[i].payRate)
+                if (filteredHauls.data[i].loadType === 'flatbedperc') {
+                    _totalFreightPay += parseFloat(
+                        filteredHauls.data[i].payRate
+                    )
                 }
             }
 
@@ -184,23 +173,23 @@ function HaulSummary() {
     }
 
     const calculateDriverSubtotal = () => {
-        if (data && data.driver && data.hauls) {
+        if (driver && driver.data && filteredHauls && filteredHauls.data) {
             let _totalDriverPay = 0
-            const _driverEndDumpPayRate = parseFloat(data.driver.endDumpPayRate)
-            const _driverFlatBedPayRate = parseFloat(data.driver.flatBedPayRate)
+            const _driverEndDumpPayRate = parseFloat(driver.data.endDumpPayRate)
+            const _driverFlatBedPayRate = parseFloat(driver.data.flatBedPayRate)
 
-            for (let i = 0; i < data.hauls.length; i++) {
-                if (data.hauls[i].loadType === 'enddump') {
+            for (let i = 0; i < filteredHauls.data.length; i++) {
+                if (filteredHauls.data[i].loadType === 'enddump') {
                     let _add = roundPrecise(
-                        parseFloat(data.hauls[i].tons) *
-                            parseFloat(data.hauls[i].rate) *
+                        parseFloat(filteredHauls.data[i].tons) *
+                            parseFloat(filteredHauls.data[i].rate) *
                             _driverEndDumpPayRate
                     )
                     _totalDriverPay += _add
                 }
-                if (data.hauls[i].loadType === 'flatbedperc') {
+                if (filteredHauls.data[i].loadType === 'flatbedperc') {
                     let _add = roundPrecise(
-                        parseFloat(data.hauls[i].payRate) *
+                        parseFloat(filteredHauls.data[i].payRate) *
                             _driverFlatBedPayRate
                     )
                     _totalDriverPay += _add
@@ -208,18 +197,20 @@ function HaulSummary() {
             }
 
             return roundPrecise(_totalDriverPay).toFixed(2)
-        } else return -1
+        } else {
+            return -1
+        }
     }
 
     const calculateNCTotal = () => {
-        if (data && data.workdays && data.driver) {
+        if (workdays && workdays.data && driver && driver.data) {
             let _nctotal = 0
-            let _driverNCRate = parseFloat(data.driver.ncRate)
+            let _driverNCRate = parseFloat(driver.data.ncRate)
 
-            for (let i = 0; i < data.workdays.length; i++) {
-                if (data.workdays[i].nchours) {
+            for (let i = 0; i < workdays.data.length; i++) {
+                if (workdays.data[i].nchours) {
                     _nctotal += roundPrecise(
-                        parseFloat(data.workdays[i].nchours) * _driverNCRate
+                        parseFloat(workdays.data[i].nchours) * _driverNCRate
                     )
                 }
             }
@@ -259,11 +250,11 @@ function HaulSummary() {
     }
 
     const chHoursTemplate = (rowData) => {
-        if (rowData && data && data.workdays) {
+        if (rowData && workdays && workdays.data) {
             const _dateHaul = rowData.dateHaul.split('T')[0]
 
             if (!chDatesPrinted.includes(_dateHaul)) {
-                const wday = data.workdays.find((w) => {
+                const wday = workdays.data.find((w) => {
                     const _date = w.date.split('T')[0]
                     if (_dateHaul === _date) {
                         chDatesPrinted.push(w.date.split('T')[0])
@@ -296,9 +287,9 @@ function HaulSummary() {
     }
 
     const ncHoursTemplate = (rowData) => {
-        if (rowData && data && data.workdays) {
+        if (rowData && workdays && workdays.data) {
             if (!ncDatesPrinted.includes(rowData.dateHaul.split('T')[0])) {
-                const wday = data.workdays.find((w) => {
+                const wday = workdays.data.find((w) => {
                     ncDatesPrinted.push(w.date.split('T')[0])
                     return (
                         w.date.split('T')[0] === rowData.dateHaul.split('T')[0]
@@ -364,15 +355,15 @@ function HaulSummary() {
     }, [])
 
     useEffect(() => {
-        if (workdays.data && hauls.data) {
+        if (workdays.data) {
             setData((prevState) => ({
                 ...prevState,
                 driver: driver.data,
-                hauls: hauls.data,
+                hauls: filteredHauls.data,
                 workdays: workdays.data,
             }))
         }
-    }, [workdays.data, hauls.data])
+    }, [])
     // #endregion
 
     return (
@@ -451,8 +442,9 @@ function HaulSummary() {
             {/* Data Table */}
             <div id="haulSummaryDataTable">
                 <DataTable
-                    value={data && data.hauls}
-                    loading={hauls && hauls.isLoading}
+                    // value={data && data.hauls}
+                    value={filteredHauls && filteredHauls.data}
+                    loading={filteredHauls.isLoading}
                     responsiveLayout="scroll"
                     size="small"
                     stripedRows
@@ -520,11 +512,11 @@ function HaulSummary() {
                                     </td>
                                     <td className="tdSpacer">
                                         $
-                                        {data &&
-                                        data.driver &&
-                                        data.driver.ncRate ? (
+                                        {driver &&
+                                        driver.data &&
+                                        driver.data.ncRate ? (
                                             parseFloat(
-                                                data.driver.ncRate
+                                                driver.data.ncRate
                                             ).toFixed(2)
                                         ) : (
                                             <>...</>
@@ -542,8 +534,8 @@ function HaulSummary() {
                         <strong>NC Reasons: </strong>
                     </div>
                     {data &&
-                        data.workdays &&
-                        data.workdays.map((day) => (
+                        workdays &&
+                        workdays.data.map((day) => (
                             <div key={day._id}>
                                 {day && day.ncReasons ? (
                                     <>

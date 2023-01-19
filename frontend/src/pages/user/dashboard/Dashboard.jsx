@@ -9,7 +9,7 @@ import DriversDashboard from './DriversDashboard'
 import CostCalculator from './CostCalculator'
 
 function Dashboard({ user }) {
-    const [tabsActiveIndex, setTabsActiveIndex] = useState(0)
+    const [tabsActiveIndex, setTabsActiveIndex] = useState(null)
 
     return (
         <section style={{ padding: '2em' }}>
@@ -18,13 +18,15 @@ function Dashboard({ user }) {
 
             <TabView
                 activeIndex={tabsActiveIndex}
-                onTabChange={(e) => setTabsActiveIndex(e.index)}
+                onTabChange={(e) => {
+                    setTabsActiveIndex(e.index)
+                }}
             >
                 <TabPanel header="Welcome">
                     <h3>Welcome</h3>
                     <p>Choose any tab to get started</p>
                 </TabPanel>
-                <TabPanel header="Hauls">
+                <TabPanel header="Hauls" id="tabHauls">
                     <HaulsDashboard />
                 </TabPanel>
                 <TabPanel header="Deliveries">

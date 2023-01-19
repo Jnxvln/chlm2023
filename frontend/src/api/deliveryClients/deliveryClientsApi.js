@@ -14,6 +14,18 @@ export const getDeliveryClients = async (token) => {
     return response.data
 }
 
+// Get delivery client by id
+export const getDeliveryClientById = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.get(API_URL + `/${id}`, config)
+    return response.data
+}
+
 // Create delivery client
 export const createDeliveryClient = async (deliveryClientData, token) => {
     const config = {
