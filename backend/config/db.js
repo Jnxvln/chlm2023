@@ -5,9 +5,13 @@ const connectDB = async () => {
         let conn
 
         if (process.env.NODE_ENV === 'production') {
-            conn = await mongoose.connect(process.env.MONGODB_URI_23)
+            conn = await mongoose.connect(process.env.MONGODB_URI_23, {
+                useNewUrlParser: true,
+            })
         } else {
-            conn = await mongoose.connect(process.env.MONGODB_URI_DEV)
+            conn = await mongoose.connect(process.env.MONGODB_URI_DEV, {
+                useNewUrlParser: true,
+            })
         }
 
         console.log(

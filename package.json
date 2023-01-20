@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "Official website for the C&H Landscape Materials business",
     "main": "server.js",
+    "engines": {
+        "node": "16.16.0"
+    },
     "scripts": {
         "start": "node backend/server.js",
         "server": "nodemon backend/server.js",
