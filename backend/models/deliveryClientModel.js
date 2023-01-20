@@ -4,15 +4,15 @@ const deliveryClientSchema = mongoose.Schema(
     {
         firstName: {
             type: String,
-            required: [true, 'First name is required'],
+            required: false,
         },
         lastName: {
             type: String,
-            required: [true, 'Last name is required'],
+            required: false,
         },
         phone: {
             type: String,
-            required: [true, 'Phone number is required'],
+            required: false,
         },
         companyName: {
             type: String,

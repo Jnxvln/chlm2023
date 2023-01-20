@@ -23,11 +23,6 @@ const getDeliveryClientById = asyncHandler(async (req, res) => {
 // @route   POST /api/deliveries/clients
 // @access  Private
 const createDeliveryClient = asyncHandler(async (req, res) => {
-    if (!req.body.firstName || !req.body.lastName || !req.body.phone) {
-        res.status(400)
-        throw new Error('Please provide all required fields')
-    }
-
     const clientExists = await DeliveryClient.findOne({
         firstName: { $regex: req.body.firstName, $options: 'i' },
         lastName: { $regex: req.body.lastName, $options: 'i' },

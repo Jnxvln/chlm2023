@@ -113,7 +113,13 @@ function DeliveryForm({ selectedClient, iconButton }) {
         if (option) {
             return (
                 <>
-                    {option.firstName} {option.lastName}
+                    {option.companyName ? (
+                        <>{option.companyName}</>
+                    ) : (
+                        <>
+                            {option.firstName} {option.lastName}
+                        </>
+                    )}
                 </>
             )
         }
@@ -125,7 +131,13 @@ function DeliveryForm({ selectedClient, iconButton }) {
         if (option) {
             return (
                 <>
-                    {option.firstName} {option.lastName}
+                    {option.companyName ? (
+                        <>{option.companyName}</>
+                    ) : (
+                        <>
+                            {option.firstName} {option.lastName}
+                        </>
+                    )}
                 </>
             )
         }

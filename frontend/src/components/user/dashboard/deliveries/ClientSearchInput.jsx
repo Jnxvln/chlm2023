@@ -35,13 +35,30 @@ function ClientSearchInput({ onClientSelected }) {
         return (
             <div className="flex flex-column gap-2" style={{ width: '100%' }}>
                 <div>
-                    <strong>
-                        {option.firstName} {option.lastName}
-                    </strong>
+                    {option.companyName ? (
+                        <div>
+                            <div>
+                                <strong>{option.companyName}</strong>
+                            </div>
+                            {option.firstName && option.lastName ? (
+                                <div>
+                                    {option.firstName} {option.lastName}
+                                </div>
+                            ) : (
+                                <div>
+                                    <em>(Name missing)</em>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <strong>
+                            {option.firstName} {option.lastName}
+                        </strong>
+                    )}
                 </div>
                 <div style={{ whiteSpace: 'pre' }}>{option.phone}</div>
                 <div>
-                    <address style={{ whiteSpace: 'pre' }}>
+                    <address style={{ whiteSpace: 'pre', fontStyle: 'normal' }}>
                         {option.address}
                     </address>
                 </div>
@@ -72,7 +89,8 @@ function ClientSearchInput({ onClientSelected }) {
                     query.toLowerCase()
                 ) ||
                 client.phone.toLowerCase().includes(query.toLowerCase()) ||
-                client.address.toLowerCase().includes(query.toLowerCase())
+                client.address.toLowerCase().includes(query.toLowerCase()) ||
+                client.companyName.toLowerCase().includes(query.toLowerCase())
         )
         setFilteredClients(filteredClients)
     }

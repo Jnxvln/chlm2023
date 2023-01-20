@@ -99,11 +99,11 @@ function DeliveryClientForm({ clientName, iconButton }) {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        if (!firstName || !lastName || !phone) {
-            return toast.error(
-                'First name, last name, and phone number are required fields'
-            )
-        }
+        // if (!firstName || !lastName || !phone) {
+        //     return toast.error(
+        //         'First name, last name, and phone number are required fields'
+        //     )
+        // }
 
         // dispatch(createDeliveryClient(formData));
         mutationCreateDeliveryClient.mutate({
@@ -166,14 +166,14 @@ function DeliveryClientForm({ clientName, iconButton }) {
                                         id="firstName"
                                         name="firstName"
                                         value={firstName}
-                                        placeholder="First name *"
+                                        placeholder="First name"
                                         onChange={onChange}
                                         style={{ width: '100%' }}
                                         autoFocus
                                         required
                                     />
                                     <label htmlFor="firstName">
-                                        First Name *
+                                        First Name
                                     </label>
                                 </span>
                             </div>
@@ -187,14 +187,12 @@ function DeliveryClientForm({ clientName, iconButton }) {
                                         id="lastName"
                                         name="lastName"
                                         value={lastName}
-                                        placeholder="Last name *"
+                                        placeholder="Last name"
                                         onChange={onChange}
                                         style={{ width: '100%' }}
                                         required
                                     />
-                                    <label htmlFor="lastName">
-                                        Last Name *
-                                    </label>
+                                    <label htmlFor="lastName">Last Name</label>
                                 </span>
                             </div>
                         </div>
@@ -229,14 +227,14 @@ function DeliveryClientForm({ clientName, iconButton }) {
                                         id="phone"
                                         name="phone"
                                         value={phone}
-                                        placeholder="Phone(s) *"
+                                        placeholder="Phone(s)"
                                         onChange={onChange}
                                         rows={4}
                                         cols={30}
                                         style={{ width: '100%' }}
                                         required
                                     />
-                                    <label htmlFor="phone">Phone(s) *</label>
+                                    <label htmlFor="phone">Phone(s)</label>
                                 </span>
                             </div>
                         </div>

@@ -130,7 +130,13 @@ function DeliveryForm({ delivery }) {
         if (option) {
             return (
                 <>
-                    {option.firstName} {option.lastName}
+                    {option.companyName ? (
+                        <>{option.companyName}</>
+                    ) : (
+                        <>
+                            {option.firstName} {option.lastName}
+                        </>
+                    )}
                 </>
             )
         }
@@ -141,7 +147,13 @@ function DeliveryForm({ delivery }) {
     const driverOptionLabelTemplate = (rowData) => {
         return (
             <>
-                {rowData.firstName} {rowData.lastName}
+                {rowData.companyName ? (
+                    <>{rowData.companyName}</>
+                ) : (
+                    <>
+                        {rowData.firstName} {rowData.lastName}
+                    </>
+                )}
             </>
         )
     }

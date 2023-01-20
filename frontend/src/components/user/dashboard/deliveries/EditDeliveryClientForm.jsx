@@ -107,11 +107,11 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        if (!firstName || !lastName || !phone) {
-            return toast.error(
-                'First name, last name, and phone number are required fields'
-            )
-        }
+        // if (!firstName || !lastName || !phone) {
+        //     return toast.error(
+        //         'First name, last name, and phone number are required fields'
+        //     )
+        // }
 
         // dispatch(updateDeliveryClient(formData));
         mutationUpdateDeliveryClient.mutate({
@@ -197,14 +197,14 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
                                         id="firstName"
                                         name="firstName"
                                         value={firstName}
-                                        placeholder="First name *"
+                                        placeholder="First name"
                                         onChange={onChange}
                                         style={{ width: '100%' }}
                                         autoFocus
                                         required
                                     />
                                     <label htmlFor="firstName">
-                                        First Name *
+                                        First Name
                                     </label>
                                 </span>
                             </div>
@@ -223,9 +223,7 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
                                         style={{ width: '100%' }}
                                         required
                                     />
-                                    <label htmlFor="lastName">
-                                        Last Name *
-                                    </label>
+                                    <label htmlFor="lastName">Last Name</label>
                                 </span>
                             </div>
                         </div>
@@ -267,7 +265,7 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
                                         style={{ width: '100%' }}
                                         required
                                     />
-                                    <label htmlFor="phone">Phone(s) *</label>
+                                    <label htmlFor="phone">Phone(s)</label>
                                 </span>
                             </div>
                         </div>

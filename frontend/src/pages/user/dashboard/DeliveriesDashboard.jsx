@@ -272,7 +272,13 @@ function DeliveriesDashboard() {
                         className={pastDueClass(rowData)}
                         style={{ marginLeft: '0.5em' }}
                     >
-                        {_client.firstName} {_client.lastName}
+                        {_client.companyName ? (
+                            <>{_client.companyName}</>
+                        ) : (
+                            <>
+                                {_client.firstName} {_client.lastName}
+                            </>
+                        )}
                     </span>
                 )}
             </>
