@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const connectDB = async () => {
+    console.log(
+        '\n\nPROCESS.ENV.MONGODB_URI_DEV: ' + process.env.MONGODB_URI_DEV
+    )
+
     try {
         let conn
 
