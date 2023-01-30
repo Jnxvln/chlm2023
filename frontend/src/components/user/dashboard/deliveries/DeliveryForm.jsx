@@ -16,7 +16,7 @@ import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClie
 import { createDelivery } from '../../../../api/deliveries/deliveriesApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function DeliveryForm({ selectedClient, iconButton }) {
+function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -195,8 +195,28 @@ function DeliveryForm({ selectedClient, iconButton }) {
 
     // Handle dialog close
     const onClose = () => {
+        console.log('Canceled..')
         resetForm()
         setFormDialog(false)
+    }
+
+    const setClientData = () => {
+        if (selectedClient) {
+            // console.log('[DeliveryForm]: Delivery client found: ')
+            // console.log(selectedClient)
+            setFormData((prevState) => ({
+                ...prevState,
+                deliveryClient: selectedClient,
+                contactName:
+                    selectedClient.firstName + ' ' + selectedClient.lastName,
+                contactPhone: selectedClient.phone,
+                address: selectedClient.address,
+                coordinates: selectedClient.coordinates,
+                directions: selectedClient.directions,
+            }))
+        } else {
+            console.log('Else no client selected?')
+        }
     }
     // #endregion
 
@@ -217,31 +237,30 @@ function DeliveryForm({ selectedClient, iconButton }) {
     }, [deliveryClients.data, selectedDeliveryClient])
 
     useEffect(() => {
-        if (selectedClient) {
-            setFormData((prevState) => ({
-                ...prevState,
-                deliveryClient: selectedClient,
-                contactName:
-                    selectedClient.firstName + ' ' + selectedClient.lastName,
-                contactPhone: selectedClient.phone,
-                address: selectedClient.address,
-                coordinates: selectedClient.coordinates,
-                directions: selectedClient.directions,
-            }))
-        }
+        setClientData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [selectedClient])
+
+    useEffect(() => {
+        if (display) {
+            setFormDialog(true)
+        }
+    }, [display])
 
     return (
-        <section>
-            <Button
-                label={iconButton ? null : 'New Delivery'}
-                icon={iconButton ? 'pi pi-truck' : 'pi pi-plus'}
-                onClick={(e) => {
-                    e.stopPropagation()
-                    setFormDialog(true)
-                }}
-            />
+        <>
+            {!hideButton && (
+                <Button
+                    label={iconButton ? null : 'New Delivery'}
+                    icon={iconButton ? 'pi pi-truck' : 'pi pi-plus'}
+                    style={{ height: '100%' }}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        setClientData()
+                        setFormDialog(true)
+                    }}
+                />
+            )}
 
             <Dialog
                 id="newDeliveryDialog"
@@ -249,10 +268,10 @@ function DeliveryForm({ selectedClient, iconButton }) {
                 header={deliveryDialogHeader}
                 footer={deliveryDialogFooter}
                 onHide={onClose}
-                style={{ width: '900px' }}
+                modal={true}
+                closeOnEscape={false}
                 onClick={(e) => e.stopPropagation()}
                 blockScroll
-                modal
             >
                 <form onSubmit={onSubmit}>
                     {/* DELIVERY CLIENT, DELIVERY DATE */}
@@ -520,7 +539,7 @@ function DeliveryForm({ selectedClient, iconButton }) {
                     </div>
                 </form>
             </Dialog>
-        </section>
+        </>
     )
 }
 

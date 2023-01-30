@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
+import ClientSearchInput from '../../../components/user/dashboard/deliveries/ClientSearchInput'
 import EditDeliveryClientForm from '../../../components/user/dashboard/deliveries/EditDeliveryClientForm'
 import EditDeliveryForm from '../../../components/user/dashboard/deliveries/EditDeliveryForm'
-import ClientSearchInput from '../../../components/user/dashboard/deliveries/ClientSearchInput'
+import DeliveryForm from '../../../components/user/dashboard/deliveries/DeliveryForm'
 import DeliveryTimeframeSelector from '../../../components/user/dashboard/deliveries/DeliveryTimeframeSelector'
+import TestClientSearch from '../../../components/user/dashboard/deliveries/TestClientSearch'
 // PrimeReact Components
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -31,7 +33,6 @@ import { createSearchParams, useNavigate } from 'react-router-dom'
 
 function DeliveriesDashboard() {
     // #region VARS ==============================================================
-
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 
@@ -43,6 +44,7 @@ function DeliveriesDashboard() {
     )
     const [rangeDates, setRangeDates] = useState([])
     const [filteredDeliveries, setFilteredDeliveries] = useState([])
+    const [selectedClient, setSelectedClient] = useState(null)
     const [selectedClientId, setSelectedClientId] = useState('')
     const [selectedClientAvatar, setSelectedClientAvatar] = useState(null)
     const [deliveryRowSelected, setDeliveryRowSelected] = useState(null)
@@ -213,10 +215,20 @@ function DeliveriesDashboard() {
         return (
             <div className="flex justify-content-between">
                 <div>
-                    <div className="flex" style={{ gap: '1em' }}>
-                        <ClientSearchInput
+                    <div className="flex gap-4">
+                        {/* <ClientSearchInput
                             onClientSelected={onClientSelected}
+                        /> */}
+
+                        <TestClientSearch
+                            onClientSelected={onClientSelected}
+                            selectedClient={selectedClient}
                         />
+
+                        {selectedClient && (
+                            <DeliveryForm selectedClient={selectedClient} />
+                        )}
+
                         <DeliveryTimeframeSelector
                             onDateRangeSelected={onDateRangeSelected}
                         />
@@ -533,23 +545,37 @@ function DeliveriesDashboard() {
 
     // Handle client selected, show client's deliveries
     const onClientSelected = (clientSelected) => {
-        // If the user clicks on a delivery client in the list, show all of this customer's deliveries
-        if (clientSelected && clientSelected.hasOwnProperty('_id')) {
-            const clientDeliveries =
-                deliveries && deliveries.data
-                    ? deliveries.data.filter(
-                          (dlv) => dlv.deliveryClient === clientSelected._id
-                      )
-                    : []
-            if (clientDeliveries && clientDeliveries.length > 0) {
-                setFilteredDeliveries(clientDeliveries)
-            } else {
-                toast.warning('No deliveries for this client')
-                return []
-            }
+        if (clientSelected === undefined) {
+            // console.log('[DeliveriesDashboard]: Client selection cleared')
+            // console.log(clientSelected)
+            setSelectedClient(null)
+            setFilteredDeliveries([])
         } else {
-            // Otherwise set deliveries back to date range selected
-            setFilteredDeliveriesToDateRange()
+            // console.log(
+            //     '[DeliveriesDashboard]: Running onClientSelected with value: '
+            // )
+            // console.log(clientSelected)
+            setSelectedClient(clientSelected)
+
+            // If the user clicks on a delivery client in the list, show all of this customer's deliveries
+            if (clientSelected && clientSelected.hasOwnProperty('_id')) {
+                setSelectedClientId(clientSelected._id)
+                const clientDeliveries =
+                    deliveries && deliveries.data
+                        ? deliveries.data.filter(
+                              (dlv) => dlv.deliveryClient === clientSelected._id
+                          )
+                        : []
+                if (clientDeliveries && clientDeliveries.length > 0) {
+                    setFilteredDeliveries(clientDeliveries)
+                } else {
+                    toast.warning('No deliveries for this client')
+                    return []
+                }
+            } else {
+                // Otherwise set deliveries back to date range selected
+                setFilteredDeliveriesToDateRange()
+            }
         }
     }
 

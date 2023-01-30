@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import DialogHeader from '../../../dialogComponents/DialogHeader'
 import DialogFooter from '../../../dialogComponents/DialogFooter_SubmitClose'
+import DeliveryForm from './DeliveryForm'
 // PrimeReact Components
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { ConfirmDialog } from 'primereact/confirmdialog' // For <ConfirmDialog /> component
+import { confirmDialog } from 'primereact/confirmdialog' // For confirmDialog method
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
 import { createDeliveryClient } from '../../../../api/deliveryClients/deliveryClientsApi'
@@ -28,6 +31,8 @@ function DeliveryClientForm({ clientName, iconButton }) {
     }
 
     const [formDialog, setFormDialog] = useState(false)
+    const [displayDeliveryForm, setDisplayDeliveryForm] = useState(false)
+    const [selectedDeliveryClient, setSelectedDeliveryClient] = useState(null)
     const [formData, setFormData] = useState(initialState)
 
     // Destructure form data
@@ -52,6 +57,7 @@ function DeliveryClientForm({ clientName, iconButton }) {
                 `${deliveryClient.firstName} ${deliveryClient.lastName} created`,
                 { autoClose: 1000 }
             )
+            confirmBookDelivery(deliveryClient)
             queryClient.invalidateQueries(['deliveryClients'])
         },
         onError: (err) => {
@@ -99,17 +105,12 @@ function DeliveryClientForm({ clientName, iconButton }) {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        // if (!firstName || !lastName || !phone) {
-        //     return toast.error(
-        //         'First name, last name, and phone number are required fields'
-        //     )
-        // }
-
         // dispatch(createDeliveryClient(formData));
         mutationCreateDeliveryClient.mutate({
             formData,
             token: user.data.token,
         })
+
         onClose()
     }
 
@@ -122,6 +123,21 @@ function DeliveryClientForm({ clientName, iconButton }) {
     const onClose = () => {
         resetForm()
         setFormDialog(false)
+    }
+
+    const confirmBookDelivery = (deliveryClient) => {
+        confirmDialog({
+            message: `Do you want to book a delivery for ${deliveryClient.firstName} ${deliveryClient.lastName}?`,
+            header: 'Book Delivery?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                setSelectedDeliveryClient(deliveryClient)
+                setDisplayDeliveryForm(true)
+            },
+            reject: () => {
+                // do nothing
+            },
+        })
     }
     // #endregion
 
@@ -138,11 +154,20 @@ function DeliveryClientForm({ clientName, iconButton }) {
     }, [clientName])
 
     return (
-        <section>
+        <>
+            {/* <Toast ref={toast} /> */}
+            <ConfirmDialog />
+            <DeliveryForm
+                hideButton={true}
+                display={displayDeliveryForm}
+                selectedClient={selectedDeliveryClient}
+            />
+
             <Button
                 label={iconButton ? null : 'New Client'}
                 icon="pi pi-plus"
-                style={{ height: '100%' }}
+                style={{ height: '100%', marginLeft: '0.75em' }}
+                className="p-button-darkgray"
                 onClick={() => setFormDialog(true)}
             />
 
@@ -303,7 +328,7 @@ function DeliveryClientForm({ clientName, iconButton }) {
                     </div>
                 </form>
             </Dialog>
-        </section>
+        </>
     )
 }
 

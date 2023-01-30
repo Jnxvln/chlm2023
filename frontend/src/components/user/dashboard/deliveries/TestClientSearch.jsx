@@ -1,21 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DeliveryForm from './DeliveryForm'
 import DeliveryClientForm from './DeliveryClientForm'
 import EditDeliveryClientForm from './EditDeliveryClientForm'
 // PrimeReact Components
-import { AutoComplete } from 'primereact/autocomplete'
+// import { AutoComplete } from 'primereact/autocomplete'
+import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
 import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-function ClientSearchInput({ onClientSelected }) {
+function TestClientSearch({ onClientSelected, selectedClient }) {
     // #region VARS -------------------------------
 
     const queryClient = useQueryClient()
 
-    const [searchInput, setSearchInput] = useState('')
+    // const [searchInput, setSearchInput] = useState('')
     const [clientTest, setClientTest] = useState(null)
     const [filteredClients, setFilteredClients] = useState([])
 
@@ -126,25 +127,15 @@ function ClientSearchInput({ onClientSelected }) {
     }
 
     const onChange = (e) => {
-        onClientSelected(e.value)
-        setSearchInput(e.value)
+        // console.log('[TestClientSearch] Dropdown value changed: ')
+        // console.log(e.value)
         setClientTest(e.value)
+        onClientSelected(e.value)
     }
 
     return (
         <div>
-            <AutoComplete
-                dropdown
-                value={searchInput}
-                field={searchFieldTemplate}
-                itemTemplate={searchItemTemplate}
-                suggestions={filteredClients}
-                completeMethod={searchDeliveryClient}
-                onChange={onChange}
-                placeholder="Customer search (name, phone, address)"
-            />
-
-            {/* <Dropdown
+            <Dropdown
                 value={clientTest}
                 options={deliveryClients.data}
                 onChange={onChange}
@@ -152,16 +143,22 @@ function ClientSearchInput({ onClientSelected }) {
                 filter
                 showClear
                 filterBy="firstName"
-                placeholder="Select Customer"
+                placeholder="Choose Client..."
                 valueTemplate={selectedDeliveryClientTemplate}
                 itemTemplate={deliveryClientTemplate}
-            /> */}
+            />
 
-            {filteredClients.length <= 0 && searchInput.length > 0 ? (
-                <DeliveryClientForm clientName={searchInput} />
-            ) : null}
+            {!selectedClient && (
+                // <Button
+                //     className="p-button-darkgray"
+                //     style={{ height: '100%', marginLeft: '0.75em' }}
+                // >
+                //     New Client
+                // </Button>
+                <DeliveryClientForm />
+            )}
         </div>
     )
 }
 
-export default ClientSearchInput
+export default TestClientSearch
