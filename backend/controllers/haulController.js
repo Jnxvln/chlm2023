@@ -134,7 +134,8 @@ const createHaul = asyncHandler(async (req, res) => {
     }
     if (
         !req.body.vendorLocation &&
-        req.body.from.toLowerCase() !== 'off duty'
+        req.body.from.toLowerCase() !== 'off duty' &&
+        req.body.loadType !== 'flatbedperc'
     ) {
         res.status(400)
         throw new Error('The `vendor location` field required')
