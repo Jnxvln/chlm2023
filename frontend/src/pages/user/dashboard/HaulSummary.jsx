@@ -443,7 +443,13 @@ function HaulSummary() {
             <div id="haulSummaryDataTable">
                 <DataTable
                     // value={data && data.hauls}
-                    value={filteredHauls && filteredHauls.data}
+                    value={
+                        filteredHauls &&
+                        filteredHauls.data &&
+                        filteredHauls.data.sort(
+                            (a, b) => dayjs(a.dateHaul) - dayjs(b.dateHaul)
+                        )
+                    }
                     loading={filteredHauls.isLoading}
                     responsiveLayout="scroll"
                     size="small"
