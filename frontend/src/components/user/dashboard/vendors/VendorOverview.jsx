@@ -145,7 +145,11 @@ function VendorOverview() {
 
     return (
         <section>
-            <Panel header="Vendors">
+            <Panel
+                header="Vendors"
+                className={`p-panel-titlebar vendorHeader`}
+                id="vendorOverviewVendorPanelHeader"
+            >
                 <Dropdown
                     value={selectedVendor}
                     options={
@@ -158,7 +162,7 @@ function VendorOverview() {
                     onChange={onVendorChange}
                     optionLabel="name"
                     placeholder="Choose Vendor"
-                    style={{ width: '12em' }}
+                    style={{ width: '12em', marginTop: '1em' }}
                 />
 
                 <br />
@@ -208,7 +212,10 @@ function VendorOverview() {
             <br />
             <br />
 
-            <Panel header="Freight Routes">
+            <Panel
+                header="Freight Routes"
+                id="vendorOverviewFreightRoutesPanelHeader"
+            >
                 <DataTable
                     value={
                         freightRoutes &&
