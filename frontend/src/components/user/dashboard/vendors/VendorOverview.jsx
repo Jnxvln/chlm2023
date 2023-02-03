@@ -8,10 +8,9 @@ import { Messages } from 'primereact/messages'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchUser } from '../../../../api/users/usersApi'
 import { getVendors } from '../../../../api/vendors/vendorsApi'
-import {
-    getVendorProducts,
-    getVendorProductsByVendorId,
-} from '../../../../api/vendorProducts/vendorProductsApi'
+import { getVendorProductsByVendorId } from '../../../../api/vendorProducts/vendorProductsApi'
+import { getVendorLocations } from '../../../../api/vendorLocations/vendorLocationsApi'
+import { getFreightRoutesByVendorId } from '../../../../api/freightRoutes/freightRoutesApi'
 import { toast } from 'react-toastify'
 
 function VendorOverview() {
@@ -20,8 +19,8 @@ function VendorOverview() {
     const userId = user?.data?._id
 
     const [selectedVendor, setSelectedVendor] = useState(null)
-    const [filteredVendors, setFilteredVendors] = useState([])
 
+    // #region DATABASE DATA
     // VENDORS
     const vendors = useQuery({
         queryKey: ['vendors'],
@@ -37,7 +36,7 @@ function VendorOverview() {
         },
     })
 
-    // VENDOR PRODUCTS
+    // VENDOR PRODUCTS BY VENDOR ID
     const vendorProducts = useQuery({
         queryKey: ['vendorProducts', selectedVendor],
         queryFn: () => {
@@ -61,6 +60,47 @@ function VendorOverview() {
         },
     })
 
+    // VENDOR LOCATIONS
+    const vendorLocations = useQuery({
+        queryKey: ['vendorLocations', selectedVendor],
+        queryFn: () => {
+            return getVendorLocations(user.data.token)
+        },
+        enabled: !!(selectedVendor && selectedVendor._id),
+        refetchOnWindowFocus: false,
+        onSuccess: (vendorLocations) => {
+            // console.log('Vendor locations: ')
+            // console.log(vendorLocations)
+        },
+        onError: (err) => {
+            console.log(err)
+            toast.error(err.message)
+        },
+    })
+
+    // FREIGHT ROUTES BY VENDOR ID
+    const freightRoutes = useQuery({
+        queryKey: ['freightRoutes', selectedVendor],
+        queryFn: () => {
+            return getFreightRoutesByVendorId(
+                selectedVendor._id,
+                user.data.token
+            )
+        },
+        enabled: !!(selectedVendor && selectedVendor._id),
+        refetchOnWindowFocus: false,
+        onSuccess: (freightRoutes) => {
+            // console.log('Freight routes for selected vendor: ')
+            // console.log(freightRoutes)
+        },
+        onError: (err) => {
+            console.log(err)
+            toast.error(err.message)
+        },
+    })
+    // #endregion
+
+    // #region ACTION HANDLERS
     const onVendorChange = (e) => {
         setSelectedVendor(e.value)
         queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
@@ -81,10 +121,27 @@ function VendorOverview() {
             </>
         )
     }
+    // #endregion
 
+    // #region DATATABLE TEMPLATES
     const productCostTemplate = (rowData) => {
         return <>${parseFloat(rowData.productCost).toFixed(2)} /t</>
     }
+
+    const freightCostTemplate = (rowData) => {
+        return <>${parseFloat(rowData.freightCost).toFixed(2)} /t</>
+    }
+
+    const vendorLocationTemplate = (rowData) => {
+        const vendor =
+            vendorLocations && vendorLocations.data
+                ? vendorLocations.data.find(
+                      (loc) => loc._id === rowData.vendorLocationId
+                  )
+                : null
+        return <>{vendor ? vendor.name : 'Loading...'}</>
+    }
+    // #endregion
 
     return (
         <section>
@@ -127,16 +184,52 @@ function VendorOverview() {
                         vendorProducts &&
                         vendorProducts.data &&
                         vendorProducts.data.length > 0
-                            ? vendorProducts.data
+                            ? vendorProducts.data.sort((a, b) =>
+                                  a.name.localeCompare(b.name)
+                              )
                             : []
                     }
                     responsiveLayout="scroll"
                 >
+                    <Column
+                        field="vendorLocationId"
+                        header="Location"
+                        body={vendorLocationTemplate}
+                    />
                     <Column field="name" header="Name" />
                     <Column
                         field="productCost"
                         header="Product Cost"
                         body={productCostTemplate}
+                    />
+                </DataTable>
+            </Panel>
+
+            <br />
+            <br />
+
+            <Panel header="Freight Routes">
+                <DataTable
+                    value={
+                        freightRoutes &&
+                        freightRoutes.data &&
+                        freightRoutes.data.length > 0
+                            ? freightRoutes.data.sort((a, b) =>
+                                  a.destination.localeCompare(b.destination)
+                              )
+                            : []
+                    }
+                >
+                    <Column
+                        field="vendorLocationId"
+                        header="Freight Cost"
+                        body={vendorLocationTemplate}
+                    />
+                    <Column field="destination" header="Destination" />
+                    <Column
+                        field="freightCost"
+                        header="Freight Cost"
+                        body={freightCostTemplate}
                     />
                 </DataTable>
             </Panel>
