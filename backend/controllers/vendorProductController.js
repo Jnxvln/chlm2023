@@ -10,6 +10,15 @@ const getVendorProducts = asyncHandler(async (req, res) => {
     res.status(200).send(products)
 })
 
+// @desc    Get vendor products by vendor ID
+// @route   GET /api/vendor-products/vendor/:vendorId
+// @access  Private
+const getVendorProductsByVendorId = asyncHandler(async (req, res) => {
+    const products = await VendorProduct.find({ vendorId: req.params.vendorId })
+
+    res.status(200).send(products)
+})
+
 // @desc    Create vendor product
 // @route   POST /api/vendor-products
 // @access  Private
@@ -101,6 +110,7 @@ const deleteVendorProduct = asyncHandler(async (req, res) => {
 
 module.exports = {
     getVendorProducts,
+    getVendorProductsByVendorId,
     createVendorProduct,
     updateVendorProduct,
     deleteVendorProduct,

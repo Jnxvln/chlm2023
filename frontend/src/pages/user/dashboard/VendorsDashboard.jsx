@@ -3,6 +3,7 @@ import VendorDataTable from '../../../components/user/dashboard/vendors/VendorDa
 import VendorLocationDataTable from '../../../components/user/dashboard/vendors/VendorLocationDataTable'
 import VendorProductDataTable from '../../../components/user/dashboard/vendors/VendorProductDataTable'
 import FreightRouteDataTable from '../../../components/user/dashboard/vendors/FreightRouteDataTable'
+import VendorOverview from '../../../components/user/dashboard/vendors/VendorOverview'
 // PrimeReact Components
 import { TabView, TabPanel } from 'primereact/tabview'
 
@@ -21,6 +22,9 @@ function VendorsDashboard() {
                 activeIndex={activeTabIndex}
                 onTabChange={(e) => setActiveTabIndex(e.index)}
             >
+                <TabPanel header="Overview">
+                    <VendorOverview />
+                </TabPanel>
                 <TabPanel header="Vendors">
                     <VendorDataTable />
                 </TabPanel>
