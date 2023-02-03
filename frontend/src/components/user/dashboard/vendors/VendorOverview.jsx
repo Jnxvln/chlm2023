@@ -4,7 +4,8 @@ import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Message } from 'primereact/message'
-import { Messages } from 'primereact/messages'
+import { FilterMatchMode } from 'primereact/api'
+import { InputText } from 'primereact/inputtext'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchUser } from '../../../../api/users/usersApi'
 import { getVendors } from '../../../../api/vendors/vendorsApi'
@@ -19,6 +20,14 @@ function VendorOverview() {
     const userId = user?.data?._id
 
     const [selectedVendor, setSelectedVendor] = useState(null)
+    const [vendorFilters, setVendorFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    })
+    const [freightFilters, setFreightFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    })
+    const [globalFilterValue, setGlobalFilterValue] = useState('')
+    const [freightGlobalFilterValue, setFreightGlobalFilterValue] = useState('')
 
     // #region DATABASE DATA
     // VENDORS
@@ -121,6 +130,24 @@ function VendorOverview() {
             </>
         )
     }
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value
+        let _vendorFilters = { ...vendorFilters }
+        _vendorFilters['global'].value = value
+
+        setVendorFilters(_vendorFilters)
+        setGlobalFilterValue(value)
+    }
+
+    const onFreightGlobalFilterChange = (e) => {
+        const value = e.target.value
+        let _freightFilters = { ...freightFilters }
+        _freightFilters['global'].value = value
+
+        setFreightFilters(_freightFilters)
+        setFreightGlobalFilterValue(value)
+    }
     // #endregion
 
     // #region DATATABLE TEMPLATES
@@ -140,6 +167,36 @@ function VendorOverview() {
                   )
                 : null
         return <>{vendor ? vendor.name : 'Loading...'}</>
+    }
+
+    const renderVendorHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText
+                        value={globalFilterValue}
+                        onChange={onGlobalFilterChange}
+                        placeholder="By selected vendor"
+                    />
+                </span>
+            </div>
+        )
+    }
+
+    const renderFreightHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText
+                        value={freightGlobalFilterValue}
+                        onChange={onFreightGlobalFilterChange}
+                        placeholder="By selected vendor"
+                    />
+                </span>
+            </div>
+        )
     }
     // #endregion
 
@@ -194,6 +251,8 @@ function VendorOverview() {
                             : []
                     }
                     responsiveLayout="scroll"
+                    filters={vendorFilters}
+                    header={renderVendorHeader}
                 >
                     <Column
                         field="vendorLocationId"
@@ -226,10 +285,12 @@ function VendorOverview() {
                               )
                             : []
                     }
+                    filters={freightFilters}
+                    header={renderFreightHeader}
                 >
                     <Column
                         field="vendorLocationId"
-                        header="Freight Cost"
+                        header="Location"
                         body={vendorLocationTemplate}
                     />
                     <Column field="destination" header="Destination" />
