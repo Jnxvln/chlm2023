@@ -30,6 +30,7 @@ import {
 import { getDeliveryClients } from '../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { createSearchParams, useNavigate } from 'react-router-dom'
+import DeliveryClientForm from '../../../components/user/dashboard/deliveries/DeliveryClientForm'
 
 function DeliveriesDashboard() {
     // #region VARS ==============================================================
@@ -227,6 +228,12 @@ function DeliveriesDashboard() {
 
                         {selectedClient && (
                             <DeliveryForm selectedClient={selectedClient} />
+                        )}
+
+                        {selectedClient && (
+                            <EditDeliveryClientForm
+                                deliveryClientToEdit={selectedClient}
+                            />
                         )}
 
                         <DeliveryTimeframeSelector

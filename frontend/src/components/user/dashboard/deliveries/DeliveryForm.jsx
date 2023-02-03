@@ -202,8 +202,6 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
 
     const setClientData = () => {
         if (selectedClient) {
-            // console.log('[DeliveryForm]: Delivery client found: ')
-            // console.log(selectedClient)
             setFormData((prevState) => ({
                 ...prevState,
                 deliveryClient: selectedClient,
@@ -215,7 +213,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                 directions: selectedClient.directions,
             }))
         } else {
-            console.log('Else no client selected?')
+            // console.log('Else no client selected?')
         }
     }
     // #endregion
@@ -253,7 +251,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                 <Button
                     label={iconButton ? null : 'New Delivery'}
                     icon={iconButton ? 'pi pi-truck' : 'pi pi-plus'}
-                    style={{ height: '100%' }}
+                    style={{ height: '100%', padding: '0.8em' }}
                     onClick={(e) => {
                         e.stopPropagation()
                         setClientData()

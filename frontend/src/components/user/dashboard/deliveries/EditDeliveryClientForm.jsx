@@ -167,7 +167,7 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
             <Button
                 label={iconButton ? null : 'Edit Client'}
                 icon="pi pi-pencil"
-                style={{ height: '100%' }}
+                className="editDeliveryClientFormButton"
                 onClick={(e) => {
                     e.stopPropagation()
                     setFormDialog(true)

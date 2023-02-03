@@ -166,6 +166,14 @@ form {
     width: 100% !important;
 }
 
+.editDeliveryClientFormButton {
+    height: 99% !important;
+    background-color: #444 !important;
+}
+.editDeliveryClientFormButton:hover {
+    background-color: #666 !important;
+}
+
 .field.col {
     margin-bottom: 0 !important;
 }

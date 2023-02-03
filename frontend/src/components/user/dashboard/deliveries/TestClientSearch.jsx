@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import DeliveryForm from './DeliveryForm'
 import DeliveryClientForm from './DeliveryClientForm'
 import EditDeliveryClientForm from './EditDeliveryClientForm'
@@ -6,6 +6,7 @@ import EditDeliveryClientForm from './EditDeliveryClientForm'
 // import { AutoComplete } from 'primereact/autocomplete'
 import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
+import { InputText } from 'primereact/inputtext'
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
 import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClientsApi'
@@ -19,6 +20,9 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
     // const [searchInput, setSearchInput] = useState('')
     const [clientTest, setClientTest] = useState(null)
     const [filteredClients, setFilteredClients] = useState([])
+
+    const [filterValue, setFilterValue] = useState('')
+    const filterInputRef = useRef()
 
     const user = useQuery(['user'], fetchUser)
 
@@ -133,6 +137,39 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
         onClientSelected(e.value)
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    const filterTemplate = (options) => {
+        let { filterOptions } = options
+
+        return (
+            <div className="flex gap-2">
+                <InputText
+                    value={filterValue}
+                    ref={filterInputRef}
+                    onChange={(e) => myFilterFunction(e, filterOptions)}
+                />
+                <Button
+                    label="Reset"
+                    onClick={() => myResetFunction(filterOptions)}
+                />
+            </div>
+        )
+    }
+
+    const myResetFunction = (options) => {
+        setFilterValue('')
+        options.reset()
+        filterInputRef && filterInputRef.current.focus()
+    }
+
+    const myFilterFunction = (event, options) => {
+        console.log(event)
+        let _filterValue = event.target.value
+        setFilterValue(_filterValue)
+        options.filter(event)
+    }
+    // -----------------------------------------------------------------------------------------------------------------
+
     return (
         <div>
             <Dropdown
@@ -140,23 +177,15 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
                 options={deliveryClients.data}
                 onChange={onChange}
                 optionLabel="firstName"
-                filter
                 showClear
-                filterBy="firstName"
+                filterBy="firstName,lastName,phone,companyName,address,coordinates"
                 placeholder="Choose Client..."
                 valueTemplate={selectedDeliveryClientTemplate}
                 itemTemplate={deliveryClientTemplate}
+                filter
             />
 
-            {!selectedClient && (
-                // <Button
-                //     className="p-button-darkgray"
-                //     style={{ height: '100%', marginLeft: '0.75em' }}
-                // >
-                //     New Client
-                // </Button>
-                <DeliveryClientForm />
-            )}
+            {!selectedClient && <DeliveryClientForm />}
         </div>
     )
 }
