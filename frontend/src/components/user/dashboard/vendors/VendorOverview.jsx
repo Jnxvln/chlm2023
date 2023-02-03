@@ -28,8 +28,8 @@ function VendorOverview() {
         queryFn: () => getVendors(user.data.token),
         enabled: !!userId,
         onSuccess: (vendors) => {
-            console.log('Vendors loaded: ')
-            console.log(vendors)
+            // console.log('Vendors loaded: ')
+            // console.log(vendors)
         },
         onError: (err) => {
             console.log(err)
@@ -39,13 +39,21 @@ function VendorOverview() {
 
     // VENDOR PRODUCTS
     const vendorProducts = useQuery({
-        queryKey: ['vendorProducts'],
-        queryFn: () =>
-            getVendorProductsByVendorId(selectedVendor._id, user.data.token),
+        queryKey: ['vendorProducts', selectedVendor],
+        queryFn: () => {
+            // console.log('selectedVendor: ')
+            // console.log(selectedVendor)
+
+            return getVendorProductsByVendorId(
+                selectedVendor._id,
+                user.data.token
+            )
+        },
         enabled: !!(selectedVendor && selectedVendor._id),
+        refetchOnWindowFocus: false,
         onSuccess: (vendorProducts) => {
-            console.log('Vendors Products loaded: ')
-            console.log(vendorProducts)
+            // console.log('Vendors Products loaded: ')
+            // console.log(vendorProducts)
         },
         onError: (err) => {
             console.log(err)
@@ -55,18 +63,27 @@ function VendorOverview() {
 
     const onVendorChange = (e) => {
         setSelectedVendor(e.value)
+        queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
     }
 
     const fuelSurchargeAmount = () => {
         return (
             <>
-                <span>Fuel Surcharge: $</span>
-                <span>
+                <span>Fuel Surcharge: </span>
+                <strong>
+                    $
                     {selectedVendor &&
-                        parseFloat(selectedVendor.chtFuelSurcharge).toFixed(2)}
-                </span>
+                        parseFloat(selectedVendor.chtFuelSurcharge).toFixed(
+                            2
+                        )}{' '}
+                    /t
+                </strong>
             </>
         )
+    }
+
+    const productCostTemplate = (rowData) => {
+        return <>${parseFloat(rowData.productCost).toFixed(2)} /t</>
     }
 
     return (
@@ -116,7 +133,11 @@ function VendorOverview() {
                     responsiveLayout="scroll"
                 >
                     <Column field="name" header="Name" />
-                    <Column field="productCost" header="Product Cost" />
+                    <Column
+                        field="productCost"
+                        header="Product Cost"
+                        body={productCostTemplate}
+                    />
                 </DataTable>
             </Panel>
         </section>
