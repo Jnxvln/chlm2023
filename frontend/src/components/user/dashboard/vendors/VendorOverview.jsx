@@ -35,10 +35,6 @@ function VendorOverview() {
         queryKey: ['vendors'],
         queryFn: () => getVendors(user.data.token),
         enabled: !!userId,
-        onSuccess: (vendors) => {
-            // console.log('Vendors loaded: ')
-            // console.log(vendors)
-        },
         onError: (err) => {
             console.log(err)
             toast.error(err.message)
@@ -49,9 +45,6 @@ function VendorOverview() {
     const vendorProducts = useQuery({
         queryKey: ['vendorProducts', selectedVendor],
         queryFn: () => {
-            // console.log('selectedVendor: ')
-            // console.log(selectedVendor)
-
             return getVendorProductsByVendorId(
                 selectedVendor._id,
                 user.data.token
@@ -59,10 +52,6 @@ function VendorOverview() {
         },
         enabled: !!(selectedVendor && selectedVendor._id),
         refetchOnWindowFocus: false,
-        onSuccess: (vendorProducts) => {
-            // console.log('Vendors Products loaded: ')
-            // console.log(vendorProducts)
-        },
         onError: (err) => {
             console.log(err)
             toast.error(err.message)
@@ -77,10 +66,6 @@ function VendorOverview() {
         },
         enabled: !!(selectedVendor && selectedVendor._id),
         refetchOnWindowFocus: false,
-        onSuccess: (vendorLocations) => {
-            // console.log('Vendor locations: ')
-            // console.log(vendorLocations)
-        },
         onError: (err) => {
             console.log(err)
             toast.error(err.message)
@@ -98,10 +83,6 @@ function VendorOverview() {
         },
         enabled: !!(selectedVendor && selectedVendor._id),
         refetchOnWindowFocus: false,
-        onSuccess: (freightRoutes) => {
-            // console.log('Freight routes for selected vendor: ')
-            // console.log(freightRoutes)
-        },
         onError: (err) => {
             console.log(err)
             toast.error(err.message)
@@ -192,7 +173,7 @@ function VendorOverview() {
                     <InputText
                         value={freightGlobalFilterValue}
                         onChange={onFreightGlobalFilterChange}
-                        placeholder="By selected vendor"
+                        placeholder="By destination"
                     />
                 </span>
             </div>
