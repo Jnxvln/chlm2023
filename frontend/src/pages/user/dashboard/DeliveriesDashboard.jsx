@@ -526,6 +526,9 @@ function DeliveriesDashboard() {
 
         if (!e || !e.value) {
             // Clear ranges and filteredDeliveries (DataTable will default to `deliveries`). Used when clear button pressed
+            // console.log(
+            //     '[onDateRangeSelected] setting range dates to [] and firing setFilteredDeliveries([])'
+            // )
             setRangeDates([])
             setFilteredDeliveries([])
             return
@@ -552,16 +555,27 @@ function DeliveriesDashboard() {
 
     // Handle client selected, show client's deliveries
     const onClientSelected = (clientSelected) => {
-        if (clientSelected === undefined) {
-            // console.log('[DeliveriesDashboard]: Client selection cleared')
+        if (
+            !clientSelected ||
+            clientSelected === undefined ||
+            clientSelected === '' ||
+            clientSelected === null
+        ) {
+            console.log(
+                '[onClientSelected()]: Client selection cleared, firing setFilteredDeliveriesToLocalStorageRange'
+            )
             // console.log(clientSelected)
             setSelectedClient(null)
             setFilteredDeliveries([])
+            setFilteredDeliveriesToLocalStorageRange()
         } else {
             // console.log(
             //     '[DeliveriesDashboard]: Running onClientSelected with value: '
             // )
             // console.log(clientSelected)
+            console.log(
+                `[onClientSelected()]: Setting selectedClient to the client chosen (${clientSelected.firstName} ${clientSelected.lastName})`
+            )
             setSelectedClient(clientSelected)
 
             // If the user clicks on a delivery client in the list, show all of this customer's deliveries
@@ -573,7 +587,11 @@ function DeliveriesDashboard() {
                               (dlv) => dlv.deliveryClient === clientSelected._id
                           )
                         : []
+
                 if (clientDeliveries && clientDeliveries.length > 0) {
+                    console.log(
+                        '[onClientSelected()]: Setting filteredDeliveries to client deliveries'
+                    )
                     setFilteredDeliveries(clientDeliveries)
                 } else {
                     toast.warning('No deliveries for this client')
@@ -581,6 +599,9 @@ function DeliveriesDashboard() {
                 }
             } else {
                 // Otherwise set deliveries back to date range selected
+                console.log(
+                    '[onClientSelected()]: clientSelected is falsey or is missing _id property. Firing setFilteredDeliveriesToDateRange'
+                )
                 setFilteredDeliveriesToDateRange()
             }
         }
@@ -588,8 +609,8 @@ function DeliveriesDashboard() {
 
     // Print delivery
     const printDelivery = (rowData) => {
-        console.log('Printing data: ')
-        console.log(rowData)
+        // console.log('Printing data: ')
+        // console.log(rowData)
 
         navigate({
             pathname: '/deliveries/print',
@@ -599,7 +620,8 @@ function DeliveriesDashboard() {
     // #endregion
 
     const setFilteredDeliveriesToDateRange = () => {
-        if (rangeDates && rangeDates.length > 0) {
+        if (!selectedClient && rangeDates && rangeDates.length > 0) {
+            // console.log('Firing setFilteredDeliveriesToDateRange')
             // Filter deliveries by date range (rangeDates)
             // let _selectedDriverId = localStorage.getItem("selectedDriverId") || null;
 
@@ -612,6 +634,10 @@ function DeliveriesDashboard() {
                           )
                       )
                     : []
+
+            // console.log(
+            //     'Firing setFilteredDeliverie based on toggleShowCompleted'
+            // )
             setFilteredDeliveries(
                 !toggleShowCompleted
                     ? _filteredDeliveries.filter((dlv) => !dlv.completed)
@@ -621,7 +647,11 @@ function DeliveriesDashboard() {
     }
 
     const setFilteredDeliveriesToLocalStorageRange = () => {
+        setSelectedClient(null)
         if (localStorage.getItem('selectedDeliveriesDateRange')) {
+            console.log(
+                '[setFilteredDeliveriesToLocalStorageRange()]: Setting filteredDeliveries to all deliveries in selected date range'
+            )
             const _deliveriesDateRange = JSON.parse(
                 localStorage.getItem('selectedDeliveriesDateRange')
             )
@@ -634,6 +664,9 @@ function DeliveriesDashboard() {
                         new Date(_deliveriesDateRange[1]),
                     ],
                 }
+                // console.log(
+                //     '[setFilteredDeliveriesToLocalStorageRange]: Firing onRangeSelected'
+                // )
                 onDateRangeSelected(e)
             }
         }
@@ -677,6 +710,11 @@ function DeliveriesDashboard() {
         )
 
         if (toggleShowCompleted) {
+            console.log(
+                '[useEffect() toggleShowCompleted]: toggleShowCompleted is set to ' +
+                    toggleShowCompleted
+            )
+            // Set selected client avatar
             if (selectedClientId) {
                 const client =
                     deliveryClients &&
@@ -687,12 +725,44 @@ function DeliveriesDashboard() {
                 setSelectedClientAvatar(client)
             }
 
+            // Then set deliveries to current date range
+            console.log(
+                '[useEffect toggleShowCompleted]: toggleShowCompleted is TRUE, showing ALL deliveries (firing setFilteredDeliveriesToDateRange())'
+            )
             setFilteredDeliveriesToDateRange()
         } else {
-            const _dlvsNotCompleted = filteredDeliveries.filter(
-                (dlv) => !dlv.completed
+            console.log(
+                '[useEffect toggleShowCompleted]: toggleShowCompleted is FALSE, only showing deliveries that are NOT completed (setFilteredDeliveries(_dlvsNotCompleted))'
             )
+
+            // ===========================================================================================================
+            // ===========================================================================================================
+            // ===========================================================================================================
+
+            // JUSTIN! IMPORTANT, THIS IS NOT WORKING IN CONJUNCTION WITH selectedClient, REVISE!!!
+
+            let _dlvsNotCompleted
+
+            if (selectedClient) {
+                console.log("restricting deliveries to selected client's")
+                _dlvsNotCompleted = deliveries.data.filter(
+                    (dlv) =>
+                        dlv.deliveryClient === selectedClient._id &&
+                        dlv.completed === false
+                )
+            } else {
+                _dlvsNotCompleted = deliveries.data.filter(
+                    (dlv) =>
+                        dlv.deliveryClient === selectedClient._id &&
+                        dlv.completed === true
+                )
+            }
+
             setFilteredDeliveries(_dlvsNotCompleted)
+
+            // ===========================================================================================================
+            // ===========================================================================================================
+            // ===========================================================================================================
         }
     }, [toggleShowCompleted])
     // #endregion
@@ -702,6 +772,16 @@ function DeliveriesDashboard() {
             <h1 style={{ textAlign: 'center', fontSize: '20pt' }}>
                 C&H Deliveries
             </h1>
+            {selectedClient && (
+                <div>
+                    <p>
+                        <strong style={{ color: 'red', fontSize: '1.3rem' }}>
+                            Showing deliveries for: {selectedClient.firstName}{' '}
+                            {selectedClient.lastName}
+                        </strong>
+                    </p>
+                </div>
+            )}
 
             <ConfirmPopup />
 
