@@ -272,7 +272,7 @@ function DeliveryClientForm({ clientName, iconButton }) {
                                         id="address"
                                         name="address"
                                         value={address}
-                                        placeholder="Phone(s)"
+                                        placeholder="Address"
                                         onChange={onChange}
                                         rows={4}
                                         cols={30}
