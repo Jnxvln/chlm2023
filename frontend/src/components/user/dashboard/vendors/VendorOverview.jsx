@@ -158,7 +158,7 @@ function VendorOverview() {
                     <InputText
                         value={globalFilterValue}
                         onChange={onGlobalFilterChange}
-                        placeholder="By selected vendor"
+                        placeholder="Search name"
                     />
                 </span>
             </div>
@@ -173,7 +173,7 @@ function VendorOverview() {
                     <InputText
                         value={freightGlobalFilterValue}
                         onChange={onFreightGlobalFilterChange}
-                        placeholder="By destination"
+                        placeholder="Search destination"
                     />
                 </span>
             </div>
