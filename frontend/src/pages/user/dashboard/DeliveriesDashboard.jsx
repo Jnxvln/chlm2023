@@ -561,21 +561,10 @@ function DeliveriesDashboard() {
             clientSelected === '' ||
             clientSelected === null
         ) {
-            // console.log(
-            //     '[onClientSelected()]: Client selection cleared, firing setFilteredDeliveriesToLocalStorageRange'
-            // )
-            // console.log(clientSelected)
             setSelectedClient(null)
             setFilteredDeliveries([])
             setFilteredDeliveriesToLocalStorageRange()
         } else {
-            // console.log(
-            //     '[DeliveriesDashboard]: Running onClientSelected with value: '
-            // )
-            // console.log(clientSelected)
-            // console.log(
-            //     `[onClientSelected()]: Setting selectedClient to the client chosen (${clientSelected.firstName} ${clientSelected.lastName})`
-            // )
             setSelectedClient(clientSelected)
 
             // If the user clicks on a delivery client in the list, show all of this customer's deliveries
@@ -710,10 +699,6 @@ function DeliveriesDashboard() {
         )
 
         if (toggleShowCompleted) {
-            // console.log(
-            //     '[useEffect() toggleShowCompleted]: toggleShowCompleted is set to ' +
-            //         toggleShowCompleted
-            // )
             // Set selected client avatar
             if (selectedClientId) {
                 const client =
@@ -726,32 +711,10 @@ function DeliveriesDashboard() {
             }
 
             // Then set deliveries to current date range
-            // console.log(
-            //     '[useEffect toggleShowCompleted]: toggleShowCompleted is TRUE, showing ALL deliveries (firing setFilteredDeliveriesToDateRange())'
-            // )
 
             if (!selectedClient) {
                 setFilteredDeliveriesToDateRange()
             } else {
-                // ==========================================================================================================
-                // ==========================================================================================================
-                // ==========================================================================================================
-
-                // JUSTIN : STILL NOT WORKING!!!
-
-                // selectedClient truthy  &&  toggleShowCompleted === true
-
-                // let _filteredDeliveries =
-                //     deliveries && deliveries.data
-                //         ? deliveries.data.filter(
-                //               (delivery) =>
-                //                   rangeDates.includes(
-                //                       new Date(delivery.deliveryDate).toDateString()
-                //                   ) &&
-                //                   delivery.deliveryClient === selectedClient._id
-                //           )
-                //         : []
-
                 let _filteredDeliveries
 
                 // console.log('selectedClient: ')
@@ -768,10 +731,6 @@ function DeliveriesDashboard() {
 
                     setFilteredDeliveries(_filteredDeliveries)
                 }
-
-                // ==========================================================================================================
-                // ==========================================================================================================
-                // ==========================================================================================================
             }
         } else {
             // console.log(
@@ -781,10 +740,6 @@ function DeliveriesDashboard() {
             if (!selectedClient) {
                 setFilteredDeliveriesToDateRange()
             } else {
-                // ==========================================================================================================
-                // ==========================================================================================================
-                // ==========================================================================================================
-
                 let _filteredDeliveries
 
                 // console.log('selectedClient: ')
@@ -801,10 +756,6 @@ function DeliveriesDashboard() {
                 }
 
                 setFilteredDeliveries(_filteredDeliveries)
-
-                // ==========================================================================================================
-                // ==========================================================================================================
-                // ==========================================================================================================
             }
         }
     }, [toggleShowCompleted])
@@ -819,8 +770,12 @@ function DeliveriesDashboard() {
                 <div>
                     <p>
                         <strong style={{ color: 'red', fontSize: '1.3rem' }}>
-                            Showing deliveries for: {selectedClient.firstName}{' '}
-                            {selectedClient.lastName}
+                            Showing deliveries for:
+                            {/* {selectedClient.firstName}{' '}
+                            {selectedClient.lastName}{' '}
+                            {selectedClient.companyName ? (
+                                <span>({selectedClient.companyName})</span>
+                            ) : null} */}
                         </strong>
                     </p>
                 </div>

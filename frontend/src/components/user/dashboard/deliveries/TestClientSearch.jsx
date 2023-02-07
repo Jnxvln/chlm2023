@@ -85,12 +85,23 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
     }
 
     const selectedDeliveryClientTemplate = (option, props) => {
+        // THIS TEMPLATE IS FOR THE CHOSEN CLIENT
         if (option) {
             return (
                 <div>
                     <div>
-                        {option.firstName} {option.lastName}
+                        <strong>
+                            {option.firstName
+                                ? option.firstName
+                                : '[First Name]'}{' '}
+                            {option.lastName ? option.lastName : '[Last Name]'}
+                        </strong>
                     </div>
+                    {option.companyName && (
+                        <div>
+                            {option.companyName ? option.companyName : ''}
+                        </div>
+                    )}
                 </div>
             )
         }
@@ -99,12 +110,23 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
     }
 
     const deliveryClientTemplate = (option, props) => {
+        // THIS TEMPLATE IS FOR THE DROPDOWN
         if (option) {
             return (
                 <div>
                     <div>
-                        {option.firstName} {option.lastName}
+                        <strong>
+                            {option.firstName
+                                ? option.firstName
+                                : '[First Name]'}{' '}
+                            {option.lastName ? option.lastName : '[Last Name]'}
+                        </strong>
                     </div>
+                    {option.companyName && (
+                        <div>
+                            {option.companyName ? option.companyName : ''}
+                        </div>
+                    )}
                 </div>
             )
         }
@@ -174,15 +196,21 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
         <div>
             <Dropdown
                 value={clientTest}
-                options={deliveryClients.data}
+                options={
+                    deliveryClients && deliveryClients.data
+                        ? deliveryClients.data.sort((a, b) =>
+                              a.firstName.localeCompare(b.firstName)
+                          )
+                        : []
+                }
                 onChange={onChange}
                 optionLabel="firstName"
-                showClear
                 filterBy="firstName,lastName,phone,companyName,address,coordinates"
                 placeholder="Choose Client..."
                 valueTemplate={selectedDeliveryClientTemplate}
                 itemTemplate={deliveryClientTemplate}
                 filter
+                showClear
             />
 
             {!selectedClient && <DeliveryClientForm />}
