@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.scss'
 import 'primereact/resources/themes/mdc-light-indigo/theme.css' //theme
 import 'primereact/resources/primereact.min.css' //core css
@@ -20,7 +20,7 @@ const root = createRoot(container)
 root.render(
     <QueryClientProvider client={queryClient}>
         <App />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
 )
 
