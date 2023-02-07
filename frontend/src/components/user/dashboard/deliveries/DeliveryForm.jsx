@@ -93,7 +93,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
         notes,
         directions,
         hasPaid,
-        directionsReminder,
+        // directionsReminder,
         completed,
     } = formData
     // #endregion
@@ -506,7 +506,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                         </div>
 
                         {/* Directions Reminder */}
-                        <div className="field col">
+                        {/* <div className="field col">
                             <div>
                                 <InputSwitch
                                     id="directionsReminder"
@@ -518,7 +518,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                                     Directions Reminder
                                 </strong>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Completed */}
                         <div className="field col">

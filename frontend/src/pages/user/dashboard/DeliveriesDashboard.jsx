@@ -722,9 +722,7 @@ function DeliveriesDashboard() {
 
                 if (deliveries && deliveries.data) {
                     _filteredDeliveries = deliveries.data.filter(
-                        (dlv) =>
-                            dlv.deliveryClient === selectedClient._id &&
-                            dlv.completed
+                        (dlv) => dlv.deliveryClient === selectedClient._id
                     )
                     // console.log('COMPLETED _filteredDeliveries: ')
                     // console.log(_filteredDeliveries)

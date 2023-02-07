@@ -55,7 +55,7 @@ function DeliveryForm({ delivery }) {
         notes,
         directions,
         hasPaid,
-        directionsReminder,
+        // directionsReminder,
         completed,
     } = formData
 
@@ -552,7 +552,7 @@ function DeliveryForm({ delivery }) {
                         </div>
 
                         {/* Directions Reminder */}
-                        <div className="field col">
+                        {/* <div className="field col">
                             <div>
                                 <InputSwitch
                                     id="directionsReminder"
@@ -564,7 +564,7 @@ function DeliveryForm({ delivery }) {
                                     Directions Reminder
                                 </strong>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Completed */}
                         <div className="field col">
