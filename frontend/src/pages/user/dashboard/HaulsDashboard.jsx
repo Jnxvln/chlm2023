@@ -193,7 +193,6 @@ function HaulsDashboard() {
 
     // #region ACTION HANDLERS ------------------------------------
     const handleHaulSummary = (e) => {
-        // TODO: Before navigating, check workdays
         let _datesMissingWorkday = []
 
         for (let i = 0; i < filteredHauls.length; i++) {
@@ -221,11 +220,6 @@ function HaulsDashboard() {
             dateStart: rangeDates[0],
             dateEnd: rangeDates[rangeDates.length - 1],
         }
-
-        // console.log('HAUL SUMMARY REPORT VARIABLES: ')
-        // console.log('DriverID: ' + selectedDriverId)
-        // console.log('Date Start: ' + rangeDates[0])
-        // console.log('Date End: ' + rangeDates[rangeDates.length - 1])
 
         navigate({
             pathname: '/hauls/summary',
