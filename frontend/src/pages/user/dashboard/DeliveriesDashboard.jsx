@@ -561,9 +561,9 @@ function DeliveriesDashboard() {
             clientSelected === '' ||
             clientSelected === null
         ) {
-            console.log(
-                '[onClientSelected()]: Client selection cleared, firing setFilteredDeliveriesToLocalStorageRange'
-            )
+            // console.log(
+            //     '[onClientSelected()]: Client selection cleared, firing setFilteredDeliveriesToLocalStorageRange'
+            // )
             // console.log(clientSelected)
             setSelectedClient(null)
             setFilteredDeliveries([])
@@ -573,9 +573,9 @@ function DeliveriesDashboard() {
             //     '[DeliveriesDashboard]: Running onClientSelected with value: '
             // )
             // console.log(clientSelected)
-            console.log(
-                `[onClientSelected()]: Setting selectedClient to the client chosen (${clientSelected.firstName} ${clientSelected.lastName})`
-            )
+            // console.log(
+            //     `[onClientSelected()]: Setting selectedClient to the client chosen (${clientSelected.firstName} ${clientSelected.lastName})`
+            // )
             setSelectedClient(clientSelected)
 
             // If the user clicks on a delivery client in the list, show all of this customer's deliveries
@@ -589,9 +589,9 @@ function DeliveriesDashboard() {
                         : []
 
                 if (clientDeliveries && clientDeliveries.length > 0) {
-                    console.log(
-                        '[onClientSelected()]: Setting filteredDeliveries to client deliveries'
-                    )
+                    // console.log(
+                    //     '[onClientSelected()]: Setting filteredDeliveries to client deliveries'
+                    // )
                     setFilteredDeliveries(clientDeliveries)
                 } else {
                     toast.warning('No deliveries for this client')
@@ -599,9 +599,9 @@ function DeliveriesDashboard() {
                 }
             } else {
                 // Otherwise set deliveries back to date range selected
-                console.log(
-                    '[onClientSelected()]: clientSelected is falsey or is missing _id property. Firing setFilteredDeliveriesToDateRange'
-                )
+                // console.log(
+                //     '[onClientSelected()]: clientSelected is falsey or is missing _id property. Firing setFilteredDeliveriesToDateRange'
+                // )
                 setFilteredDeliveriesToDateRange()
             }
         }
@@ -649,9 +649,9 @@ function DeliveriesDashboard() {
     const setFilteredDeliveriesToLocalStorageRange = () => {
         setSelectedClient(null)
         if (localStorage.getItem('selectedDeliveriesDateRange')) {
-            console.log(
-                '[setFilteredDeliveriesToLocalStorageRange()]: Setting filteredDeliveries to all deliveries in selected date range'
-            )
+            // console.log(
+            //     '[setFilteredDeliveriesToLocalStorageRange()]: Setting filteredDeliveries to all deliveries in selected date range'
+            // )
             const _deliveriesDateRange = JSON.parse(
                 localStorage.getItem('selectedDeliveriesDateRange')
             )
@@ -710,10 +710,10 @@ function DeliveriesDashboard() {
         )
 
         if (toggleShowCompleted) {
-            console.log(
-                '[useEffect() toggleShowCompleted]: toggleShowCompleted is set to ' +
-                    toggleShowCompleted
-            )
+            // console.log(
+            //     '[useEffect() toggleShowCompleted]: toggleShowCompleted is set to ' +
+            //         toggleShowCompleted
+            // )
             // Set selected client avatar
             if (selectedClientId) {
                 const client =
@@ -726,43 +726,86 @@ function DeliveriesDashboard() {
             }
 
             // Then set deliveries to current date range
-            console.log(
-                '[useEffect toggleShowCompleted]: toggleShowCompleted is TRUE, showing ALL deliveries (firing setFilteredDeliveriesToDateRange())'
-            )
-            setFilteredDeliveriesToDateRange()
-        } else {
-            console.log(
-                '[useEffect toggleShowCompleted]: toggleShowCompleted is FALSE, only showing deliveries that are NOT completed (setFilteredDeliveries(_dlvsNotCompleted))'
-            )
+            // console.log(
+            //     '[useEffect toggleShowCompleted]: toggleShowCompleted is TRUE, showing ALL deliveries (firing setFilteredDeliveriesToDateRange())'
+            // )
 
-            // ===========================================================================================================
-            // ===========================================================================================================
-            // ===========================================================================================================
-
-            // JUSTIN! IMPORTANT, THIS IS NOT WORKING IN CONJUNCTION WITH selectedClient, REVISE!!!
-
-            let _dlvsNotCompleted
-
-            if (selectedClient) {
-                console.log("restricting deliveries to selected client's")
-                _dlvsNotCompleted = deliveries.data.filter(
-                    (dlv) =>
-                        dlv.deliveryClient === selectedClient._id &&
-                        dlv.completed === false
-                )
+            if (!selectedClient) {
+                setFilteredDeliveriesToDateRange()
             } else {
-                _dlvsNotCompleted = deliveries.data.filter(
-                    (dlv) =>
-                        dlv.deliveryClient === selectedClient._id &&
-                        dlv.completed === true
-                )
+                // ==========================================================================================================
+                // ==========================================================================================================
+                // ==========================================================================================================
+
+                // JUSTIN : STILL NOT WORKING!!!
+
+                // selectedClient truthy  &&  toggleShowCompleted === true
+
+                // let _filteredDeliveries =
+                //     deliveries && deliveries.data
+                //         ? deliveries.data.filter(
+                //               (delivery) =>
+                //                   rangeDates.includes(
+                //                       new Date(delivery.deliveryDate).toDateString()
+                //                   ) &&
+                //                   delivery.deliveryClient === selectedClient._id
+                //           )
+                //         : []
+
+                let _filteredDeliveries
+
+                // console.log('selectedClient: ')
+                // console.log(selectedClient)
+
+                if (deliveries && deliveries.data) {
+                    _filteredDeliveries = deliveries.data.filter(
+                        (dlv) =>
+                            dlv.deliveryClient === selectedClient._id &&
+                            dlv.completed
+                    )
+                    // console.log('COMPLETED _filteredDeliveries: ')
+                    // console.log(_filteredDeliveries)
+
+                    setFilteredDeliveries(_filteredDeliveries)
+                }
+
+                // ==========================================================================================================
+                // ==========================================================================================================
+                // ==========================================================================================================
             }
+        } else {
+            // console.log(
+            //     '[useEffect toggleShowCompleted]: toggleShowCompleted is FALSE, only showing deliveries that are NOT completed'
+            // )
 
-            setFilteredDeliveries(_dlvsNotCompleted)
+            if (!selectedClient) {
+                setFilteredDeliveriesToDateRange()
+            } else {
+                // ==========================================================================================================
+                // ==========================================================================================================
+                // ==========================================================================================================
 
-            // ===========================================================================================================
-            // ===========================================================================================================
-            // ===========================================================================================================
+                let _filteredDeliveries
+
+                // console.log('selectedClient: ')
+                // console.log(selectedClient)
+
+                if (deliveries && deliveries.data) {
+                    _filteredDeliveries = deliveries.data.filter(
+                        (dlv) =>
+                            dlv.deliveryClient === selectedClient._id &&
+                            dlv.completed === false
+                    )
+                    // console.log('NOT COMPLETED _filteredDeliveries: ')
+                    // console.log(_filteredDeliveries)
+                }
+
+                setFilteredDeliveries(_filteredDeliveries)
+
+                // ==========================================================================================================
+                // ==========================================================================================================
+                // ==========================================================================================================
+            }
         }
     }, [toggleShowCompleted])
     // #endregion
@@ -913,7 +956,7 @@ function DeliveriesDashboard() {
                         dataKey="_id"
                         stateStorage="session"
                         stateKey="dt-deliveries-session"
-                        emptyMessage="No deliveries found"
+                        emptyMessage="No deliveries found (if this wasn't expected, check if you're hiding completed deliveries)"
                         stripedRows
                     >
                         {/* Has Paid */}
