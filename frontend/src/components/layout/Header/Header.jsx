@@ -4,6 +4,7 @@ import { Menubar } from 'primereact/menubar'
 import { Button } from 'primereact/button'
 import { Menu } from 'primereact/menu'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import styles from './Header.module.scss'
 
 function Header({ user }) {
     const navigate = useNavigate()
@@ -119,7 +120,7 @@ function Header({ user }) {
     }
 
     return (
-        <header className="header noPrint">
+        <header className={`${styles.navbarHeader} noPrint`}>
             <Menu
                 ref={loggedInMenu}
                 model={loggedInNavItems}
