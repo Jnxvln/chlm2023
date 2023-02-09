@@ -1,6 +1,6 @@
-import styles from './Header.module.scss'
+import styles from './LandingHeader.module.scss'
 
-export default function Header() {
+export default function LandingHeader() {
     return (
         <header className={styles.header}>
             <div className={styles.overlay}></div>
@@ -10,7 +10,8 @@ export default function Header() {
             </div>
 
             <address className={styles.address}>
-                5725 W 7th St. Texarkana, TX 75501 | 903-334-7350
+                5725 W 7th St.
+                <br /> Texarkana, TX 75501 | 903-334-7350
             </address>
         </header>
     )

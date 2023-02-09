@@ -74,5 +74,30 @@
     width: 100%;
     font-style: normal;
     font-weight: bold;
+    font-size: 0.8rem;
     color: white;
+}
+
+@media screen and (min-width: 425px) {
+    .address {
+        font-size: 1rem;
+    }
+    .title2 {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .title1 {
+        font-size: 3.5rem;
+    }
+    .title2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .header {
+        height: 60vh;
+    }
 }

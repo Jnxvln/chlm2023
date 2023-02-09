@@ -1,4 +1,4 @@
-import Header from '../components/Landing/Header/Header'
+import LandingHeader from '../components/Landing/LandingHeader/LandingHeader'
 import Footer from '../components/layout/Footer'
 import Bulletin from '../components/Landing/Bulletin/Bulletin'
 import MaterialBrowser from '../components/Landing/MaterialBrowser/MaterialBrowser'
@@ -11,7 +11,7 @@ export default function Landing() {
     return (
         <section>
             {/* HEADER */}
-            <Header />
+            <LandingHeader />
 
             {/* BULLETIN BOARD */}
             <Bulletin />

@@ -29,11 +29,15 @@ body {
     border: none !important;
 }
 .p-menubar-root-list {
-    background-color: $navbar-background !important;
+    background-color: red !important;
+    // background-color: $navbar-background !important;
 }
+
+// Mobile Nav menu
 div.p-menu.p-component.p-menu-overlay.p-connected-overlay-enter-done,
 li.p-submenu-header {
-    background-color: $navbar-background !important;
+    // background-color: $navbar-background !important;
+    background-color: $navbar-background-mobile !important;
 }
 span.p-menuitem-text {
     color: white !important;
@@ -47,6 +51,10 @@ a.p-menuitem-link:hover {
 a.p-menubar-button {
     color: rgb(247, 205, 171) !important;
 }
+.p-button.p-component.p-button-outlined.p-button-primary:hover {
+    background-color: #755042;
+}
+
 .p-button.p-component.p-button-outlined.p-button-primary,
 .p-button.p-component.p-button-outlined.p-button-primary:hover {
     color: white;
@@ -311,5 +319,17 @@ tr.spacer td {
     .noPrint,
     .noPrint * {
         display: none !important;
+    }
+}
+
+@media screen and (min-width: 320px) {
+    .p-menubar-root-list {
+        background-color: $navbar-background-mobile !important;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .p-menubar-root-list {
+        background-color: $navbar-background !important;
     }
 }
