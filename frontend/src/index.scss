@@ -47,7 +47,8 @@ a.p-menuitem-link:hover {
 a.p-menubar-button {
     color: rgb(247, 205, 171) !important;
 }
-.p-button.p-component.p-button-outlined.p-button-primary {
+.p-button.p-component.p-button-outlined.p-button-primary,
+.p-button.p-component.p-button-outlined.p-button-primary:hover {
     color: white;
 }
 // #endregion
