@@ -1,0 +1,78 @@
+@import '../../../styles/colors.scss';
+
+.header {
+    // background-image: url('../../../assets/images/header_temp.png');
+    background-image: url('../../../assets/images/unsplash/sigmund/header_bkg.jpg');
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    z-index: 1;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+
+.overlay {
+    // border: 2px solid orange;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgb(102, 74, 50, 0.8);
+    background: -moz-linear-gradient(
+        180deg,
+        $landing-header-gradientTop 0%,
+        $landing-header-gradientMiddle 35%,
+        $landing-header-gradientBottom 100%
+    );
+    background: -webkit-linear-gradient(
+        180deg,
+        $landing-header-gradientTop 0%,
+        $landing-header-gradientMiddle 35%,
+        $landing-header-gradientBottom 100%
+    );
+    background: linear-gradient(
+        180deg,
+        $landing-header-gradientTop 0%,
+        $landing-header-gradientMiddle 35%,
+        $landing-header-gradientBottom 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#726051",endColorstr="#113147",GradientType=1);
+    mix-blend-mode: normal;
+}
+
+.container {
+    // border: 2px solid red;
+    position: relative;
+    z-index: 2;
+    margin: 0 auto;
+}
+
+.title1 {
+    margin: 0;
+    font-size: 3rem;
+    text-align: center;
+    color: white;
+}
+
+.title2 {
+    margin: 0;
+    text-align: center;
+    color: white;
+}
+
+.address {
+    // border: 1px solid blue;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    padding: 1em 0;
+    text-align: center;
+    width: 100%;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+}

@@ -20,6 +20,38 @@ body {
     font-size: 16px;
 }
 
+// #region NAVBAR
+.p-menubar.p-component {
+    border: none !important;
+}
+.p-menubar {
+    background-color: $navbar-background !important;
+    border: none !important;
+}
+.p-menubar-root-list {
+    background-color: $navbar-background !important;
+}
+div.p-menu.p-component.p-menu-overlay.p-connected-overlay-enter-done,
+li.p-submenu-header {
+    background-color: $navbar-background !important;
+}
+span.p-menuitem-text {
+    color: white !important;
+}
+.p-menuitem-icon {
+    color: white !important;
+}
+a.p-menuitem-link:hover {
+    background-color: rgb(39, 23, 9) !important;
+}
+a.p-menubar-button {
+    color: rgb(247, 205, 171) !important;
+}
+.p-button.p-component.p-button-outlined.p-button-primary {
+    color: white;
+}
+// #endregion
+
 form {
     padding: 1em;
 }
