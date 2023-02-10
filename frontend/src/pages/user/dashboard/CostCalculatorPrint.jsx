@@ -37,15 +37,30 @@ function CostCalculatorPrint() {
                 ).toFixed(2)
             )
 
+            console.log(`Tons: ${parseFloat(breakdownData.tons)}`)
+            console.log(`Product: ${parseFloat(breakdownData.product)}`)
+            console.log(
+                `Freight to yard: ${parseFloat(breakdownData.freightToYard)}`
+            )
+            console.log(
+                `chtFuelSurcharge: ${parseFloat(
+                    breakdownData.chtFuelSurcharge
+                )}`
+            )
+            console.log(
+                `vendorFuelSurcharge: ${parseFloat(
+                    breakdownData.vendorFuelSurcharge
+                )}`
+            )
+
+            let _productTotal = breakdownData.product * breakdownData.tons
+            let _freightTotal = breakdownData.freightToYard * breakdownData.tons
+            let _fscTotal =
+                breakdownData.chtFuelSurcharge * breakdownData.tons +
+                breakdownData.vendorFuelSurcharge * breakdownData.tons
+
             setTotalWithFSC(
-                (
-                    parseFloat(breakdownData.chtFuelSurcharge) +
-                    parseFloat(breakdownData.vendorFuelSurcharge) +
-                    parseFloat(breakdownData.product) *
-                        parseFloat(breakdownData.tons) +
-                    parseFloat(breakdownData.freightToYard) *
-                        parseFloat(breakdownData.tons)
-                ).toFixed(2)
+                (_productTotal + _freightTotal + _fscTotal).toFixed(2)
             )
 
             setTotalWithoutFSC(
@@ -226,8 +241,8 @@ function CostCalculatorPrint() {
                     style={{ border: '1px solid #E1E1E1', padding: '0.75em' }}
                 >
                     <div style={{ marginTop: '2em' }}>
-                        <div>{breakdownData.tons} T</div>
-                        <div>= {breakdownData.yards} yds</div>
+                        <div>{breakdownData.tons.toFixed(2)} T</div>
+                        <div>= {breakdownData.yards.toFixed(2)} yds</div>
                     </div>
                 </div>
 
@@ -248,7 +263,13 @@ function CostCalculatorPrint() {
                                 <tr>
                                     <td className="tdBold">Vendor:</td>
                                     <td style={{ paddingLeft: '1em' }}>
-                                        ${productTotal}
+                                        $
+                                        {(
+                                            breakdownData.product *
+                                                breakdownData.tons +
+                                            breakdownData.vendorFuelSurcharge *
+                                                breakdownData.tons
+                                        ).toFixed(2)}
                                     </td>
                                 </tr>
 
@@ -260,7 +281,10 @@ function CostCalculatorPrint() {
                                         $
                                         {(
                                             parseFloat(freightTotal) +
-                                            parseFloat(totalFSC)
+                                            parseFloat(
+                                                breakdownData.chtFuelSurcharge *
+                                                    breakdownData.tons
+                                            )
                                         ).toFixed(2)}
                                     </td>
                                 </tr>
