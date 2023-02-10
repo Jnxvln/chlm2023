@@ -215,7 +215,16 @@ function CostCalculatorPrint() {
                             {/* Plus FSC */}
                             <tr>
                                 <td></td>
-                                <td>+ ${totalFSC} FSC</td>
+                                <td>
+                                    + $
+                                    {(
+                                        breakdownData.vendorFuelSurcharge *
+                                            breakdownData.tons +
+                                        breakdownData.chtFuelSurcharge *
+                                            breakdownData.tons
+                                    ).toFixed(2)}{' '}
+                                    FSC
+                                </td>
                             </tr>
                             {/* Totals */}
                             <br />
