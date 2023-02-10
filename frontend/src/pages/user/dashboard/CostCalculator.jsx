@@ -158,8 +158,11 @@ function CostCalculator() {
 
     const performCalculations = (e) => {
         // Get vendor info
+        // const vendor = vendors.data.find(
+        //     (v) => v._id === formData.material.vendorId
+        // )
         const vendor = vendors.data.find(
-            (v) => v._id === formData.material.vendorId
+            (v) => v._id === selectedMaterial.vendorId
         )
 
         // Find routes matching vendorLocationId from material
