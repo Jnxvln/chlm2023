@@ -115,10 +115,26 @@ function CostCalculatorPrint() {
                             <tr>
                                 <td>Vendor FSC:</td>
                                 <td>${breakdownData.vendorFuelSurcharge} /t</td>
+                                <td>
+                                    ($
+                                    {(
+                                        breakdownData.vendorFuelSurcharge *
+                                        breakdownData.tons
+                                    ).toFixed(2)}
+                                    )
+                                </td>
                             </tr>
                             <tr>
                                 <td>CHT FSC:</td>
                                 <td>${breakdownData.chtFuelSurcharge} /t</td>
+                                <td>
+                                    ($
+                                    {(
+                                        breakdownData.chtFuelSurcharge *
+                                        breakdownData.tons
+                                    ).toFixed(2)}
+                                    )
+                                </td>
                             </tr>
                             <tr>
                                 <td className="tdBold">Total FSC:</td>
@@ -133,6 +149,16 @@ function CostCalculatorPrint() {
                                         )
                                     ).toFixed(2)}{' '}
                                     /t
+                                </td>
+                                <td>
+                                    ($
+                                    {(
+                                        breakdownData.vendorFuelSurcharge *
+                                            breakdownData.tons +
+                                        breakdownData.chtFuelSurcharge *
+                                            breakdownData.tons
+                                    ).toFixed(2)}
+                                    )
                                 </td>
                             </tr>
                         </tbody>

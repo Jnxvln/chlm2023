@@ -24,6 +24,7 @@ function CostCalculator() {
         totalCostTons: null,
     }
     const [filteredProducts, setFilteredProducts] = useState([])
+    const [selectedMaterial, setSelectedMaterial] = useState(null)
     const [breakdownData, setBreakdownData] = useState(null)
     const [formData, setFormData] = useState(initialState)
     const [isComplete, setIsComplete] = useState(false)
@@ -135,11 +136,17 @@ function CostCalculator() {
             ...prevState,
             [e.target.name]: e.value,
         }))
+
+        if (e.target.value._id) {
+            setSelectedMaterial(e.target.value)
+        } else {
+            setSelectedMaterial(null)
+        }
     }
 
     const searchProduct = (e) => {
         let _filteredProducts = vendorProducts.data.filter((product) =>
-            product.name.startsWith(e.query)
+            product.name.toLowerCase().includes(e.query.toLowerCase())
         )
 
         if (!_filteredProducts || _filteredProducts.length <= 0) {
@@ -233,6 +240,18 @@ function CostCalculator() {
             search: `?${createSearchParams(params)}`,
         })
     }
+
+    const vendorIdToName = (vendorId) => {
+        let _vendor = vendors.data.find((vendor) => vendor._id === vendorId)
+        return _vendor.name
+    }
+
+    const vendorLocationToName = (vendorLocationId) => {
+        let _vendorLoc = vendorLocations.data.find(
+            (loc) => loc._id === vendorLocationId
+        )
+        return _vendorLoc.name
+    }
     // #endregion
 
     // #region TEMPLATES ------------------------------------------------------------------------
@@ -270,6 +289,13 @@ function CostCalculator() {
                 </h1>
             </div>
         )
+    }
+
+    const materialItemTemplate = (rowData) => {
+        // console.log(rowData)
+        const vendorName = vendorIdToName(rowData.vendorId)
+        const vendorLocName = vendorLocationToName(rowData.vendorLocationId)
+        return `${rowData.name} (${vendorName} - ${vendorLocName})`
     }
     // #endregion
 
@@ -342,6 +368,7 @@ function CostCalculator() {
                                 value={formData.material}
                                 suggestions={filteredProducts}
                                 completeMethod={searchProduct}
+                                itemTemplate={materialItemTemplate}
                                 onChange={(e) => onChangeAutoComplete(e)}
                             />
 
@@ -451,6 +478,22 @@ function CostCalculator() {
                             <>{formData.material.name}</>
                         ) : (
                             ''
+                        )}
+
+                        <br />
+
+                        {selectedMaterial && (
+                            <div
+                                style={{
+                                    textAlign: 'center',
+                                    fontSize: '1rem',
+                                }}
+                            >
+                                {vendorIdToName(selectedMaterial.vendorId)} -{' '}
+                                {vendorLocationToName(
+                                    selectedMaterial.vendorLocationId
+                                )}
+                            </div>
                         )}
                     </div>
 
