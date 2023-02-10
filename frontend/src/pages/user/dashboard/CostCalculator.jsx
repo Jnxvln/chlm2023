@@ -168,7 +168,8 @@ function CostCalculator() {
         // Find routes matching vendorLocationId from material
         const routesMatchingVendorLocationId = freightRoutes?.data.find(
             (route) =>
-                route.vendorLocationId === formData.material.vendorLocationId
+                route.vendorLocationId === formData.material.vendorLocationId &&
+                route.destination.toLowerCase() === 'c&h yard'
         )
 
         // Calculations
