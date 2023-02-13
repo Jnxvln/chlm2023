@@ -1,0 +1,51 @@
+@import '../../../styles/colors.scss';
+
+.sectionContainer {
+    background: linear-gradient(rgb(235, 230, 226), rgba(237, 237, 237, 0.08));
+    padding: 2em;
+}
+
+.title {
+    margin: 0;
+    padding: 0.5em 0;
+    color: #753e16;
+    font-weight: bold;
+    text-align: center;
+    font-size: 26pt;
+}
+
+@media screen and (min-width: 320px) {
+    .title {
+        font-size: 1.8rem;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .title {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .title {
+        font-size: 2.1rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .title {
+        font-size: 2.2rem;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .title {
+        font-size: 2.9rem;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .title {
+        font-size: 4.5rem;
+    }
+}

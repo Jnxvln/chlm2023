@@ -78,26 +78,83 @@
     color: white;
 }
 
-@media screen and (min-width: 425px) {
+@media screen and (min-width: 320px) {
+    .title1 {
+        font-size: 2.5rem;
+    }
     .address {
-        font-size: 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (min-width: 375px) {
+    .title1 {
+        font-size: 2.4rem;
     }
     .title2 {
-        font-size: 2rem;
+        font-size: 1.7rem;
+    }
+    .address {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .title2 {
+        font-size: 1.9rem;
+    }
+    .address {
+        font-size: 0.9rem;
     }
 }
 
 @media screen and (min-width: 768px) {
     .title1 {
-        font-size: 3.5rem;
+        font-size: 3rem;
     }
     .title2 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 }
 
-@media screen and (min-width: 960px) {
+@media screen and (min-width: 1024px) {
     .header {
         height: 60vh;
+    }
+    .title1 {
+        font-size: 4rem;
+    }
+    .title2 {
+        font-size: 3rem;
+    }
+    .address {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .title1 {
+        font-size: 4.7rem;
+    }
+    .title2 {
+        font-size: 3.8rem;
+    }
+    .address {
+        font-size: 1.3rem;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .header {
+        height: 55vh;
+    }
+    .title1 {
+        font-size: 7rem;
+    }
+    .title2 {
+        font-size: 5rem;
+    }
+    .address {
+        font-size: 1.9rem;
     }
 }

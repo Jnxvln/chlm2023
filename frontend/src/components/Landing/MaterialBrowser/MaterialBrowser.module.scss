@@ -1,0 +1,69 @@
+@import '../../../styles/colors.scss';
+
+.sectionContainer {
+}
+
+.backgroundContainer {
+    background-image: url('../../../assets/images/browsemats.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 350px;
+}
+
+.backgroundOverlay {
+    width: 100%;
+    height: 100%;
+    background-color: #745a42;
+    mix-blend-mode: multiply;
+}
+
+.article {
+    position: relative;
+    top: -42vh;
+    border: 3px solid red;
+}
+
+.title {
+    color: bisque;
+    font-size: 20pt;
+    text-align: center;
+}
+
+.carouselContainer {
+    background-color: rgb(180, 133, 74);
+    width: 90%;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.navList {
+    border: 2px solid blue;
+    text-align: center;
+    padding: 0;
+}
+
+.navListItem {
+    display: inline-block;
+    list-style-type: none;
+    margin-right: 1em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #6a4421;
+}
+
+.navListItem:hover {
+    color: rgb(219, 142, 54);
+    cursor: pointer;
+}
+
+.infoContainer {
+    margin-top: 1em;
+}
+
+.categoryTitle {
+    color: #177eb9;
+    text-align: center;
+    font-weight: bold;
+}

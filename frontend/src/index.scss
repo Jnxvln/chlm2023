@@ -333,3 +333,43 @@ tr.spacer td {
         background-color: $navbar-background !important;
     }
 }
+
+@media screen and (min-width: 1440px) {
+    .p-menubar.p-component ul li {
+        font-size: 1.2rem;
+    }
+
+    .p-button.p-component.p-button-outlined.p-button-primary {
+        font-size: 1.2rem;
+    }
+
+    // Mobile Nav menu
+    div.p-menu.p-component.p-menu-overlay.p-connected-overlay-enter-done
+        li.p-menuitem,
+    li.p-submenu-header {
+        // background-color: $navbar-background !important;
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .p-button.p-component.p-button-outlined.p-button-primary {
+        font-size: 1.8rem;
+    }
+
+    .p-menubar.p-component ul li {
+        font-size: 1.8rem;
+    }
+
+    .p-button.p-component.p-button-outlined.p-button-primary {
+        font-size: 1.8rem;
+    }
+
+    // Mobile Nav menu
+    div.p-menu.p-component.p-menu-overlay.p-connected-overlay-enter-done
+        li.p-menuitem,
+    li.p-submenu-header {
+        // background-color: $navbar-background !important;
+        font-size: 1.8rem;
+    }
+}

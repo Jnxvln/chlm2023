@@ -1,0 +1,98 @@
+@import '../../../../styles/colors.scss';
+
+.container {
+    margin-bottom: 2em;
+}
+
+.title {
+    color: #bc8156;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.25em 0;
+}
+
+.published {
+    color: #a79b91;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.content {
+    line-height: 1.7;
+}
+
+@media screen and (min-width: 320px) {
+    .title {
+        font-size: 1.2rem;
+    }
+    .published {
+        font-size: 0.78rem;
+    }
+    .content {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .title {
+        font-size: 1.5rem;
+    }
+    .published {
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .title {
+        font-size: 1.7rem;
+    }
+    .published {
+        font-size: 0.9rem;
+    }
+    .content {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .title {
+        font-size: 1.9rem;
+    }
+    .published {
+        font-size: 1rem;
+    }
+    .content {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .title {
+        font-size: 2.1rem;
+    }
+    .published {
+        font-size: 1.2rem;
+    }
+    .content {
+        font-size: 1.3rem;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .container {
+        max-width: 1280px;
+    }
+    .title {
+        font-size: 3rem;
+    }
+    .published {
+        font-size: 1.8rem;
+    }
+    .content {
+        font-size: 2.1rem;
+    }
+}
