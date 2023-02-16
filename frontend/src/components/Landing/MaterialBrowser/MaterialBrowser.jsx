@@ -15,9 +15,7 @@ export default function MaterialBrowser() {
             <article className={styles.article}>
                 <div>
                     <h1 className={styles.title}>Browse Our Materials</h1>
-                    <div className={styles.carouselContainer}>
-                        {/* Image Carousel */}
-                    </div>
+                    <div className={styles.carouselContainer}></div>
                     <nav className={styles.nav}>
                         <ul className={styles.navList}>
                             <li className={styles.navListItem}>Gravel</li>
