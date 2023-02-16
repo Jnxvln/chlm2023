@@ -33,6 +33,7 @@
 .carouselContainer {
     background-color: rgb(180, 133, 74);
     width: 90%;
+    max-width: 350px;
     height: 250px;
     margin: 0 auto;
 }
@@ -66,4 +67,54 @@
     color: #177eb9;
     text-align: center;
     font-weight: bold;
+}
+
+.materialsButtonContainer {
+    text-align: center;
+    padding: 0.5em 0;
+}
+
+.materialBrowserItemContainer {
+    border: 2px solid blue;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .materialBrowserItemContainer {
+        flex-direction: row;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .materialBrowserItemContainer {
+        flex-direction: row;
+    }
+    .carouselContainer {
+        background-color: rgb(180, 133, 74);
+        width: 90%;
+        max-width: 440px;
+        height: 250px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .article {
+        position: relative;
+        top: -30vh;
+        border: 3px solid red;
+    }
+    .carouselContainer {
+        background-color: rgb(180, 133, 74);
+        width: 90%;
+        max-width: 500px;
+        height: 250px;
+        margin: 0 auto;
+    }
 }
