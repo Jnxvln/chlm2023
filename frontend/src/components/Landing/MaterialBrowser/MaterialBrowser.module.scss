@@ -1,13 +1,11 @@
 @import '../../../styles/colors.scss';
 
-.sectionContainer {
-}
-
 .backgroundContainer {
     background-image: url('../../../assets/images/browsemats.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
     height: 350px;
 }
 
@@ -19,9 +17,9 @@
 }
 
 .article {
+    // border: 3px solid red;
     position: relative;
     top: -42vh;
-    border: 3px solid red;
 }
 
 .title {
@@ -31,15 +29,15 @@
 }
 
 .carouselContainer {
-    background-color: rgb(180, 133, 74);
     width: 90%;
     max-width: 350px;
     height: 250px;
     margin: 0 auto;
+    background-color: rgb(180, 133, 74);
 }
 
 .navList {
-    border: 2px solid blue;
+    // border: 2px solid blue;
     text-align: center;
     padding: 0;
 }
@@ -67,6 +65,7 @@
     color: #177eb9;
     text-align: center;
     font-weight: bold;
+    font-size: 2rem;
 }
 
 .materialsButtonContainer {
@@ -75,23 +74,34 @@
 }
 
 .materialBrowserItemContainer {
-    border: 2px solid blue;
+    // border: 2px solid blue;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: space-evenly;
     margin: 0 auto;
-    text-align: center;
+    // text-align: center;
     width: 100%;
 }
 
-@media screen and (min-width: 768px) {
-    .materialBrowserItemContainer {
-        flex-direction: row;
+@media screen and (min-width: 425px) {
+    .article {
+        // border: 3px solid rgb(228, 12, 192);
+        position: relative;
+        top: -36vh;
+    }
+    .carouselContainer {
+        height: 270px;
+        margin: 0 auto;
     }
 }
 
 @media screen and (min-width: 768px) {
+    .article {
+        // border: 3px solid rgb(9, 178, 201);
+        position: relative;
+        top: -36vh;
+    }
     .materialBrowserItemContainer {
         flex-direction: row;
     }
@@ -99,22 +109,45 @@
         background-color: rgb(180, 133, 74);
         width: 90%;
         max-width: 440px;
-        height: 250px;
+        height: 270px;
         margin: 0 auto;
+    }
+    .navListItem {
+        font-size: 1.1rem;
     }
 }
 
 @media screen and (min-width: 1024px) {
     .article {
         position: relative;
-        top: -30vh;
-        border: 3px solid red;
+        top: -36vh;
+        // border: 3px solid rgb(90, 194, 31);
     }
     .carouselContainer {
         background-color: rgb(180, 133, 74);
         width: 90%;
         max-width: 500px;
-        height: 250px;
+        height: 270px;
         margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .article {
+        position: relative;
+        top: -50vh;
+        // border: 3px solid red;
+    }
+    .backgroundContainer {
+        height: 500px;
+    }
+    .title {
+        color: bisque;
+        font-size: 30pt;
+        text-align: center;
+    }
+    .carouselContainer {
+        max-width: 700px;
+        height: 360px;
     }
 }

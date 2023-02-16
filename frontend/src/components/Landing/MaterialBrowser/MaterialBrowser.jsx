@@ -34,7 +34,6 @@ export default function MaterialBrowser() {
                     <div className={styles.materialsButtonContainer}>
                         <Button
                             type="button"
-                            className="p-button-sm"
                             onClick={() => navigate('/materials')}
                         >
                             View All Materials
@@ -91,7 +90,6 @@ export default function MaterialBrowser() {
                     <div className={styles.materialsButtonContainer}>
                         <Button
                             type="button"
-                            className="p-button-sm"
                             onClick={() => navigate('/materials')}
                         >
                             View All Materials

@@ -1,14 +1,15 @@
 @import '../../../../styles/colors.scss';
 
 .materialItemContainer {
-    border: 2px solid orange;
+    // border: 2px solid orange;
     display: flex;
     flex-direction: column;
     padding: 1em;
+    margin-bottom: 0.75em;
 }
 
 .materialItemImage {
-    border: 2px solid purple;
+    // border: 2px solid purple;
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
@@ -25,6 +26,10 @@
     line-height: 1.5;
     max-width: 320px;
     margin: 0 auto;
+    max-height: 100px;
+    overflow-y: scroll;
+    border: 1px dotted gray;
+    padding: 0.25em;
 }
 
 @media screen and (min-width: 768px) {
@@ -32,11 +37,19 @@
         width: 100%;
         max-width: 220px;
     }
+    .materialDescription {
+        max-height: 120px;
+        overflow-y: scroll;
+    }
 }
 
 @media screen and (min-width: 1024px) {
     .materialItemImage {
         width: 100%;
         max-width: 300px;
+    }
+    .materialDescription {
+        max-height: 180px;
+        overflow-y: scroll;
     }
 }
