@@ -1,13 +1,27 @@
+import styles from './HowMuch.module.scss'
+import imgTapeMeasure from '../../../assets/images/tapemeasure.png'
+
 export default function HowMuch() {
     return (
-        <section>
-            <h1>How much do I need?</h1>
-            <div>
-                <a href="/calculator">Try our Calculator</a>
-                <img src="" alt="" />
+        <section className={styles.sectionContainer}>
+            <h1 className={styles.title}>How much do I need?</h1>
+            <div className={styles.linkContainer}>
+                <a href="/calculator" className={styles.calculatorLink}>
+                    Try our Calculator
+                </a>
+                <div className={styles.imageContainer}>
+                    <img src={imgTapeMeasure} alt="" className={styles.image} />
+                </div>
             </div>
-            <p>For bulk materials only (soils, mulches, and gravel)</p>
-            <small>Disclaimer: Calculations are an approimation only</small>
+            <p className={styles.description}>
+                For bulk materials only{' '}
+                <span className={styles.descriptionBreak}>
+                    (soils, mulches, and gravel)
+                </span>
+            </p>
+            <div className={styles.disclaimer}>
+                Disclaimer: Calculations are an approimation only
+            </div>
         </section>
     )
 }
