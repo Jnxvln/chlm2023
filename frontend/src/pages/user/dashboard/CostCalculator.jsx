@@ -168,7 +168,8 @@ function CostCalculator() {
         // Find routes matching vendorLocationId from material
         const routesMatchingVendorLocationId = freightRoutes?.data.find(
             (route) =>
-                route.vendorLocationId === formData.material.vendorLocationId
+                route.vendorLocationId === formData.material.vendorLocationId &&
+                route.destination.toLowerCase() === 'c&h yard'
         )
 
         // Calculations
@@ -201,16 +202,16 @@ function CostCalculator() {
             vendor,
             material: formData.material,
             location: _location.name,
-            tons: parseFloat(formData.tons).toFixed(2),
-            product: parseFloat(_product).toFixed(2),
-            freightToYard: parseFloat(_freightToYard).toFixed(2),
+            tons: parseFloat(formData.tons),
+            product: parseFloat(_product),
+            freightToYard: parseFloat(_freightToYard),
             chtFuelSurcharge: vendor.chtFuelSurcharge
-                ? parseFloat(vendor.chtFuelSurcharge).toFixed(2)
-                : parseFloat(0).toFixed(2),
+                ? parseFloat(vendor.chtFuelSurcharge)
+                : parseFloat(0),
             vendorFuelSurcharge: vendor.vendorFuelSurcharge
-                ? parseFloat(vendor.vendorFuelSurcharge).toFixed(2)
-                : parseFloat(0).toFixed(2),
-            yards: (parseFloat(formData.tons) / 1.35).toFixed(2),
+                ? parseFloat(vendor.vendorFuelSurcharge)
+                : parseFloat(0),
+            yards: parseFloat(formData.tons) / 1.35,
             costPerYard: _costPerYard,
             costPerTon: _costPerTon,
             totalCostTons: _totalCostTons,
