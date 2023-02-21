@@ -311,6 +311,8 @@ function DeliveriesDashboard() {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(
                         rowData.address
                     )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{ textDecoration: 'none' }}
                 >
                     <span>{rowData.address}</span>
