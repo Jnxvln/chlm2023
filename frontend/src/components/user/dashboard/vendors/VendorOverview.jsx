@@ -246,9 +246,6 @@ function VendorOverview() {
                                   )
                                 : null
 
-                        console.log('Selected Freight Row:: ')
-                        console.log(selectedFreightRow)
-
                         setSelectedFreightRow(selectedFreightRow)
                     }}
                     value={
