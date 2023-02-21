@@ -2,46 +2,58 @@
 
 .sectionContainer {
     background-color: rgb(235, 235, 235);
-    // height: 1400px;
     border: 4px dashed red;
+    // position: relative;
+    // height: 1400px;
 }
 
 .backgroundContainer {
+    background-color: #745a42;
+    width: 100%;
+    height: 100%;
+}
+
+.backgroundOverlay {
     background-image: url('../../../assets/images/browsemats.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    height: 350px;
-    position: relative;
+    mix-blend-mode: overlay;
+    opacity: 1;
+    z-index: 2;
 }
 
-.backgroundOverlay {
+.title {
+    border: 2px solid blue;
+    color: bisque;
+    font-size: 24pt;
+    text-align: center;
     width: 100%;
-    height: 100%;
-    background-color: #745a42;
-    mix-blend-mode: multiply;
+    position: relative;
+    z-index: 2;
+    padding: auto 0;
+    margin: 0;
 }
 
 .article {
     border: 4px solid purple;
-    position: relative;
+    // margin-top: 20pt;
+    // padding: 1em 0;
+    // position: relative;
     // border: 3px solid red;
-    top: -260pt;
-}
-
-.title {
-    color: bisque;
-    font-size: 20pt;
-    text-align: center;
+    // top: -260pt;
 }
 
 .carouselContainer {
-    width: 90%;
-    max-width: 350px;
-    height: 250px;
-    margin: 0 auto;
+    height: 200px;
+    width: 100%;
     background-color: rgb(180, 133, 74);
+    position: relative;
+    // top: -32vh;
+    // position: absolute;
+    // top: 18vh;
+    // left: 2.1vh;
 }
 
 .navList {
@@ -92,70 +104,123 @@
     width: 100%;
 }
 
-@media screen and (min-width: 425px) {
-    .article {
-        // border: 3px solid rgb(228, 12, 192);
+@media screen and (min-width: 320px) {
+    .backgroundContainer {
+        background-image: url('../../../assets/images/browsemats.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        height: 200px;
         position: relative;
-        top: -36vh;
     }
-    .carouselContainer {
-        height: 270px;
-        margin: 0 auto;
+    .title {
+        // margin: 0.4em 0 0 0;
     }
 }
 
+@media screen and (min-width: 375px) {
+    // .carouselContainer {
+    //     position: absolute;
+    //     height: 220px;
+    //     top: 19vh;
+    //     left: 2.6vh;
+    // }
+    .title {
+        font-size: 1.9rem;
+        margin: 0.5em 0 0 0;
+    }
+    // .article {
+    //     margin-top: 10pt;
+    // }
+}
+
+@media screen and (min-width: 425px) {
+    .title {
+        font-size: 2rem;
+        margin: 1em 0 0 0;
+    }
+    // .carouselContainer {
+    //     // height: 270px;
+    //     top: 16vh;
+    //     left: 2.8vh;
+    // }
+}
+
 @media screen and (min-width: 768px) {
-    .article {
-        // border: 3px solid rgb(9, 178, 201);
-        position: relative;
-        top: -36vh;
+    .backgroundContainer {
+        height: 55vh;
+    }
+    .title {
+        top: 10px;
+        font-size: 2.5rem;
     }
     .materialBrowserItemContainer {
         flex-direction: row;
     }
-    .carouselContainer {
-        background-color: rgb(180, 133, 74);
-        width: 90%;
-        max-width: 440px;
-        height: 270px;
-        margin: 0 auto;
-    }
+    // .carouselContainer {
+    //     max-width: 80%;
+    //     top: 22vh;
+    //     left: 11vh;
+    // }
     .navListItem {
         font-size: 1.1rem;
     }
 }
 
 @media screen and (min-width: 1024px) {
-    .article {
-        position: relative;
-        top: -36vh;
-        // border: 3px solid rgb(90, 194, 31);
+    .backgroundContainer {
+        height: 60vh;
     }
-    .carouselContainer {
-        background-color: rgb(180, 133, 74);
-        width: 90%;
-        max-width: 500px;
-        height: 270px;
-        margin: 0 auto;
+    .title {
+        font-size: 2.8rem;
+        margin-top: 1.25em;
     }
+    // .carouselContainer {
+    //     max-width: 60%;
+    //     top: 28vh;
+    //     left: 34vh;
+    // }
 }
 
 @media screen and (min-width: 1440px) {
-    .article {
-        position: relative;
-        top: -50vh;
-        // border: 3px solid red;
-    }
     .backgroundContainer {
-        height: 500px;
+        height: 70vh;
     }
     .title {
         color: bisque;
-        font-size: 30pt;
+        font-size: 3rem;
+        margin-top: 1em;
         text-align: center;
     }
-    .carouselContainer {
-        max-width: 700px;
-        height: 360px;
+    // .carouselContainer {
+    //     max-width: 60%;
+    //     height: 320px;
+    //     top: 23vh;
+    //     left: 45vh;
+    // }
+    .article {
+        margin-top: 20pt;
+        padding: 1em 0;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .backgroundContainer {
+        height: 80vh;
+    }
+    .title {
+        font-size: 5rem;
+        text-align: center;
+    }
+    // .carouselContainer {
+    //     max-width: 50%;
+    //     height: 470px;
+    //     top: 30vh;
+    //     left: 70vh;
+    // }
+    .article {
+        margin-top: 30pt;
+        padding: 1em 0;
     }
 }

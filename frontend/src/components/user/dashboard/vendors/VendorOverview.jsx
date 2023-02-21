@@ -20,6 +20,9 @@ function VendorOverview() {
     const userId = user?.data?._id
 
     const [selectedVendor, setSelectedVendor] = useState(null)
+    const [selectedVendorProductRow, setSelectedVendorProductRow] =
+        useState(null)
+    const [selectedFreightRow, setSelectedFreightRow] = useState(null)
     const [vendorFilters, setVendorFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
@@ -222,6 +225,29 @@ function VendorOverview() {
                 <br />
 
                 <DataTable
+                    stripedRows
+                    selectionMode="single"
+                    selection={selectedVendorProductRow}
+                    onSelectionChange={(e) => {
+                        setSelectedVendorProductRow(e.value)
+
+                        // Set Selected Freight Row to matching vendorId with "C&H Yard" as destination
+
+                        const selectedFreightRow =
+                            freightRoutes &&
+                            freightRoutes.data &&
+                            freightRoutes.data.length > 0
+                                ? freightRoutes.data.find(
+                                      (route) =>
+                                          route.vendorId === e.value.vendorId &&
+                                          route.vendorLocationId ===
+                                              e.value.vendorLocationId &&
+                                          route.destination === 'C&H Yard'
+                                  )
+                                : null
+
+                        setSelectedFreightRow(selectedFreightRow)
+                    }}
                     value={
                         vendorProducts &&
                         vendorProducts.data &&
@@ -257,6 +283,10 @@ function VendorOverview() {
                 id="vendorOverviewFreightRoutesPanelHeader"
             >
                 <DataTable
+                    stripedRows
+                    selectionMode="single"
+                    selection={selectedFreightRow}
+                    onSelectionChange={(e) => setSelectedFreightRow(e.value)}
                     value={
                         freightRoutes &&
                         freightRoutes.data &&
