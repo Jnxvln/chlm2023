@@ -72,6 +72,16 @@ const updateDeliveryClient = asyncHandler(async (req, res) => {
         throw new Error('Delivery client not found')
     }
 
+    // Check if coordinates are numbers, truncate to 6 digits if so
+    let cleanCoords = req.body.coordinates.replace(/\s/g, '')
+    let _lat = cleanCoords.split(',')[0]
+    let _long = cleanCoords.split(',')[1]
+
+    let lat, long
+
+    lat = isNaN(_lat) ? _lat : parseFloat(_lat).toFixed(6)
+    long = isNaN(_long) ? _long : parseFloat(_long).toFixed(6)
+
     const updatedDeliveryClient = await DeliveryClient.findByIdAndUpdate(
         req.params.id,
         {
@@ -81,7 +91,7 @@ const updateDeliveryClient = asyncHandler(async (req, res) => {
             phone: req.body.phone,
             companyName: req.body.companyName,
             address: req.body.address,
-            coordinates: req.body.coordinates,
+            coordinates: `${lat}, ${long}`,
             directions: req.body.directions,
         },
         { new: true }
