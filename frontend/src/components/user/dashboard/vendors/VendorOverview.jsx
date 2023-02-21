@@ -231,13 +231,7 @@ function VendorOverview() {
                     onSelectionChange={(e) => {
                         setSelectedVendorProductRow(e.value)
 
-                        console.log(
-                            '[VendorOverview] selectedVendorProductRow  e.value: '
-                        )
-                        console.log(e.value)
-
                         // Set Selected Freight Row to matching vendorId with "C&H Yard" as destination
-
                         const selectedFreightRow =
                             freightRoutes &&
                             freightRoutes.data &&
@@ -247,7 +241,8 @@ function VendorOverview() {
                                           route.vendorId === e.value.vendorId &&
                                           route.vendorLocationId ===
                                               e.value.vendorLocationId &&
-                                          route.destination === 'C&H Yard'
+                                          route.destination.toLowerCase() ===
+                                              'c&h yard'
                                   )
                                 : null
 
