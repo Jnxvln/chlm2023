@@ -231,6 +231,11 @@ function VendorOverview() {
                     onSelectionChange={(e) => {
                         setSelectedVendorProductRow(e.value)
 
+                        console.log(
+                            '[VendorOverview] selectedVendorProductRow  e.value: '
+                        )
+                        console.log(e.value)
+
                         // Set Selected Freight Row to matching vendorId with "C&H Yard" as destination
 
                         const selectedFreightRow =
@@ -245,6 +250,9 @@ function VendorOverview() {
                                           route.destination === 'C&H Yard'
                                   )
                                 : null
+
+                        console.log('Selected Freight Row:: ')
+                        console.log(selectedFreightRow)
 
                         setSelectedFreightRow(selectedFreightRow)
                     }}
