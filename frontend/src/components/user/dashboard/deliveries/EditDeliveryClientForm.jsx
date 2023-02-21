@@ -135,8 +135,9 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
                 coordinates: deliveryClientToEdit.coordinates,
                 directions: deliveryClientToEdit.directions,
             }))
+        } else {
+            setFormData(initialState)
         }
-        setFormData(initialState)
     }
 
     // Handle form closing

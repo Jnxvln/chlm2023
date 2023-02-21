@@ -264,7 +264,7 @@ function DeliveriesDashboard() {
     const deliveryDateTemplate = (rowData) => {
         return (
             <div className={pastDueClass(rowData)}>
-                {dayjs(rowData.deliveryDate).format('MM/DD/YY')}
+                {dayjs(rowData.deliveryDate).format('ddd MM/DD/YY')}
             </div>
         )
     }
@@ -319,11 +319,11 @@ function DeliveriesDashboard() {
         )
     }
 
-    const contactNameTemplate = (rowData) => {
-        return (
-            <div className={pastDueClass(rowData)}>{rowData.contactName}</div>
-        )
-    }
+    // const contactNameTemplate = (rowData) => {
+    //     return (
+    //         <div className={pastDueClass(rowData)}>{rowData.contactName}</div>
+    //     )
+    // }
 
     const contactPhoneTemplate = (rowData) => {
         return (
@@ -925,7 +925,7 @@ function DeliveriesDashboard() {
                             field="deliveryDate"
                             header="Deliver"
                             body={deliveryDateTemplate}
-                            style={{ maxWidth: '6em' }}
+                            style={{ maxWidth: '9em' }}
                             sortable
                         ></Column>
 
@@ -959,11 +959,11 @@ function DeliveriesDashboard() {
                         ></Column>
 
                         {/* Contact Name */}
-                        <Column
+                        {/* <Column
                             field="contactName"
                             header="Contact Name"
                             body={contactNameTemplate}
-                        ></Column>
+                        ></Column> */}
 
                         {/* Contact  Phone */}
                         <Column
