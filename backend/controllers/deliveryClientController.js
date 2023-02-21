@@ -36,6 +36,16 @@ const createDeliveryClient = asyncHandler(async (req, res) => {
         )
     }
 
+    // Check if coordinates are numbers, truncate to 6 digits if so
+    let cleanCoords = req.body.coordinates.replace(/\s/g, '')
+    let _lat = cleanCoords.split(',')[0]
+    let _long = cleanCoords.split(',')[1]
+
+    let lat, long
+
+    lat = isNaN(_lat) ? _lat : parseFloat(_lat).toFixed(6)
+    long = isNaN(_long) ? _long : parseFloat(_long).toFixed(6)
+
     const deliveryClient = await DeliveryClient.create({
         createdBy: req.user.id,
         updatedBy: req.user.id,
@@ -44,7 +54,7 @@ const createDeliveryClient = asyncHandler(async (req, res) => {
         phone: req.body.phone,
         companyName: req.body.companyName,
         address: req.body.address,
-        coordinates: req.body.coordinates,
+        coordinates: `${lat}, ${long}`,
         directions: req.body.directions,
     })
 
