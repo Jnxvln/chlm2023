@@ -185,7 +185,7 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
     }
 
     const myFilterFunction = (event, options) => {
-        console.log(event)
+        // console.log(event)
         let _filterValue = event.target.value
         setFilterValue(_filterValue)
         options.filter(event)

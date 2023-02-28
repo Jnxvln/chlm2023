@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const DeliveryClient = require('../models/deliveryClientModel')
+const formatCoords = require('../utils/formatCoords')
 
 // @desc    Get delivery clients
 // @route   GET /api/deliveries/clients
@@ -36,15 +37,8 @@ const createDeliveryClient = asyncHandler(async (req, res) => {
         )
     }
 
-    // Check if coordinates are numbers, truncate to 6 digits if so
-    let cleanCoords = req.body.coordinates.replace(/\s/g, '')
-    let _lat = cleanCoords.split(',')[0]
-    let _long = cleanCoords.split(',')[1]
-
-    let lat, long
-
-    lat = isNaN(_lat) ? _lat : parseFloat(_lat).toFixed(6)
-    long = isNaN(_long) ? _long : parseFloat(_long).toFixed(6)
+    // Check if coordinates are numbers, truncate to 6 digits if so}
+    const coords = formatCoords(req.body.coordinates)
 
     const deliveryClient = await DeliveryClient.create({
         createdBy: req.user.id,
@@ -54,7 +48,7 @@ const createDeliveryClient = asyncHandler(async (req, res) => {
         phone: req.body.phone,
         companyName: req.body.companyName,
         address: req.body.address,
-        coordinates: `${lat}, ${long}`,
+        coordinates: coords,
         directions: req.body.directions,
     })
 
@@ -72,15 +66,8 @@ const updateDeliveryClient = asyncHandler(async (req, res) => {
         throw new Error('Delivery client not found')
     }
 
-    // Check if coordinates are numbers, truncate to 6 digits if so
-    let cleanCoords = req.body.coordinates.replace(/\s/g, '')
-    let _lat = cleanCoords.split(',')[0]
-    let _long = cleanCoords.split(',')[1]
-
-    let lat, long
-
-    lat = isNaN(_lat) ? _lat : parseFloat(_lat).toFixed(6)
-    long = isNaN(_long) ? _long : parseFloat(_long).toFixed(6)
+    // Check if coordinates are numbers, truncate to 6 digits if so}
+    const coords = formatCoords(req.body.coordinates)
 
     const updatedDeliveryClient = await DeliveryClient.findByIdAndUpdate(
         req.params.id,
@@ -91,7 +78,7 @@ const updateDeliveryClient = asyncHandler(async (req, res) => {
             phone: req.body.phone,
             companyName: req.body.companyName,
             address: req.body.address,
-            coordinates: `${lat}, ${long}`,
+            coordinates: coords,
             directions: req.body.directions,
         },
         { new: true }

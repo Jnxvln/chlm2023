@@ -4,6 +4,7 @@ import DialogHeader from '../../../dialogComponents/DialogHeader'
 import DialogFooter from '../../../dialogComponents/DialogFooter_SubmitClose'
 // PrimeReact Components
 import { Dialog } from 'primereact/dialog'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
@@ -12,7 +13,10 @@ import { Dropdown } from 'primereact/dropdown'
 import { InputSwitch } from 'primereact/inputswitch'
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
-import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClientsApi'
+import {
+    getDeliveryClients,
+    updateDeliveryClient,
+} from '../../../../api/deliveryClients/deliveryClientsApi'
 import { createDelivery } from '../../../../api/deliveries/deliveriesApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
@@ -37,8 +41,13 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
         directionsReminder: false,
         completed: false,
     }
+    const [
+        confirmClientUpdatesDialogVisible,
+        setConfirmClientUpdatesDialogVisible,
+    ] = useState(false)
     const [formDialog, setFormDialog] = useState(false)
     const [formData, setFormData] = useState(initialState)
+    const [clientUpdates, setClientUpdates] = useState(null)
     const [selectedDeliveryClient, setSelectedDeliveryClient] = useState(null)
 
     // User state
@@ -67,6 +76,35 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
             const errMsg = 'Error creating delivery'
             console.log(errMsg)
             console.log(err)
+
+            if (
+                err &&
+                err.response &&
+                err.response.data &&
+                err.response.data.message
+            ) {
+                toast.error(err.response.data.message, { autoClose: false })
+            } else {
+                toast.error(errMsg, { autoClose: false })
+            }
+        },
+    })
+
+    const mutationUpdateDeliveryClient = useMutation({
+        mutationKey: ['deliveryClients'],
+        mutationFn: ({ clientUpdates, token }) =>
+            updateDeliveryClient(clientUpdates, token),
+        onSuccess: (data) => {
+            toast.success('Client updated!', { autoClose: 3000 })
+            setClientUpdates(null)
+            queryClient.invalidateQueries(['deliveryClients'])
+            // setClientData()
+        },
+        onError: (err) => {
+            const errMsg = 'Error updating delivery client. Check logs'
+            console.log(errMsg)
+            console.log(err)
+            setClientUpdates(null)
 
             if (
                 err &&
@@ -161,8 +199,6 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
         e.preventDefault()
 
         formData.deliveryClient = formData.deliveryClient._id
-        // console.log("DELIVERY TO SUBMIT: ");
-        // console.log(formData);
 
         if (!deliveryClient) {
             return toast.error('A client is required')
@@ -184,6 +220,51 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
             return toast.error('The product quantity is required')
         }
 
+        // Check for **BLANK** DeliveryClient fields, ask if want to save --------------------------------------------
+        let updates = {}
+
+        // #region Delivery Client update checks
+        if (
+            contactPhone &&
+            selectedClient &&
+            (!selectedClient.phone || selectedClient.phone === '')
+        ) {
+            updates.phone = contactPhone
+        }
+
+        if (
+            address &&
+            selectedClient &&
+            (!selectedClient.address || selectedClient.address === '')
+        ) {
+            updates.address = address
+        }
+
+        if (
+            coordinates &&
+            selectedClient &&
+            (!selectedClient.coordinates || selectedClient.coordinates === '')
+        ) {
+            updates.coordinates = coordinates
+        }
+
+        if (
+            directions &&
+            selectedClient &&
+            (!selectedClient.directions || selectedClient.directions === '')
+        ) {
+            updates.directions = directions
+        }
+        // #endregion
+
+        // Set clientUpdates values (doesn't approve yet, still need to confirm with user, this just sets data in place)
+        if (Object.keys(updates).length > 0) {
+            setClientUpdates(updates)
+            setConfirmClientUpdatesDialogVisible(true)
+        }
+
+        //  ------------------------------------------------------------------------------------------------------
+
         mutationCreateDelivery.mutate({ formData, token: user.data.token })
         onClose()
     }
@@ -195,13 +276,16 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
 
     // Handle dialog close
     const onClose = () => {
-        console.log('Canceled..')
         resetForm()
         setFormDialog(false)
     }
 
     const setClientData = () => {
         if (selectedClient) {
+            // console.log(
+            //     '[DeliveryForm setClientData]: Setting selectedClient: '
+            // )
+            // console.log(selectedClient)
             setFormData((prevState) => ({
                 ...prevState,
                 deliveryClient: selectedClient,
@@ -216,6 +300,66 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
             // console.log('Else no client selected?')
         }
     }
+
+    const acceptClientUpdates = () => {
+        // Add clientId
+        clientUpdates._id = selectedClient._id
+
+        mutationUpdateDeliveryClient.mutate({
+            clientUpdates,
+            token: user.data.token,
+        })
+
+        setClientUpdates(null)
+    }
+
+    const capitalizeFirstLetter = (text) => {
+        return text.charAt(0).toUpperCase() + text.slice(1)
+    }
+
+    const clientUpdatesJSX = () => {
+        if (!clientUpdates || Object.keys(clientUpdates).length === 0) {
+            return <>No updates found</>
+        }
+
+        return (
+            <>
+                <div>
+                    <p>
+                        The following fields do not exist on the delivery
+                        customer. Do you want to add them?
+                    </p>
+                </div>
+                <div>
+                    {/* {clientUpdates &&
+                        Object.entries(clientUpdates).map((entry) => {
+                            console.log('clientUpdates entries: ')
+                            console.log(entry)
+                        })} */}
+
+                    {clientUpdates &&
+                        Object.entries(clientUpdates).map((entry, idx) => (
+                            <>
+                                {entry[1] !== null && (
+                                    <div
+                                        style={{
+                                            whiteSpace: 'pre',
+                                            marginBottom: '0.5em',
+                                        }}
+                                    >
+                                        <strong>
+                                            {capitalizeFirstLetter(entry[0])}:
+                                        </strong>{' '}
+                                        {entry[1]}
+                                    </div>
+                                )}
+                            </>
+                        ))}
+                </div>
+            </>
+        )
+    }
+
     // #endregion
 
     useEffect(() => {
@@ -247,6 +391,18 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
 
     return (
         <>
+            <ConfirmDialog
+                visible={confirmClientUpdatesDialogVisible}
+                onHide={() => setConfirmClientUpdatesDialogVisible(false)}
+                message={clientUpdatesJSX}
+                header="Customer Updates Detected. Save Changes?"
+                icon="pi pi-exclamation-triangle"
+                accept={acceptClientUpdates}
+                reject={() => {
+                    setClientUpdates(null)
+                }}
+            />
+
             {!hideButton && (
                 <Button
                     label={iconButton ? null : 'New Delivery'}
@@ -343,7 +499,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                                         id="contactPhone"
                                         name="contactPhone"
                                         value={contactPhone}
-                                        placeholder="Contact Phone(s) *"
+                                        placeholder="Phone(s) *"
                                         onChange={onChange}
                                         rows={4}
                                         cols={30}
@@ -351,7 +507,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                                         required
                                     />
                                     <label htmlFor="contactPhone">
-                                        Contact Phone(s) *
+                                        Phone(s) *
                                     </label>
                                 </span>
                             </div>
@@ -408,7 +564,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                                         id="productName"
                                         name="productName"
                                         value={productName}
-                                        placeholder="Products *"
+                                        placeholder="* Products (1 per line)"
                                         onChange={onChange}
                                         rows={4}
                                         cols={30}
@@ -430,7 +586,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                                         id="productQuantity"
                                         name="productQuantity"
                                         value={productQuantity}
-                                        placeholder="Material(s) *"
+                                        placeholder="* Quantities (1 per line)"
                                         onChange={onChange}
                                         rows={4}
                                         cols={30}
@@ -476,7 +632,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
                                         id="notes"
                                         name="notes"
                                         value={notes}
-                                        placeholder="Enter notes"
+                                        placeholder="Notes (not printed)"
                                         onChange={onChange}
                                         rows={4}
                                         cols={30}

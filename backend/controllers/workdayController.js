@@ -24,8 +24,6 @@ const getWorkdaysByDriverId = asyncHandler(async (req, res) => {
 // @route   GET /api/workdays/range/:dateStart/:dateEnd
 // @access  Private
 const getAllWorkdaysByDateRange = asyncHandler(async (req, res) => {
-    console.log('Running getAllWorkdaysByDateRange...')
-
     if (!req.params.dateStart) {
         res.status(400)
         throw new Error('Date start is required')
@@ -50,16 +48,8 @@ const getAllWorkdaysByDateRange = asyncHandler(async (req, res) => {
 
     // ------------------------------------------------------------------------------------------------------------------
 
-    // console.log('PARAM dateStart: ' + req.params.dateStart)
-    // console.log('PARAM dateEnd: ' + req.params.dateEnd)
-
     // const workdaysFrom = new Date(req.params.dateStart).setHours(0, 0, 0, 0)
     // const workdaysTo = new Date(req.params.dateEnd).setHours(23, 59, 59)
-
-    // console.log('FROM: ')
-    // console.log(dayjs(workdaysFrom).format('MM/DD/YYYY HH:mm:ss'))
-    // console.log('TO: ')
-    // console.log(dayjs(workdaysTo).format('MM/DD/YYYY HH:mm:ss'))
 
     const workdaysRange = await Workday.find()
 
@@ -86,11 +76,6 @@ const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
         throw new Error('An ending date is required')
     }
     // #endregion
-
-    // console.log(
-    //     '\nDate Start: ' + dayjs(req.params.dateStart).format('MM/DD/YY')
-    // )
-    // console.log('\nDate End: ' + dayjs(req.params.dateEnd).format('MM/DD/YY'))
 
     // const gte = new Date(
     //     dayjs(req.params.dateStart).format('MM/DD/YYYY')
@@ -121,9 +106,6 @@ const getWorkdaysByDriverIdAndDateRange = asyncHandler(async (req, res) => {
     for (let i = 0; i < diff; i++) {
         dates.push(dayjs(dateStart).add(i, 'day').format('YYYY-MM-DD'))
     }
-
-    // console.log('Dates: ')
-    // console.log(dates)
 
     // Return workdays within this date range
     const driverWorkdays = await Workday.find({ driverId: req.params.driverId })

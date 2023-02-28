@@ -12,7 +12,11 @@ import { fetchUser } from '../../../../api/users/usersApi'
 import { updateDeliveryClient } from '../../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
+function EditDeliveryClientForm({
+    deliveryClientToEdit,
+    iconButton,
+    onSetDeliveryClient,
+}) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -46,6 +50,10 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
 
     const mutationUpdateDeliveryClient = useMutation({
         mutationKey: ['deliveryClients'],
+        // onMutate: (mutationData) => {
+        //     console.log('Mutation data: ')
+        //     console.log(mutationData)
+        // },
         mutationFn: ({ formData, token }) =>
             updateDeliveryClient(formData, token),
         onSuccess: (updDeliveryClient) => {
@@ -55,6 +63,9 @@ function EditDeliveryClientForm({ deliveryClientToEdit, iconButton }) {
             )
             queryClient.invalidateQueries(['deliveryClients'])
             queryClient.invalidateQueries(['deliveries'])
+
+            // Client dropdown clears after invalidating queries, so add client back manually:
+            onSetDeliveryClient(updDeliveryClient)
         },
         onError: (err) => {
             const errMsg = 'Error updating delivery client'

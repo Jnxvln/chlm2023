@@ -17,29 +17,21 @@ const registerUser = asyncHandler(async (req, res) => {
     const { firstName, lastName, email, password } = req.body
 
     if (!firstName) {
-        console.log('First name submitted: ')
-        console.log(firstName)
         res.status(400)
         throw new Error('First name is required')
     }
 
     if (!lastName) {
-        console.log('Last name submitted: ')
-        console.log(lastName)
         res.status(400)
         throw new Error('Last name is required')
     }
 
     if (!email) {
-        console.log('Email submitted: ')
-        console.log(email)
         res.status(400)
         throw new Error('Email is required')
     }
 
     if (!password) {
-        console.log('Password submitted: ')
-        console.log(password)
         res.status(400)
         throw new Error('Password is required')
     }

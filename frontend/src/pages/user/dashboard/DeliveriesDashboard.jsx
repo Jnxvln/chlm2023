@@ -213,6 +213,11 @@ function DeliveriesDashboard() {
 
     // #region COMPONENT TEMPLATES ==============================================================
     const dataTableHeaderTemplate = () => {
+        // console.log(
+        //     '[DeliveriesDashboard dataTableHeaderTemplate]: selectedClient: '
+        // )
+        // console.log(selectedClient)
+
         return (
             <div className="flex justify-content-between">
                 <div>
@@ -233,6 +238,7 @@ function DeliveriesDashboard() {
                         {selectedClient && (
                             <EditDeliveryClientForm
                                 deliveryClientToEdit={selectedClient}
+                                onSetDeliveryClient={onSetDeliveryClient}
                             />
                         )}
 
@@ -259,6 +265,14 @@ function DeliveriesDashboard() {
                 </span>
             </div>
         )
+    }
+
+    const onSetDeliveryClient = (client) => {
+        // console.log(
+        //     '[DeliveriesDashboard onSetDeliveryClient]: Resetting client to: '
+        // )
+        // console.log(client)
+        onClientSelected(client)
     }
 
     const deliveryDateTemplate = (rowData) => {
@@ -380,13 +394,21 @@ function DeliveriesDashboard() {
 
     const productNameTemplate = (rowData) => {
         return (
-            <div className={pastDueClass(rowData)}>{rowData.productName}</div>
+            <div
+                className={pastDueClass(rowData)}
+                style={{ whiteSpace: 'pre' }}
+            >
+                {rowData.productName}
+            </div>
         )
     }
 
     const productQuantityTemplate = (rowData) => {
         return (
-            <div className={pastDueClass(rowData)}>
+            <div
+                className={pastDueClass(rowData)}
+                style={{ whiteSpace: 'pre' }}
+            >
                 {rowData.productQuantity}
             </div>
         )
@@ -395,24 +417,51 @@ function DeliveriesDashboard() {
     const hasPaidTemplate = (rowData) => {
         return (
             <>
-                <Tooltip target=".clickToToggle" />
-                <div
-                    onClick={() => handleToggleHasPaid(rowData)}
-                    className="clickToToggle"
-                    data-pr-tooltip="Click to toggle"
-                >
-                    {Boolean(rowData.hasPaid) ? (
-                        <i
-                            className="pi pi-check"
-                            style={{ color: 'green', fontWeight: 'bold' }}
-                        ></i>
-                    ) : (
-                        <i
-                            className="pi pi-dollar"
-                            style={{ color: 'red', fontWeight: 'bold' }}
-                        ></i>
-                    )}
-                </div>
+                {selectedClient ? (
+                    <>
+                        {/* <Tooltip target=".clickToToggle" /> */}
+                        <div className="clickToToggle">
+                            {Boolean(rowData.hasPaid) ? (
+                                <i
+                                    className="pi pi-check"
+                                    style={{
+                                        color: 'green',
+                                        fontWeight: 'bold',
+                                    }}
+                                ></i>
+                            ) : (
+                                <i
+                                    className="pi pi-dollar"
+                                    style={{ color: 'red', fontWeight: 'bold' }}
+                                ></i>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <Tooltip target=".clickToToggle" />
+                        <div
+                            onClick={() => handleToggleHasPaid(rowData)}
+                            className="clickToToggle"
+                            data-pr-tooltip="Click to toggle"
+                        >
+                            {Boolean(rowData.hasPaid) ? (
+                                <i
+                                    className="pi pi-check"
+                                    style={{
+                                        color: 'green',
+                                        fontWeight: 'bold',
+                                    }}
+                                ></i>
+                            ) : (
+                                <i
+                                    className="pi pi-dollar"
+                                    style={{ color: 'red', fontWeight: 'bold' }}
+                                ></i>
+                            )}
+                        </div>
+                    </>
+                )}
             </>
         )
     }
@@ -420,24 +469,51 @@ function DeliveriesDashboard() {
     const completedTemplate = (rowData) => {
         return (
             <>
-                <Tooltip target=".clickToToggle" />
-                <div
-                    onClick={() => handleToggleCompleted(rowData)}
-                    className="clickToToggle"
-                    data-pr-tooltip="Click to toggle"
-                >
-                    {Boolean(rowData.completed) ? (
-                        <i
-                            className="pi pi-check"
-                            style={{ color: 'green', fontWeight: 'bold' }}
-                        ></i>
-                    ) : (
-                        <i
-                            className="pi pi-times"
-                            style={{ color: 'red', fontWeight: 'bold' }}
-                        ></i>
-                    )}
-                </div>
+                {selectedClient ? (
+                    <>
+                        {/* <Tooltip target=".clickToToggle" /> */}
+                        <div className="clickToToggle">
+                            {Boolean(rowData.completed) ? (
+                                <i
+                                    className="pi pi-check"
+                                    style={{
+                                        color: 'green',
+                                        fontWeight: 'bold',
+                                    }}
+                                ></i>
+                            ) : (
+                                <i
+                                    className="pi pi-times"
+                                    style={{ color: 'red', fontWeight: 'bold' }}
+                                ></i>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <Tooltip target=".clickToToggle" />
+                        <div
+                            onClick={() => handleToggleCompleted(rowData)}
+                            className="clickToToggle"
+                            data-pr-tooltip="Click to toggle"
+                        >
+                            {Boolean(rowData.completed) ? (
+                                <i
+                                    className="pi pi-check"
+                                    style={{
+                                        color: 'green',
+                                        fontWeight: 'bold',
+                                    }}
+                                ></i>
+                            ) : (
+                                <i
+                                    className="pi pi-times"
+                                    style={{ color: 'red', fontWeight: 'bold' }}
+                                ></i>
+                            )}
+                        </div>
+                    </>
+                )}
             </>
         )
     }
@@ -445,17 +521,21 @@ function DeliveriesDashboard() {
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex', gap: 10 }}>
-                <EditDeliveryForm delivery={rowData} />
+                {!selectedClient && <EditDeliveryForm delivery={rowData} />}
+
                 <Button
                     icon="pi pi-print"
                     className="p-button-darkGray"
                     onClick={(e) => printDelivery(rowData)}
                 />
-                <Button
-                    icon="pi pi-trash"
-                    className="p-button-danger"
-                    onClick={(e) => onDelete(e, rowData)}
-                />
+
+                {!selectedClient && (
+                    <Button
+                        icon="pi pi-trash"
+                        className="p-button-danger"
+                        onClick={(e) => onDelete(e, rowData)}
+                    />
+                )}
             </div>
         )
     }
@@ -569,6 +649,11 @@ function DeliveriesDashboard() {
         } else {
             setSelectedClient(clientSelected)
 
+            // localStorage.setItem(
+            //     'selectedDeliveryClient',
+            //     JSON.stringify(clientSelected)
+            // )
+
             // If the user clicks on a delivery client in the list, show all of this customer's deliveries
             if (clientSelected && clientSelected.hasOwnProperty('_id')) {
                 setSelectedClientId(clientSelected._id)
@@ -586,6 +671,7 @@ function DeliveriesDashboard() {
                     setFilteredDeliveries(clientDeliveries)
                 } else {
                     toast.warning('No deliveries for this client')
+                    setFilteredDeliveries([])
                     return []
                 }
             } else {
@@ -771,11 +857,11 @@ function DeliveriesDashboard() {
                     <p>
                         <strong style={{ color: 'red', fontSize: '1.3rem' }}>
                             Showing deliveries for:
-                            {/* {selectedClient.firstName}{' '}
-                            {selectedClient.lastName}{' '}
+                            <br />
+                            {selectedClient.firstName} {selectedClient.lastName}{' '}
                             {selectedClient.companyName ? (
                                 <span>({selectedClient.companyName})</span>
-                            ) : null} */}
+                            ) : null}
                         </strong>
                     </p>
                 </div>
