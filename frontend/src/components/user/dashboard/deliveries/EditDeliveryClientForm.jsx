@@ -7,15 +7,22 @@ import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
+import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> tag
+import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
-import { updateDeliveryClient } from '../../../../api/deliveryClients/deliveryClientsApi'
+import {
+    updateDeliveryClient,
+    deleteDeliveryClient,
+} from '../../../../api/deliveryClients/deliveryClientsApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function EditDeliveryClientForm({
     deliveryClientToEdit,
     iconButton,
     onSetDeliveryClient,
+    onResetFilteredDeliveries,
 }) {
     // #region VARS ------------------------
 
@@ -50,10 +57,6 @@ function EditDeliveryClientForm({
 
     const mutationUpdateDeliveryClient = useMutation({
         mutationKey: ['deliveryClients'],
-        // onMutate: (mutationData) => {
-        //     console.log('Mutation data: ')
-        //     console.log(mutationData)
-        // },
         mutationFn: ({ formData, token }) =>
             updateDeliveryClient(formData, token),
         onSuccess: (updDeliveryClient) => {
@@ -66,6 +69,39 @@ function EditDeliveryClientForm({
 
             // Client dropdown clears after invalidating queries, so add client back manually:
             onSetDeliveryClient(updDeliveryClient)
+            onResetFilteredDeliveries()
+        },
+        onError: (err) => {
+            const errMsg = 'Error updating delivery client'
+            console.log(errMsg)
+            console.log(err)
+
+            if (
+                err &&
+                err.response &&
+                err.response.data &&
+                err.response.data.message
+            ) {
+                toast.error(err.response.data.message, { autoClose: false })
+            } else {
+                toast.error(errMsg, { autoClose: false })
+            }
+        },
+    })
+
+    const mutationDeleteDeliveryClient = useMutation({
+        mutationKey: ['deliveryClients'],
+        mutationFn: (client) => {
+            deleteDeliveryClient(client._id, user.data.token)
+        },
+        onSuccess: (data) => {
+            // Invalidate deliveries and deliveryClients
+            queryClient.invalidateQueries(['deliveries', 'deliveryClients'])
+            toast.success(
+                `Delivery customer and associated deliveries removed!`
+            )
+            onClose()
+            onResetFilteredDeliveries()
         },
         onError: (err) => {
             const errMsg = 'Error updating delivery client'
@@ -99,11 +135,19 @@ function EditDeliveryClientForm({
     }
 
     const deliveryClientDialogFooter = () => {
-        return <DialogFooter onClose={onClose} onSubmit={onSubmit} />
+        return (
+            <DialogFooter
+                isDelete={true}
+                onDelete={(e) => onDeleteClient(e, deliveryClientToEdit)}
+                onClose={onClose}
+                onSubmit={onSubmit}
+            />
+        )
     }
     // #endregion
 
     // #region FORM HANDLERS
+
     // Handle form text input
     const onChange = (e) => {
         if (e.hasOwnProperty('target')) {
@@ -156,6 +200,43 @@ function EditDeliveryClientForm({
         resetForm()
         setFormDialog(false)
     }
+
+    const onDeleteClient = (e, deliveryClientToEdit) => {
+        confirmDeleteClient(e, deliveryClientToEdit)
+    }
+
+    const acceptDeleteDeliveryClient = (client) => {
+        mutationDeleteDeliveryClient.mutate(client)
+    }
+
+    const warningDeleteClientJSX = (client) => {
+        if (!client || !client._id) {
+            return
+        }
+
+        return (
+            <>
+                <div>
+                    <strong style={{ color: 'red' }}>Permanently delete</strong>{' '}
+                    <strong>
+                        {client.firstName} {client.lastName} and all of their
+                        associated deliveries.
+                    </strong>{' '}
+                    This action cannot be undone! <strong>Continue?</strong>
+                </div>
+            </>
+        )
+    }
+
+    const confirmDeleteClient = (e, client) => {
+        confirmPopup({
+            target: e.currentTarget,
+            message: warningDeleteClientJSX(client),
+            acceptClassName: 'p-button-danger',
+            accept: () => acceptDeleteDeliveryClient(client),
+            reject: () => {},
+        })
+    }
     // #endregion
 
     useEffect(() => {
@@ -176,6 +257,8 @@ function EditDeliveryClientForm({
 
     return (
         <section>
+            <ConfirmPopup />
+
             <Button
                 label={iconButton ? null : 'Edit Client'}
                 icon="pi pi-pencil"

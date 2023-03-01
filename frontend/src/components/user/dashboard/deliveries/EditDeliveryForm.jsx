@@ -16,7 +16,7 @@ import { getDeliveryClients } from '../../../../api/deliveryClients/deliveryClie
 import { updateDelivery } from '../../../../api/deliveries/deliveriesApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function DeliveryForm({ delivery }) {
+function DeliveryForm({ delivery, onResetFilteredDeliveries }) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -79,6 +79,7 @@ function DeliveryForm({ delivery }) {
                 toast.success('Delivery updated', { autoClose: 1000 })
                 queryClient.invalidateQueries(['deliveries'])
                 queryClient.invalidateQueries(['deliveryClients'])
+                onResetFilteredDeliveries()
             }
         },
         onError: (err) => {

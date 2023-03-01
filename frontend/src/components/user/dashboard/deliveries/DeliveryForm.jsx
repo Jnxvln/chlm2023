@@ -20,7 +20,13 @@ import {
 import { createDelivery } from '../../../../api/deliveries/deliveriesApi'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
+function DeliveryForm({
+    selectedClient,
+    iconButton,
+    hideButton,
+    display,
+    onResetFilteredDeliveries,
+}) {
     // #region VARS ------------------------
 
     const queryClient = useQueryClient()
@@ -69,6 +75,7 @@ function DeliveryForm({ selectedClient, iconButton, hideButton, display }) {
         onSuccess: (delivery) => {
             if (delivery) {
                 toast.success('Delivery created', { autoClose: 1000 })
+                onResetFilteredDeliveries()
                 queryClient.invalidateQueries(['deliveries'])
             }
         },

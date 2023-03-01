@@ -232,13 +232,21 @@ function DeliveriesDashboard() {
                         />
 
                         {selectedClient && (
-                            <DeliveryForm selectedClient={selectedClient} />
+                            <DeliveryForm
+                                selectedClient={selectedClient}
+                                onResetFilteredDeliveries={
+                                    onResetFilteredDeliveries
+                                }
+                            />
                         )}
 
                         {selectedClient && (
                             <EditDeliveryClientForm
                                 deliveryClientToEdit={selectedClient}
                                 onSetDeliveryClient={onSetDeliveryClient}
+                                onResetFilteredDeliveries={
+                                    onResetFilteredDeliveries
+                                }
                             />
                         )}
 
@@ -521,7 +529,12 @@ function DeliveriesDashboard() {
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex', gap: 10 }}>
-                {!selectedClient && <EditDeliveryForm delivery={rowData} />}
+                {!selectedClient && (
+                    <EditDeliveryForm
+                        delivery={rowData}
+                        onResetFilteredDeliveries={onResetFilteredDeliveries}
+                    />
+                )}
 
                 <Button
                     icon="pi pi-print"
@@ -538,6 +551,11 @@ function DeliveriesDashboard() {
                 )}
             </div>
         )
+    }
+
+    const onResetFilteredDeliveries = () => {
+        console.log('[DeliveriesDashboard.jsx onResetFilteredDeliveries]: ')
+        setSelectedClient(null)
     }
     // #endregion
 

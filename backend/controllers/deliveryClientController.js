@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const DeliveryClient = require('../models/deliveryClientModel')
+const Delivery = require('../models/deliveryModel')
 const formatCoords = require('../utils/formatCoords')
 
 // @desc    Get delivery clients
@@ -98,9 +99,31 @@ const deleteDeliveryClient = asyncHandler(async (req, res) => {
         throw new Error('Delivery client not found')
     }
 
-    deliveryClient.remove()
+    // Delete all deliveries associated with this client
+    try {
+        await Delivery.deleteMany({ deliveryClient: req.params.id })
+    } catch (error) {
+        console.error(
+            "An error occurred while trying to delete all of delivery client's deliveries: "
+        )
+        console.error(error.message)
+        res.status(400).json({
+            error: "An error occurred while trying to delete all of delivery client's deliveries",
+        })
+    }
 
-    res.status(200).json({ id: req.params.id })
+    // Now attempt to remove the delivery client itself:
+    try {
+        await deliveryClient.remove()
+        res.status(200).json({ id: req.params.id })
+    } catch (error) {
+        console.error(
+            'An error occurred while trying to delete delivery client'
+        )
+        res.status(400).json({
+            error: 'An error occurred while trying to delete delivery client',
+        })
+    }
 })
 
 module.exports = {

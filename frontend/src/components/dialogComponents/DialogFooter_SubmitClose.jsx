@@ -7,9 +7,11 @@ const DialogFooter_SubmitClose = ({
     onSubmit,
     onClose,
     isHaulDialog,
+    isDelete,
     loadType,
     onDrivingTime,
     onOffDuty,
+    onDelete,
 }) => {
     // #region VARS ======================================================================
     const [offDutyOptions, setOffDutyOptions] = useState([
@@ -107,22 +109,46 @@ const DialogFooter_SubmitClose = ({
                         </div>
                     )}
             </div>
-            <div>
-                <Button
-                    type="button"
-                    label="Cancel"
-                    icon="pi pi-times"
-                    onClick={onClose}
-                    className="p-button-text"
-                    tabIndex={-1}
-                />
-                <Button
-                    type="submit"
-                    label="Save"
-                    iconPos="left"
-                    icon="pi pi-save"
-                    onClick={onSubmit}
-                />
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}
+            >
+                {/* Delete Button */}
+                <div>
+                    {isDelete && (
+                        <Button
+                            type="button"
+                            label="Delete"
+                            icon="pi pi-trash"
+                            className="p-button-danger"
+                            tabIndex={-1}
+                            onClick={onDelete}
+                        />
+                    )}
+                </div>
+
+                <div>
+                    <Button
+                        type="button"
+                        label="Cancel"
+                        icon="pi pi-times"
+                        onClick={onClose}
+                        className="p-button-text"
+                        tabIndex={-1}
+                    />
+
+                    <Button
+                        type="submit"
+                        label="Save"
+                        iconPos="left"
+                        icon="pi pi-save"
+                        onClick={onSubmit}
+                    />
+                </div>
             </div>
         </footer>
     )

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import DeliveryForm from './DeliveryForm'
 import DeliveryClientForm from './DeliveryClientForm'
 import EditDeliveryClientForm from './EditDeliveryClientForm'
@@ -191,6 +191,14 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
         options.filter(event)
     }
     // -----------------------------------------------------------------------------------------------------------------
+
+    useEffect(() => {
+        if (selectedClient === null) {
+            setClientTest(null)
+            // Invalidate deliveries
+            queryClient.invalidateQueries(['deliveries'])
+        }
+    }, [selectedClient])
 
     return (
         <div>
