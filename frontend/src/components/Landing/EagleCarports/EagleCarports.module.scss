@@ -1,0 +1,254 @@
+.sectionContainer {
+    padding: 4em 1em 1em 1em;
+}
+
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-15px);
+    /* margin-top: 3em; */
+}
+
+.logo {
+    width: 15%;
+    margin-right: 0.5em;
+}
+
+.title {
+    color: #104c83;
+    font-weight: bold;
+    font-size: 1.5rem;
+    position: relative;
+    top: 5pt;
+    margin: 0 0 5pt 0;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.carportCarouselContainerWrapper {
+    padding: 1em 0;
+}
+
+.carportCarouselContainer {
+    border: 2px solid blue;
+    background-color: rgb(219, 219, 219);
+    height: 35vh;
+    display: flex;
+    padding: 0.5em;
+}
+
+.tempCarouselNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em;
+}
+
+.arrowLeft {
+    width: 6%;
+}
+.arrowRight {
+    width: 6%;
+    transform: rotate(180deg);
+}
+
+/* Eagle Nav */
+.eagleNavContainer {
+}
+
+.eagleNavTitle {
+    background-color: #355e9c;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    margin: 0;
+}
+
+.eagleNav {
+}
+
+.eagleNavList {
+    display: flex;
+    flex-direction: column;
+}
+
+.eagleNavListItem {
+    padding: 0.25em;
+    font-weight: bold;
+}
+
+.eagleNavListItem:hover {
+    background-color: rgb(219, 219, 219);
+    cursor: pointer;
+}
+
+.eagleDescriptionContainer {
+}
+
+.eagleDescriptionImage {
+    width: 100%;
+    height: 20vh;
+}
+
+.eagleDescriptionContentContainer {
+    /* border: 2px dotted blue; */
+}
+
+.eagleDescriptionTitle {
+    font-weight: bold;
+    margin-top: 0.5em;
+}
+
+.eagleDescriptionContent {
+    line-height: 1.5;
+}
+
+.bottomSection {
+    margin-top: 1em;
+}
+
+.quote {
+    background-color: #355e9c;
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+@media screen and (min-width: 320px) {
+    .title {
+        font-size: 1.5rem;
+        top: 5pt;
+    }
+}
+
+@media screen and (min-width: 375px) {
+    .eagleDescriptionImage {
+        height: 25vh;
+    }
+    .quote {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .title {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .sectionContainer {
+        padding: 4em;
+    }
+    .info {
+        flex-direction: row;
+        gap: 2em;
+    }
+    .eagleNavContainer {
+        width: 110vw;
+    }
+    .carportCarouselContainer {
+        height: 45vh;
+    }
+    .logo {
+        width: 13%;
+    }
+    .eagleNavListItem {
+        font-size: 0.9rem;
+        margin-bottom: 0.3em;
+    }
+    .eagleDescriptionImage {
+        height: 30vh;
+    }
+    .quote {
+        margin-top: 1.5em;
+        font-size: 1rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .eagleNavContainer {
+        width: 110vw;
+    }
+    .carportCarouselContainer {
+        height: 45vh;
+    }
+    .eagleNavListItem {
+        padding: 0.25em;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+    .logo {
+        width: 13%;
+    }
+    .title {
+        font-size: 3rem;
+    }
+    .titleContainer {
+        margin-top: 3em;
+    }
+    .title {
+        top: 10pt;
+    }
+    .bottomSection {
+        padding: 0 4em;
+    }
+    .eagleNavTitle {
+        font-size: 1.3rem;
+    }
+    .eagleNavListItem {
+        font-size: 1.15rem;
+    }
+    .eagleDescriptionTitle {
+        font-size: 1.6rem;
+    }
+    .eagleDescriptionContent {
+        font-size: 1.25rem;
+    }
+    .quote {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .logo {
+        width: 10%;
+    }
+    .title {
+        margin-left: 0.1em;
+        font-size: 4.5rem;
+    }
+    .titleContainer {
+        margin-top: 7em;
+        margin-bottom: 2em;
+    }
+    .bottomSection {
+        padding: 2em 12em 0em 12em;
+    }
+    .eagleNavListItem {
+        font-size: 1.2rem;
+    }
+    .eagleDescriptionImage {
+        height: 30vh;
+    }
+    .eagleNavContainer {
+        width: 80vw;
+    }
+    .eagleDescriptionTitle {
+        font-size: 2rem;
+    }
+    .eagleDescriptionContent {
+        font-size: 1.4rem;
+        line-height: 155%;
+    }
+    .carportCarouselContainer {
+        height: 50vh;
+    }
+}

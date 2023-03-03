@@ -1,5 +1,5 @@
 import LandingHeader from '../components/Landing/LandingHeader/LandingHeader'
-import Footer from '../components/layout/Footer'
+import Footer from '../components/layout/Footer/Footer'
 import Bulletin from '../components/Landing/Bulletin/Bulletin'
 import MaterialBrowser from '../components/Landing/MaterialBrowser/MaterialBrowser'
 import HowMuch from '../components/Landing/HowMuch/HowMuch'

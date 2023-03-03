@@ -1,0 +1,96 @@
+.sectionContainer {
+    background: linear-gradient(rgb(95, 76, 63), rgb(30, 52, 58));
+    padding: 1.5em 1.5em 3em 1.5em;
+}
+
+.title {
+    color: #3cbbd8;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0;
+    margin: 0.8em 0;
+}
+
+.description {
+    // font-weight: bold;
+    color: #dcc7af;
+    font-size: 1.2rem;
+    line-height: 135%;
+    text-align: center;
+}
+
+.imageLinkContainer {
+    border: 2px dotted red;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.imageLink {
+    border: 2px dotted blue;
+}
+
+.helpLink {
+    color: white;
+    text-decoration: none;
+    background-color: rgb(122, 84, 59);
+    padding: 0.5em 1em;
+    margin-top: 2em;
+}
+.helpLink:hover {
+    background-color: rgb(136, 85, 52);
+}
+
+@media screen and (min-width: 320px) {
+    .imageLinkContainer {
+        display: none;
+    }
+    .imageLink {
+        margin-top: 3em;
+    }
+    .sectionContainer {
+        background: linear-gradient(rgb(95, 76, 63), rgb(30, 52, 58));
+    }
+    .helpLinkContainer {
+        margin-top: 1.8em;
+        text-align: center;
+    }
+    .helpLink {
+        border-radius: 4pt;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .title {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .title {
+        font-size: 1.8rem;
+    }
+    .description {
+        width: 70%;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .title {
+        font-size: 2.5rem;
+    }
+    .description {
+        font-size: 1.5rem;
+    }
+    .helpLink {
+        font-size: 1.3rem;
+        padding: 0.6em 2em;
+    }
+    .helpLinkContainer {
+        margin-top: 2.6em;
+    }
+}

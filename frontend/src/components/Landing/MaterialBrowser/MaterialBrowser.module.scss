@@ -2,8 +2,6 @@
 
 .sectionContainer {
     background-color: rgb(235, 235, 235);
-    // height: 1400px;
-    border: 4px dashed red;
 }
 
 .backgroundContainer {
@@ -13,7 +11,8 @@
     background-size: cover;
     background-attachment: fixed;
     height: 350px;
-    position: relative;
+    width: 100%;
+    position: absolute;
 }
 
 .backgroundOverlay {
@@ -24,15 +23,13 @@
 }
 
 .article {
-    border: 4px solid purple;
     position: relative;
-    // border: 3px solid red;
-    top: -260pt;
 }
 
 .title {
+    margin: 0;
     color: bisque;
-    font-size: 20pt;
+    font-size: 1.2rem;
     text-align: center;
 }
 
@@ -45,7 +42,6 @@
 }
 
 .navList {
-    // border: 2px solid blue;
     text-align: center;
     padding: 0;
 }
@@ -78,84 +74,94 @@
 
 .materialsButtonContainer {
     text-align: center;
-    padding: 0.5em 0;
+    padding: 1.5em;
 }
 
 .materialBrowserItemContainer {
-    // border: 2px solid blue;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: space-evenly;
     margin: 0 auto;
-    // text-align: center;
     width: 100%;
 }
 
-@media screen and (min-width: 425px) {
-    .article {
-        // border: 3px solid rgb(228, 12, 192);
-        position: relative;
-        top: -36vh;
+.materialsButtonContainer button {
+    padding: 0.6em 4em;
+}
+
+@media screen and (min-width: 320px) {
+    .title {
+        margin: 0;
+        padding: 2.2em 0;
+        font-size: 1.4rem;
     }
     .carouselContainer {
-        height: 270px;
-        margin: 0 auto;
+        width: 90%;
+        max-width: 350px;
+        height: 250px;
+    }
+}
+
+@media screen and (min-width: 375px) {
+    .title {
+        margin: 0;
+        padding: 1.8em 0;
+        font-size: 1.6rem;
     }
 }
 
 @media screen and (min-width: 768px) {
-    .article {
-        // border: 3px solid rgb(9, 178, 201);
-        position: relative;
-        top: -36vh;
-    }
-    .materialBrowserItemContainer {
-        flex-direction: row;
+    .title {
+        padding: 1.3em 0;
+        font-size: 2rem;
     }
     .carouselContainer {
-        background-color: rgb(180, 133, 74);
         width: 90%;
-        max-width: 440px;
-        height: 270px;
-        margin: 0 auto;
+        max-width: 420px;
+        height: 250px;
     }
-    .navListItem {
-        font-size: 1.1rem;
+
+    .materialBrowserItemContainer {
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin: 0 auto;
+        width: 100%;
     }
 }
 
 @media screen and (min-width: 1024px) {
-    .article {
-        position: relative;
-        top: -36vh;
-        // border: 3px solid rgb(90, 194, 31);
+    .title {
+        font-size: 2.3rem;
+        padding: 1.5em 0;
     }
     .carouselContainer {
-        background-color: rgb(180, 133, 74);
         width: 90%;
         max-width: 500px;
-        height: 270px;
-        margin: 0 auto;
+        height: 275px;
+    }
+    .backgroundContainer {
+        height: 400px;
+    }
+    .navListItem {
+        font-size: 1.2rem;
     }
 }
 
 @media screen and (min-width: 1440px) {
-    .article {
-        position: relative;
-        top: -50vh;
-        // border: 3px solid red;
-    }
-    .backgroundContainer {
-        height: 500px;
-    }
     .title {
-        color: bisque;
-        font-size: 30pt;
-        text-align: center;
+        font-size: 2.5rem;
+        padding: 1.5em 0;
     }
     .carouselContainer {
-        max-width: 700px;
-        height: 360px;
+        width: 90%;
+        max-width: 600px;
+        height: 400px;
+    }
+    .backgroundContainer {
+        height: 550px;
+    }
+    .navListItem {
+        font-size: 1.4rem;
     }
 }

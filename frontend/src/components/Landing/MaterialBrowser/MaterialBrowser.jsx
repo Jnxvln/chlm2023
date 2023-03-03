@@ -33,6 +33,7 @@ export default function MaterialBrowser() {
                         <Button
                             type="button"
                             onClick={() => navigate('/materials')}
+                            className="viewMatsBtn"
                         >
                             View All Materials
                         </Button>
@@ -89,6 +90,7 @@ export default function MaterialBrowser() {
                         <Button
                             type="button"
                             onClick={() => navigate('/materials')}
+                            className="viewMatsBtn"
                         >
                             View All Materials
                         </Button>

@@ -1,0 +1,227 @@
+.sectionContainer {
+    background-image: url('../../../assets/images/landing_delivery_bkg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45vh;
+}
+
+.sectionContent {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100%;
+    min-height: 100%;
+    background-color: #412813;
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+.sectionLifted {
+    position: absolute;
+    background-color: transparent;
+    max-width: 90%;
+    z-index: 100;
+    color: white;
+}
+
+.title {
+    margin: 0;
+    margin-bottom: 1.2em;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.description {
+    font-size: 1rem;
+    text-align: center;
+    line-height: 140%;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    margin-top: 1em;
+    font-size: 0.8rem;
+}
+
+.button {
+    padding: 0.8em 1em;
+    margin-right: 0.8em;
+    margin-bottom: 0.6em;
+    border-radius: 0.5em;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.linkLearnMore {
+    background-color: #789356;
+}
+
+.linkLearnMore:hover {
+    background-color: #5e773f;
+}
+
+.linkViewMaterials {
+    background-color: #cd9655;
+}
+
+.linkViewMaterials:hover {
+    background-color: #b1762e;
+}
+
+.emphasizeBulk {
+    color: rgb(207, 154, 56);
+    font-style: normal;
+}
+
+// .dumpTrailerContainer {
+//     width: 100%;
+//     border: 2px solid red;
+// }
+
+.dumpTrailer {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    right: -40px;
+    bottom: -150px;
+    // border: 2px solid blue;
+}
+
+.deliveredText {
+    color: #a7ce76;
+}
+
+@media screen and (min-width: 320px) {
+    .title {
+        font-size: 1.5rem;
+    }
+    .links {
+        margin-top: 1.5em;
+    }
+    .sectionContainer {
+        height: 55vh;
+    }
+    .dumpTrailer {
+        width: 60%;
+        height: 70%;
+        right: -20px;
+        bottom: -140px;
+    }
+}
+
+@media screen and (min-width: 375px) {
+    .sectionContent {
+        max-width: 85%;
+    }
+    .title {
+        font-size: 1.6rem;
+    }
+    .button {
+        margin-right: 0;
+    }
+    .dumpTrailer {
+        width: 55%;
+        height: 75%;
+        bottom: -140px;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .title {
+        margin-bottom: 1em;
+    }
+    .links {
+        margin-top: 2em;
+        gap: 20px;
+    }
+    .dumpTrailer {
+        width: 55%;
+        height: 90%;
+        right: -30px;
+        bottom: -140px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .title {
+        font-size: 1.8rem;
+    }
+    .description {
+        max-width: 600px;
+        line-height: 165%;
+        font-size: 1.05rem;
+    }
+    .links {
+        margin-top: 2em;
+    }
+    .dumpTrailer {
+        width: 50%;
+        height: 120%;
+        right: -80px;
+        bottom: -160px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .sectionContainer {
+        height: 70vh;
+    }
+    .title {
+        font-size: 2.5rem;
+    }
+    .description {
+        font-size: 1.4rem;
+        max-width: 800px;
+    }
+    .links {
+        margin-top: 3em;
+    }
+    .button {
+        margin-right: 1em;
+        padding: 0.6em 2em;
+        font-size: 1.2rem;
+    }
+    .dumpTrailer {
+        width: 55%;
+        height: 130%;
+        right: -90px;
+        bottom: -240px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .title {
+        font-size: 4rem;
+    }
+    .description {
+        font-size: 2rem;
+        max-width: 1000px;
+    }
+    .links {
+        margin-top: 3em;
+    }
+    .button {
+        margin-right: 1em;
+        padding: 0.8em 2em;
+        font-size: 1.6rem;
+    }
+    .dumpTrailer {
+        width: 48%;
+        height: 120%;
+        right: -240px;
+        bottom: -250px;
+    }
+}
