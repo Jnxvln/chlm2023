@@ -133,6 +133,9 @@
 }
 
 @media screen and (min-width: 1440px) {
+    .header {
+        height: 65vh;
+    }
     .title1 {
         font-size: 4.7rem;
     }
@@ -145,9 +148,6 @@
 }
 
 @media screen and (min-width: 2560px) {
-    .header {
-        height: 55vh;
-    }
     .title1 {
         font-size: 7rem;
     }

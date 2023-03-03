@@ -1,0 +1,43 @@
+.footer {
+    background-color: #2b2724;
+    text-align: center;
+    padding: 1.5em;
+}
+
+.logo {
+    color: #73b3c1;
+    margin: 0.4em;
+    font-weight: normal;
+    font-size: 1em;
+}
+
+.address {
+    color: white;
+    margin-bottom: 1em;
+    font-style: normal;
+    font-size: 0.7rem;
+}
+
+.copyright {
+    color: #9e9489;
+    font-size: 0.6rem;
+}
+
+.footerBreak {
+}
+
+.footerSpan {
+    display: none;
+}
+
+@media screen and (min-width: 320px) {
+}
+
+@media screen and (min-width: 425px) {
+    .footerBreak {
+        display: none;
+    }
+    .footerSpan {
+        display: inline;
+    }
+}

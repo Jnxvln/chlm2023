@@ -7,11 +7,11 @@ export default function HowMuch() {
             <h1 className={styles.title}>How much do I need?</h1>
             <div className={styles.linkContainer}>
                 <a href="/calculator" className={styles.calculatorLink}>
-                    Try our Calculator
+                    <span>Try our online calculator</span>
                 </a>
-                <div className={styles.imageContainer}>
+                {/* <div className={styles.imageContainer}>
                     <img src={imgTapeMeasure} alt="" className={styles.image} />
-                </div>
+                </div> */}
             </div>
             <p className={styles.description}>
                 For bulk materials only{' '}
@@ -20,7 +20,7 @@ export default function HowMuch() {
                 </span>
             </p>
             <div className={styles.disclaimer}>
-                Disclaimer: Calculations are an approimation only
+                Disclaimer: Calculations are an approximation only
             </div>
         </section>
     )

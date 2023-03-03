@@ -1,14 +1,12 @@
 @import '../../../styles/colors.scss';
 
+@import '../../../styles/colors.scss';
+
 .sectionContainer {
     // border: 1px solid green;
     background-color: #cfcdbb;
     padding: 2em 0;
 }
-
-// .sectionContainer * {
-//     border: 2px dashed rgb(92, 92, 92);
-// }
 
 .title {
     // border: 1px solid red;
@@ -20,42 +18,35 @@
 
 .linkContainer {
     // border: 4px solid purple;
-}
-
-.imageContainer {
+    max-width: 90%;
+    margin: 0 auto;
 }
 
 .calculatorLink {
-    // border: 2px solid red;
     background-color: #97ab1c;
-    display: block;
+    display: inline-block;
     text-decoration: none;
-    text-align: center;
     color: white;
     font-weight: bold;
     font-size: 1.1rem;
     padding: 1em 0;
     width: 100%;
-    transition: all 0.3s;
+    text-align: center;
 }
-
 .calculatorLink:hover {
-    background-color: #829411;
-    transition: all 0.3s;
+    background-color: #879913;
 }
 
 .imageContainer {
     width: 100%;
-    // border: 1px solid blue;
+    border: 2px solid rgb(35, 31, 231);
+    line-height: 0;
     position: relative;
 }
 
 .image {
     width: 110px;
-    // border: 2px solid rgb(160, 28, 50);
-    position: absolute;
-    right: 10pt;
-    top: -45pt;
+    border: 2px solid rgb(160, 28, 50);
 }
 
 .description {
@@ -78,21 +69,12 @@
     .descriptionBreak {
         display: block;
     }
-    .image {
-        width: 100px;
-        right: 0;
-    }
 }
 
 @media screen and (min-width: 375px) {
     .calculatorLink {
         font-size: 1.2rem;
         // padding-left: 3.8em;
-    }
-    .image {
-        width: 120px;
-        right: 10pt;
-        top: -55pt;
     }
     .descriptionBreak {
         display: block;
@@ -102,13 +84,6 @@
 @media screen and (min-width: 425px) {
     .calculatorLink {
         font-size: 1.2rem;
-        max-width: 80%;
-        margin: 0 auto;
-    }
-    .image {
-        width: 130px;
-        right: 6pt;
-        top: -55pt;
     }
     .description {
         margin-top: 2.4em;
@@ -124,11 +99,7 @@
     }
     .calculatorLink {
         font-size: 1.5rem;
-    }
-    .image {
-        width: 190px;
-        right: 40pt;
-        top: -70pt;
+        // padding-left: 10em;
     }
     .description {
         margin-top: 3em;
@@ -152,11 +123,6 @@
     .calculatorLink {
         font-size: 2rem;
     }
-    .image {
-        width: 220px;
-        right: 45pt;
-        top: -90pt;
-    }
     .description {
         margin-top: 2.5em;
         font-size: 1.6rem;
@@ -178,38 +144,6 @@
     }
     .calculatorLink {
         font-size: 2.6rem;
-    }
-    .image {
-        width: 290px;
-        right: 70pt;
-        top: -120pt;
-    }
-    .description {
-        margin-top: 3.2em;
-        font-size: 2rem;
-    }
-    .descriptionBreak {
-        display: inline;
-    }
-    .disclaimer {
-        font-size: 1.5rem;
-    }
-}
-
-@media screen and (min-width: 2560px) {
-    .sectionContainer {
-        padding: 4.5em 0;
-    }
-    .title {
-        font-size: 3.2rem;
-    }
-    .calculatorLink {
-        font-size: 2.6rem;
-    }
-    .image {
-        width: 310px;
-        right: 130pt;
-        top: -120pt;
     }
     .description {
         margin-top: 3.2em;
