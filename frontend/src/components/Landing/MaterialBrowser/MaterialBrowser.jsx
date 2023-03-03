@@ -10,12 +10,11 @@ export default function MaterialBrowser() {
         <section className={styles.sectionContainer}>
             <div className={styles.backgroundContainer}>
                 <div className={styles.backgroundOverlay}></div>
-                <h1 className={styles.title}>Browse Our Materials</h1>
             </div>
 
             <article className={styles.article}>
                 <div>
-                    {/* <h1 className={styles.title}>Browse Our Materials</h1> */}
+                    <h1 className={styles.title}>Browse Our Materials</h1>
                     <div className={styles.carouselContainer}></div>
                     <nav className={styles.nav}>
                         <ul className={styles.navList}>
