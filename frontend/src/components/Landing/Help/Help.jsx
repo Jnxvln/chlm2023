@@ -6,8 +6,11 @@ export default function Help() {
         <section className={styles.sectionContainer}>
             <h1 className={styles.title}>Help</h1>
             <p className={styles.description}>
-                Our help page should be your first stop if you have questions.
-                For anything else, just give us a call!
+                If you have questions about something, check out our help page
+                which has valuable information.
+            </p>
+            <p className={styles.description}>
+                For anything else just give us a call during office hours!
             </p>
 
             {/* Help Links */}
@@ -46,7 +49,7 @@ export default function Help() {
             </div>
 
             <div className={styles.helpLinkContainer}>
-                <NavLink to="#" className={styles.helpLink}>
+                <NavLink to="/help" className={styles.helpLink}>
                     Visit Help Page
                 </NavLink>
             </div>
