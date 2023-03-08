@@ -63,11 +63,11 @@ function Header({ user }) {
             icon: 'pi pi-home',
             command: () => navigate('/'),
         },
-        {
-            label: 'About',
-            icon: 'pi pi-book',
-            command: () => navigate('/about'),
-        },
+        // {
+        //     label: 'About',
+        //     icon: 'pi pi-book',
+        //     command: () => navigate('/about'),
+        // },
         {
             label: 'Materials',
             icon: 'pi pi-tags',
