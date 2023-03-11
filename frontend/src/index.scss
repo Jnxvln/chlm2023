@@ -315,6 +315,27 @@ tr.spacer td {
     background-color: #616161 !important;
 }
 
+// MATERIAL CARD STOCK BG COLORS
+.stock-new {
+    background-color: rgb(23, 134, 19);
+}
+
+.stock-in {
+    background-color: rgb(46, 89, 124);
+}
+
+.stock-low {
+    background-color: rgb(187, 114, 5);
+}
+
+.stock-out {
+    background-color: rgb(175, 37, 13);
+}
+
+.stock-notavail {
+    background-color: rgb(100, 100, 100);
+}
+
 @media print {
     .noPrint,
     .noPrint * {

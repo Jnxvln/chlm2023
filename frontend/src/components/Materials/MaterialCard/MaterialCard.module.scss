@@ -1,0 +1,73 @@
+.container {
+    width: 300px;
+    margin: 2em;
+}
+
+.header {
+    background-color: #6c5751;
+    padding: 0.5em 1em;
+    font-weight: bold;
+    color: white;
+    border-top-left-radius: 10pt;
+    border-top-right-radius: 10pt;
+}
+
+.imageContainer {
+    line-height: 0;
+    height: 340px;
+    overflow-y: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    line-height: 0;
+}
+
+.descriptionTemplateContainer {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0em 0.8em;
+}
+
+.descriptionContainer {
+    border: 1px solid rgb(231, 231, 231);
+    box-shadow: none;
+}
+
+.descriptionTemplateTitle {
+    font-size: 1.15rem;
+    padding: 0.5em 0em 0.5em 0.5em;
+}
+
+.stock {
+    background-color: rgb(102, 102, 102);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em 0;
+}
+
+.detailsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0.5em;
+    background-color: #f1f1f1;
+}
+
+.scrollPanel {
+    line-height: 125%;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        width: 320px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .container {
+        width: 400px;
+    }
+}

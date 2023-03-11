@@ -1,0 +1,36 @@
+.container {
+    background-color: #415c76;
+    padding: 2em;
+    text-align: center;
+}
+
+.main {
+    max-width: 1024px;
+    padding: 0em;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.filterSearch {
+    width: 200px;
+}
+
+@media screen and (min-width: 375px) {
+    .filterSearch {
+        width: 250px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .filterSearch {
+        width: 280px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .main {
+        max-width: 1400px;
+    }
+}

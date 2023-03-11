@@ -8,7 +8,7 @@ import './App.css'
 // PAGES
 import Landing from './pages/Landing'
 // import About from './pages/About'
-import Materials from './pages/Materials'
+import Materials from './pages/Materials/Materials'
 // import Carports from './pages/Carports'
 import Calculator from './pages/Calculator'
 import Help from './pages/Help'

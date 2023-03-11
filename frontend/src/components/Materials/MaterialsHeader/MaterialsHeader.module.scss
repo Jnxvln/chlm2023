@@ -1,0 +1,52 @@
+.header {
+    background-image: url('https://images.unsplash.com/photo-1455243629161-1f993797f78d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.gradient {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: rgb(33, 56, 78);
+    background: -moz-linear-gradient(
+        180deg,
+        rgb(236, 236, 236) 0%,
+        rgb(25, 52, 68) 100%
+    );
+    background: -webkit-linear-gradient(
+        180deg,
+        rgba(236, 236, 236, 1) 0%,
+        rgba(25, 52, 68, 1) 100%
+    );
+    background: linear-gradient(
+        180deg,
+        rgba(236, 236, 236, 1) 0%,
+        rgba(25, 52, 68, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#8c8c8c",endColorstr="#264e66",GradientType=1);
+    mix-blend-mode: multiply;
+    opacity: 60%;
+}
+
+.title {
+    color: white;
+    text-align: center;
+    margin: 0;
+    font-size: 2rem;
+    padding: 2em;
+    position: relative;
+    z-index: 2;
+}
+
+@media screen and (min-width: 768px) {
+    .title {
+        font-size: 3rem;
+        padding: 3em 2em;
+    }
+}
