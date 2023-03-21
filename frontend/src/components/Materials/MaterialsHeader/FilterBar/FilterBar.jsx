@@ -11,21 +11,23 @@ export default function FilterBar() {
     const queryClient = useQueryClient()
 
     const CATEGORYMAP = {
-        soil: 'c-soil',
-        compost: 'c-compost',
-        mulch: 'c-mulch',
-        dyedmulch: 'sc-dyedMulch',
-        naturalmulch: 'sc-naturalMulch',
-        gravel: 'c-gravel',
-        drivewaygravel: 'sc-drivewayGravel',
-        stone: 'c-stone',
-        flagstone: 'sc-flagStone',
-        choppedstone: 'sc-choppedStone',
-        fieldstone: 'sc-fieldstone',
-        rock: 'c-rock',
-        creekrock: 'sc-creekRock',
-        coloradorock: 'sc-colorado',
-        boulders: 'sc-boulders',
+        soil: 'soil',
+        compost: 'compost',
+        mulch: 'mulch',
+        dyedmulch: 'dyedmulch',
+        naturalmulch: 'naturalmulch',
+        gravel: 'gravel',
+        drivewaygravel: 'drivewaygravel',
+        washedgravel: 'washedgravel',
+        finebasegravel: 'finebasegravel',
+        stone: 'stone',
+        flagstone: 'flagstone',
+        choppedstone: 'choppedstone',
+        fieldstone: 'fieldstone',
+        rock: 'rock',
+        creekrock: 'creekrock',
+        coloradorock: 'colorado',
+        boulders: 'boulders',
     }
 
     const initialNodes = [
@@ -37,23 +39,27 @@ export default function FilterBar() {
             children: [
                 {
                     label: 'Topsoil',
-                    key: 'soil-topsoil',
-                    data: 'soil-topsoil',
+                    key: 'material-unscreened topsoil soil',
+                    data: 'material-unscreened topsoil soil',
+                    children: null,
                 },
                 {
-                    label: 'Special Blend',
-                    key: 'soil-specialBlend',
-                    data: 'soil-specialBlend',
+                    label: 'Special Blend (70/30 mix)',
+                    key: 'material-special blend soil',
+                    data: 'material-special blend soil',
+                    children: null,
                 },
                 {
                     label: "Craig's Mix",
-                    key: 'soil-craigsMix',
-                    data: 'soil-craigsMix',
+                    key: "material-craig's mix soil",
+                    data: "material-craig's mix soil",
+                    children: null,
                 },
                 {
                     label: 'Masonry Sand',
-                    key: 'soil-masonrySand',
-                    data: 'soil-masonrySand',
+                    key: 'material-masonry sand soil',
+                    data: 'material-masonry sand soil',
+                    children: null,
                 },
             ],
         },
@@ -65,16 +71,16 @@ export default function FilterBar() {
             children: [
                 {
                     label: 'Premium Compost',
-                    key: 'compost-premiumCompost',
-                    data: 'compost-premiumCompost',
+                    key: 'material-premium compost',
+                    data: 'material-premium compost',
                 },
             ],
         },
         // MULCH
         {
             label: 'Mulch',
-            key: CATEGORYMAP.mulch,
-            data: CATEGORYMAP.mulch,
+            key: 'mulch',
+            data: 'mulch',
             children: [
                 // Dyed Mulch
                 {
@@ -84,18 +90,21 @@ export default function FilterBar() {
                     children: [
                         {
                             label: 'Chocolate Mulch',
-                            key: 'dyedMulch-chocolate',
-                            data: 'dyedMulch-chocolate',
+                            key: 'material-chocolate mulch',
+                            data: 'material-chocolate mulch',
+                            children: null,
                         },
                         {
                             label: 'Red Mulch',
-                            key: 'dyedMulch-red',
-                            data: 'dyedMulch-red',
+                            key: 'material-red mulch',
+                            data: 'material-red mulch',
+                            children: null,
                         },
                         {
                             label: 'Black Mulch',
-                            key: 'dyedMulch-black',
-                            data: 'dyedMulch-black',
+                            key: 'material-black mulch',
+                            data: 'material-black mulch',
+                            children: null,
                         },
                     ],
                 },
@@ -107,18 +116,21 @@ export default function FilterBar() {
                     children: [
                         {
                             label: 'Cedar Mulch',
-                            key: 'naturalMulch-cedar',
-                            data: 'naturalMulch-cedar',
+                            key: 'material-cedar mulch',
+                            data: 'material-cedar mulch',
+                            children: null,
                         },
                         {
                             label: 'Hardwood Mulch (Dbl-Ground)',
-                            key: 'naturalMulch-hardwood',
-                            data: 'naturalMulch-hardwood',
+                            key: 'material-hardwood mulch',
+                            data: 'material-hardwood mulch',
+                            children: null,
                         },
                         {
                             label: 'IPEMA-Certified Playground Mulch',
-                            key: 'naturalMulch-playground',
-                            data: 'naturalMulch-playground',
+                            key: 'material-playground mulch',
+                            data: 'material-playground mulch',
+                            children: null,
                         },
                     ],
                 },
@@ -127,82 +139,96 @@ export default function FilterBar() {
         // GRAVEL
         {
             label: 'Gravel',
-            key: CATEGORYMAP.gravel,
-            data: CATEGORYMAP.gravel,
+            key: 'gravel',
+            data: 'gravel',
             children: [
+                // Driveway Gravel (with Base)
                 {
                     label: 'Driveway Gravel (with Base)',
-                    key: 'sc-drivewayGravel',
-                    data: 'sc-drivewayGravel',
+                    key: 'drivewaygravel',
+                    data: 'drivewaygravel',
                     children: [
                         {
                             label: 'Blue SB2',
-                            key: 'drivewayGravel-blueSB2',
-                            data: 'drivewayGravel-blueSB2',
+                            key: 'bluesb2',
+                            data: 'bluesb2',
+                            children: null,
                         },
                         {
                             label: 'Arkansas Class 5',
-                            key: 'drivewayGravel-arClass5',
-                            data: 'drivewayGravel-arClass5',
+                            key: 'arclass5',
+                            data: 'arclass5',
+                            children: null,
                         },
                     ],
                 },
+                // Washed Gravel
                 {
-                    key: '3-1',
                     label: 'Washed Gravel',
+                    key: 'washedgravel',
                     data: 'washedgravel',
                     children: [
                         {
-                            key: '3-1-0',
                             label: `Small Smooth Brown (Bin #1)`,
+                            key: 'bin1',
                             data: 'bin1',
+                            children: null,
                         },
                         {
-                            key: '3-1-1',
                             label: `Medium Smooth Brown (Bin #2)`,
+                            key: 'bin2',
                             data: 'bin2',
+                            children: null,
                         },
                         {
-                            key: '3-1-2',
                             label: `Medium Blue & White Gravel (Bin #5)`,
+                            key: 'bin5',
                             data: 'bin5',
+                            children: null,
                         },
                         {
-                            key: '3-1-3',
                             label: `Landscape Cobbles (Bin #6)`,
+                            key: 'bin6',
                             data: 'bin6',
+                            children: null,
                         },
                         {
-                            key: '3-1-4',
                             label: `Oversize White Gravel (Bin #9)`,
+                            key: 'bin9',
                             data: 'bin9',
+                            children: null,
                         },
                         {
-                            key: '3-1-5',
                             label: `Crushed Gravel (Bin #10)`,
+                            key: 'bin10',
                             data: 'bin10',
+                            children: null,
                         },
                         {
-                            key: '3-1-6',
                             label: `Pea Gravel (Bin #11)`,
+                            key: 'bin11',
                             data: 'bin11',
+                            children: null,
                         },
                     ],
                 },
+                // Fine Base Gravel
                 {
-                    key: '3-2',
                     label: 'Fine Base Gravel',
+                    key: 'finebasegravel',
                     data: 'finebasegravel',
                     children: [
                         {
-                            key: '3-2-0',
                             label: 'Crushed Decomposed Granite',
+                            key: 'crushedgranite',
                             data: 'dcgranite',
+                            children: null,
                         },
                         {
-                            key: '3-2-1',
                             label: 'Blue Fine Screenings',
+                            key: 'bluefines',
                             data: 'bluefines',
+                            children: null,
                         },
                     ],
                 },
@@ -219,16 +245,92 @@ export default function FilterBar() {
                     label: 'Flagstone',
                     key: CATEGORYMAP.flagstone,
                     data: CATEGORYMAP.flagstone,
+                    children: [
+                        {
+                            label: 'Cherry Blend',
+                            key: 'material-cherry blend flagstone',
+                            data: 'material-cherry blend flagstone',
+                            children: null,
+                        },
+                        {
+                            label: 'Cheyenne Brown',
+                            key: 'material-cheyenne brown flagstone',
+                            data: 'material-cheyenne brown flagstone',
+                            children: null,
+                        },
+                        {
+                            label: 'Cheyenne Blue',
+                            key: 'material-cheyenne blue flagstone',
+                            data: 'material-cheyenne blue flagstone',
+                            children: null,
+                        },
+                        {
+                            label: 'Silvermist',
+                            key: 'material-silvermist flagstone',
+                            data: 'material-silvermist flagstone',
+                            children: null,
+                        },
+                        {
+                            label: 'Dark Buckskin',
+                            key: 'material-dark buckskin flagstone',
+                            data: 'material-dark buckskin flagstone',
+                            children: null,
+                        },
+                        {
+                            label: 'Chestnut',
+                            key: 'material-chestnut flagstone',
+                            data: 'material-chestnut flagstone',
+                            children: null,
+                        },
+                        {
+                            label: 'Copper Ridge',
+                            key: 'material-copper ridge flagstone',
+                            data: 'material-copper ridge flagstone',
+                            children: null,
+                        },
+                    ],
                 },
                 // Chopped Stone
                 {
                     label: 'Chopped Stone',
                     key: CATEGORYMAP.choppedstone,
                     data: CATEGORYMAP.choppedstone,
+                    children: [
+                        {
+                            label: 'Chopped Limestone',
+                            key: 'material-chopped limestone',
+                            data: 'material-chopped limestone',
+                            children: null,
+                        },
+                        {
+                            label: 'Chopped Cheyenne Blue',
+                            key: 'material-chopped cheyenne blue',
+                            data: 'material-chopped cheyenne blue',
+                            children: null,
+                        },
+                        {
+                            label: 'Chopped Silvermist',
+                            key: 'material-chopped silvermist',
+                            data: 'material-chopped silvermist',
+                            children: null,
+                        },
+                        {
+                            label: 'Chopped Cherry Blend',
+                            key: 'material-chopped cherry blend',
+                            data: 'material-chopped cherry blend',
+                            children: null,
+                        },
+                        {
+                            label: 'Chopped Chestnut',
+                            key: 'material-chopped chestnut',
+                            data: 'material-chopped chestnut',
+                            children: null,
+                        },
+                    ],
                 },
-                // Field Stone
+                // Fieldstone
                 {
-                    label: 'Field Stone',
+                    label: 'Fieldstone',
                     key: CATEGORYMAP.fieldstone,
                     data: CATEGORYMAP.fieldstone,
                     children: [
@@ -239,61 +341,72 @@ export default function FilterBar() {
                             children: [
                                 {
                                     label: 'Small Creek Boulders',
-                                    key: 'boulders-smallCreek',
-                                    data: 'boulders-smallCreek',
+                                    key: 'material-small creek boulders',
+                                    data: 'material-small creek boulders',
+                                    children: null,
                                 },
                                 {
-                                    label: 'Large Creek Boulders',
-                                    key: 'boulders-largeCreek',
-                                    data: 'boulders-largeCreek',
+                                    label: 'Medium Creek Boulders',
+                                    key: 'material-medium creek boulders',
+                                    data: 'material-medium creek boulders',
+                                    children: null,
                                 },
                                 {
                                     label: 'Small Mossy Boulders',
-                                    key: 'boulders-smallMossy',
-                                    data: 'boulders-smallMossy',
+                                    key: 'material-small mossy boulders',
+                                    data: 'material-small mossy boulders',
+                                    children: null,
                                 },
                                 {
                                     label: 'Medium Mossy Boulders',
-                                    key: 'boulders-mediumMossy',
-                                    data: 'boulders-mediumMossy',
+                                    key: 'material-medium mossy boulders',
+                                    data: 'material-medium mossy boulders',
+                                    children: null,
                                 },
                                 {
                                     label: 'Large Mossy Boulders',
-                                    key: 'boulders-largeMossy',
-                                    data: 'boulders-largeMossy',
+                                    key: 'material-large mossy boulders',
+                                    data: 'material-large mossy boulders',
+                                    children: null,
                                 },
                             ],
                         },
                         {
                             label: 'Med. Cut Stone Steps',
-                            key: 'fieldStone-cutStoneSteps',
-                            data: 'fieldStone-cutStoneSteps',
+                            key: 'material-medium cut stone steps',
+                            data: 'material-medium cut stone steps',
+                            children: null,
                         },
                         {
                             label: 'Lrg. Cut Stone Steps',
-                            key: 'fieldStone-lrgCutStoneSteps',
-                            data: 'fieldStone-lrgCutStoneSteps',
+                            key: 'material-large cut stone steps',
+                            data: 'material-large cut stone steps',
+                            children: null,
                         },
                         {
                             label: 'Mossy Waterfall',
-                            key: 'fieldStone-waterfall',
-                            data: 'fieldStone-waterfall',
+                            key: 'material-mossy waterfall',
+                            data: 'material-mossy waterfall',
+                            children: null,
                         },
                         {
                             label: 'Mossy Brick',
-                            key: 'fieldStone-mossyBrick',
-                            data: 'fieldStone-mossyBrick',
-                        },
-                        {
-                            label: 'Mossy Rounds',
-                            key: 'fieldStone-mossyRounds',
-                            data: 'fieldStone-mossyRounds',
+                            key: 'material-mossy brick',
+                            data: 'material-mossy brick',
+                            children: null,
                         },
                         {
                             label: 'Mossy Natural Steps (Grotto)',
-                            key: 'fieldStone-naturalSteps',
-                            data: 'fieldStone-naturalSteps',
+                            key: 'material-mossy natural steps grotto',
+                            data: 'material-mossy natural steps grotto',
+                            children: null,
                         },
+                        // {
+                        //     label: 'Mossy Rounds',
+                        //     key: 'material-mossy rounds',
+                        //     data: 'material-mossy rounds',
+                        //     children: null,
+                        // },
                     ],
                 },
             ],
@@ -311,21 +424,40 @@ export default function FilterBar() {
                     data: CATEGORYMAP.creekrock,
                     children: [
                         {
-                            label: 'Flat Creek',
-                            key: 'creekRock-flat',
-                            data: 'creekRock-flat',
-                            children: [],
+                            label: 'Small Flat Creek',
+                            key: 'material-small flat creek rock brown',
+                            data: 'material-small flat creek rock brown',
+                            children: null,
                         },
                         {
-                            label: 'Round Creek',
-                            key: 'creekRock-round',
-                            data: 'creekRock-round',
-                            children: [],
+                            label: 'Medium Flat Creek',
+                            key: 'material-medium flat creek rock',
+                            data: 'material-medium flat creek rock',
+                            children: null,
+                        },
+                        {
+                            label: 'Large Flat Creek',
+                            key: 'material-large flat creek rock',
+                            data: 'material-large flat creek rock',
+                            children: null,
+                        },
+                        {
+                            label: 'Small Round Creek',
+                            key: 'material-small round creek rock',
+                            data: 'material-small round creek rock',
+                            children: null,
+                        },
+                        {
+                            label: 'Medium Round Creek',
+                            key: 'material-medium round creek rock',
+                            data: 'material-medium round creek rock',
+                            children: null,
                         },
                         {
                             label: 'Creek Brick',
-                            key: 'creekRock-brick',
-                            data: 'creekRock-brick',
+                            key: 'material-creek brick',
+                            data: 'material-creek brick',
+                            children: null,
                         },
                     ],
                 },
@@ -337,28 +469,39 @@ export default function FilterBar() {
                     children: [
                         {
                             label: 'Rocky Mountain River Rock',
-                            key: 'colorado-rockyMtnRiverRock',
-                            data: 'colorado-rockyMtnRiverRock',
+                            key: 'material-colorado rocky mountain mtn river rock',
+                            data: 'material-colorado rocky mountain mtn river rock',
+                            children: null,
                         },
                         {
                             label: 'Colorado Skippers',
-                            key: 'colorado-skippers',
-                            data: 'colorado-skippers',
+                            key: 'material-colorado skippers',
+                            data: 'material-colorado skippers',
+                            children: null,
+                        },
+                        {
+                            label: 'Small Colorado Pancakes',
+                            key: 'material-colorado small pancakes',
+                            data: 'material-colorado small pancakes',
+                            children: null,
                         },
                         {
                             label: 'Medium Pancakes',
-                            key: 'colorado-medPancakes',
-                            data: 'colorado-medPancakes',
+                            key: 'material-colorado medium pancakes',
+                            data: 'material-colorado medium pancakes',
+                            children: null,
                         },
                         {
                             label: 'Large Pancakes',
-                            key: 'colorado-lrgPancakes',
-                            data: 'colorado-lrgPancakes',
+                            key: 'material-colorado large pancakes',
+                            data: 'material-colorado large pancakes',
+                            children: null,
                         },
                         {
                             label: 'Mexican Beach Pebbles',
-                            key: 'colorado-beachPebbles',
-                            data: 'colorado-beachPebbles',
+                            key: 'material-colorado mexican beach pebbles',
+                            data: 'material-colorado mexican beach pebbles',
+                            children: null,
                         },
                     ],
                 },
@@ -368,12 +511,17 @@ export default function FilterBar() {
 
     const [nodes, setNodes] = useState(initialNodes)
     const [selectedNodeKey, setSelectedNodeKey] = useState(null)
+    const [navCategories, setNavCategories] = useState(null)
     const [filteredMaterials, setFilteredMaterials] = useState([])
 
     // #region REACT-QUERY
     const materials = useQuery({
         queryKey: ['materials'],
         queryFn: () => getActiveMaterials(),
+        onSuccess: (materials) => {
+            console.log('Materials: ')
+            console.log(materials)
+        },
         onError: (err) => {
             console.log(err)
             toast.error(err.message, { autoClose: 8000 })
@@ -388,102 +536,122 @@ export default function FilterBar() {
             toast.error(err.message, { autoClose: 8000 })
         },
     })
+
+    // #region SUB API (FILTER MATERIALS) ============================================================================
+    const filterByKeywords = (keywords) => {
+        let mats = materials.data.filter(
+            (mat) =>
+                mat.keywords &&
+                keywords.every((el) => mat.keywords.includes(el))
+        )
+
+        if (keywords.includes('gravel')) {
+            mats.sort((a, b) => parseInt(a.binNumber) - parseInt(b.binNumber))
+            setFilteredMaterials(mats)
+        } else {
+            // // Sort by category
+            // let sortByCat = mats.sort((a, b) =>
+            //     a.category.localeCompare(b.category)
+            // )
+            // // Then by name
+            // let sortByName = sortByCat.sort((a, b) =>
+            //     a.name.localeCompare(b.name)
+            // )
+            let sorted = mats.sort((a, b) =>
+                a.category.localeCompare(b.category)
+            )
+            setFilteredMaterials(sorted)
+        }
+    }
+    // #endregion ====================================================================================================
+
     // #endregion
 
     // #region EVENT HANDLERS
     const onMenuChange = (e) => {
         console.log('[Materials FilterBar.jsx onMenuChange]: ')
         console.log(e)
+
         setSelectedNodeKey(e.value)
-        filterMaterials(e.value)
-    }
 
-    const filterMaterials = (categoryName) => {
-        // Match existing C&H materialcategory name with CATEGORYMAP keys
-        const mapName = Object.entries(CATEGORYMAP).find(
-            (e) => e[1] === categoryName
-        )[0]
-        console.log('mapName: ' + mapName)
-
-        let categoryIds = []
-
-        if (mapName === 'stone') {
-            let cats = categories.data.filter(
-                (cat) =>
-                    cat.name.toLowerCase() === 'flagstone' ||
-                    cat.name.toLowerCase() === 'chopped stone' ||
-                    cat.name.toLowerCase() === 'field stone' ||
-                    cat.name.toLowerCase() === 'boulders'
-            )
-
-            cats.forEach((element) => {
-                categoryIds.push(element._id)
-            })
-
-            // console.log('CategoryIds: ')
-            // console.log(categoryIds)
-
-            setFilteredMaterials(
-                materials.data.filter((mat) =>
-                    categoryIds.includes(mat.category.toString())
-                )
-            )
-        } else if (mapName === 'rock') {
-            let cats = categories.data.filter(
-                (cat) =>
-                    cat.name.toLowerCase() === 'creek rock' ||
-                    cat.name.toLowerCase() === 'colorado rock'
-            )
-            cats.forEach((element) => {
-                categoryIds.push(element._id)
-            })
-
-            console.log('CategoryIds: ')
-            console.log(categoryIds)
-
-            setFilteredMaterials(
-                materials.data.filter((mat) =>
-                    categoryIds.includes(mat.category)
-                )
-            )
-        } else if (mapName === 'dyedmulch') {
-            setFilteredMaterials(
-                materials.data.filter(
-                    (mat) =>
-                        mat.name.toLowerCase() === 'red mulch' ||
-                        mat.name.toLowerCase() === 'black mulch' ||
-                        mat.name.toLowerCase() === 'chocolate brown mulch'
-                )
-            )
-        } else if (mapName === 'naturalmulch') {
-            setFilteredMaterials(
-                materials.data.filter(
-                    (mat) =>
-                        mat.name.toLowerCase() === 'cedar mulch' ||
-                        mat.name.toLowerCase() ===
-                            'hardwood dbl-ground mulch' ||
-                        mat.name.toLowerCase() === 'pinebark mulch' ||
-                        mat.name.toLowerCase() === 'playground mulch (ipema)'
-                )
-            )
+        // If e.value is an INDIVIDUAL MATERIAL
+        if (e.value.split('-')[0] === 'material') {
+            // Extract the keywords then filter
+            let keywords = e.value.split('-')[1].split(' ')
+            console.log('Keywords to search: ')
+            console.log(keywords)
+            filterByKeywords(keywords)
         } else {
-            const categoryId = categories.data.find(
-                (cat) => cat.name.toLowerCase() === mapName.toLowerCase()
-            )._id
-            console.log('Category ID: ' + categoryId)
-            setFilteredMaterials(
-                materials.data.filter((mat) => mat.category === categoryId)
-            )
+            // Otherwise, use manual filtering
+            switch (e.value) {
+                // #region SOIL
+                case 'soil':
+                    filterByKeywords(['soil'])
+                    break
+                // #endregion
+                // #region COMPOST
+
+                case 'compost':
+                    filterByKeywords(['compost'])
+                    break
+                // #endregion
+                // #region GRAVEL
+                case 'gravel':
+                    filterByKeywords(['gravel'])
+                    break
+                case 'drivewaygravel':
+                    filterByKeywords(['gravel', 'driveway'])
+                    break
+                case 'washedgravel':
+                    filterByKeywords(['gravel', 'washed'])
+                    break
+                case 'finebasegravel':
+                    filterByKeywords(['gravel', 'base', 'fine'])
+                    break
+                // #endregion
+                // #region MULCH
+                case 'mulch':
+                    filterByKeywords(['mulch'])
+                    break
+                case 'dyedmulch':
+                    filterByKeywords(['mulch', 'dyed'])
+                    break
+                case 'naturalmulch':
+                    filterByKeywords(['mulch', 'natural'])
+                    break
+                // #endregion
+                // #region STONE
+                case 'stone':
+                    filterByKeywords(['stone'])
+                    break
+                case 'boulders':
+                    filterByKeywords(['stone', 'boulders'])
+                    break
+                case 'flagstone':
+                    filterByKeywords(['flagstone'])
+                    break
+                case 'choppedstone':
+                    filterByKeywords(['chopped', 'stone'])
+                    break
+                case 'fieldstone':
+                    filterByKeywords(['fieldstone'])
+                    break
+                // #endregion
+                // #region ROCK
+                case 'rock':
+                    filterByKeywords(['rock'])
+                    break
+                case 'creekrock':
+                    filterByKeywords(['creek', 'rock'])
+                    break
+                case 'colorado':
+                    filterByKeywords(['colorado'])
+                    break
+                // #endregion
+            }
         }
     }
     // #endregion
-
-    useEffect(() => {
-        if (filteredMaterials && filteredMaterials.length > 0) {
-            console.log('=== FILTERED MATERIALS SET ===')
-            console.log(filteredMaterials)
-        }
-    }, [filteredMaterials])
 
     return (
         <>
@@ -496,6 +664,24 @@ export default function FilterBar() {
                     className={styles.filterSearch}
                     filter
                 />
+            </div>
+
+            <div className={styles.info}>
+                <p style={{ textAlign: 'center' }}>
+                    Use the menu above to search for the material you're looking
+                    for. You can click on category names as well as material
+                    names.
+                </p>
+            </div>
+
+            <div className={`${styles.info} ${styles.disclaimer}`}>
+                <p>
+                    While browsing, please keep in mind each picture shown
+                    represents the material at a single point in time. Every
+                    truckload we receive will vary in size, texture, color, and
+                    composition. We <u>always</u> suggest stopping by to look
+                    before purchasing.
+                </p>
             </div>
 
             <section className={styles.main}>
