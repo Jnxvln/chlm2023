@@ -262,14 +262,7 @@ function HaulSummary() {
                     return w.date.split('T')[0] === _dateHaul
                 })
 
-                // const _chhours =
-                //     wday && wday.chhours
-                //         ? parseFloat(wday.chhours).toFixed(2)
-                //         : -1
-
                 const _chhours = parseFloat(wday && wday.chhours)
-
-                // console.log('_chhours: ' + _chhours)
 
                 if (_chhours == '0' || _chhours === 0) {
                     return parseFloat(0)
@@ -282,7 +275,7 @@ function HaulSummary() {
                 // return _chhours
             }
         } else {
-            return <>Loading....</>
+            return <>Loading...</>
         }
     }
 
@@ -539,8 +532,8 @@ function HaulSummary() {
                     <div>
                         <strong>NC Reasons: </strong>
                     </div>
-                    {data &&
-                        workdays &&
+                    {workdays &&
+                        workdays.data &&
                         workdays.data.map((day) => (
                             <div key={day._id}>
                                 {day && day.ncReasons ? (

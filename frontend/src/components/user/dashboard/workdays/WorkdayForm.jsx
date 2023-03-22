@@ -118,6 +118,10 @@ function WorkdayForm({ workDate, driver }) {
         //     return toast.error('CH Hours is required (enter 0 if not needed)')
         // }
 
+        if (!hasCHHours && hasCHHours != '0') {
+            return toast.error('CH Hours is required (enter 0 if not needed)')
+        }
+
         if (!hasNCHours && hasNCReasons) {
             return toast.error('NC Reasons is provided but NC Hours is blank')
         }
