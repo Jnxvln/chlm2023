@@ -1,6 +1,7 @@
 import styles from './FilterBar.module.scss'
 import { TreeSelect } from 'primereact/treeselect'
-import { useState, useEffect } from 'react'
+import { Button } from 'primereact/button'
+import { useState, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { getActiveMaterials } from '../../../../api/materials/materialsApi'
@@ -11,6 +12,7 @@ export default function FilterBar() {
     const queryClient = useQueryClient()
 
     const CATEGORYMAP = {
+        all: 'all',
         soil: 'soil',
         compost: 'compost',
         mulch: 'mulch',
@@ -31,6 +33,13 @@ export default function FilterBar() {
     }
 
     const initialNodes = [
+        // ALL MATERIALS
+        {
+            label: 'All Materials',
+            key: CATEGORYMAP.all,
+            data: CATEGORYMAP.all,
+            children: null,
+        },
         // SOILS
         {
             label: 'Soils',
@@ -513,15 +522,16 @@ export default function FilterBar() {
     const [selectedNodeKey, setSelectedNodeKey] = useState(null)
     const [navCategories, setNavCategories] = useState(null)
     const [filteredMaterials, setFilteredMaterials] = useState([])
+    const containerRef = useRef(null)
 
     // #region REACT-QUERY
     const materials = useQuery({
         queryKey: ['materials'],
         queryFn: () => getActiveMaterials(),
-        onSuccess: (materials) => {
-            console.log('Materials: ')
-            console.log(materials)
-        },
+        // onSuccess: (materials) => {
+        //     console.log('Materials: ')
+        //     console.log(materials)
+        // },
         onError: (err) => {
             console.log(err)
             toast.error(err.message, { autoClose: 8000 })
@@ -549,19 +559,17 @@ export default function FilterBar() {
             mats.sort((a, b) => parseInt(a.binNumber) - parseInt(b.binNumber))
             setFilteredMaterials(mats)
         } else {
-            // // Sort by category
-            // let sortByCat = mats.sort((a, b) =>
-            //     a.category.localeCompare(b.category)
-            // )
-            // // Then by name
-            // let sortByName = sortByCat.sort((a, b) =>
-            //     a.name.localeCompare(b.name)
-            // )
             let sorted = mats.sort((a, b) =>
                 a.category.localeCompare(b.category)
             )
             setFilteredMaterials(sorted)
         }
+    }
+
+    const filterAllMaterials = () => {
+        setFilteredMaterials(
+            materials.data.sort((a, b) => a.category.localeCompare(b.category))
+        )
     }
     // #endregion ====================================================================================================
 
@@ -569,8 +577,8 @@ export default function FilterBar() {
 
     // #region EVENT HANDLERS
     const onMenuChange = (e) => {
-        console.log('[Materials FilterBar.jsx onMenuChange]: ')
-        console.log(e)
+        // console.log('[Materials FilterBar.jsx onMenuChange]: ')
+        // console.log(e)
 
         setSelectedNodeKey(e.value)
 
@@ -578,13 +586,16 @@ export default function FilterBar() {
         if (e.value.split('-')[0] === 'material') {
             // Extract the keywords then filter
             let keywords = e.value.split('-')[1].split(' ')
-            console.log('Keywords to search: ')
-            console.log(keywords)
+            // console.log('Keywords to search: ')
+            // console.log(keywords)
             filterByKeywords(keywords)
         } else {
             // Otherwise, use manual filtering
             switch (e.value) {
                 // #region SOIL
+                case 'all':
+                    filterAllMaterials()
+                    break
                 case 'soil':
                     filterByKeywords(['soil'])
                     break
@@ -651,11 +662,27 @@ export default function FilterBar() {
             }
         }
     }
+
+    // Cause filter bar to stick to top of screen after scrolling 250px
+    const isSticky = () => {
+        const scrollTop = window.scrollY
+        scrollTop >= 250
+            ? containerRef.current.classList.add('is-sticky')
+            : containerRef.current.classList.remove('is-sticky')
+    }
     // #endregion
 
+    // Sticky Menu Area
+    useEffect(() => {
+        window.addEventListener('scroll', isSticky)
+        return () => {
+            window.removeEventListener('scroll', isSticky)
+        }
+    })
+
     return (
-        <>
-            <div className={styles.container}>
+        <div>
+            <div className={styles.container} ref={containerRef}>
                 <TreeSelect
                     value={selectedNodeKey}
                     onChange={(e) => onMenuChange(e)}
@@ -664,10 +691,15 @@ export default function FilterBar() {
                     className={styles.filterSearch}
                     filter
                 />
+                <Button
+                    icon="pi pi-arrow-circle-up"
+                    id="filterBarScrollTop"
+                    onClick={() => window.scrollTo(0, 0)}
+                />
             </div>
 
             <div className={styles.info}>
-                <p style={{ textAlign: 'center' }}>
+                <p className={styles.info}>
                     Use the menu above to search for the material you're looking
                     for. You can click on category names as well as material
                     names.
@@ -691,6 +723,15 @@ export default function FilterBar() {
                         <MaterialCard key={mat._id} material={mat} />
                     ))}
             </section>
-        </>
+
+            <div className={styles.centerButton}>
+                <Button
+                    label="Scroll To Top"
+                    icon="pi pi-arrow-circle-up"
+                    iconPos="left"
+                    onClick={() => window.scrollTo(0, 0)}
+                />
+            </div>
+        </div>
     )
 }

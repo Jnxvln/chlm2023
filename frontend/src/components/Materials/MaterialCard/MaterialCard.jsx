@@ -2,6 +2,7 @@ import styles from './MaterialCard.module.scss'
 import { Panel } from 'primereact/panel'
 import { ScrollPanel } from 'primereact/scrollpanel'
 import { Ripple } from 'primereact/ripple'
+import { Image } from 'primereact/image'
 
 export default function MaterialCard({ material }) {
     const template = (options) => {
@@ -47,10 +48,17 @@ export default function MaterialCard({ material }) {
         <div className={styles.container}>
             <header className={styles.header}>{material.name}</header>
             <div className={styles.imageContainer}>
-                <img
+                {/* <img
                     src={material.image}
                     alt={material.name}
                     className={styles.image}
+                /> */}
+                <Image
+                    src={material.image}
+                    alt={material.name}
+                    width="100%"
+                    preview
+                    // className={styles.image}
                 />
             </div>
             <div

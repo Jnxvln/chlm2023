@@ -336,6 +336,31 @@ tr.spacer td {
     background-color: rgb(100, 100, 100);
 }
 
+// Materials Page Filter Bar
+.is-sticky {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    box-shadow: 0 2px 24px 0 rgb(0 0 0 / 15%);
+    background-color: #415c76 !important;
+    animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
+    padding: 2em;
+}
+#filterBarScrollTop {
+    background-color: white;
+    color: black;
+    margin-left: 1em;
+}
+#filterBarScrollTop:hover {
+    background-color: rgb(176, 218, 238);
+}
+#filterBarScrollTop:active {
+    background-color: rgb(219, 234, 241);
+}
+// ------------
+
 @media print {
     .noPrint,
     .noPrint * {
