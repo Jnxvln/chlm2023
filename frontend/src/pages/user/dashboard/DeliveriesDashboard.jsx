@@ -276,10 +276,6 @@ function DeliveriesDashboard() {
     }
 
     const onSetDeliveryClient = (client) => {
-        // console.log(
-        //     '[DeliveriesDashboard onSetDeliveryClient]: Resetting client to: '
-        // )
-        // console.log(client)
         onClientSelected(client)
     }
 
@@ -704,9 +700,6 @@ function DeliveriesDashboard() {
 
     // Print delivery
     const printDelivery = (rowData) => {
-        // console.log('Printing data: ')
-        // console.log(rowData)
-
         navigate({
             pathname: '/deliveries/print',
             search: `?${createSearchParams(rowData)}`,
@@ -977,6 +970,10 @@ function DeliveriesDashboard() {
                         {selectedClientAvatar && (
                             <EditDeliveryClientForm
                                 deliveryClientToEdit={selectedClientAvatar}
+                                onSetDeliveryClient={onSetDeliveryClient}
+                                onResetFilteredDeliveries={
+                                    onResetFilteredDeliveries
+                                }
                             />
                         )}
                     </section>
