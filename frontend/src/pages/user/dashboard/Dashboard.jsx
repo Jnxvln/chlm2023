@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { TabView, TabPanel } from 'primereact/tabview'
 import HaulsDashboard from './HaulsDashboard'
 import DeliveriesDashboard from './DeliveriesDashboard'
@@ -9,7 +9,17 @@ import DriversDashboard from './DriversDashboard'
 import CostCalculator from './CostCalculator'
 
 function Dashboard({ user }) {
-    const [tabsActiveIndex, setTabsActiveIndex] = useState(null)
+    const [tabsActiveIndex, setTabsActiveIndex] = useState(
+        localStorage.getItem('activeTab') || undefined
+    )
+
+    useEffect(() => {
+        let tabIndex = localStorage.getItem('activeTab')
+        if (tabIndex !== null) {
+            tabIndex = parseInt(tabIndex)
+            setTabsActiveIndex(tabIndex)
+        }
+    }, [])
 
     return (
         <section style={{ padding: '2em' }}>
@@ -19,6 +29,7 @@ function Dashboard({ user }) {
             <TabView
                 activeIndex={tabsActiveIndex}
                 onTabChange={(e) => {
+                    localStorage.setItem('activeTab', e.index)
                     setTabsActiveIndex(e.index)
                 }}
             >
