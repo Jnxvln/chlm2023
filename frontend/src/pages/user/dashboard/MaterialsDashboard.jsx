@@ -214,7 +214,7 @@ function MaterialsDashboard() {
             mat = materialCategories.data.find(
                 (cat) => cat._id === rowData.category
             )
-            return <>{mat.name}</>
+            return mat ? <>{mat.name}</> : <></>
         }
     }
 
