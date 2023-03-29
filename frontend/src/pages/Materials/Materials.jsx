@@ -3,7 +3,7 @@ import FilterBar from '../../components/Materials/MaterialsHeader/FilterBar/Filt
 
 export default function Materials() {
     return (
-        <section>
+        <section style={{ paddingBottom: '3em' }}>
             <MaterialsHeader />
             <FilterBar />
         </section>
