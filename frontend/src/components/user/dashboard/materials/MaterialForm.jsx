@@ -14,6 +14,7 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import { FileUpload } from 'primereact/fileupload'
 import { ProgressSpinner } from 'primereact/progressspinner'
 import { Image } from 'primereact/image'
+import { Chips } from 'primereact/chips'
 
 // Data
 import {
@@ -39,6 +40,7 @@ function MaterialForm({ keys }) {
         stock: '',
         notes: '',
         description: '',
+        keywords: [],
         isFeatured: false,
         isTruckable: false,
         isActive: true,
@@ -110,6 +112,7 @@ function MaterialForm({ keys }) {
         stock,
         notes,
         description,
+        keywords,
         isFeatured,
         isTruckable,
         isActive,
@@ -143,6 +146,21 @@ function MaterialForm({ keys }) {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
+        }))
+    }
+    const onChangeChips = (e) => {
+        // Trim and convert to lower case
+        let targets = e.target.value
+        for (let i = 0; i < targets.length; i++) {
+            targets[i] = targets[i].toString().trim().toLowerCase()
+        }
+        // console.log('Targets: ')
+        // console.log(targets)
+
+        // Set form data
+        setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: targets,
         }))
     }
 
@@ -441,6 +459,26 @@ function MaterialForm({ keys }) {
                                     <label htmlFor="description">
                                         Description
                                     </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* KEYWORDS */}
+                    <div className="formgrid grid">
+                        <div className="field col">
+                            <div style={{ margin: '0.8em 0' }}>
+                                <span className="p-float-label">
+                                    <Chips
+                                        id="keywords"
+                                        name="keywords"
+                                        placeholder="Keywords (separate with a comma)"
+                                        separator=","
+                                        value={keywords}
+                                        onChange={onChangeChips}
+                                        className="input-chips"
+                                    />
+                                    <label htmlFor="keywords">Keywords</label>
                                 </span>
                             </div>
                         </div>

@@ -59,6 +59,7 @@ const materialSchema = mongoose.Schema(
             type: Boolean,
             required: false,
         },
+        keywords: [String],
     },
     {
         timestamps: true,

@@ -3,7 +3,6 @@ import DialogHeader from '../../../dialogComponents/DialogHeader'
 import DialogFooter from '../../../dialogComponents/DialogFooter_SubmitClose'
 import { toast } from 'react-toastify'
 import { uploadFile } from 'react-s3'
-import axios from 'axios'
 // PrimeReact Components
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
@@ -14,6 +13,7 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import { FileUpload } from 'primereact/fileupload'
 import { ProgressSpinner } from 'primereact/progressspinner'
 import { Image } from 'primereact/image'
+import { Chips } from 'primereact/chips'
 // Select data
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { getMaterialCategories } from '../../../../api/materialCategories/materialCategoriesApi'
@@ -34,6 +34,7 @@ function EditMaterialForm({ material, keys }) {
         stock: '',
         notes: '',
         description: '',
+        keywords: [],
         isFeatured: false,
         isTruckable: false,
         isActive: true,
@@ -106,6 +107,7 @@ function EditMaterialForm({ material, keys }) {
         stock,
         notes,
         description,
+        keywords,
         isFeatured,
         isTruckable,
         isActive,
@@ -143,6 +145,7 @@ function EditMaterialForm({ material, keys }) {
                 stock: material.stock,
                 notes: material.notes,
                 description: material.description,
+                keywords: material.keywords,
                 isFeatured: material.isFeatured,
                 isActive: material.isFeatured,
                 isTruckable: material.isTruckable,
@@ -157,11 +160,29 @@ function EditMaterialForm({ material, keys }) {
         resetForm()
         setFormDialog(false)
     }
+
     // Handle form change
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
+        }))
+    }
+
+    // Handle form change (Chips input)
+    const onChangeChips = (e) => {
+        // Trim and convert to lower case
+        let targets = e.target.value
+        for (let i = 0; i < targets.length; i++) {
+            targets[i] = targets[i].toString().trim().toLowerCase()
+        }
+        // console.log('Targets: ')
+        // console.log(targets)
+
+        // Set form data
+        setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: targets,
         }))
     }
 
@@ -239,6 +260,8 @@ function EditMaterialForm({ material, keys }) {
     // Fill FormData with contents of Material prop
     useEffect(() => {
         if (material) {
+            // console.log('Editing: ')
+            // console.log(material)
             setFormData((prevState) => ({
                 ...prevState,
                 _id: material._id,
@@ -250,13 +273,14 @@ function EditMaterialForm({ material, keys }) {
                 stock: material.stock,
                 notes: material.notes,
                 description: material.description,
+                keywords: material.keywords,
                 isFeatured: material.isFeatured,
-                isActive: material.isFeatured,
+                isActive: material.isActive,
                 isTruckable: material.isTruckable,
             }))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [material])
     // #endregion
 
     return (
@@ -500,6 +524,26 @@ function EditMaterialForm({ material, keys }) {
                                     <label htmlFor="description">
                                         Description
                                     </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* KEYWORDS */}
+                    <div className="formgrid grid">
+                        <div className="field col">
+                            <div style={{ margin: '0.8em 0' }}>
+                                <span className="p-float-label">
+                                    <Chips
+                                        id="keywords"
+                                        name="keywords"
+                                        placeholder="Keywords (separate with a comma)"
+                                        separator=","
+                                        value={keywords}
+                                        onChange={onChangeChips}
+                                        className="input-chips"
+                                    />
+                                    <label htmlFor="keywords">Keywords</label>
                                 </span>
                             </div>
                         </div>

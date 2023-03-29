@@ -361,6 +361,15 @@ tr.spacer td {
 }
 // ------------
 
+// Material / Edit Material dialog
+.input-chips {
+    // border: 2px solid red !important;
+}
+.input-chips input {
+    // border: 2px solid rgb(32, 35, 218) !important;
+    width: 400px !important;
+}
+
 @media print {
     .noPrint,
     .noPrint * {
