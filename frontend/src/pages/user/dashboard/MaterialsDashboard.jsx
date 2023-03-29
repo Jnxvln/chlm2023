@@ -95,7 +95,11 @@ function MaterialsDashboard() {
     const imageBodyTemplate = (rowData) => {
         return (
             <Image
-                src={`${rowData.image}`}
+                src={`${
+                    rowData.image
+                        ? rowData.image
+                        : 'https://django-chlmweb-files.s3.us-east-2.amazonaws.com/TEST/placeholder.png'
+                }`}
                 width="100%"
                 height="auto"
                 alt={rowData.name}
