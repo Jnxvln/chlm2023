@@ -54,7 +54,11 @@ export default function MaterialCard({ material }) {
                     className={styles.image}
                 /> */}
                 <Image
-                    src={material.image}
+                    src={
+                        material.image
+                            ? material.image
+                            : 'https://django-chlmweb-files.s3.us-east-2.amazonaws.com/TEST/placeholder.png'
+                    }
                     alt={material.name}
                     width="100%"
                     preview
