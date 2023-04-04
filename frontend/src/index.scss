@@ -370,6 +370,15 @@ tr.spacer td {
     width: 400px !important;
 }
 
+// Calculator - FormDisplay
+.clearButton {
+    background-color: rgb(66, 66, 66) !important;
+    color: white;
+}
+.clearButton:hover {
+    background-color: rgb(39, 39, 39) !important;
+}
+
 @media print {
     .noPrint,
     .noPrint * {
