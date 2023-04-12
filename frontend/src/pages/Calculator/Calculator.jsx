@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import styles from './Calculator.module.scss'
 import ShapeDisplay from './ShapeDisplay'
 import FormDisplay from './FormDispay/FormDisplay'
 import { Dropdown } from 'primereact/dropdown'
+import { Button } from 'primereact/button'
+import { OverlayPanel } from 'primereact/overlaypanel'
 
 export default function Calculator() {
     // #region VARS
@@ -41,6 +43,8 @@ export default function Calculator() {
         },
     ])
     const [shapeSelected, setShapeSelected] = useState(undefined)
+    const [dimensions, setDimensions] = useState(undefined)
+    const infoRef = useRef(null)
     // #endregion
 
     // #region SHAPE TEMPLATES
@@ -239,14 +243,15 @@ export default function Calculator() {
             return <>Choose project shape</>
         }
     }
-    // #endregion
 
-    // useEffect(() => {
-    //     if (shapeSelected) {
-    //         console.log('Shape selected: ')
-    //         console.log(shapeSelected)
-    //     }
-    // }, [shapeSelected])
+    const onFormUpdated = (formInfo) => {
+        console.log(
+            '[Calculator.jsx]: FormDisplay.jsx triggered onFormUpdated: '
+        )
+        console.log(formInfo)
+        setDimensions(formInfo)
+    }
+    // #endregion
 
     return (
         <div>
@@ -268,16 +273,78 @@ export default function Calculator() {
                     itemTemplate={shapesTemplate}
                     className="w-full md:w-24rem"
                 />
+                <Button
+                    type="button"
+                    icon="pi pi-info"
+                    style={{
+                        backgroundColor: 'white',
+                        color: 'navy',
+                        fontWeight: 'bold',
+                        marginLeft: '0.5em',
+                    }}
+                    onClick={(e) => infoRef.current.toggle(e)}
+                />
+                <OverlayPanel ref={infoRef} style={{ maxWidth: '600px' }}>
+                    <h2>How It Works</h2>
+                    <div>
+                        <strong>
+                            Disclaimer: Results provided by the calculator are
+                            an approximation only.
+                        </strong>
+                    </div>
+                    <div>
+                        <ol className={styles.instructionList}>
+                            <li>
+                                Choose the shape that best matches your project.
+                            </li>
+                            <li>
+                                Look at the diagram, input each dimension
+                                according to your measurements
+                            </li>
+                            <li>
+                                Click the <strong>Calculate</strong> button to
+                                display the result in cubic yards
+                            </li>
+                        </ol>
+                        <div className="mb-3">
+                            An image of a skidsteer with a half-yard loader
+                            bucket will appear with an approximation of how many
+                            buckets it might take.
+                        </div>
+                        <div className="mb-3">
+                            This estimate will round up since the calculator
+                            does not figure in compaction.{' '}
+                            <strong>
+                                In reality, it could take more or less, but this
+                                tool should help you get close.
+                            </strong>
+                        </div>
+                        <div className="mb-3">
+                            Note: The{' '}
+                            <span style={{ fontStyle: 'italic' }}>
+                                smallest
+                            </span>{' '}
+                            quantity we will load is a quarter-yard <br />
+                            (1/4yd or 0.25 cubic yards)
+                        </div>
+                    </div>
+                </OverlayPanel>
             </section>
 
             {/* CALCULATOR */}
             <div className={styles.contentWrapper}>
                 {/* Shape Display */}
                 <div className={styles.shapeWrapper}>
-                    <ShapeDisplay shape={shapeSelected} />
+                    <ShapeDisplay
+                        shape={shapeSelected}
+                        dimensions={dimensions}
+                    />
                 </div>
                 <div className={styles.formWrapper}>
-                    <FormDisplay shape={shapeSelected} />
+                    <FormDisplay
+                        shape={shapeSelected}
+                        onFormUpdated={onFormUpdated}
+                    />
                 </div>
             </div>
         </div>
