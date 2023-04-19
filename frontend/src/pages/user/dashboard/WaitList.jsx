@@ -3,12 +3,14 @@ import WaitListForm from '../../../components/user/dashboard/waitlist/WaitListFo
 import { DataTable } from 'primereact/datatable'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
+import { InputText } from 'primereact/inputtext'
 import { ConfirmPopup } from 'primereact/confirmpopup' // To use <ConfirmPopup> tag
 import { confirmPopup } from 'primereact/confirmpopup' // To use confirmPopup method
 import { toast } from 'react-toastify'
 import { fetchUser } from '../../../api/users/usersApi'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteEntry, getEntries } from '../../../api/waitList/waitList'
+import { FilterMatchMode, FilterOperator } from 'primereact/api'
 
 export default function WaitList() {
     const queryClient = useQueryClient()
@@ -97,6 +99,16 @@ export default function WaitList() {
     // ])
     const [rowSelected, setRowSelected] = useState(null)
     const [entryToEdit, setEntryToEdit] = useState(null)
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        lastName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        material: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        phone: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        email: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        status: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    })
+    const [globalFilterValue, setGlobalFilterValue] = useState('')
 
     // Get entries from store
     const entries = useQuery({
@@ -156,6 +168,16 @@ export default function WaitList() {
             reject: () => null,
         })
     }
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value
+        let _filters = { ...filters }
+
+        _filters['global'].value = value
+
+        setFilters(_filters)
+        setGlobalFilterValue(value)
+    }
     // #endregion
 
     // #region TEMPLATES =============================================================================================================================
@@ -195,7 +217,24 @@ export default function WaitList() {
             </div>
         )
     }
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText
+                        value={globalFilterValue}
+                        onChange={onGlobalFilterChange}
+                        placeholder="Keyword Search"
+                    />
+                </span>
+            </div>
+        )
+    }
     // #endregion
+
+    const filterHeader = renderHeader()
 
     return (
         <div>
@@ -210,6 +249,21 @@ export default function WaitList() {
                 selectionMode="single"
                 selection={rowSelected}
                 onSelectionChange={(e) => setRowSelected(e.value)}
+                paginator
+                rows={10}
+                dataKey="id"
+                filters={filters}
+                filterDisplay="row"
+                globalFilterFields={[
+                    'status',
+                    'material',
+                    'quantity',
+                    'firstName',
+                    'lastName',
+                    'phone',
+                    'email',
+                ]}
+                header={filterHeader}
                 stripedRows
                 rowHover
             >
