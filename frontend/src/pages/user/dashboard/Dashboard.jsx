@@ -4,9 +4,10 @@ import HaulsDashboard from './HaulsDashboard'
 import DeliveriesDashboard from './DeliveriesDashboard'
 import VendorsDashboard from './VendorsDashboard'
 import MaterialsDashboard from './MaterialsDashboard'
-import CarportsDashboard from './CarportsDashboard'
+// import CarportsDashboard from './CarportsDashboard'
 import DriversDashboard from './DriversDashboard'
 import CostCalculator from './CostCalculator'
+import WaitList from './WaitList'
 
 function Dashboard({ user }) {
     const [tabsActiveIndex, setTabsActiveIndex] = useState(
@@ -57,6 +58,9 @@ function Dashboard({ user }) {
                 </TabPanel>
                 <TabPanel header="Cost Calculator">
                     <CostCalculator />
+                </TabPanel>
+                <TabPanel header="Wait List">
+                    <WaitList />
                 </TabPanel>
             </TabView>
         </section>

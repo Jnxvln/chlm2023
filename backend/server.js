@@ -29,6 +29,7 @@ app.use('/api/deliveries', require('./routes/deliveryRoutes'))
 app.use('/api/hauls', require('./routes/haulRoutes'))
 app.use('/api/freight-routes', require('./routes/freightRouteRoutes'))
 app.use('/api/workdays', require('./routes/workdayRoutes'))
+app.use('/api/waitlist', require('./routes/waitListRoutes'))
 
 // Service static
 app.use(express.static(path.resolve(__dirname, '../frontend/build')))
