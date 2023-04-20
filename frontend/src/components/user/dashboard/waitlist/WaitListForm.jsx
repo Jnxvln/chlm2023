@@ -104,7 +104,7 @@ export default function WaitListForm({
         mutationFn: ({ form, token }) => updateEntry(form, token),
         onSuccess: (updEntry) => {
             if (updEntry) {
-                toast.success(`Entry updated`, { autoFocus: 3000 })
+                toast.success(`Entry updated`, { autoFocus: 1000 })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
@@ -171,11 +171,11 @@ export default function WaitListForm({
         }
 
         if (!material) {
-            return toast.error('Material is required')
+            return toast.error('Material is required', { autoClose: 3000 })
         }
 
         if (!quantity) {
-            return toast.error('Quantity is required')
+            return toast.error('Quantity is required', { autoClose: 3000 })
         }
 
         if (entryToEdit !== null && isEditIcon) {
