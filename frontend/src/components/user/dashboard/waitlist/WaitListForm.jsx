@@ -104,7 +104,7 @@ export default function WaitListForm({
         mutationFn: ({ form, token }) => updateEntry(form, token),
         onSuccess: (updEntry) => {
             if (updEntry) {
-                toast.success(`Entry updated`, { autoFocus: 1000 })
+                toast.success(`Entry updated`, { autoClose: 1000 })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
