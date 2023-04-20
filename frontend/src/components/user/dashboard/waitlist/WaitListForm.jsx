@@ -265,12 +265,13 @@ export default function WaitListForm({
                         {/* First Name */}
                         <div className="field col">
                             <span className="p-float-label">
-                                <InputText
+                                <InputTextarea
                                     id="firstName"
                                     name="firstName"
                                     value={firstName}
                                     onChange={onChange}
                                     autoFocus
+                                    rows={2}
                                     style={{ width: '100%' }}
                                 />
                                 <label htmlFor="firstName">First Name</label>
@@ -280,11 +281,12 @@ export default function WaitListForm({
                         {/* Last Name */}
                         <div className="field col">
                             <span className="p-float-label">
-                                <InputText
+                                <InputTextarea
                                     id="lastName"
                                     name="lastName"
                                     value={lastName}
                                     onChange={onChange}
+                                    rows={2}
                                     style={{ width: '100%' }}
                                 />
                                 <label htmlFor="lastName">Last Name</label>
@@ -297,11 +299,12 @@ export default function WaitListForm({
                         {/* Phone */}
                         <div className="field col">
                             <span className="p-float-label">
-                                <InputText
+                                <InputTextarea
                                     id="phone"
                                     name="phone"
                                     value={phone}
                                     onChange={onChange}
+                                    rows={2}
                                     style={{ width: '100%' }}
                                 />
                                 <label htmlFor="phone">Phone</label>
@@ -311,11 +314,12 @@ export default function WaitListForm({
                         {/* Email */}
                         <div className="field col">
                             <span className="p-float-label">
-                                <InputText
+                                <InputTextarea
                                     id="email"
                                     name="email"
                                     value={email}
                                     style={{ width: '100%' }}
+                                    rows={2}
                                     onChange={onChange}
                                 />
                                 <label htmlFor="email">E-mail</label>
@@ -328,11 +332,12 @@ export default function WaitListForm({
                         {/* Material */}
                         <div className="field col">
                             <span className="p-float-label">
-                                <InputText
+                                <InputTextarea
                                     id="material"
                                     name="material"
                                     style={{ width: '100%' }}
                                     value={material}
+                                    rows={2}
                                     onChange={onChange}
                                 />
                                 <label htmlFor="material">Material</label>
@@ -342,11 +347,12 @@ export default function WaitListForm({
                         {/* Quantity */}
                         <div className="field col">
                             <span className="p-float-label">
-                                <InputText
+                                <InputTextarea
                                     id="quantity"
                                     name="quantity"
                                     style={{ width: '100%' }}
                                     value={quantity}
+                                    rows={2}
                                     onChange={onChange}
                                 />
                                 <label htmlFor="quantity">Quantity</label>

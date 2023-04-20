@@ -16,87 +16,6 @@ export default function WaitList() {
     const queryClient = useQueryClient()
     const user = useQuery(['user'], fetchUser)
 
-    // const [waitList, setWaitList] = useState([
-    //     {
-    //         _id: 'd023odf90u1rhifg',
-    //         dateCreated:
-    //             'Tue Apr 06 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         dateModified:
-    //             'Tue Apr 14 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         firstName: 'Hector',
-    //         lastName: 'Garcia',
-    //         phone: '888-999-7777',
-    //         email: '',
-    //         material: 'Chopped Limestone',
-    //         quantity: '2pl 4x4',
-    //         status: 'waiting',
-    //         notes: '',
-    //         alert: true,
-    //     },
-    //     {
-    //         _id: 'ik9582hf9ah3fhj',
-    //         dateCreated:
-    //             'Tue Apr 06 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         dateModified: null,
-    //         firstName: 'Joe',
-    //         lastName: 'Williams',
-    //         phone: '505-333-1111',
-    //         email: '',
-    //         material: 'Compost',
-    //         quantity: '6yds',
-    //         status: 'waiting',
-    //         notes: 'Please call his other number: 903-444-2222',
-    //         alert: true,
-    //     },
-    //     {
-    //         _id: 'nKhd93934iawde19jh',
-    //         dateCreated:
-    //             'Tue Apr 07 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         dateModified:
-    //             'Tue Apr 08 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         firstName: 'Thomas',
-    //         lastName: 'Jones',
-    //         phone: '444-222-3333',
-    //         email: '',
-    //         material: 'Cherry Blend',
-    //         quantity: '1/2 PL',
-    //         status: 'informed',
-    //         notes: '',
-    //         alert: false,
-    //     },
-    //     {
-    //         _id: 'BA84fBgjdjOhf92',
-    //         dateCreated:
-    //             'Tue Apr 08 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         dateModified:
-    //             'Tue Apr 09 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         firstName: 'Gloria',
-    //         lastName: 'Pennington',
-    //         phone: '444-111-2222',
-    //         email: 'gloriapenn@test.com',
-    //         material: 'Sm. Round Creek',
-    //         quantity: '5gal bucket',
-    //         status: 'waiting',
-    //         notes: '',
-    //         alert: true,
-    //     },
-    //     {
-    //         _id: 'nJ83jcTcvmajn4j',
-    //         dateCreated:
-    //             'Tue Apr 09 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         dateModified:
-    //             'Tue Apr 12 2023 00:00:00 GMT-0500 (Central Daylight Time)',
-    //         firstName: 'Shawn',
-    //         lastName: 'Bradbury',
-    //         phone: '222-666-5555',
-    //         email: '',
-    //         material: '3x300 Ground Cover',
-    //         quantity: '3 rolls',
-    //         status: 'waiting',
-    //         notes: '',
-    //         alert: true,
-    //     },
-    // ])
     const [rowSelected, setRowSelected] = useState(null)
     const [entryToEdit, setEntryToEdit] = useState(null)
     const [filters, setFilters] = useState({
@@ -181,12 +100,29 @@ export default function WaitList() {
     // #endregion
 
     // #region TEMPLATES =============================================================================================================================
+
+    const firstNameTemplate = (rowData) => {
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.firstName}</div>
+    }
+
+    const lastNameTemplate = (rowData) => {
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.lastName}</div>
+    }
+
+    const phoneTemplate = (rowData) => {
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.phone}</div>
+    }
+
+    const emailTemplate = (rowData) => {
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.email}</div>
+    }
+
     const materialTemplate = (rowData) => {
-        return <div>{rowData.material}</div>
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.material}</div>
     }
 
     const quantityTemplate = (rowData) => {
-        return <div>{rowData.quantity}</div>
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.quantity}</div>
     }
 
     const actionsTemplate = (rowData) => {
@@ -218,9 +154,13 @@ export default function WaitList() {
         )
     }
 
+    const notesTemplate = (rowData) => {
+        return <div style={{ whiteSpace: 'pre' }}>{rowData.notes}</div>
+    }
+
     const renderHeader = () => {
         return (
-            <div className="flex justify-content-end">
+            <div className="flex justify-content-start">
                 <span className="p-input-icon-left">
                     <i className="pi pi-search" />
                     <InputText
@@ -243,6 +183,8 @@ export default function WaitList() {
 
             <WaitListForm />
 
+            <br />
+
             <DataTable
                 value={entries && entries.data}
                 loading={entries && entries.loading}
@@ -251,7 +193,7 @@ export default function WaitList() {
                 onSelectionChange={(e) => setRowSelected(e.value)}
                 paginator
                 rows={10}
-                dataKey="id"
+                dataKey="_id"
                 filters={filters}
                 filterDisplay="row"
                 globalFilterFields={[
@@ -267,7 +209,7 @@ export default function WaitList() {
                 stripedRows
                 rowHover
             >
-                <Column field="status" header="Status"></Column>
+                <Column field="status" header="Status" sortable></Column>
                 <Column
                     field="material"
                     header="Material"
@@ -280,11 +222,36 @@ export default function WaitList() {
                     body={quantityTemplate}
                     sortable
                 ></Column>
-                <Column field="firstName" header="First Name" sortable></Column>
-                <Column field="lastName" header="Last Name" sortable></Column>
-                <Column field="phone" header="Phone" sortable></Column>
-                <Column field="email" header="E-mail" sortable></Column>
-                <Column field="notes" header="Notes" sortable></Column>
+                <Column
+                    field="firstName"
+                    header="First Name"
+                    body={firstNameTemplate}
+                    sortable
+                ></Column>
+                <Column
+                    field="lastName"
+                    header="Last Name"
+                    body={lastNameTemplate}
+                    sortable
+                ></Column>
+                <Column
+                    field="phone"
+                    header="Phone"
+                    body={phoneTemplate}
+                    sortable
+                ></Column>
+                <Column
+                    field="email"
+                    header="E-mail"
+                    body={emailTemplate}
+                    sortable
+                ></Column>
+                <Column
+                    field="notes"
+                    header="Notes"
+                    body={notesTemplate}
+                    sortable
+                ></Column>
                 <Column
                     field="alert"
                     header="Remind?"
