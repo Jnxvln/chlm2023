@@ -99,7 +99,7 @@ export default function WaitListForm({
         mutationFn: ({ form, token }) => createEntry(form, token),
         onSuccess: (entry) => {
             if (entry) {
-                toast.success(`Entry created`, { autoFocus: 3000 })
+                toast.success(`Entry created`, { autoClose: 1000 })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
