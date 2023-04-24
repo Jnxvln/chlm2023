@@ -27,6 +27,9 @@ export const getEntryById = async (entryId, token) => {
 
 // Create entry
 export const createEntry = async (entryData, token) => {
+    // console.log('[waitList api createEntry()] entryData: ')
+    // console.log(entryData)
+
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -39,8 +42,8 @@ export const createEntry = async (entryData, token) => {
 
 // Update entry
 export const updateEntry = async (entryData, token) => {
-    console.log('[waitList.api] Attempting to update entry: ')
-    console.log(entryData)
+    // console.log('[waitList.api] Attempting to update entry: ')
+    // console.log(entryData)
 
     const config = {
         headers: {

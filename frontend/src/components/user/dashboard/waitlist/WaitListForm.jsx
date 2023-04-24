@@ -6,8 +6,12 @@ import { InputText } from 'primereact/inputtext'
 import { Dropdown } from 'primereact/dropdown'
 import { Checkbox } from 'primereact/checkbox'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { AutoComplete } from 'primereact/autocomplete'
+import { Chips } from 'primereact/chips'
+// import { ListBox } from 'primereact/listbox'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { fetchUser } from '../../../../api/users/usersApi'
+import { getActiveMaterials } from '../../../../api/materials/materialsApi'
 import { createEntry, updateEntry } from '../../../../api/waitList/waitList'
 
 export default function WaitListForm({
@@ -28,6 +32,8 @@ export default function WaitListForm({
         phone: '',
         email: '',
         material: '',
+        tags: [],
+        tagsNames: [],
         quantity: '',
         status: '',
         notes: '',
@@ -36,6 +42,9 @@ export default function WaitListForm({
 
     const [visible, setVisible] = useState(false)
     const [form, setForm] = useState(initialForm)
+    const [selectedMaterial, setSelectedMaterial] = useState(null)
+    const [filteredMaterials, setFilteredMaterials] = useState(null)
+    const [materialsChosen, setMaterialsChosen] = useState()
     const [statuses] = useState([
         {
             name: 'Choose',
@@ -65,11 +74,24 @@ export default function WaitListForm({
         phone,
         email,
         material,
+        tags,
+        tagsNames,
         quantity,
         status,
         notes,
         reminder,
     } = form
+
+    const materials = useQuery({
+        queryKey: ['materials'],
+        queryFn: getActiveMaterials,
+        onError: (err) => {
+            const errMsg = 'Error fetching materials for WaitList'
+            toast.error('Error fetching materials for wait list', {
+                autoClose: 5000,
+            })
+        },
+    })
 
     // Create entry mutation
     const mutationCreateEntry = useMutation({
@@ -104,7 +126,7 @@ export default function WaitListForm({
         mutationFn: ({ form, token }) => updateEntry(form, token),
         onSuccess: (updEntry) => {
             if (updEntry) {
-                toast.success(`Entry updated`, { autoFocus: 3000 })
+                toast.success(`Entry updated`, { autoClose: 1000 })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
@@ -119,9 +141,9 @@ export default function WaitListForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: 5000 })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: 5000 })
             }
         },
     })
@@ -167,16 +189,21 @@ export default function WaitListForm({
 
         // #region ERROR CHECKS
         if (!phone) {
-            return toast.error('Phone is required', { autoClose: 3000 })
+            return toast.error('Phone is required', { autoClose: 5000 })
         }
 
         if (!material) {
-            return toast.error('Material is required')
+            return toast.error('Material is required', { autoClose: 5000 })
         }
 
         if (!quantity) {
-            return toast.error('Quantity is required')
+            return toast.error('Quantity is required', { autoClose: 5000 })
         }
+
+        // console.log('FORM: ')
+        // console.log(form)
+
+        // console.log('Attempting to simplify material field: ')
 
         if (entryToEdit !== null && isEditIcon) {
             // Update entry
@@ -202,6 +229,60 @@ export default function WaitListForm({
             reminder: e.checked,
         }))
     }
+
+    const searchMaterial = (event) => {
+        if (materials && materials.data) {
+            let _filteredMaterials
+
+            if (!event.query.trim().length) {
+                _filteredMaterials = [...materials]
+            } else {
+                _filteredMaterials = materials.data.filter((material) => {
+                    return material.name
+                        .toLowerCase()
+                        .includes(event.query.toLowerCase())
+                })
+            }
+
+            setFilteredMaterials(_filteredMaterials)
+        }
+    }
+
+    const onTagSelected = (e) => {
+        setForm((prevState) => ({
+            ...prevState,
+            tags: [...prevState.tags, e.value._id],
+        }))
+
+        setForm((prevState) => ({
+            ...prevState,
+            tagsNames: [...prevState.tagsNames, e.value.name],
+        }))
+    }
+
+    const tagsToNames = (tags) => {
+        let names = []
+
+        for (let i = 0; i < tags.length; i++) {
+            names.push(materials.data.find((mat) => mat._id === tags[i]).name)
+        }
+
+        return names
+    }
+
+    const onTagsNamesChanged = (e) => {
+        // Cross-reference visible field to update
+        let ids = []
+        for (let i = 0; i < e.value.length; i++) {
+            ids.push(materials.data.find((mat) => mat.name === e.value[i])._id)
+        }
+
+        setForm((prevState) => ({
+            ...prevState,
+            tagsNames: e.value,
+            tags: ids,
+        }))
+    }
     // #endregion
 
     useEffect(() => {
@@ -214,6 +295,11 @@ export default function WaitListForm({
                 phone: entryToEdit.phone,
                 email: entryToEdit.email,
                 material: entryToEdit.material,
+                // material: entryToEdit ? _material : entryToEdit.material,
+                tags: entryToEdit.tags ? entryToEdit.tags : [],
+                tagsNames: entryToEdit.tags
+                    ? tagsToNames(entryToEdit.tags)
+                    : [],
                 quantity: entryToEdit.quantity,
                 status: entryToEdit.status,
                 notes: entryToEdit.notes,
@@ -222,6 +308,13 @@ export default function WaitListForm({
             setVisible(true)
         }
     }, [entryToEdit, visible])
+
+    // useEffect(() => {
+    //     if (form && form.tags && form.tags.length > 0) {
+    //         // console.log('[WaitListForm useEffect()] Tags: ')
+    //         // console.log(form.tags)
+    //     }
+    // }, [form.tags])
 
     return (
         <div>
@@ -337,10 +430,20 @@ export default function WaitListForm({
                                     name="material"
                                     style={{ width: '100%' }}
                                     value={material}
-                                    rows={2}
+                                    rows={4}
                                     onChange={onChange}
                                 />
                                 <label htmlFor="material">Material</label>
+                                {/* <ListBox
+                                    value={material}
+                                    options={material}
+                                    optionLabel="name"
+                                    // optionLabel={isEditIcon && 'name'}
+                                    style={{
+                                        height: '100px',
+                                        overflowY: 'scroll',
+                                    }}
+                                /> */}
                             </span>
                         </div>
 
@@ -352,11 +455,55 @@ export default function WaitListForm({
                                     name="quantity"
                                     style={{ width: '100%' }}
                                     value={quantity}
-                                    rows={2}
+                                    rows={4}
                                     onChange={onChange}
                                 />
                                 <label htmlFor="quantity">Quantity</label>
                             </span>
+                        </div>
+                    </div>
+
+                    {/* TAGS */}
+                    <div className="formgrid grid mb-3">
+                        <div className="field col">
+                            <span className="p-float-label">
+                                <AutoComplete
+                                    id="matSearch"
+                                    field="name"
+                                    value={selectedMaterial}
+                                    suggestions={filteredMaterials}
+                                    completeMethod={searchMaterial}
+                                    className="p-inputtext-sm"
+                                    onSelect={(e) => onTagSelected(e)}
+                                    style={{ width: '100%' }}
+                                />
+                                <label htmlFor="matSearch">
+                                    Search Materials...
+                                </label>
+                            </span>
+                        </div>
+
+                        <div className="field col">
+                            <span className="p-float-label">
+                                <Chips
+                                    id="tagsNames"
+                                    value={tagsNames}
+                                    separator=","
+                                    allowDuplicate={false}
+                                    onAdd={() => {
+                                        return false
+                                    }}
+                                    onChange={(e) => onTagsNamesChanged(e)}
+                                />
+                                <label htmlFor="tagsNames">Tags</label>
+                            </span>
+                            <Chips
+                                id="tags"
+                                value={tags}
+                                allowDuplicate={false}
+                                separator=","
+                                style={{ display: 'none' }}
+                            />
                         </div>
                     </div>
 

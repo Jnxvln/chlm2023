@@ -18,9 +18,18 @@ const waitListSchema = mongoose.Schema(
             type: String,
             required: false,
         },
+        // material: {
+        //     type: [mongoose.SchemaTypes.ObjectId],
+        //     ref: 'Material',
+        //     required: [true, 'At least one material is required'],
+        // },
         material: {
             type: String,
-            required: [true, 'Material is required'],
+            required: [true, 'At least one material is required'],
+        },
+        tags: {
+            type: [String],
+            required: false,
         },
         quantity: {
             type: String,
