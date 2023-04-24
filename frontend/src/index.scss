@@ -379,6 +379,15 @@ tr.spacer td {
     background-color: rgb(39, 39, 39) !important;
 }
 
+.p-listbox-item {
+    // border: 2px solid orange !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+.p-listbox-item:first-child {
+    padding-top: 0.8em !important;
+}
+
 @media print {
     .noPrint,
     .noPrint * {

@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const WaitList = require('../models/waitListModel')
+const mongoose = require('mongoose')
 
 // @desc    Get entries
 // @route   GET /api/waitlist
@@ -23,29 +24,41 @@ const getEntryById = asyncHandler(async (req, res) => {
 // @route   POST /api/waitlist
 // @access  Private
 const createEntry = asyncHandler(async (req, res) => {
-    if (
-        !req.body.phone ||
-        !req.body.material ||
-        !req.body.quantity ||
-        !req.body.status
-    ) {
+    // console.log('[SERVER waitListController createEntry] REQ.BODY: ')
+    // console.log(req.body)
+    // let _reqBody = req.body
+
+    // for (let i = 0; i < req.body.material.length; i++) {
+    //     _reqBody.material[i] = mongoose.Types.ObjectId(_reqBody.material[i]._id)
+    // }
+
+    // console.log(
+    //     '[SERVER waitListController createEntry]: REFINED DATA _reqBody: '
+    // )
+    // console.log(_reqBody)
+
+    if (!req.body.phone || !req.body.quantity || !req.body.status) {
         res.status(400)
         throw new Error(
             'Please provide all required fields (phone, material, quantity, status)'
         )
     }
 
-    const entryExists = await WaitList.findOne({
-        phone: { $regex: req.body.phone, $options: 'i' },
-        material: { $regex: req.body.material, $options: 'i' },
-    })
+    // const entryExists = await WaitList.findOne({
+    //     phone: { $regex: req.body.phone, $options: 'i' },
+    //     material: { $regex: req.body.material, $options: 'i' },
+    // })
 
-    if (entryExists) {
-        res.status(400)
-        throw new Error(
-            `Entry for "${req.body.firstName} ${req.body.lastName}, ${req.body.quantity} ${req.body.material}" already exists`
-        )
-    }
+    // if (entryExists) {
+    //     res.status(400)
+    //     throw new Error(
+    //         `Entry for "${req.body.firstName} ${req.body.lastName}, ${req.body.quantity} ${req.body.material}" already exists`
+    //     )
+    // }
+
+    console.log(
+        '[SERVER waitListController createEntry] Passed validations, attempting to create...'
+    )
 
     const entry = await WaitList.create({
         firstName: req.body.firstName,
@@ -58,6 +71,9 @@ const createEntry = asyncHandler(async (req, res) => {
         notes: req.body.notes,
         reminder: req.body.reminder,
     })
+
+    console.log('[SERVER waitListController createEntry] Created entry: ')
+    console.log(entry)
 
     res.status(200).json(entry)
 })

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import WaitListForm from '../../../components/user/dashboard/waitlist/WaitListForm'
+import { Badge } from 'primereact/badge'
 import { DataTable } from 'primereact/datatable'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
@@ -10,6 +11,7 @@ import { toast } from 'react-toastify'
 import { fetchUser } from '../../../api/users/usersApi'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteEntry, getEntries } from '../../../api/waitList/waitList'
+import { getActiveMaterials } from '../../../api/materials/materialsApi'
 import { FilterMatchMode, FilterOperator } from 'primereact/api'
 
 export default function WaitList() {
@@ -39,6 +41,17 @@ export default function WaitList() {
             const errMsg = 'Error fetching waitlist entries'
             console.log(errMsg)
             console.log(err)
+        },
+    })
+
+    const materials = useQuery({
+        queryKey: ['materials'],
+        queryFn: getActiveMaterials,
+        onError: (err) => {
+            const errMsg = 'Error fetching materials for wait list table'
+            console.log(errMsg)
+            console.log(err)
+            toast.error(errMsg, { autoClose: 5000 })
         },
     })
 
@@ -90,12 +103,27 @@ export default function WaitList() {
 
     const onGlobalFilterChange = (e) => {
         const value = e.target.value
+        // console.log('[WaitList onGlobalFilterChange] value: ')
+        // console.log(value)
         let _filters = { ...filters }
 
-        _filters['global'].value = value
+        let materialMatch =
+            materials && materials.data
+                ? materials.data.filter((mat) => mat._id)
+                : null
+
+        if (materialMatch) {
+            _filters['global'].value = materialMatch
+        } else {
+            _filters['global'].value = value
+        }
 
         setFilters(_filters)
         setGlobalFilterValue(value)
+    }
+
+    const capitalize = (string) => {
+        return string[0].toUpperCase() + string.slice(1)
     }
     // #endregion
 
@@ -117,12 +145,99 @@ export default function WaitList() {
         return <div style={{ whiteSpace: 'pre' }}>{rowData.email}</div>
     }
 
+    const materialsIdToDiv = (matId) => {
+        // console.log('[WaitList materialIdToName()] material id passed: ')
+        // console.log(matId)
+
+        if (materials && materials.data && materials.data.length > 0) {
+            return (
+                <div style={{ whiteSpace: 'pre' }}>
+                    {materials.data.find((mat) => mat._id === matId)
+                        ? materials.data.find((mat) => mat._id === matId).name
+                        : '<Error>'}
+                </div>
+            )
+        }
+    }
+
     const materialTemplate = (rowData) => {
         return <div style={{ whiteSpace: 'pre' }}>{rowData.material}</div>
     }
 
     const quantityTemplate = (rowData) => {
         return <div style={{ whiteSpace: 'pre' }}>{rowData.quantity}</div>
+    }
+
+    const stockTemplate = (rowData) => {
+        let _stocks = []
+
+        for (let i = 0; i < rowData.tags.length; i++) {
+            _stocks.push(
+                materials.data.find((mat) => mat._id === rowData.tags[i]).stock
+            )
+        }
+
+        let divs = []
+        for (let i = 0; i < _stocks.length; i++) {
+            switch (_stocks[i].toLowerCase()) {
+                case 'notavail':
+                    divs.push(
+                        <div
+                            key={`stk-${i}`}
+                            style={{
+                                color: '#525252',
+                                fontWeight: 'normal',
+                                fontStyle: 'italic',
+                            }}
+                        >
+                            Not Avail.
+                        </div>
+                    )
+                    break
+                case 'new':
+                    divs.push(
+                        <div
+                            key={`stk-${i}`}
+                            style={{ color: '#039F58', fontWeight: 'bold' }}
+                        >
+                            New
+                        </div>
+                    )
+                    break
+                case 'in':
+                    divs.push(
+                        <div
+                            key={`stk-${i}`}
+                            style={{ color: 'black', fontWeight: 'bold' }}
+                        >
+                            In
+                        </div>
+                    )
+                    break
+                case 'low':
+                    divs.push(
+                        <div
+                            key={`stk-${i}`}
+                            style={{ color: 'orange', fontWeight: 'bold' }}
+                        >
+                            Low
+                        </div>
+                    )
+                    break
+                case 'out':
+                    divs.push(
+                        <div
+                            key={`stk-${i}`}
+                            style={{ color: 'red', fontWeight: 'bold' }}
+                        >
+                            Out
+                        </div>
+                    )
+                    break
+            }
+        }
+
+        return <div style={{ whiteSpace: 'pre' }}>{divs}</div>
     }
 
     const actionsTemplate = (rowData) => {
@@ -216,11 +331,17 @@ export default function WaitList() {
                     body={materialTemplate}
                     sortable
                 ></Column>
+
                 <Column
                     field="quantity"
                     header="Quantity"
                     body={quantityTemplate}
                     sortable
+                ></Column>
+                <Column
+                    field="tags"
+                    header="Stock"
+                    body={stockTemplate}
                 ></Column>
                 <Column
                     field="firstName"
