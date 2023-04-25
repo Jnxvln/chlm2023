@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import dayjs from 'dayjs'
 import WaitListForm from '../../../components/user/dashboard/waitlist/WaitListForm'
 import { Badge } from 'primereact/badge'
 import { DataTable } from 'primereact/datatable'
@@ -137,6 +138,10 @@ export default function WaitList() {
     // #endregion
 
     // #region TEMPLATES =============================================================================================================================
+
+    const createdAtTemplate = (rowData) => {
+        return <div>{dayjs(rowData.createdAt).format('MM/DD/YY')}</div>
+    }
 
     const firstNameTemplate = (rowData) => {
         return <div style={{ whiteSpace: 'pre' }}>{rowData.firstName}</div>
@@ -339,6 +344,12 @@ export default function WaitList() {
                 stripedRows
                 rowHover
             >
+                <Column
+                    field="createdAt"
+                    header="Created"
+                    body={createdAtTemplate}
+                    sortable
+                ></Column>
                 <Column field="status" header="Status" sortable></Column>
                 <Column
                     field="material"
