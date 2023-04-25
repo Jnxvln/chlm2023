@@ -388,6 +388,11 @@ tr.spacer td {
     padding-top: 0.8em !important;
 }
 
+#matSearch input {
+    width: 100% !important;
+    // border: 1px solid red;
+}
+
 @media print {
     .noPrint,
     .noPrint * {
