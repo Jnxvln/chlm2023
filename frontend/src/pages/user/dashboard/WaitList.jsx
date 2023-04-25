@@ -102,24 +102,33 @@ export default function WaitList() {
     }
 
     const onGlobalFilterChange = (e) => {
-        const value = e.target.value
-        // console.log('[WaitList onGlobalFilterChange] value: ')
-        // console.log(value)
-        let _filters = { ...filters }
-
-        let materialMatch =
-            materials && materials.data
-                ? materials.data.filter((mat) => mat._id)
-                : null
-
-        if (materialMatch) {
-            _filters['global'].value = materialMatch
+        if (e.target.value === '') {
+            let _filters = { ...filters }
+            _filters['global'].value = ''
+            setFilters(_filters)
+            setGlobalFilterValue(e.target.value)
         } else {
-            _filters['global'].value = value
-        }
+            const value = e.target.value
+            let _filters = { ...filters }
 
-        setFilters(_filters)
-        setGlobalFilterValue(value)
+            let entryMatch =
+                entries && entries.data
+                    ? entries.data.find((mat) =>
+                          mat.material
+                              .toLowerCase()
+                              .includes(value.toLowerCase())
+                      )
+                    : null
+
+            if (entryMatch) {
+                _filters['global'].value = entryMatch.material
+            } else {
+                _filters['global'].value = value
+            }
+
+            setFilters(_filters)
+            setGlobalFilterValue(value)
+        }
     }
 
     const capitalize = (string) => {
@@ -169,75 +178,80 @@ export default function WaitList() {
     }
 
     const stockTemplate = (rowData) => {
-        let _stocks = []
+        if (materials && materials.data) {
+            let _stocks = []
 
-        for (let i = 0; i < rowData.tags.length; i++) {
-            _stocks.push(
-                materials.data.find((mat) => mat._id === rowData.tags[i]).stock
-            )
-        }
-
-        let divs = []
-        for (let i = 0; i < _stocks.length; i++) {
-            switch (_stocks[i].toLowerCase()) {
-                case 'notavail':
-                    divs.push(
-                        <div
-                            key={`stk-${i}`}
-                            style={{
-                                color: '#525252',
-                                fontWeight: 'normal',
-                                fontStyle: 'italic',
-                            }}
-                        >
-                            Not Avail.
-                        </div>
-                    )
-                    break
-                case 'new':
-                    divs.push(
-                        <div
-                            key={`stk-${i}`}
-                            style={{ color: '#039F58', fontWeight: 'bold' }}
-                        >
-                            New
-                        </div>
-                    )
-                    break
-                case 'in':
-                    divs.push(
-                        <div
-                            key={`stk-${i}`}
-                            style={{ color: 'black', fontWeight: 'bold' }}
-                        >
-                            In
-                        </div>
-                    )
-                    break
-                case 'low':
-                    divs.push(
-                        <div
-                            key={`stk-${i}`}
-                            style={{ color: 'orange', fontWeight: 'bold' }}
-                        >
-                            Low
-                        </div>
-                    )
-                    break
-                case 'out':
-                    divs.push(
-                        <div
-                            key={`stk-${i}`}
-                            style={{ color: 'red', fontWeight: 'bold' }}
-                        >
-                            Out
-                        </div>
-                    )
-                    break
+            for (let i = 0; i < rowData.tags.length; i++) {
+                _stocks.push(
+                    materials.data.find((mat) => mat._id === rowData.tags[i])
+                        .stock
+                )
             }
-        }
 
-        return <div style={{ whiteSpace: 'pre' }}>{divs}</div>
+            let divs = []
+            for (let i = 0; i < _stocks.length; i++) {
+                switch (_stocks[i].toLowerCase()) {
+                    case 'notavail':
+                        divs.push(
+                            <div
+                                key={`stk-${i}`}
+                                style={{
+                                    color: '#525252',
+                                    fontWeight: 'normal',
+                                    fontStyle: 'italic',
+                                }}
+                            >
+                                Not Avail.
+                            </div>
+                        )
+                        break
+                    case 'new':
+                        divs.push(
+                            <div
+                                key={`stk-${i}`}
+                                style={{ color: '#039F58', fontWeight: 'bold' }}
+                            >
+                                New
+                            </div>
+                        )
+                        break
+                    case 'in':
+                        divs.push(
+                            <div
+                                key={`stk-${i}`}
+                                style={{ color: 'black', fontWeight: 'bold' }}
+                            >
+                                In
+                            </div>
+                        )
+                        break
+                    case 'low':
+                        divs.push(
+                            <div
+                                key={`stk-${i}`}
+                                style={{ color: 'orange', fontWeight: 'bold' }}
+                            >
+                                Low
+                            </div>
+                        )
+                        break
+                    case 'out':
+                        divs.push(
+                            <div
+                                key={`stk-${i}`}
+                                style={{ color: 'red', fontWeight: 'bold' }}
+                            >
+                                Out
+                            </div>
+                        )
+                        break
+                }
+            }
+
+            return <div style={{ whiteSpace: 'pre' }}>{divs}</div>
+        } else {
+            return '<ERR>'
+        }
     }
 
     const actionsTemplate = (rowData) => {
@@ -308,6 +322,7 @@ export default function WaitList() {
                 onSelectionChange={(e) => setRowSelected(e.value)}
                 paginator
                 rows={10}
+                size="small"
                 dataKey="_id"
                 filters={filters}
                 filterDisplay="row"

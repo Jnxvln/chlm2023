@@ -13,6 +13,7 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { fetchUser } from '../../../../api/users/usersApi'
 import { getActiveMaterials } from '../../../../api/materials/materialsApi'
 import { createEntry, updateEntry } from '../../../../api/waitList/waitList'
+import styles from './WaitListForm.module.scss'
 
 export default function WaitListForm({
     entryToEdit,
@@ -473,9 +474,8 @@ export default function WaitListForm({
                                     value={selectedMaterial}
                                     suggestions={filteredMaterials}
                                     completeMethod={searchMaterial}
-                                    className="p-inputtext-sm"
+                                    // className="p-inputtext-sm"
                                     onSelect={(e) => onTagSelected(e)}
-                                    style={{ width: '100%' }}
                                 />
                                 <label htmlFor="matSearch">
                                     Search Materials...
@@ -494,6 +494,7 @@ export default function WaitListForm({
                                         return false
                                     }}
                                     onChange={(e) => onTagsNamesChanged(e)}
+                                    tabIndex={-1}
                                 />
                                 <label htmlFor="tagsNames">Tags</label>
                             </span>
@@ -503,6 +504,7 @@ export default function WaitListForm({
                                 allowDuplicate={false}
                                 separator=","
                                 style={{ display: 'none' }}
+                                tabIndex={-1}
                             />
                         </div>
                     </div>
