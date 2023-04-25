@@ -219,7 +219,7 @@ export default function WaitList() {
                         divs.push(
                             <div
                                 key={`stk-${i}`}
-                                style={{ color: 'black', fontWeight: 'bold' }}
+                                style={{ color: '#0C6C07', fontWeight: 'bold' }}
                             >
                                 In
                             </div>
@@ -357,6 +357,7 @@ export default function WaitList() {
                     field="tags"
                     header="Stock"
                     body={stockTemplate}
+                    sortable
                 ></Column>
                 <Column
                     field="firstName"
