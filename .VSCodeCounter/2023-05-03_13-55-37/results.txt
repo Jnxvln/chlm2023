@@ -1,0 +1,316 @@
+Date : 2023-05-03 13:55:37
+Directory : d:\JUSTIN\CODE\chlm\chlm2023
+Total : 196 files,  59821 codes, 2300 comments, 3219 blanks, all 65340 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JSON           |          6 |     32,650 |          0 |          6 |     32,656 |
+| JavaScript JSX |         78 |     20,153 |      1,588 |      2,037 |     23,778 |
+| JavaScript     |         86 |      4,868 |        562 |        830 |      6,260 |
+| SCSS           |         21 |      2,082 |        126 |        320 |      2,528 |
+| Markdown       |          1 |         26 |          0 |         21 |         47 |
+| HTML           |          1 |         20 |         23 |          1 |         44 |
+| CSS            |          2 |         11 |          0 |          4 |         15 |
+| XML            |          1 |         11 |          1 |          0 |         12 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                |        196 |     59,821 |      2,300 |      3,219 |     65,340 |
+| . (Files)                                                                                                                        |          3 |      3,064 |          0 |          3 |      3,067 |
+| backend                                                                                                                          |         45 |      2,103 |        336 |        457 |      2,896 |
+| backend (Files)                                                                                                                  |          1 |         33 |          5 |          8 |         46 |
+| backend\config                                                                                                                   |          1 |         26 |          0 |          5 |         31 |
+| backend\controllers                                                                                                              |         13 |      1,126 |        276 |        318 |      1,720 |
+| backend\middleware                                                                                                               |          2 |         32 |          3 |         11 |         46 |
+| backend\models                                                                                                                   |         13 |        638 |          5 |         39 |        682 |
+| backend\routes                                                                                                                   |         14 |        225 |         41 |         70 |        336 |
+| backend\utils                                                                                                                    |          1 |         23 |          6 |          6 |         35 |
+| frontend                                                                                                                         |        148 |     54,654 |      1,964 |      2,759 |     59,377 |
+| frontend (Files)                                                                                                                 |          3 |     29,587 |          0 |         23 |     29,610 |
+| frontend\public                                                                                                                  |          2 |         45 |         23 |          2 |         70 |
+| frontend\src                                                                                                                     |        143 |     25,022 |      1,941 |      2,734 |     29,697 |
+| frontend\src (Files)                                                                                                             |          7 |        550 |         44 |         95 |        689 |
+| frontend\src\api                                                                                                                 |         13 |        611 |         69 |        133 |        813 |
+| frontend\src\api\deliveries                                                                                                      |          1 |         42 |          4 |         10 |         56 |
+| frontend\src\api\deliveryClients                                                                                                 |          1 |         51 |          5 |         12 |         68 |
+| frontend\src\api\drivers                                                                                                         |          1 |         51 |         12 |         13 |         76 |
+| frontend\src\api\freightRoutes                                                                                                   |          1 |         51 |          5 |         10 |         66 |
+| frontend\src\api\hauls                                                                                                           |          1 |         67 |          6 |         14 |         87 |
+| frontend\src\api\materialCategories                                                                                              |          1 |         11 |          1 |          3 |         15 |
+| frontend\src\api\materials                                                                                                       |          1 |         50 |          4 |          6 |         60 |
+| frontend\src\api\users                                                                                                           |          1 |         22 |          4 |         10 |         36 |
+| frontend\src\api\vendorLocations                                                                                                 |          1 |         42 |          4 |          9 |         55 |
+| frontend\src\api\vendorProducts                                                                                                  |          1 |         51 |          5 |         10 |         66 |
+| frontend\src\api\vendors                                                                                                         |          1 |         42 |          4 |          9 |         55 |
+| frontend\src\api\waitList                                                                                                        |          1 |         51 |          9 |         13 |         73 |
+| frontend\src\api\workdays                                                                                                        |          1 |         80 |          6 |         14 |        100 |
+| frontend\src\app                                                                                                                 |          1 |         27 |          0 |          2 |         29 |
+| frontend\src\assets                                                                                                              |          1 |         11 |          1 |          0 |         12 |
+| frontend\src\assets\images                                                                                                       |          1 |         11 |          1 |          0 |         12 |
+| frontend\src\components                                                                                                          |         70 |     12,743 |      1,073 |      1,343 |     15,159 |
+| frontend\src\components (Files)                                                                                                  |          2 |         43 |          1 |          6 |         50 |
+| frontend\src\components\Landing                                                                                                  |         18 |      1,459 |         47 |        173 |      1,679 |
+| frontend\src\components\Landing\Bulletin                                                                                         |          4 |        164 |          0 |         24 |        188 |
+| frontend\src\components\Landing\Bulletin (Files)                                                                                 |          2 |         66 |          0 |         12 |         78 |
+| frontend\src\components\Landing\Bulletin\BulletinArticle                                                                         |          2 |         98 |          0 |         12 |        110 |
+| frontend\src\components\Landing\Delivery                                                                                         |          2 |        242 |          8 |         23 |        273 |
+| frontend\src\components\Landing\EagleCarports                                                                                    |          2 |        286 |         21 |         34 |        341 |
+| frontend\src\components\Landing\Help                                                                                             |          2 |        138 |          2 |         17 |        157 |
+| frontend\src\components\Landing\HowMuch                                                                                          |          2 |        164 |         10 |         18 |        192 |
+| frontend\src\components\Landing\LandingHeader                                                                                    |          2 |        159 |          4 |         17 |        180 |
+| frontend\src\components\Landing\MaterialBrowser                                                                                  |          4 |        306 |          2 |         40 |        348 |
+| frontend\src\components\Landing\MaterialBrowser (Files)                                                                          |          2 |        240 |          0 |         31 |        271 |
+| frontend\src\components\Landing\MaterialBrowser\MaterialBrowserItem                                                              |          2 |         66 |          2 |          9 |         77 |
+| frontend\src\components\Materials                                                                                                |          6 |        952 |         74 |         61 |      1,087 |
+| frontend\src\components\Materials\MaterialCard                                                                                   |          2 |        174 |          6 |         22 |        202 |
+| frontend\src\components\Materials\MaterialsHeader                                                                                |          4 |        778 |         68 |         39 |        885 |
+| frontend\src\components\Materials\MaterialsHeader (Files)                                                                        |          2 |         58 |          0 |          6 |         64 |
+| frontend\src\components\Materials\MaterialsHeader\FilterBar                                                                      |          2 |        720 |         68 |         33 |        821 |
+| frontend\src\components\dialogComponents                                                                                         |          2 |        198 |          3 |         13 |        214 |
+| frontend\src\components\layout                                                                                                   |          5 |        191 |         11 |         27 |        229 |
+| frontend\src\components\layout (Files)                                                                                           |          1 |          5 |          0 |          3 |          8 |
+| frontend\src\components\layout\Footer                                                                                            |          2 |         57 |          0 |         10 |         67 |
+| frontend\src\components\layout\Header                                                                                            |          2 |        129 |         11 |         14 |        154 |
+| frontend\src\components\user                                                                                                     |         37 |      9,900 |        937 |      1,063 |     11,900 |
+| frontend\src\components\user\dashboard                                                                                           |         37 |      9,900 |        937 |      1,063 |     11,900 |
+| frontend\src\components\user\dashboard\deliveries                                                                                |          7 |      2,094 |        208 |        225 |      2,527 |
+| frontend\src\components\user\dashboard\drivers                                                                                   |          2 |        599 |         57 |         55 |        711 |
+| frontend\src\components\user\dashboard\hauls                                                                                     |          9 |      2,058 |        182 |        218 |      2,458 |
+| frontend\src\components\user\dashboard\materials                                                                                 |          2 |        950 |        117 |         82 |      1,149 |
+| frontend\src\components\user\dashboard\vendors                                                                                   |         13 |      3,171 |        284 |        372 |      3,827 |
+| frontend\src\components\user\dashboard\waitlist                                                                                  |          2 |        476 |         47 |         47 |        570 |
+| frontend\src\components\user\dashboard\workdays                                                                                  |          2 |        552 |         42 |         64 |        658 |
+| frontend\src\features                                                                                                            |         22 |      1,933 |        144 |        215 |      2,292 |
+| frontend\src\features\auth                                                                                                       |          2 |        115 |         12 |         22 |        149 |
+| frontend\src\features\deliveries                                                                                                 |          2 |        208 |         17 |         24 |        249 |
+| frontend\src\features\deliveryClients                                                                                            |          2 |        217 |         17 |         23 |        257 |
+| frontend\src\features\drivers                                                                                                    |          2 |        185 |         14 |         20 |        219 |
+| frontend\src\features\freightRoutes                                                                                              |          2 |        195 |         13 |         20 |        228 |
+| frontend\src\features\hauls                                                                                                      |          2 |        179 |         16 |         20 |        215 |
+| frontend\src\features\materialCategory                                                                                           |          2 |         72 |          3 |         10 |         85 |
+| frontend\src\features\materials                                                                                                  |          2 |        212 |         13 |         16 |        241 |
+| frontend\src\features\vendorLocations                                                                                            |          2 |        198 |         13 |         20 |        231 |
+| frontend\src\features\vendorProducts                                                                                             |          2 |        167 |         13 |         20 |        200 |
+| frontend\src\features\vendors                                                                                                    |          2 |        185 |         13 |         20 |        218 |
+| frontend\src\pages                                                                                                               |         27 |      9,127 |        609 |        941 |     10,677 |
+| frontend\src\pages (Files)                                                                                                       |          4 |         46 |          8 |         15 |         69 |
+| frontend\src\pages\Calculator                                                                                                    |          5 |      3,418 |        187 |        253 |      3,858 |
+| frontend\src\pages\Calculator (Files)                                                                                            |          3 |      1,037 |         37 |         60 |      1,134 |
+| frontend\src\pages\Calculator\FormDispay                                                                                         |          2 |      2,381 |        150 |        193 |      2,724 |
+| frontend\src\pages\Help                                                                                                          |          2 |        998 |         72 |        143 |      1,213 |
+| frontend\src\pages\Materials                                                                                                     |          2 |         10 |          0 |          3 |         13 |
+| frontend\src\pages\user                                                                                                          |         14 |      4,655 |        342 |        527 |      5,524 |
+| frontend\src\pages\user (Files)                                                                                                  |          2 |        330 |         20 |         41 |        391 |
+| frontend\src\pages\user\dashboard                                                                                                |         12 |      4,325 |        322 |        486 |      5,133 |
+| frontend\src\styles                                                                                                              |          2 |         20 |          1 |          5 |         26 |
+| frontend\src\styles (Files)                                                                                                      |          1 |          9 |          1 |          2 |         12 |
+| frontend\src\styles\user                                                                                                         |          1 |         11 |          0 |          3 |         14 |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                                         | language       | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\JUSTIN\CODE\chlm\chlm2023\.prettierrc                                                                                         | JSON           |          6 |          0 |          1 |          7 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\config\db.js                                                                                | JavaScript     |         26 |          0 |          5 |         31 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\deliveryClientController.js                                                     | JavaScript     |         97 |         19 |         20 |        136 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\deliveryController.js                                                           | JavaScript     |         90 |         16 |         21 |        127 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\driverController.js                                                             | JavaScript     |         77 |         15 |         20 |        112 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\freightRouteController.js                                                       | JavaScript     |         82 |         15 |         23 |        120 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\haulController.js                                                               | JavaScript     |        185 |         29 |         45 |        259 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\materialCategoryController.js                                                   | JavaScript     |         56 |         12 |         18 |         86 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\materialController.js                                                           | JavaScript     |         57 |         12 |         19 |         88 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\userController.js                                                               | JavaScript     |         81 |         14 |         17 |        112 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\vendorController.js                                                             | JavaScript     |         66 |         24 |         22 |        112 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\vendorLocationController.js                                                     | JavaScript     |         62 |         12 |         20 |         94 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\vendorProductController.js                                                      | JavaScript     |         76 |         19 |         23 |        118 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\waitListController.js                                                           | JavaScript     |         73 |         35 |         28 |        136 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\workdayController.js                                                            | JavaScript     |        124 |         54 |         42 |        220 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\middleware\authMiddleware.js                                                                | JavaScript     |         23 |          3 |          8 |         34 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\middleware\errorMiddleware.js                                                               | JavaScript     |          9 |          0 |          3 |         12 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\deliveryClientModel.js                                                               | JavaScript     |         47 |          0 |          3 |         50 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\deliveryModel.js                                                                     | JavaScript     |         66 |          0 |          3 |         69 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\driverModel.js                                                                       | JavaScript     |         55 |          0 |          3 |         58 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\freightRouteModel.js                                                                 | JavaScript     |         45 |          0 |          3 |         48 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\haulModel.js                                                                         | JavaScript     |         84 |          0 |          3 |         87 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\materialCategoryModel.js                                                             | JavaScript     |         33 |          0 |          3 |         36 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\materialModel.js                                                                     | JavaScript     |         67 |          0 |          3 |         70 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\userModel.js                                                                         | JavaScript     |         29 |          0 |          3 |         32 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\vendorLocationModel.js                                                               | JavaScript     |         32 |          0 |          3 |         35 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\vendorModel.js                                                                       | JavaScript     |         45 |          0 |          3 |         48 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\vendorProductModel.js                                                                | JavaScript     |         42 |          0 |          3 |         45 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\waitListModel.js                                                                     | JavaScript     |         49 |          5 |          3 |         57 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\models\workdayModel.js                                                                      | JavaScript     |         44 |          0 |          3 |         47 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\awsKeys.js                                                                           | JavaScript     |         12 |         15 |          6 |         33 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\deliveryClientRoutes.js                                                              | JavaScript     |         20 |          2 |          5 |         27 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\deliveryRoutes.js                                                                    | JavaScript     |         15 |          2 |          5 |         22 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\driverRoutes.js                                                                      | JavaScript     |         17 |          2 |          5 |         24 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\freightRouteRoutes.js                                                                | JavaScript     |         20 |          2 |          5 |         27 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\haulRoutes.js                                                                        | JavaScript     |         22 |          2 |          5 |         29 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\materialCategoryRoutes.js                                                            | JavaScript     |         12 |          2 |          5 |         19 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\materialRoutes.js                                                                    | JavaScript     |         12 |          2 |          5 |         19 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\userRoutes.js                                                                        | JavaScript     |         12 |          1 |          4 |         17 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\vendorLocationRoutes.js                                                              | JavaScript     |         12 |          2 |          5 |         19 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\vendorProductRoutes.js                                                               | JavaScript     |         20 |          3 |          5 |         28 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\vendorRoutes.js                                                                      | JavaScript     |         12 |          2 |          5 |         19 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\waitListRoutes.js                                                                    | JavaScript     |         17 |          2 |          5 |         24 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\workdayRoutes.js                                                                     | JavaScript     |         22 |          2 |          5 |         29 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\server.js                                                                                   | JavaScript     |         33 |          5 |          8 |         46 |
+| d:\JUSTIN\CODE\chlm\chlm2023\backend\utils\formatCoords.js                                                                       | JavaScript     |         23 |          6 |          6 |         35 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\README.md                                                                                  | Markdown       |         26 |          0 |         21 |         47 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\package-lock.json                                                                          | JSON           |     29,507 |          0 |          1 |     29,508 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\package.json                                                                               | JSON           |         54 |          0 |          1 |         55 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\public\index.html                                                                          | HTML           |         20 |         23 |          1 |         44 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\public\manifest.json                                                                       | JSON           |         25 |          0 |          1 |         26 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\App.css                                                                                | CSS            |          0 |          0 |          1 |          1 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\App.js                                                                                 | JavaScript     |        148 |          3 |         12 |        163 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\App.test.js                                                                            | JavaScript     |         13 |          0 |          3 |         16 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\deliveries\deliveriesApi.js                                                        | JavaScript     |         42 |          4 |         10 |         56 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\deliveryClients\deliveryClientsApi.js                                              | JavaScript     |         51 |          5 |         12 |         68 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\drivers\driversApi.js                                                              | JavaScript     |         51 |         12 |         13 |         76 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\freightRoutes\freightRoutesApi.js                                                  | JavaScript     |         51 |          5 |         10 |         66 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\hauls\haulsApi.js                                                                  | JavaScript     |         67 |          6 |         14 |         87 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\materialCategories\materialCategoriesApi.js                                        | JavaScript     |         11 |          1 |          3 |         15 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\materials\materialsApi.js                                                          | JavaScript     |         50 |          4 |          6 |         60 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\users\usersApi.js                                                                  | JavaScript     |         22 |          4 |         10 |         36 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\vendorLocations\vendorLocationsApi.js                                              | JavaScript     |         42 |          4 |          9 |         55 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\vendorProducts\vendorProductsApi.js                                                | JavaScript     |         51 |          5 |         10 |         66 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\vendors\vendorsApi.js                                                              | JavaScript     |         42 |          4 |          9 |         55 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\waitList\waitList.js                                                               | JavaScript     |         51 |          9 |         13 |         73 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\workdays\workdaysApi.js                                                            | JavaScript     |         80 |          6 |         14 |        100 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\app\store.js                                                                           | JavaScript     |         27 |          0 |          2 |         29 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\assets\images\arrow-left.svg                                                           | XML            |         11 |          1 |          0 |         12 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\DecorDivider.jsx                                                            | JavaScript JSX |         36 |          1 |          3 |         40 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\Bulletin.jsx                                               | JavaScript JSX |         23 |          0 |          3 |         26 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\Bulletin.module.scss                                       | SCSS           |         43 |          0 |          9 |         52 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\BulletinArticle\BulletinArticle.jsx                        | JavaScript JSX |         10 |          0 |          1 |         11 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\BulletinArticle\BulletinArticle.module.scss                | SCSS           |         88 |          0 |         11 |         99 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Delivery\Delivery.jsx                                               | JavaScript JSX |         40 |          3 |          2 |         45 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Delivery\Delivery.module.scss                                       | SCSS           |        202 |          5 |         21 |        228 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\EagleCarports\EagleCarports.jsx                                     | JavaScript JSX |        155 |          6 |         12 |        173 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\EagleCarports\EagleCarports.module.scss                             | SCSS           |        131 |         15 |         22 |        168 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Help\Help.jsx                                                       | JavaScript JSX |         51 |          1 |          7 |         59 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Help\Help.module.scss                                               | SCSS           |         87 |          1 |         10 |         98 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\HowMuch\HowMuch.jsx                                                 | JavaScript JSX |         23 |          3 |          2 |         28 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\HowMuch\HowMuch.module.scss                                         | SCSS           |        141 |          7 |         16 |        164 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\LandingHeader\LandingHeader.jsx                                     | JavaScript JSX |         16 |          0 |          3 |         19 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\LandingHeader\LandingHeader.module.scss                             | SCSS           |        143 |          4 |         14 |        161 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowser.jsx                                 | JavaScript JSX |         93 |          0 |         10 |        103 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowser.module.scss                         | SCSS           |        147 |          0 |         21 |        168 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowserItem\MaterialBrowserItem.jsx         | JavaScript JSX |         18 |          0 |          2 |         20 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowserItem\MaterialBrowserItem.module.scss | SCSS           |         48 |          2 |          7 |         57 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialCard\MaterialCard.jsx                                     | JavaScript JSX |         94 |          6 |          7 |        107 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialCard\MaterialCard.module.scss                             | SCSS           |         80 |          0 |         15 |         95 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\FilterBar\FilterBar.jsx                           | JavaScript JSX |        662 |         54 |         22 |        738 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\FilterBar\FilterBar.module.scss                   | SCSS           |         58 |         14 |         11 |         83 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\MaterialsHeader.jsx                               | JavaScript JSX |          9 |          0 |          2 |         11 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\MaterialsHeader.module.scss                       | SCSS           |         49 |          0 |          4 |         53 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\ProtectedRoute.jsx                                                          | JavaScript JSX |          7 |          0 |          3 |         10 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\dialogComponents\DialogFooter_SubmitClose.jsx                               | JavaScript JSX |        145 |          3 |         10 |        158 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\dialogComponents\DialogHeader.jsx                                           | JavaScript JSX |         53 |          0 |          3 |         56 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Footer\Footer.jsx                                                    | JavaScript JSX |         21 |          0 |          2 |         23 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Footer\Footer.module.scss                                            | SCSS           |         36 |          0 |          8 |         44 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Header\Header.jsx                                                    | JavaScript JSX |        124 |         10 |         12 |        146 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Header\Header.module.scss                                            | SCSS           |          5 |          1 |          2 |          8 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Spinner.jsx                                                          | JavaScript JSX |          5 |          0 |          3 |          8 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\ClientSearchInput.jsx                             | JavaScript JSX |        130 |         19 |         19 |        168 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\DeliveryClientForm.jsx                            | JavaScript JSX |        281 |         25 |         30 |        336 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\DeliveryForm.jsx                                  | JavaScript JSX |        581 |         65 |         62 |        708 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\DeliveryTimeframeSelector.jsx                     | JavaScript JSX |         46 |          1 |          9 |         56 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\EditDeliveryClientForm.jsx                        | JavaScript JSX |        369 |         30 |         38 |        437 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\EditDeliveryForm.jsx                              | JavaScript JSX |        498 |         51 |         43 |        592 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\TestClientSearch.jsx                              | JavaScript JSX |        189 |         17 |         24 |        230 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\drivers\DriverForm.jsx                                       | JavaScript JSX |        290 |         28 |         30 |        348 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\drivers\EditDriverForm.jsx                                   | JavaScript JSX |        309 |         29 |         25 |        363 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\DateRangeSelector.jsx                                  | JavaScript JSX |         41 |          1 |          9 |         51 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\DriverSelector.jsx                                     | JavaScript JSX |         76 |          3 |         11 |         90 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\DriverWorkdaysCompleted.jsx                            | JavaScript JSX |         56 |          6 |          9 |         71 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\EditHaulForm.jsx                                       | JavaScript JSX |        931 |         85 |         82 |      1,098 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulForm.jsx                                           | JavaScript JSX |        751 |         79 |         75 |        905 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulFromSelector.jsx                                   | JavaScript JSX |         44 |          2 |          8 |         54 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulLocationSelector.jsx                               | JavaScript JSX |         53 |          2 |          8 |         63 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulMaterialSelector.jsx                               | JavaScript JSX |         51 |          2 |          8 |         61 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulToSelector.jsx                                     | JavaScript JSX |         55 |          2 |          8 |         65 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\materials\EditMaterialForm.jsx                               | JavaScript JSX |        502 |         66 |         39 |        607 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\materials\MaterialForm.jsx                                   | JavaScript JSX |        448 |         51 |         43 |        542 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditFreightRouteForm.jsx                             | JavaScript JSX |        335 |         28 |         37 |        400 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditVendorForm.jsx                                   | JavaScript JSX |        243 |         24 |         22 |        289 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditVendorLocationForm.jsx                           | JavaScript JSX |        164 |         20 |         21 |        205 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditVendorProductForm.jsx                            | JavaScript JSX |        348 |         28 |         39 |        415 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\FreightRouteDataTable.jsx                            | JavaScript JSX |        231 |         20 |         33 |        284 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\FreightRouteForm.jsx                                 | JavaScript JSX |        288 |         26 |         32 |        346 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorDataTable.jsx                                  | JavaScript JSX |        201 |         19 |         25 |        245 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorForm.jsx                                       | JavaScript JSX |        194 |         22 |         20 |        236 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorLocationDataTable.jsx                          | JavaScript JSX |        205 |         23 |         29 |        257 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorLocationForm.jsx                               | JavaScript JSX |        154 |         18 |         20 |        192 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorOverview.jsx                                   | JavaScript JSX |        281 |         11 |         28 |        320 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorProductDataTable.jsx                           | JavaScript JSX |        237 |         19 |         32 |        288 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorProductForm.jsx                                | JavaScript JSX |        290 |         26 |         34 |        350 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\waitlist\WaitListForm.jsx                                    | JavaScript JSX |        476 |         47 |         46 |        569 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\waitlist\WaitListForm.module.scss                            | SCSS           |          0 |          0 |          1 |          1 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\workdays\EditWorkdayForm.jsx                                 | JavaScript JSX |        322 |         20 |         34 |        376 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\workdays\WorkdayForm.jsx                                     | JavaScript JSX |        230 |         22 |         30 |        282 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\auth\authService.js                                                           | JavaScript     |         25 |          4 |         11 |         40 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\auth\authSlice.js                                                             | JavaScript     |         90 |          8 |         11 |        109 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveries\deliveryService.js                                                 | JavaScript     |         49 |          4 |         12 |         65 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveries\deliverySlice.js                                                   | JavaScript     |        159 |         13 |         12 |        184 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveryClients\deliveryClientService.js                                      | JavaScript     |         49 |          4 |         12 |         65 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveryClients\deliveryClientSlice.js                                        | JavaScript     |        168 |         13 |         11 |        192 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\drivers\driverService.js                                                      | JavaScript     |         45 |          4 |         11 |         60 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\drivers\driverSlice.js                                                        | JavaScript     |        140 |         10 |          9 |        159 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\freightRoutes\freightRouteService.js                                          | JavaScript     |         45 |          4 |         11 |         60 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\freightRoutes\freightRouteSlice.js                                            | JavaScript     |        150 |          9 |          9 |        168 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\hauls\haulService.js                                                          | JavaScript     |         45 |          4 |         11 |         60 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\hauls\haulSlice.js                                                            | JavaScript     |        134 |         12 |          9 |        155 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materialCategory\materialCategoryService.js                                   | JavaScript     |         15 |          1 |          5 |         21 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materialCategory\materialCategorySlice.js                                     | JavaScript     |         57 |          2 |          5 |         64 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materials\materialService.js                                                  | JavaScript     |         56 |          4 |          8 |         68 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materials\materialSlice.js                                                    | JavaScript     |        156 |          9 |          8 |        173 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorLocations\vendorLocationService.js                                      | JavaScript     |         49 |          4 |         11 |         64 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorLocations\vendorLocationSlice.js                                        | JavaScript     |        149 |          9 |          9 |        167 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorProducts\vendorProductService.js                                        | JavaScript     |         45 |          4 |         11 |         60 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorProducts\vendorProductSlice.js                                          | JavaScript     |        122 |          9 |          9 |        140 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendors\vendorService.js                                                      | JavaScript     |         45 |          4 |         11 |         60 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendors\vendorSlice.js                                                        | JavaScript     |        140 |          9 |          9 |        158 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\index.js                                                                               | JavaScript     |         20 |          6 |          5 |         31 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\index.scss                                                                             | SCSS           |        356 |         31 |         71 |        458 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\About.jsx                                                                        | JavaScript JSX |          8 |          0 |          2 |         10 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\Calculator.jsx                                                        | JavaScript JSX |        329 |          7 |         17 |        353 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\Calculator.module.scss                                                | SCSS           |         93 |          3 |         12 |        108 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\FormDispay\FormDisplay.jsx                                            | JavaScript JSX |      2,373 |        148 |        190 |      2,711 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\FormDispay\FormDisplay.module.scss                                    | SCSS           |          8 |          2 |          3 |         13 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\ShapeDisplay.jsx                                                      | JavaScript JSX |        615 |         27 |         31 |        673 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Carports.jsx                                                                     | JavaScript JSX |          8 |          0 |          2 |         10 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Contact.jsx                                                                      | JavaScript JSX |          8 |          0 |          2 |         10 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Help\Help.jsx                                                                    | JavaScript JSX |        640 |         32 |         84 |        756 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Help\Help.module.scss                                                            | SCSS           |        358 |         40 |         59 |        457 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Landing.jsx                                                                      | JavaScript JSX |         22 |          8 |          9 |         39 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Materials\Materials.jsx                                                          | JavaScript JSX |         10 |          0 |          2 |         12 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Materials\Materials.module.scss                                                  | SCSS           |          0 |          0 |          1 |          1 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\Login.jsx                                                                   | JavaScript JSX |         84 |          9 |         15 |        108 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\Register.jsx                                                                | JavaScript JSX |        246 |         11 |         26 |        283 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\CarportsDashboard.jsx                                             | JavaScript JSX |          8 |          0 |          1 |          9 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\CostCalculator.jsx                                                | JavaScript JSX |        609 |         39 |         67 |        715 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\CostCalculatorPrint.jsx                                           | JavaScript JSX |        283 |         12 |         24 |        319 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\Dashboard.jsx                                                     | JavaScript JSX |         61 |          4 |          6 |         71 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\DeliveriesDashboard.jsx                                           | JavaScript JSX |        894 |        115 |         97 |      1,106 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\DeliverySummary.jsx                                               | JavaScript JSX |        276 |         15 |         30 |        321 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\DriversDashboard.jsx                                              | JavaScript JSX |        270 |         23 |         37 |        330 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\HaulSummary.jsx                                                   | JavaScript JSX |        520 |         26 |         59 |        605 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\HaulsDashboard.jsx                                                | JavaScript JSX |        576 |         58 |         80 |        714 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\MaterialsDashboard.jsx                                            | JavaScript JSX |        421 |         20 |         42 |        483 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\VendorsDashboard.jsx                                              | JavaScript JSX |         38 |          3 |          5 |         46 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\WaitList.jsx                                                      | JavaScript JSX |        369 |          7 |         38 |        414 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\reportWebVitals.js                                                                     | JavaScript     |         12 |          0 |          2 |         14 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\setupTests.js                                                                          | JavaScript     |          1 |          4 |          1 |          6 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\styles\_colors.scss                                                                    | SCSS           |          9 |          1 |          2 |         12 |
+| d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\styles\user\Register.module.css                                                        | CSS            |         11 |          0 |          3 |         14 |
+| d:\JUSTIN\CODE\chlm\chlm2023\package-lock.json                                                                                   | JSON           |      3,021 |          0 |          1 |      3,022 |
+| d:\JUSTIN\CODE\chlm\chlm2023\package.json                                                                                        | JSON           |         37 |          0 |          1 |         38 |
+| Total                                                                                                                            |                |     59,821 |      2,300 |      3,219 |     65,340 |
++----------------------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

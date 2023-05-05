@@ -30,6 +30,8 @@ app.use('/api/hauls', require('./routes/haulRoutes'))
 app.use('/api/freight-routes', require('./routes/freightRouteRoutes'))
 app.use('/api/workdays', require('./routes/workdayRoutes'))
 app.use('/api/waitlist', require('./routes/waitListRoutes'))
+app.use('/api/faq', require('./routes/faqRoutes'))
+app.use('/api/faq-active', require('./routes/faqActiveRoutes'))
 
 // Service static
 app.use(express.static(path.resolve(__dirname, '../frontend/build')))

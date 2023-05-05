@@ -1,0 +1,522 @@
+// Shared
+.sectionTitle {
+    color: #417999;
+    font-weight: bold;
+    text-shadow: 0px 1px 2px rgb(18, 48, 74, 0.4);
+    text-align: center;
+    font-size: 2rem;
+    margin: 2em 0;
+}
+.mainSection {
+    // border: 2px solid red;
+}
+
+.upButtonWrapper {
+    // border: 1px solid orange;
+    position: -webkit-sticky;
+    position: sticky;
+    margin: 0;
+    padding: 0;
+    top: 10px;
+    left: 30%;
+    text-align: center;
+    z-index: 999;
+    height: 0;
+}
+
+.upArrowButton {
+    position: sticky;
+}
+
+.upArrowButtonInvisible {
+    display: none !important;
+}
+
+// Begin
+
+.header {
+    // border: 2px solid cornflowerblue;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 45vh;
+
+    .title {
+        position: relative;
+        z-index: 99;
+        color: white;
+        text-align: center;
+        margin: 0;
+        flex-grow: 1;
+        font-size: 3rem;
+    }
+
+    .headerBackgroundImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('../../assets/images/help/help-banner.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+        z-index: 1;
+        filter: saturate(50%);
+    }
+
+    .headerOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgb(187, 175, 169), rgba(33, 37, 46, 0.89));
+        z-index: 2;
+        mix-blend-mode: multiply;
+    }
+}
+
+.questionBar {
+    background-color: #3a5666;
+    padding: 3em 2em;
+}
+
+.helpSearchWrapper {
+    display: flex;
+    gap: 14px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.helpSearchWrapper button {
+    background-color: rgb(16, 127, 155);
+}
+.helpSearchWrapper:hover button:hover {
+    background-color: rgb(21, 170, 207);
+}
+
+.clearSearchButton {
+    background-color: rgb(187, 78, 28) !important;
+}
+
+// .helpSearch {
+//     border: 2px solid orange;
+// }
+
+.responseArea {
+    // border: 2px dotted rgb(37, 128, 56);
+    // height: 5em;
+    padding: 2em;
+}
+
+.displayQuestion {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.displayAnswer {
+    line-height: 145%;
+}
+
+.relatedLinks {
+    margin-top: 0.5em;
+}
+
+.helpRelatedLink {
+    margin-bottom: 0.75em;
+}
+
+.helpRelatedLink a {
+    text-decoration: none;
+    color: rgb(197, 122, 9);
+    font-weight: bold;
+}
+
+.helpRelatedLink a:hover {
+    color: red;
+}
+
+.coverageSection {
+    padding: 1em;
+}
+
+// #region GENERAL INFORMATION ====================================================================
+
+.generalInformationSection {
+    // border: 2px dotted gray;
+}
+
+.generalInfoHeader {
+    // border: 2px solid red;
+    position: relative;
+    // background-color: #416755;
+    padding: 8em 2em;
+    // z-index: 1;
+
+    // background-image: url('../../assets/images/help/help.jpg');
+    // background-size: cover;
+    // background-repeat: no-repeat;
+    // background-position: center;
+    // background-attachment: fixed;
+}
+
+.generalInfoBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/images/help/help.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 50%;
+    z-index: 1;
+}
+
+.generalInfoOverlay {
+    background-color: #074129;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 70%;
+    mix-blend-mode: darken;
+    z-index: 2;
+}
+
+.generalInfoTitle {
+    position: relative;
+    width: 100%;
+    z-index: 100;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.callForPricing {
+    background-color: #ecd9aa;
+    color: #8c763b;
+    font-weight: bold;
+    text-align: center;
+    padding: 1.5em 0;
+}
+
+.materialTypeBulk {
+    // border: 1px dotted gray;
+    min-width: 300px;
+}
+
+.materialTypePallets {
+    // border: 1px dotted gray;
+    min-width: 300px;
+    margin-top: 4em;
+}
+
+.bulkImageWrapper {
+    max-width: 300px;
+}
+
+.bulkImage {
+    // border: 1px solid blue;
+    width: 100%;
+    margin: 0 auto;
+    height: 260px;
+}
+
+.palletImage {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.materialTypeTitle {
+    color: #8e9b67;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 0.25em;
+    margin-bottom: 0.5em;
+}
+
+.materialTypeName {
+    color: #6b6b6b;
+    font-weight: bold;
+    padding: 0.3em 0;
+}
+
+.loaderWrapper {
+    min-width: 300px;
+    margin: 2em 0;
+}
+
+.loadedWithText {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #8d9fa9;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+.loaderImageWrapper {
+    max-width: 300px;
+    // border: 2px dashed gray;
+}
+
+.loaderImage {
+    width: 100%;
+}
+
+.loaderName {
+    color: #88813d;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.forkliftImage {
+    width: 100%;
+    max-height: 200px;
+    // border: 2px solid blue;
+}
+// #endregion
+
+// #region WEIGHTS SECTION ========================================================================
+.weightsParent {
+    // border: 2px solid orange;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 0 1em;
+}
+.weightsBulkSection {
+}
+.weightsPalletSection {
+    // border: 2px solid red;
+    margin-top: 2em;
+}
+.weightSectionTitle {
+    margin-bottom: 0.25em;
+}
+
+.heavierWhenWet {
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1em;
+}
+
+.bulkWeightsList {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    gap: 0.35em;
+}
+
+.weightsTotal {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #c47704;
+    margin-top: 0.1 em;
+}
+
+.weightsParagraph {
+    max-width: 300px;
+}
+
+.lbsPerScoop {
+    font-weight: bold;
+    color: #606060;
+    font-size: 0.9rem;
+    transform: translateY(-5px);
+}
+// #endregion
+
+// #region COVERAGE SECTION =======================================================================
+.coverageDivider {
+    width: 100%;
+    height: 5px;
+    background-color: #389674;
+}
+.coverageSectionTitle {
+    margin: 0;
+    color: #389674;
+}
+.coverageSubTitle {
+    color: #89725d;
+    font-weight: bold;
+    margin: 1em 0;
+    margin-top: 1.8em;
+}
+.perTon {
+    color: #b58d00;
+    font-weight: bold;
+}
+
+// BULK SECTION
+.bulkRectangleWrapper {
+}
+.smallText {
+    font-size: 0.85rem;
+    padding-left: 2.6rem;
+}
+.calculatorLinkWrapper {
+    // border: 1px solid red;
+    margin: 0 auto;
+    width: 100%;
+    padding-left: 2.6rem;
+}
+.calculatorLink {
+    background-color: #d6ba57;
+    color: #8f5a09;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.calculatorLink:hover {
+    background-color: #f0d05e;
+    transition: all 0.3s;
+    // color: #ffe078;
+}
+
+.coverageFormulaSVG {
+    // border: 1px solid red;
+    margin: 1em;
+}
+
+.bulkFormulaDisclaimer {
+    color: red;
+}
+
+.messageTryCalculator {
+    margin-top: 1em;
+    color: #646464;
+    font-weight: bold;
+}
+.messageTryCalculatorLink {
+    color: #a88816;
+}
+// #endregion
+
+// #region LOADING INFO SECTION ===================================================================
+.loadingInfoSection {
+    padding: 1em;
+}
+.loadingSectionSubtitle {
+    color: #b58d00;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 1em 0;
+}
+.loadingInfoSubsection {
+    max-width: 800px;
+    margin: 0 auto;
+}
+// #endregion
+
+// #region MEDIA QUERIES ==========================================================================
+@media screen and (min-width: 320px) {
+    .bulkImage {
+        height: 150px;
+    }
+
+    .loaderImageWrapper {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 425px) {
+    .sectionTitle {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .sectionTitle {
+        font-size: 2rem;
+    }
+
+    .materialTypePallets {
+        margin-top: 0;
+    }
+
+    .materialTypePallets {
+        .bulkImageWrapper {
+            // border: 1px solid red;
+            width: 55%;
+            margin: 0 auto;
+
+            .palletImage {
+                width: 100%;
+                // border: 1px solid blue;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    .weightsParent {
+        flex-direction: row;
+    }
+
+    .weightsPalletSection {
+        margin-top: 0;
+    }
+
+    .stoneSection {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .loadingInfoSubsection {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .questionBar {
+        padding: 2em 5em;
+    }
+
+    .responseArea {
+        padding: 4em;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .bulkImage {
+        // border: 1px solid blue;
+        width: 120%;
+        height: 220px;
+    }
+
+    .materialTypePallets {
+        .bulkImageWrapper {
+            width: 80%;
+            margin: 0 auto;
+
+            .palletImage {
+                width: 100%;
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .stoneSection {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .loadingInfoSubsection {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+}
+// #endregion

@@ -1,0 +1,198 @@
+"filename", "language", "JSON", "JavaScript", "CSS", "Markdown", "SCSS", "HTML", "JavaScript JSX", "XML", "comment", "blank", "total"
+"d:\JUSTIN\CODE\chlm\chlm2023\.prettierrc", "JSON", 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\config\db.js", "JavaScript", 0, 26, 0, 0, 0, 0, 0, 0, 0, 5, 31
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\deliveryClientController.js", "JavaScript", 0, 97, 0, 0, 0, 0, 0, 0, 19, 20, 136
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\deliveryController.js", "JavaScript", 0, 90, 0, 0, 0, 0, 0, 0, 16, 21, 127
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\driverController.js", "JavaScript", 0, 77, 0, 0, 0, 0, 0, 0, 15, 20, 112
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\freightRouteController.js", "JavaScript", 0, 82, 0, 0, 0, 0, 0, 0, 15, 23, 120
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\haulController.js", "JavaScript", 0, 185, 0, 0, 0, 0, 0, 0, 29, 45, 259
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\materialCategoryController.js", "JavaScript", 0, 56, 0, 0, 0, 0, 0, 0, 12, 18, 86
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\materialController.js", "JavaScript", 0, 57, 0, 0, 0, 0, 0, 0, 12, 19, 88
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\userController.js", "JavaScript", 0, 81, 0, 0, 0, 0, 0, 0, 14, 17, 112
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\vendorController.js", "JavaScript", 0, 66, 0, 0, 0, 0, 0, 0, 24, 22, 112
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\vendorLocationController.js", "JavaScript", 0, 62, 0, 0, 0, 0, 0, 0, 12, 20, 94
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\vendorProductController.js", "JavaScript", 0, 76, 0, 0, 0, 0, 0, 0, 19, 23, 118
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\waitListController.js", "JavaScript", 0, 73, 0, 0, 0, 0, 0, 0, 35, 28, 136
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\controllers\workdayController.js", "JavaScript", 0, 124, 0, 0, 0, 0, 0, 0, 54, 42, 220
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\middleware\authMiddleware.js", "JavaScript", 0, 23, 0, 0, 0, 0, 0, 0, 3, 8, 34
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\middleware\errorMiddleware.js", "JavaScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\deliveryClientModel.js", "JavaScript", 0, 47, 0, 0, 0, 0, 0, 0, 0, 3, 50
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\deliveryModel.js", "JavaScript", 0, 66, 0, 0, 0, 0, 0, 0, 0, 3, 69
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\driverModel.js", "JavaScript", 0, 55, 0, 0, 0, 0, 0, 0, 0, 3, 58
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\freightRouteModel.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 0, 3, 48
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\haulModel.js", "JavaScript", 0, 84, 0, 0, 0, 0, 0, 0, 0, 3, 87
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\materialCategoryModel.js", "JavaScript", 0, 33, 0, 0, 0, 0, 0, 0, 0, 3, 36
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\materialModel.js", "JavaScript", 0, 67, 0, 0, 0, 0, 0, 0, 0, 3, 70
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\userModel.js", "JavaScript", 0, 29, 0, 0, 0, 0, 0, 0, 0, 3, 32
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\vendorLocationModel.js", "JavaScript", 0, 32, 0, 0, 0, 0, 0, 0, 0, 3, 35
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\vendorModel.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 0, 3, 48
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\vendorProductModel.js", "JavaScript", 0, 42, 0, 0, 0, 0, 0, 0, 0, 3, 45
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\waitListModel.js", "JavaScript", 0, 49, 0, 0, 0, 0, 0, 0, 5, 3, 57
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\models\workdayModel.js", "JavaScript", 0, 44, 0, 0, 0, 0, 0, 0, 0, 3, 47
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\awsKeys.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 15, 6, 33
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\deliveryClientRoutes.js", "JavaScript", 0, 20, 0, 0, 0, 0, 0, 0, 2, 5, 27
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\deliveryRoutes.js", "JavaScript", 0, 15, 0, 0, 0, 0, 0, 0, 2, 5, 22
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\driverRoutes.js", "JavaScript", 0, 17, 0, 0, 0, 0, 0, 0, 2, 5, 24
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\freightRouteRoutes.js", "JavaScript", 0, 20, 0, 0, 0, 0, 0, 0, 2, 5, 27
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\haulRoutes.js", "JavaScript", 0, 22, 0, 0, 0, 0, 0, 0, 2, 5, 29
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\materialCategoryRoutes.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 2, 5, 19
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\materialRoutes.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 2, 5, 19
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\userRoutes.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 1, 4, 17
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\vendorLocationRoutes.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 2, 5, 19
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\vendorProductRoutes.js", "JavaScript", 0, 20, 0, 0, 0, 0, 0, 0, 3, 5, 28
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\vendorRoutes.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 2, 5, 19
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\waitListRoutes.js", "JavaScript", 0, 17, 0, 0, 0, 0, 0, 0, 2, 5, 24
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\routes\workdayRoutes.js", "JavaScript", 0, 22, 0, 0, 0, 0, 0, 0, 2, 5, 29
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\server.js", "JavaScript", 0, 33, 0, 0, 0, 0, 0, 0, 5, 8, 46
+"d:\JUSTIN\CODE\chlm\chlm2023\backend\utils\formatCoords.js", "JavaScript", 0, 23, 0, 0, 0, 0, 0, 0, 6, 6, 35
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\README.md", "Markdown", 0, 0, 0, 26, 0, 0, 0, 0, 0, 21, 47
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\package-lock.json", "JSON", 29507, 0, 0, 0, 0, 0, 0, 0, 0, 1, 29508
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\package.json", "JSON", 54, 0, 0, 0, 0, 0, 0, 0, 0, 1, 55
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\public\index.html", "HTML", 0, 0, 0, 0, 0, 20, 0, 0, 23, 1, 44
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\public\manifest.json", "JSON", 25, 0, 0, 0, 0, 0, 0, 0, 0, 1, 26
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\App.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\App.js", "JavaScript", 0, 148, 0, 0, 0, 0, 0, 0, 3, 12, 163
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\App.test.js", "JavaScript", 0, 13, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\deliveries\deliveriesApi.js", "JavaScript", 0, 42, 0, 0, 0, 0, 0, 0, 4, 10, 56
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\deliveryClients\deliveryClientsApi.js", "JavaScript", 0, 51, 0, 0, 0, 0, 0, 0, 5, 12, 68
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\drivers\driversApi.js", "JavaScript", 0, 51, 0, 0, 0, 0, 0, 0, 12, 13, 76
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\freightRoutes\freightRoutesApi.js", "JavaScript", 0, 51, 0, 0, 0, 0, 0, 0, 5, 10, 66
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\hauls\haulsApi.js", "JavaScript", 0, 67, 0, 0, 0, 0, 0, 0, 6, 14, 87
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\materialCategories\materialCategoriesApi.js", "JavaScript", 0, 11, 0, 0, 0, 0, 0, 0, 1, 3, 15
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\materials\materialsApi.js", "JavaScript", 0, 50, 0, 0, 0, 0, 0, 0, 4, 6, 60
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\users\usersApi.js", "JavaScript", 0, 22, 0, 0, 0, 0, 0, 0, 4, 10, 36
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\vendorLocations\vendorLocationsApi.js", "JavaScript", 0, 42, 0, 0, 0, 0, 0, 0, 4, 9, 55
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\vendorProducts\vendorProductsApi.js", "JavaScript", 0, 51, 0, 0, 0, 0, 0, 0, 5, 10, 66
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\vendors\vendorsApi.js", "JavaScript", 0, 42, 0, 0, 0, 0, 0, 0, 4, 9, 55
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\waitList\waitList.js", "JavaScript", 0, 51, 0, 0, 0, 0, 0, 0, 9, 13, 73
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\api\workdays\workdaysApi.js", "JavaScript", 0, 80, 0, 0, 0, 0, 0, 0, 6, 14, 100
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\app\store.js", "JavaScript", 0, 27, 0, 0, 0, 0, 0, 0, 0, 2, 29
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\assets\images\arrow-left.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 11, 1, 0, 12
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\DecorDivider.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 36, 0, 1, 3, 40
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\Bulletin.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 23, 0, 0, 3, 26
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\Bulletin.module.scss", "SCSS", 0, 0, 0, 0, 43, 0, 0, 0, 0, 9, 52
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\BulletinArticle\BulletinArticle.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 10, 0, 0, 1, 11
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Bulletin\BulletinArticle\BulletinArticle.module.scss", "SCSS", 0, 0, 0, 0, 88, 0, 0, 0, 0, 11, 99
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Delivery\Delivery.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 40, 0, 3, 2, 45
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Delivery\Delivery.module.scss", "SCSS", 0, 0, 0, 0, 202, 0, 0, 0, 5, 21, 228
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\EagleCarports\EagleCarports.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 155, 0, 6, 12, 173
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\EagleCarports\EagleCarports.module.scss", "SCSS", 0, 0, 0, 0, 131, 0, 0, 0, 15, 22, 168
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Help\Help.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 51, 0, 1, 7, 59
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\Help\Help.module.scss", "SCSS", 0, 0, 0, 0, 87, 0, 0, 0, 1, 10, 98
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\HowMuch\HowMuch.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 23, 0, 3, 2, 28
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\HowMuch\HowMuch.module.scss", "SCSS", 0, 0, 0, 0, 141, 0, 0, 0, 7, 16, 164
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\LandingHeader\LandingHeader.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 16, 0, 0, 3, 19
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\LandingHeader\LandingHeader.module.scss", "SCSS", 0, 0, 0, 0, 143, 0, 0, 0, 4, 14, 161
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowser.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 93, 0, 0, 10, 103
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowser.module.scss", "SCSS", 0, 0, 0, 0, 147, 0, 0, 0, 0, 21, 168
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowserItem\MaterialBrowserItem.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 18, 0, 0, 2, 20
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Landing\MaterialBrowser\MaterialBrowserItem\MaterialBrowserItem.module.scss", "SCSS", 0, 0, 0, 0, 48, 0, 0, 0, 2, 7, 57
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialCard\MaterialCard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 94, 0, 6, 7, 107
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialCard\MaterialCard.module.scss", "SCSS", 0, 0, 0, 0, 80, 0, 0, 0, 0, 15, 95
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\FilterBar\FilterBar.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 662, 0, 54, 22, 738
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\FilterBar\FilterBar.module.scss", "SCSS", 0, 0, 0, 0, 58, 0, 0, 0, 14, 11, 83
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\MaterialsHeader.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 9, 0, 0, 2, 11
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\Materials\MaterialsHeader\MaterialsHeader.module.scss", "SCSS", 0, 0, 0, 0, 49, 0, 0, 0, 0, 4, 53
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\ProtectedRoute.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 7, 0, 0, 3, 10
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\dialogComponents\DialogFooter_SubmitClose.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 145, 0, 3, 10, 158
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\dialogComponents\DialogHeader.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 53, 0, 0, 3, 56
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Footer\Footer.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 21, 0, 0, 2, 23
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Footer\Footer.module.scss", "SCSS", 0, 0, 0, 0, 36, 0, 0, 0, 0, 8, 44
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Header\Header.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 124, 0, 10, 12, 146
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Header\Header.module.scss", "SCSS", 0, 0, 0, 0, 5, 0, 0, 0, 1, 2, 8
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\layout\Spinner.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 5, 0, 0, 3, 8
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\ClientSearchInput.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 130, 0, 19, 19, 168
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\DeliveryClientForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 281, 0, 25, 30, 336
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\DeliveryForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 581, 0, 65, 62, 708
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\DeliveryTimeframeSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 46, 0, 1, 9, 56
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\EditDeliveryClientForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 369, 0, 30, 38, 437
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\EditDeliveryForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 498, 0, 51, 43, 592
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\deliveries\TestClientSearch.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 189, 0, 17, 24, 230
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\drivers\DriverForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 290, 0, 28, 30, 348
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\drivers\EditDriverForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 309, 0, 29, 25, 363
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\DateRangeSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 41, 0, 1, 9, 51
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\DriverSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 76, 0, 3, 11, 90
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\DriverWorkdaysCompleted.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 56, 0, 6, 9, 71
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\EditHaulForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 931, 0, 85, 82, 1098
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 751, 0, 79, 75, 905
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulFromSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 44, 0, 2, 8, 54
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulLocationSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 53, 0, 2, 8, 63
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulMaterialSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 51, 0, 2, 8, 61
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\hauls\HaulToSelector.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 55, 0, 2, 8, 65
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\materials\EditMaterialForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 502, 0, 66, 39, 607
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\materials\MaterialForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 448, 0, 51, 43, 542
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditFreightRouteForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 335, 0, 28, 37, 400
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditVendorForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 243, 0, 24, 22, 289
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditVendorLocationForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 164, 0, 20, 21, 205
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\EditVendorProductForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 348, 0, 28, 39, 415
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\FreightRouteDataTable.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 231, 0, 20, 33, 284
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\FreightRouteForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 288, 0, 26, 32, 346
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorDataTable.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 201, 0, 19, 25, 245
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 194, 0, 22, 20, 236
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorLocationDataTable.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 205, 0, 23, 29, 257
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorLocationForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 154, 0, 18, 20, 192
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorOverview.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 281, 0, 11, 28, 320
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorProductDataTable.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 237, 0, 19, 32, 288
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\vendors\VendorProductForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 290, 0, 26, 34, 350
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\waitlist\WaitListForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 476, 0, 47, 46, 569
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\waitlist\WaitListForm.module.scss", "SCSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\workdays\EditWorkdayForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 322, 0, 20, 34, 376
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\components\user\dashboard\workdays\WorkdayForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 230, 0, 22, 30, 282
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\auth\authService.js", "JavaScript", 0, 25, 0, 0, 0, 0, 0, 0, 4, 11, 40
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\auth\authSlice.js", "JavaScript", 0, 90, 0, 0, 0, 0, 0, 0, 8, 11, 109
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveries\deliveryService.js", "JavaScript", 0, 49, 0, 0, 0, 0, 0, 0, 4, 12, 65
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveries\deliverySlice.js", "JavaScript", 0, 159, 0, 0, 0, 0, 0, 0, 13, 12, 184
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveryClients\deliveryClientService.js", "JavaScript", 0, 49, 0, 0, 0, 0, 0, 0, 4, 12, 65
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\deliveryClients\deliveryClientSlice.js", "JavaScript", 0, 168, 0, 0, 0, 0, 0, 0, 13, 11, 192
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\drivers\driverService.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 4, 11, 60
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\drivers\driverSlice.js", "JavaScript", 0, 140, 0, 0, 0, 0, 0, 0, 10, 9, 159
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\freightRoutes\freightRouteService.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 4, 11, 60
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\freightRoutes\freightRouteSlice.js", "JavaScript", 0, 150, 0, 0, 0, 0, 0, 0, 9, 9, 168
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\hauls\haulService.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 4, 11, 60
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\hauls\haulSlice.js", "JavaScript", 0, 134, 0, 0, 0, 0, 0, 0, 12, 9, 155
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materialCategory\materialCategoryService.js", "JavaScript", 0, 15, 0, 0, 0, 0, 0, 0, 1, 5, 21
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materialCategory\materialCategorySlice.js", "JavaScript", 0, 57, 0, 0, 0, 0, 0, 0, 2, 5, 64
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materials\materialService.js", "JavaScript", 0, 56, 0, 0, 0, 0, 0, 0, 4, 8, 68
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\materials\materialSlice.js", "JavaScript", 0, 156, 0, 0, 0, 0, 0, 0, 9, 8, 173
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorLocations\vendorLocationService.js", "JavaScript", 0, 49, 0, 0, 0, 0, 0, 0, 4, 11, 64
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorLocations\vendorLocationSlice.js", "JavaScript", 0, 149, 0, 0, 0, 0, 0, 0, 9, 9, 167
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorProducts\vendorProductService.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 4, 11, 60
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendorProducts\vendorProductSlice.js", "JavaScript", 0, 122, 0, 0, 0, 0, 0, 0, 9, 9, 140
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendors\vendorService.js", "JavaScript", 0, 45, 0, 0, 0, 0, 0, 0, 4, 11, 60
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\features\vendors\vendorSlice.js", "JavaScript", 0, 140, 0, 0, 0, 0, 0, 0, 9, 9, 158
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\index.js", "JavaScript", 0, 20, 0, 0, 0, 0, 0, 0, 6, 5, 31
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\index.scss", "SCSS", 0, 0, 0, 0, 356, 0, 0, 0, 31, 71, 458
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\About.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 10
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\Calculator.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 329, 0, 7, 17, 353
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\Calculator.module.scss", "SCSS", 0, 0, 0, 0, 93, 0, 0, 0, 3, 12, 108
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\FormDispay\FormDisplay.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 2373, 0, 148, 190, 2711
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\FormDispay\FormDisplay.module.scss", "SCSS", 0, 0, 0, 0, 8, 0, 0, 0, 2, 3, 13
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Calculator\ShapeDisplay.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 615, 0, 27, 31, 673
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Carports.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 10
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Contact.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 10
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Help\Help.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 640, 0, 32, 84, 756
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Help\Help.module.scss", "SCSS", 0, 0, 0, 0, 358, 0, 0, 0, 40, 59, 457
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Landing.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 22, 0, 8, 9, 39
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Materials\Materials.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 10, 0, 0, 2, 12
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\Materials\Materials.module.scss", "SCSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\Login.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 84, 0, 9, 15, 108
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\Register.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 246, 0, 11, 26, 283
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\CarportsDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 8, 0, 0, 1, 9
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\CostCalculator.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 609, 0, 39, 67, 715
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\CostCalculatorPrint.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 283, 0, 12, 24, 319
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\Dashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 61, 0, 4, 6, 71
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\DeliveriesDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 894, 0, 115, 97, 1106
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\DeliverySummary.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 276, 0, 15, 30, 321
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\DriversDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 270, 0, 23, 37, 330
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\HaulSummary.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 520, 0, 26, 59, 605
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\HaulsDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 576, 0, 58, 80, 714
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\MaterialsDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 421, 0, 20, 42, 483
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\VendorsDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 38, 0, 3, 5, 46
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\pages\user\dashboard\WaitList.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 369, 0, 7, 38, 414
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\reportWebVitals.js", "JavaScript", 0, 12, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\setupTests.js", "JavaScript", 0, 1, 0, 0, 0, 0, 0, 0, 4, 1, 6
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\styles\_colors.scss", "SCSS", 0, 0, 0, 0, 9, 0, 0, 0, 1, 2, 12
+"d:\JUSTIN\CODE\chlm\chlm2023\frontend\src\styles\user\Register.module.css", "CSS", 0, 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"d:\JUSTIN\CODE\chlm\chlm2023\package-lock.json", "JSON", 3021, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3022
+"d:\JUSTIN\CODE\chlm\chlm2023\package.json", "JSON", 37, 0, 0, 0, 0, 0, 0, 0, 0, 1, 38
+"Total", "-", 32650, 4868, 11, 26, 2082, 20, 20153, 11, 2300, 3219, 65340

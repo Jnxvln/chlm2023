@@ -390,7 +390,11 @@ tr.spacer td {
 
 #matSearch input {
     width: 100% !important;
-    // border: 1px solid red;
+}
+
+#helpSearch,
+#helpSearch input {
+    width: 100% !important;
 }
 
 @media print {
