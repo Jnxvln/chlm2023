@@ -56,16 +56,18 @@ const createFreightRoute = asyncHandler(async (req, res) => {
         throw new Error('Route already exists')
     }
 
-    const freightRoute = await FreightRoute.create({
-        createdBy: req.user.id,
-        updatedBy: req.user.id,
-        vendorId: req.body.vendorId,
-        vendorLocationId: req.body.vendorLocationId,
-        destination: req.body.destination,
-        freightCost: req.body.freightCost,
-        notes: req.body.notes,
-        isActive: req.body.isActive,
-    })
+    // const freightRoute = await FreightRoute.create({
+    //     createdBy: req.user.id,
+    //     updatedBy: req.user.id,
+    //     vendorId: req.body.vendorId,
+    //     vendorLocationId: req.body.vendorLocationId,
+    //     destination: req.body.destination,
+    //     freightCost: req.body.freightCost,
+    //     notes: req.body.notes,
+    //     isActive: req.body.isActive,
+    // })
+    let _data = { ...req.body, createdBy: req.user.id }
+    const freightRoute = await FreightRoute.create(_data)
 
     res.status(200).json(freightRoute)
 })

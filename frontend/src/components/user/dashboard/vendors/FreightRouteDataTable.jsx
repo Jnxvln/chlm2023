@@ -10,6 +10,7 @@ import { Button } from 'primereact/button'
 import { TriStateCheckbox } from 'primereact/tristatecheckbox'
 import { FilterMatchMode } from 'primereact/api'
 import { InputText } from 'primereact/inputtext'
+import { Dropdown } from 'primereact/dropdown'
 // Store data
 import { fetchUser } from '../../../../api/users/usersApi'
 import { getVendors } from '../../../../api/vendors/vendorsApi'
@@ -30,8 +31,11 @@ function FreightRouteDataTable() {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         destination: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        type: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
     const [freightRouteRowSelected, setFreightRouteRowSelected] = useState(null)
+    // const [types] = useState(['yard', 'jobsite', 'residential'])
+    const types = ['yard', 'jobsite', 'residential']
 
     const user = useQuery(['user'], fetchUser)
 
@@ -104,7 +108,7 @@ function FreightRouteDataTable() {
     }
 
     const routeVendorLocationTemplate = (rowData) => {
-        const location = vendorLocations.data.find(
+        const location = vendorLocations?.data?.find(
             (loc) => loc._id === rowData.vendorLocationId
         )
         return location ? (
@@ -139,6 +143,19 @@ function FreightRouteDataTable() {
         return <>{rowData.isActive ? <i className="pi pi-check" /> : ''}</>
     }
 
+    const typeTemplate = (option, props) => {
+        // console.log('[typeTemplate] option: ')
+        // console.log(option)
+        // return <span>{option && option.type ? option.type : '(Loading)'}</span>
+        if (option && !option.type) {
+            return <span>{option}</span>
+        } else if (option && option.type) {
+            return <span>{option.type}</span>
+        } else {
+            return <span>Err</span>
+        }
+    }
+
     const actionsTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex' }}>
@@ -150,6 +167,33 @@ function FreightRouteDataTable() {
                 />
             </div>
         )
+    }
+
+    const statusItemTemplate = (option) => {
+        return <div>{option}</div>
+    }
+
+    const statusBodyTemplate = (rowData) => {
+        return <div>{rowData.type}</div>
+    }
+
+    const typeFilterTemplate = (options) => {
+        if (options) {
+            console.log('[typeFilterTemplate] options: ')
+            console.log(options)
+            return (
+                <Dropdown
+                    value={options.value}
+                    options={types}
+                    onChange={(e) => options.filterApplyCallback(e.value)}
+                    itemTemplate={statusItemTemplate}
+                    placeholder="Select One"
+                    className="p-column-filter"
+                    style={{ minWidth: '12rem' }}
+                    showClear
+                />
+            )
+        }
     }
     // #endregion
 
@@ -205,15 +249,14 @@ function FreightRouteDataTable() {
                     value={freightRoutes.data}
                     loading={freightRoutes.isLoading}
                     header={freightRoutesDataTableHeaderTemplate}
-                    globalFilterFields={['destination']}
+                    globalFilterFields={['destination', 'type']}
                     size="small"
-                    scrollable
                     scrollHeight="flex"
                     sortMode="multiple"
                     responsiveLayout="scroll"
                     filter="true"
                     filters={filters}
-                    filterfield="name"
+                    // filterfield="type"
                     filterDisplay="row"
                     onFilter={(e) => setFilters(e.filters)}
                     selectionMode="single"
@@ -225,7 +268,8 @@ function FreightRouteDataTable() {
                     stateStorage="session"
                     stateKey="dt-freightRoutes-session"
                     emptyMessage="No freight routes found"
-                    stripedRows
+                    stripedRows="true"
+                    scrollable="true"
                 >
                     {/* VENDOR NAME */}
                     <Column
@@ -261,6 +305,16 @@ function FreightRouteDataTable() {
                     ></Column>
 
                     {/* <Column field="notes" header="Notes" /> */}
+
+                    {/* TYPE */}
+                    <Column
+                        field="type"
+                        header="Type"
+                        body={statusBodyTemplate}
+                        filter
+                        filterElement={typeFilterTemplate}
+                        showFilterMenu={false}
+                    ></Column>
 
                     {/* IS ACTIVE */}
                     <Column

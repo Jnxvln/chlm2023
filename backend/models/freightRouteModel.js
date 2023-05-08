@@ -24,6 +24,10 @@ const freightRouteSchema = mongoose.Schema(
             type: String,
             required: false,
         },
+        type: {
+            type: String,
+            enum: ['yard', 'jobsite', 'residential'],
+        },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             required: [true, 'A user is required'],
