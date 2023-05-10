@@ -66,7 +66,7 @@ const createFreightRoute = asyncHandler(async (req, res) => {
     //     notes: req.body.notes,
     //     isActive: req.body.isActive,
     // })
-    let _data = { ...req.body, createdBy: req.user.id }
+    let _data = { ...req.body, createdBy: req.user.id, updatedBy: req.user.id }
     const freightRoute = await FreightRoute.create(_data)
 
     res.status(200).json(freightRoute)
@@ -84,6 +84,9 @@ const updateFreightRoute = asyncHandler(async (req, res) => {
     }
 
     const updates = { ...req.body, updatedBy: req.user.id }
+
+    console.log('[freightRouteController updateFreightRoute] updates: ')
+    console.log(updates)
 
     const updatedFreightRoute = await FreightRoute.findByIdAndUpdate(
         req.params.id,

@@ -63,13 +63,29 @@ function FreightRouteForm() {
         mutationFn: ({ formData, token }) =>
             createFreightRoute(formData, token),
         onSuccess: (freightRoute) => {
+            console.log(
+                '[FreightRouteForm.jsx mutationCreateRoute] freightRoute argument: '
+            )
+            console.log(freightRoute)
+
             const vendor = vendors.data.find(
                 (v) => v._id === freightRoute.vendorId
             )
 
+            console.log(
+                '[FreightRouteForm.jsx mutationCreateRoute] matching vendor: '
+            )
+            console.log(vendor)
+
             const vendorLocation = vendorLocations.data.find(
                 (loc) => loc._id === freightRoute.vendorLocationId
             )
+
+            console.log(
+                '[FreightRouteForm.jsx mutationCreateRoute] matching vendorLocation: '
+            )
+            console.log(vendorLocation)
+
             if (freightRoute) {
                 toast.success(
                     `${vendor.name} (${vendorLocation.name}) to ${freightRoute.destination} created`,

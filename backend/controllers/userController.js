@@ -3,6 +3,14 @@ const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 
+// @desc    Get users
+// @route   GET /api/users
+// @access  Private
+const getUsers = asyncHandler(async (req, res) => {
+    const users = User.find()
+    res.status(200).json(users)
+})
+
 // @desc    Get user data
 // @route   GET /api/users/me
 // @access  Private
@@ -105,6 +113,7 @@ const generateToken = (id) => {
 }
 
 module.exports = {
+    getUsers,
     getMe,
     registerUser,
     loginUser,

@@ -8,6 +8,7 @@ import MaterialsDashboard from './MaterialsDashboard'
 import DriversDashboard from './DriversDashboard'
 import CostCalculator from './CostCalculator'
 import WaitList from './WaitList'
+import AdminDashboard from './AdminDashboard/AdminDashboard'
 
 function Dashboard({ user }) {
     const [tabsActiveIndex, setTabsActiveIndex] = useState(
@@ -61,6 +62,9 @@ function Dashboard({ user }) {
                 </TabPanel>
                 <TabPanel header="Wait List">
                     <WaitList />
+                </TabPanel>
+                <TabPanel header="Admin">
+                    <AdminDashboard />
                 </TabPanel>
             </TabView>
         </section>

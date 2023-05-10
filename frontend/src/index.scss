@@ -397,6 +397,11 @@ tr.spacer td {
     width: 100% !important;
 }
 
+.activeAdminMenuItem {
+    background-color: #5689ae;
+    transition: all 0.3s;
+}
+
 @media print {
     .noPrint,
     .noPrint * {

@@ -1,0 +1,80 @@
+.adminPanelWrapper {
+    // border: 2px solid blue;
+    display: flex;
+    flex-direction: row;
+}
+
+.adminPanel {
+    // border: 2px solid red;
+    background-color: #3c5466;
+    min-width: 300px;
+    padding: 1em;
+}
+
+.settingsSubtitle {
+    color: #bbe478;
+    font-weight: bold;
+    padding: 1.25em 0;
+}
+
+.storeSettingsWrapper,
+.userSettingsWrapper {
+    // margin-left: 1em;
+}
+
+.storeSettingsWrapper div,
+.userSettingsWrapper div {
+    color: white;
+}
+
+.storeOpenClosedWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.settingName {
+    margin-bottom: 0.5em;
+    padding: 0.5em 1em;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.settingName:hover {
+    background-color: #5689ae;
+    cursor: pointer;
+}
+
+.activeMenuItem {
+    background-color: #5689ae;
+}
+
+.lastSettingName {
+    margin-bottom: 0.25em;
+}
+
+.settingNoHover:hover {
+    background-color: transparent;
+    cursor: inherit;
+}
+
+.autoCapInputWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+// .activeAdminMenuItem in index.scss
+
+.panelSiteMessages,
+.panelOperatingHours,
+.panelUserProfile {
+    display: none;
+}
+
+.adminContentPanel {
+    padding: 1em;
+}
+
+.warningEmptyHours {
+    margin-left: 1em;
+    // border: 2px solid blue;
+}

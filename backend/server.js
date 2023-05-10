@@ -32,6 +32,7 @@ app.use('/api/workdays', require('./routes/workdayRoutes'))
 app.use('/api/waitlist', require('./routes/waitListRoutes'))
 app.use('/api/faq', require('./routes/faqRoutes'))
 app.use('/api/faq-active', require('./routes/faqActiveRoutes'))
+app.use('/api/settings/store', require('./routes/storeSettingsRoutes'))
 
 // Service static
 app.use(express.static(path.resolve(__dirname, '../frontend/build')))
