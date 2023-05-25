@@ -402,6 +402,34 @@ tr.spacer td {
     transition: all 0.3s;
 }
 
+// Admin Dashboard =======================================================================
+
+#adminDashboardStoreOpenSwitch {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+// Inactive
+#adminDashboardStoreOpenSwitch .p-inputswitch-slider {
+    background-color: rgb(187, 8, 8);
+    // background-color: rgb(73, 29, 29);
+}
+
+// Active
+#adminDashboardStoreOpenSwitch .p-inputswitch-checked .p-inputswitch-slider {
+    background-color: rgb(69, 167, 83);
+    // background-color: rgb(73, 29, 29);
+}
+
+// Handle
+#adminDashboardStoreOpenSwitch .p-inputswitch-slider::before {
+    background-color: rgb(252, 252, 252);
+    box-shadow: 2px 2px 2px rgb(29, 32, 34);
+}
+
+// =======================================================================================
+
 @media print {
     .noPrint,
     .noPrint * {

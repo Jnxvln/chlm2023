@@ -7,7 +7,8 @@ const User = require('../models/userModel')
 // @route   GET /api/users
 // @access  Private
 const getUsers = asyncHandler(async (req, res) => {
-    const users = User.find()
+    const users = await User.find({}, '-password')
+
     res.status(200).json(users)
 })
 
@@ -22,7 +23,7 @@ const getMe = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    const { firstName, lastName, email, password } = req.body
+    const { firstName, lastName, email, role, password } = req.body
 
     if (!firstName) {
         res.status(400)
@@ -63,6 +64,7 @@ const registerUser = asyncHandler(async (req, res) => {
         firstName,
         lastName,
         email,
+        role: role ? role : 'user',
         password: hashedPassword,
     })
 
@@ -72,6 +74,7 @@ const registerUser = asyncHandler(async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            role: user.role,
             token: generateToken(user._id),
         })
     } else {
@@ -97,12 +100,62 @@ const loginUser = asyncHandler(async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            role: user.role,
             token: generateToken(user._id),
         })
     } else {
         res.status(400)
         throw new Error('Invalid credentials')
     }
+})
+
+// @desc        Update a user
+// @route       POST /api/users/:id
+// @access      Protected
+const updateUser = asyncHandler(async (req, res) => {
+    const { firstName, lastName, email } = req.body
+
+    // #region Error Checks
+    if (!firstName) {
+        res.status(400)
+        throw new Error('First name is required')
+    }
+
+    if (!lastName) {
+        res.status(400)
+        throw new Error('Last name is required')
+    }
+
+    if (!email) {
+        res.status(400)
+        throw new Error('E-mail is required')
+    }
+    // #endregion
+
+    // Check for user
+    const user = await User.findById(req.params.id)
+
+    // console.log('[userController.js updateUser()] user found: ')
+    // console.log(user)
+
+    if (!user) {
+        res.status(400)
+        throw new Error('User not found')
+    }
+
+    const userData = { firstName, lastName, email, updatedBy: req.user.id }
+
+    // console.log('[userController updateUser()] userData: ')
+    // console.log(userData)
+
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, userData, {
+        new: true,
+    }).select('-password')
+
+    // console.log('[userController.js updateUser] updatedUser: ')
+    // console.log(updatedUser)
+
+    res.status(200).json(updatedUser)
 })
 
 // Generate JWT
@@ -117,4 +170,5 @@ module.exports = {
     getMe,
     registerUser,
     loginUser,
+    updateUser,
 }

@@ -84,6 +84,11 @@ const storeSettingsSchema = mongoose.Schema(
                 required: false,
             },
         },
+
+        storeClosedReason: {
+            type: String,
+            required: false,
+        },
     },
     { timestamps: true }
 )

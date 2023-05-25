@@ -42,6 +42,28 @@ export const logout = async () => {
     localStorage.removeItem('user')
 }
 
+// Update user
+export const updateUser = async (userData, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    // console.log('[usersApi.js updateUser] userData: ')
+    // console.log(userData)
+    // console.log('[usersApi.js updateUser] token: ' + token)
+
+    const response = await axios.post(API_URL + userData._id, userData, config)
+
+    if (response.data) {
+        localStorage.removeItem('user')
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+    return response.data
+}
+
 export const fetchUser = async () => {
     return await JSON.parse(localStorage.getItem('user'))
 }

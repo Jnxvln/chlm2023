@@ -37,9 +37,6 @@ export const updateStoreSettings = async (storeSettingsData, token) => {
         config
     )
 
-    // console.log('[storeSettingsApi updateStoreSettings] updated response: ')
-    // console.log(response)
-
     return response.data
 }
 
@@ -51,5 +48,19 @@ export const deleteStoreSettings = async (storeSettingsID, token) => {
         },
     }
     const response = await axios.delete(API_URL + storeSettingsID, config)
+    return response.data
+}
+
+// Delete a site message by id
+export const deleteSiteMessage = async (siteMessageId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    const response = await axios.delete(
+        API_URL + '/sitemessage/' + siteMessageId,
+        config
+    )
     return response.data
 }

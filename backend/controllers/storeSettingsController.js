@@ -61,6 +61,22 @@ const deleteStoreSettings = asyncHandler(async (req, res) => {
     res.status(200).json(storeSettings)
 })
 
+// @desc    Delete site message
+// @route   DELETE /api/settings/store/:id
+// @access  Private
+const deleteSiteMessage = asyncHandler(async (req, res) => {
+    const storeSettings = await StoreSettings.findById(req.params.id)
+
+    if (!storeSettings) {
+        res.status(400)
+        throw new Error('Store settings not found')
+    }
+
+    storeSettings.remove()
+
+    res.status(200).json(storeSettings)
+})
+
 module.exports = {
     getStoreSettings,
     createStoreSettings,
