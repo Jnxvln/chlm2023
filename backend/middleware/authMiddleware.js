@@ -10,24 +10,14 @@ const protect = asyncHandler(async (req, res, next) => {
         req.headers.authorization.startsWith('Bearer')
     ) {
         try {
-            // console.log('[authMiddleware protect] req.headers: ')
-            // console.log(req.headers)
-
             // Get token from header
             token = req.headers.authorization.split(' ')[1]
-            console.log('[authMiddleware protect] token from header: ' + token)
 
             // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
-            // console.log('[authMiddleware protect] decoded: ')
-            // console.log(decoded)
 
             // Get user from the token
             req.user = await User.findById(decoded.id).select('-password')
-
-            console.log('[authMiddleware protect] req.user: ')
-            console.log(req.user)
-
             next()
         } catch (error) {
             console.log(error)

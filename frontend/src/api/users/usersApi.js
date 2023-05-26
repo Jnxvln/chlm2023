@@ -50,10 +50,6 @@ export const updateUser = async (userData, token) => {
         },
     }
 
-    // console.log('[usersApi.js updateUser] userData: ')
-    // console.log(userData)
-    // console.log('[usersApi.js updateUser] token: ' + token)
-
     const response = await axios.post(API_URL + userData._id, userData, config)
 
     if (response.data) {
@@ -64,6 +60,7 @@ export const updateUser = async (userData, token) => {
     return response.data
 }
 
+// Fetch user
 export const fetchUser = async () => {
     return await JSON.parse(localStorage.getItem('user'))
 }

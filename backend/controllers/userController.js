@@ -135,9 +135,6 @@ const updateUser = asyncHandler(async (req, res) => {
     // Check for user
     const user = await User.findById(req.params.id)
 
-    // console.log('[userController.js updateUser()] user found: ')
-    // console.log(user)
-
     if (!user) {
         res.status(400)
         throw new Error('User not found')
@@ -145,17 +142,24 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const userData = { firstName, lastName, email, updatedBy: req.user.id }
 
-    // console.log('[userController updateUser()] userData: ')
-    // console.log(userData)
-
+    // Update the user and generate a new token
     const updatedUser = await User.findByIdAndUpdate(req.params.id, userData, {
         new: true,
     }).select('-password')
 
-    // console.log('[userController.js updateUser] updatedUser: ')
-    // console.log(updatedUser)
-
-    res.status(200).json(updatedUser)
+    if (updatedUser) {
+        res.status(200).json({
+            _id: updatedUser.id,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            email: updatedUser.email,
+            role: updatedUser.role,
+            token: generateToken(updatedUser._id),
+        })
+    } else {
+        res.status(400)
+        throw new Error('Invalid user data after updating')
+    }
 })
 
 // Generate JWT
