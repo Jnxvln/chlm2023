@@ -31,7 +31,7 @@ export default function Bulletin() {
                 settings.data.siteMessages &&
                 settings.data.siteMessages.length > 0 &&
                 settings.data.siteMessages.map((msg) => {
-                    if (msg.isActive) {
+                    if (msg.isActive && msg.page === '/') {
                         return (
                             <BulletinArticle
                                 key={msg._id}
