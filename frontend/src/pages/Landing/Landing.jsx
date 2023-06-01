@@ -27,6 +27,7 @@ export default function Landing() {
             {/* HEADER */}
             <LandingHeader />
 
+            {/* Store Closed Message */}
             {settings && settings.data && !settings.data.storeOpen && (
                 <div
                     style={{
@@ -62,14 +63,6 @@ export default function Landing() {
                 </div>
             )}
 
-            {/* BULLETIN BOARD */}
-            {/* {settings &&
-                settings.data &&
-                settings.data.siteMessages &&
-                settings.data.siteMessages.length > 0 &&
-                settings.data.siteMessages.some((msg) => msg.isActive) && (
-                    <Bulletin />
-                )} */}
             <Bulletin />
 
             {/* BROWSE MATERIALS */}
