@@ -12,10 +12,7 @@ const express = require('express')
 const router = express.Router()
 
 // ROUTE HANDLERS
-router
-    .route('/')
-    .get(protect, getStoreSettings)
-    .post(protect, createStoreSettings)
+router.route('/').get(getStoreSettings).post(protect, createStoreSettings)
 router
     .route('/:id')
     .delete(protect, deleteStoreSettings)

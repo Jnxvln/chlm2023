@@ -61,6 +61,7 @@ export default function AdminDashboard() {
     })
     const [siteMessageSelected, setSiteMessageSelected] = useState(null)
     // Input vars
+    const [inputSiteMessageTitle, setInputSiteMessageTitle] = useState('')
     const [inputSiteMessagePage, setInputSiteMessagePage] = useState('')
     const [inputSiteMessageMessage, setInputSiteMessageMessage] = useState('')
     const [inputSiteMessageDateStart, setInputSiteMessageDateStart] =
@@ -246,6 +247,7 @@ export default function AdminDashboard() {
         // Update siteMessageSelected, then update settingsTemplate siteMessages, then save
         let newMessage = {
             ...siteMessageSelected,
+            title: inputSiteMessageTitle,
             page: inputSiteMessagePage,
             message: inputSiteMessageMessage,
             dateStart: inputSiteMessageDateStart,
@@ -256,9 +258,6 @@ export default function AdminDashboard() {
         let index = settingsTemplate.siteMessages.findIndex(
             (el) => el._id === newMessage._id
         )
-
-        // console.log('INDEX: ')
-        // console.log(index)
 
         // Message doesn't exist, create a new one
         if (index < 0) {
@@ -496,6 +495,7 @@ export default function AdminDashboard() {
     // Set siteMessageSelected for dialogs
     useEffect(() => {
         if (siteMessageSelected) {
+            setInputSiteMessageTitle(siteMessageSelected.title)
             setInputSiteMessagePage(siteMessageSelected.page)
             setInputSiteMessageDateStart(
                 new Date(siteMessageSelected.dateStart)
@@ -592,6 +592,24 @@ export default function AdminDashboard() {
                             />
                             <label htmlFor="dialogInput_SiteMessage_DateEnd">
                                 Date End
+                            </label>
+                        </span>
+                    </div>
+
+                    {/* Title */}
+                    <div className="field">
+                        <span className="p-float-label">
+                            <InputText
+                                id="dialogInput_SiteMessage_Title"
+                                value={inputSiteMessageTitle}
+                                placeholder="Title"
+                                onChange={(e) =>
+                                    setInputSiteMessageTitle(e.target.value)
+                                }
+                                style={{ width: '100%' }}
+                            />
+                            <label htmlFor="dialogInput_SiteMessage_Title">
+                                Title
                             </label>
                         </span>
                     </div>
@@ -817,6 +835,7 @@ export default function AdminDashboard() {
                             loading={storeSettings.loading}
                         >
                             <Column header="Page" field="page" />
+                            <Column header="Title" field="title" />
                             <Column header="Message" field="message" />
                             <Column
                                 header="Date Start"

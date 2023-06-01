@@ -4,6 +4,10 @@ const storeSettingsSchema = mongoose.Schema(
     {
         siteMessages: [
             {
+                title: {
+                    type: String,
+                    required: [true, 'A title is required'],
+                },
                 message: {
                     type: String,
                     required: [true, 'A message is required'],

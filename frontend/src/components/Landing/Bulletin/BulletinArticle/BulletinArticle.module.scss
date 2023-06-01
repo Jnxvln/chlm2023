@@ -1,7 +1,7 @@
 @import '../../../../styles/colors.scss';
 
 .container {
-    margin-bottom: 2em;
+    margin-bottom: 3em !important;
 }
 
 .title {
@@ -11,7 +11,7 @@
     padding: 0.25em 0;
 }
 
-.published {
+.dateStart {
     color: #a79b91;
     font-size: 0.95rem;
     margin: 0;
@@ -25,7 +25,7 @@
     .title {
         font-size: 1.2rem;
     }
-    .published {
+    .dateStart {
         font-size: 0.78rem;
     }
     .content {
@@ -37,7 +37,7 @@
     .title {
         font-size: 1.5rem;
     }
-    .published {
+    .dateStart {
         font-size: 0.85rem;
     }
 }
@@ -46,7 +46,7 @@
     .title {
         font-size: 1.7rem;
     }
-    .published {
+    .dateStart {
         font-size: 0.9rem;
     }
     .content {
@@ -62,7 +62,7 @@
     .title {
         font-size: 1.9rem;
     }
-    .published {
+    .dateStart {
         font-size: 1rem;
     }
     .content {
@@ -74,7 +74,7 @@
     .title {
         font-size: 2.1rem;
     }
-    .published {
+    .dateStart {
         font-size: 1.2rem;
     }
     .content {
@@ -89,7 +89,7 @@
     .title {
         font-size: 3rem;
     }
-    .published {
+    .dateStart {
         font-size: 1.8rem;
     }
     .content {

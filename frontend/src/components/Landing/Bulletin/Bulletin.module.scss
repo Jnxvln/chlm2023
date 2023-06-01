@@ -14,9 +14,29 @@
     font-size: 26pt;
 }
 
+// .storeClosedWrapper {
+//     display: flex;
+//     justify-content: flex-start;
+//     align-items: center;
+//     gap: 16px;
+//     background-color: rgb(153, 52, 66);
+//     border-radius: 10pt;
+//     padding: 1.5em;
+// }
+
+// .storeClosedMessage {
+//     // border: 2px solid orange;
+//     color: white;
+//     font-weight: bold;
+//     font-size: 1.25rem;
+// }
+
 @media screen and (min-width: 320px) {
     .title {
         font-size: 1.8rem;
+    }
+    .storeClosedMessage {
+        font-size: 1rem;
     }
 }
 
@@ -33,6 +53,10 @@
 }
 
 @media screen and (min-width: 1024px) {
+    .storeClosedWrapper {
+        max-width: 900px;
+        margin: 0 auto;
+    }
     .title {
         font-size: 2.2rem;
     }
@@ -47,5 +71,8 @@
 @media screen and (min-width: 2560px) {
     .title {
         font-size: 4.5rem;
+    }
+    .storeClosedWrapper {
+        max-width: 1280px;
     }
 }

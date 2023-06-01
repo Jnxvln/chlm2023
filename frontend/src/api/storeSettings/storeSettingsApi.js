@@ -4,12 +4,12 @@ const API_URL = '/api/settings/store/'
 
 // Get store settings
 export const getStoreSettings = async (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    }
-    const response = await axios.get(API_URL, config)
+    // const config = {
+    //     headers: {
+    //         Authorization: `Bearer ${token}`,
+    //     },
+    // }
+    const response = await axios.get(API_URL)
     return response.data
 }
 

@@ -1,25 +1,59 @@
 import styles from './Bulletin.module.scss'
 import BulletinArticle from './BulletinArticle/BulletinArticle'
+import { toast } from 'react-toastify'
+import { useQuery } from '@tanstack/react-query'
+import { getStoreSettings } from '../../../api/storeSettings/storeSettingsApi'
+import dayjs from 'dayjs'
 
 export default function Bulletin() {
+    const settings = useQuery({
+        queryKey: ['storesettings'],
+        queryFn: () => getStoreSettings(),
+        onSuccess: (_settings) => {
+            console.log('[Bulletin.jsx settings]: ')
+            console.log(_settings)
+        },
+        onError: (err) => {
+            console.log(err)
+            const msg = err.message
+            toast.error(msg, { autoClose: 5000 })
+        },
+    })
+
     return (
         <section className={styles.sectionContainer}>
             <h1 className={styles.title}>Bulletin</h1>
-            <BulletinArticle
-                title="Thanksgiving Hours"
-                published="11/17/2022 6:17am"
-                content="This is a bulletin post that is supposed to relay some kind of information. It should mostly be used for company-wide or site-wide alerts, pertaining to impactions regarding services rendered; holiday hours; updates; product availability issues; etc."
-            />
 
-            <BulletinArticle
-                title="Closed Saturdays Until Spring"
-                published="10/27/2022 12:09pm"
-                content="Newer bulletin posts should appear at the top of the list.
-                This is also a bulletin post, it is just slightly older.
-                This post also should have relevant information to company
-                logistics, impactions, and other considerations used to
-                relay important, vital information to the general public."
-            />
+            <br />
+
+            {settings &&
+                settings.data &&
+                settings.data.siteMessages &&
+                settings.data.siteMessages.length > 0 &&
+                settings.data.siteMessages.map((msg) => {
+                    if (msg.isActive) {
+                        return (
+                            <BulletinArticle
+                                key={msg._id}
+                                title={msg.title}
+                                dateStart={dayjs(msg.dateStart).format(
+                                    'MM/DD/YY'
+                                )}
+                                message={msg.message}
+                            />
+                        )
+                    }
+                })}
+
+            {settings &&
+                settings.data &&
+                settings.data.siteMessages &&
+                settings.data.siteMessages.length > 0 &&
+                settings.data.siteMessages.every((msg) => !msg.isActive) && (
+                    <div style={{ fontStyle: 'italic', textAlign: 'center' }}>
+                        No messages at this time
+                    </div>
+                )}
         </section>
     )
 }

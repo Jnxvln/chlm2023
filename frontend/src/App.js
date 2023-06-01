@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 // PAGES
-import Landing from './pages/Landing'
+import Landing from './pages/Landing/Landing'
 // import About from './pages/About'
 import Materials from './pages/Materials/Materials'
 // import Carports from './pages/Carports'
