@@ -33,6 +33,7 @@ app.use('/api/waitlist', require('./routes/waitListRoutes'))
 app.use('/api/faq', require('./routes/faqRoutes'))
 app.use('/api/faq-active', require('./routes/faqActiveRoutes'))
 app.use('/api/settings/store', require('./routes/storeSettingsRoutes'))
+app.use('/api/usermessages', require('./routes/userMessagesRoutes'))
 
 // Service static
 app.use(express.static(path.resolve(__dirname, '../frontend/build')))
