@@ -479,6 +479,7 @@ function HaulsDashboard() {
         }
 
         setSelectedDriverId(driverId)
+        localStorage.setItem('selectedDriverId', driverId)
     }
 
     const handleNoWorkdays = () => {
