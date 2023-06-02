@@ -75,7 +75,9 @@ function DeliveryForm({
         onSuccess: (delivery) => {
             if (delivery) {
                 toast.success('Delivery created', { autoClose: 1000 })
-                onResetFilteredDeliveries()
+                if (onResetFilteredDeliveries) {
+                    onResetFilteredDeliveries()
+                }
                 queryClient.invalidateQueries(['deliveries'])
             }
         },

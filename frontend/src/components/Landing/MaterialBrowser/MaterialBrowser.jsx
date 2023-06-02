@@ -14,9 +14,9 @@ export default function MaterialBrowser() {
 
             <article className={styles.article}>
                 <div>
-                    <h1 className={styles.title}>Browse Our Materials</h1>
+                    <h1 className={styles.title}>Featured Materials</h1>
                     <div className={styles.carouselContainer}></div>
-                    <nav className={styles.nav}>
+                    {/* <nav className={styles.nav}>
                         <ul className={styles.navList}>
                             <li className={styles.navListItem}>Gravel</li>
                             <li className={styles.navListItem}>Soil</li>
@@ -25,23 +25,13 @@ export default function MaterialBrowser() {
                             <li className={styles.navListItem}>Flagstone</li>
                             <li className={styles.navListItem}>Creek Rock</li>
                         </ul>
-                    </nav>
+                    </nav> */}
                 </div>
 
                 <div className={styles.infoContainer}>
-                    <div className={styles.materialsButtonContainer}>
-                        <Button
-                            type="button"
-                            onClick={() => navigate('/materials')}
-                            className="viewMatsBtn"
-                        >
-                            View All Materials
-                        </Button>
-                    </div>
+                    {/* <h2 className={styles.categoryTitle}>Soil</h2> */}
 
-                    <h2 className={styles.categoryTitle}>Soil</h2>
-
-                    <div className={styles.materialBrowserItemContainer}>
+                    {/* <div className={styles.materialBrowserItemContainer}>
                         <MaterialBrowserItem
                             imgSrc="https://via.placeholder.com/200"
                             name="Unscreened Topsoil"
@@ -85,7 +75,7 @@ export default function MaterialBrowser() {
                             creating an excellent garden soil blend. Tip: Blend in with topsoil or your own soil
                             if it is draining too quickly."
                         />
-                    </div>
+                    </div> */}
                     <div className={styles.materialsButtonContainer}>
                         <Button
                             type="button"

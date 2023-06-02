@@ -234,9 +234,9 @@ function DeliveriesDashboard() {
                         {selectedClient && (
                             <DeliveryForm
                                 selectedClient={selectedClient}
-                                onResetFilteredDeliveries={
-                                    onResetFilteredDeliveries
-                                }
+                                // onResetFilteredDeliveries={
+                                //     onResetFilteredDeliveries
+                                // }
                             />
                         )}
 
