@@ -147,6 +147,7 @@ export default function UserMessages() {
          <br />
 
          <TabView>
+            {/* RECEIVED MESSAGES */}
             <TabPanel header="Received">
                <div style={{ maxHeight: '400px', overflowY: 'scroll' }}>
                   <Accordion
@@ -312,6 +313,7 @@ export default function UserMessages() {
                </div>
             </TabPanel>
 
+            {/* SENT MESSAGES */}
             <TabPanel header="Sent">
                <div style={{ maxHeight: '400px', overflowY: 'scroll' }}>
                   <Accordion>

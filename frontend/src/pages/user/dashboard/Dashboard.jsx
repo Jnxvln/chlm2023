@@ -4,7 +4,7 @@ import { TabView, TabPanel } from 'primereact/tabview'
 import { Badge } from 'primereact/badge'
 import { toast } from 'react-toastify'
 // Data
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getUserMessagesByUserId } from '../../../api/userMessages/userMessagesApi'
 // import { fetchUser } from '../../../api/users/usersApi'
 // Custom Components
@@ -96,6 +96,21 @@ function Dashboard({ user }) {
          setTabsActiveIndex(tabIndex)
       }
    }, [])
+
+   useEffect(() => {
+      if (userMessages && userMessages.data) {
+         const filt = userMessages.data.filter((msg) => {
+            return (
+               !msg.messageViewed &&
+               !msg.recipientDeleted &&
+               msg.senderId !== user._id
+            )
+         })
+
+         console.log('[Dashboard.jsx useEffect] filt: ')
+         console.log(filt)
+      }
+   }, [userMessages])
    // #endregion
 
    return (
