@@ -49,7 +49,9 @@ export default function MaterialBrowser() {
                   <Galleria
                      value={images}
                      numVisible={5}
-                     //  circular
+                     circular
+                     autoPlay
+                     transitionInterval={3000}
                      showItemNavigators
                      showThumbnails={false}
                      item={itemTemplate}
