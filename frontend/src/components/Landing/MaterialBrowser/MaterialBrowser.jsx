@@ -1,92 +1,77 @@
 import styles from './MaterialBrowser.module.scss'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from 'primereact/button'
+import { Galleria } from 'primereact/galleria'
+import { useQuery } from '@tanstack/react-query'
+import { getActiveMaterials } from '../../../api/materials/materialsApi'
 import MaterialBrowserItem from './MaterialBrowserItem/MaterialBrowserItem'
 
 export default function MaterialBrowser() {
-    const navigate = useNavigate()
+   const navigate = useNavigate()
 
-    return (
-        <section className={styles.sectionContainer}>
-            <div className={styles.backgroundContainer}>
-                <div className={styles.backgroundOverlay}></div>
+   const [images, setImages] = useState(null)
+
+   const materials = useQuery({
+      queryKey: ['materials'],
+      queryFn: getActiveMaterials,
+      onSuccess: (data) => {
+         console.log('[MaterialBrowser.jsx] Active Materials: ')
+         console.log(data)
+         let _images = []
+         for (let i = 0; i < data.length; i++) {
+            if (data[i].isFeatured) {
+               _images.push(data[i].image)
+            }
+         }
+         setImages(_images)
+      },
+   })
+
+   const itemTemplate = (item) => {
+      return <img src={item} alt="" className={styles.materialItemTemplate} />
+   }
+
+   const thumbnailTemplate = (item) => {
+      return <img src={item} alt="" className={styles.materialItemTemplate} />
+   }
+
+   return (
+      <section className={styles.sectionContainer}>
+         {/* <div className={styles.backgroundContainer}>
+            <div className={styles.backgroundOverlay}></div>
+         </div> */}
+
+         <article className={styles.article}>
+            <div>
+               <h1 className={styles.title}>Featured Materials</h1>
+               <div className={styles.carouselContainer}>
+                  <Galleria
+                     value={images}
+                     numVisible={5}
+                     //  circular
+                     showItemNavigators
+                     showThumbnails={false}
+                     item={itemTemplate}
+                     thumbnail={thumbnailTemplate}
+                  />
+               </div>
             </div>
 
-            <article className={styles.article}>
-                <div>
-                    <h1 className={styles.title}>Featured Materials</h1>
-                    <div className={styles.carouselContainer}></div>
-                    {/* <nav className={styles.nav}>
-                        <ul className={styles.navList}>
-                            <li className={styles.navListItem}>Gravel</li>
-                            <li className={styles.navListItem}>Soil</li>
-                            <li className={styles.navListItem}>Compost</li>
-                            <li className={styles.navListItem}>Mulch</li>
-                            <li className={styles.navListItem}>Flagstone</li>
-                            <li className={styles.navListItem}>Creek Rock</li>
-                        </ul>
-                    </nav> */}
-                </div>
+            <div className={styles.infoContainer}>
+               {/* <h2 className={styles.categoryTitle}>Soil</h2> */}
 
-                <div className={styles.infoContainer}>
-                    {/* <h2 className={styles.categoryTitle}>Soil</h2> */}
-
-                    {/* <div className={styles.materialBrowserItemContainer}>
-                        <MaterialBrowserItem
-                            imgSrc="https://via.placeholder.com/200"
-                            name="Unscreened Topsoil"
-                            description="We carry a local, unscreened (unfiltered)
-                            sandy loam topsoil, great for use in
-                            planting, gardening, filling holes, and much
-                            more. Its general-purpose qualities make it
-                            a mainstay in a large variety of landscaping
-                            projects."
-                        />
-
-                        <MaterialBrowserItem
-                            imgSrc="https://via.placeholder.com/200"
-                            name="Premium Organic Compost"
-                            description="Our premium organic compost is rich in
-                            nutrients made mostly from hardwood sawdust
-                            and chicken litter. It is excellent for
-                            blending into your own soil or our topsoil,
-                            for use in planting and gardening. You can
-                            also add it to your lawn for enrichment."
-                        />
-
-                        <MaterialBrowserItem
-                            imgSrc="https://via.placeholder.com/200"
-                            name="70/30 Mix (Special Blend)"
-                            description="70/30 is our in-house blend of 70% Premium
-                            Compost with 30% Masonry Sand, where the
-                            compost provides a great source of nutrients
-                            and the sand helps with drainage, together
-                            creating an excellent garden soil blend. Tip: Blend in with topsoil or your own soil
-                            if it is draining too quickly."
-                        />
-
-                        <MaterialBrowserItem
-                            imgSrc="https://via.placeholder.com/200"
-                            name="70/30 Mix (Special Blend)"
-                            description="70/30 is our in-house blend of 70% Premium
-                            Compost with 30% Masonry Sand, where the
-                            compost provides a great source of nutrients
-                            and the sand helps with drainage, together
-                            creating an excellent garden soil blend. Tip: Blend in with topsoil or your own soil
-                            if it is draining too quickly."
-                        />
-                    </div> */}
-                    <div className={styles.materialsButtonContainer}>
-                        <Button
-                            type="button"
-                            onClick={() => navigate('/materials')}
-                            className="viewMatsBtn"
-                        >
-                            View All Materials
-                        </Button>
-                    </div>
-                </div>
-            </article>
-        </section>
-    )
+               <div className={styles.materialsButtonContainer}>
+                  <Button
+                     type="button"
+                     onClick={() => navigate('/materials')}
+                     className="viewMatsBtn"
+                  >
+                     View All Materials
+                  </Button>
+               </div>
+            </div>
+         </article>
+      </section>
+   )
 }
