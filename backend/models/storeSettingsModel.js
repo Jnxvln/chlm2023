@@ -1,100 +1,105 @@
 const mongoose = require('mongoose')
 
 const storeSettingsSchema = mongoose.Schema(
-    {
-        siteMessages: [
-            {
-                title: {
-                    type: String,
-                    required: [true, 'A title is required'],
-                },
-                message: {
-                    type: String,
-                    required: [true, 'A message is required'],
-                },
-                dateStart: {
-                    type: String,
-                    required: [true, 'A start date is required'],
-                },
-                dateEnd: {
-                    type: String,
-                    required: false,
-                },
-                page: {
-                    type: String,
-                    required: [true, 'Page to display on is required'],
-                },
-                createdBy: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                    required: [true, 'A user is required'],
-                },
-                updatedBy: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                    required: false,
-                },
-                isActive: {
-                    type: Boolean,
-                    required: false,
-                },
+   {
+      siteMessages: [
+         {
+            title: {
+               type: String,
+               required: [true, 'A title is required'],
             },
-        ],
-
-        operatingHours: {
-            monFri: {
-                hours: {
-                    type: String,
-                    required: [true, 'Mon-Fri hours required'],
-                },
-                updatedBy: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                    required: false,
-                },
+            message: {
+               type: String,
+               required: [true, 'A message is required'],
             },
-            saturday: {
-                hours: {
-                    type: String,
-                    required: [true, 'Saturday hours required'],
-                },
-                updatedBy: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                    required: false,
-                },
+            dateStart: {
+               type: String,
+               required: [true, 'A start date is required'],
             },
-            sunday: {
-                hours: {
-                    type: String,
-                    required: [true, 'Sunday hours required'],
-                },
-                updatedBy: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                    required: false,
-                },
+            dateEnd: {
+               type: String,
+               required: false,
             },
-        },
-
-        storeOpen: {
-            status: {
-                type: Boolean,
-                required: false,
+            page: {
+               type: String,
+               required: [true, 'Page to display on is required'],
+            },
+            createdBy: {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: 'User',
+               required: [true, 'A user is required'],
             },
             updatedBy: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-                required: false,
+               type: mongoose.Schema.Types.ObjectId,
+               ref: 'User',
+               required: false,
             },
-        },
+            isActive: {
+               type: Boolean,
+               required: false,
+            },
+         },
+      ],
 
-        storeClosedReason: {
-            type: String,
+      operatingHours: {
+         monFri: {
+            hours: {
+               type: String,
+               required: [true, 'Mon-Fri hours required'],
+            },
+            updatedBy: {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: 'User',
+               required: false,
+            },
+         },
+         saturday: {
+            hours: {
+               type: String,
+               required: [true, 'Saturday hours required'],
+            },
+            updatedBy: {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: 'User',
+               required: false,
+            },
+         },
+         sunday: {
+            hours: {
+               type: String,
+               required: [true, 'Sunday hours required'],
+            },
+            updatedBy: {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: 'User',
+               required: false,
+            },
+         },
+      },
+
+      storeOpen: {
+         status: {
+            type: Boolean,
             required: false,
-        },
-    },
-    { timestamps: true }
+         },
+         updatedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false,
+         },
+      },
+
+      storeClosedReason: {
+         type: String,
+         required: false,
+      },
+
+      advertiseDeliveries: {
+         type: Boolean,
+         required: false,
+      },
+   },
+   { timestamps: true }
 )
 
 module.exports = mongoose.model('StoreSettings', storeSettingsSchema)

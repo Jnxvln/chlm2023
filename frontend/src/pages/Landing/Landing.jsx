@@ -12,76 +12,74 @@ import { useQuery } from '@tanstack/react-query'
 import { getStoreSettings } from '../../api/storeSettings/storeSettingsApi'
 
 export default function Landing() {
-    const settings = useQuery({
-        queryKey: ['storesettings'],
-        queryFn: () => getStoreSettings(),
-        onError: (err) => {
-            console.log(err)
-            const msg = err.message
-            toast.error(msg, { autoClose: 5000 })
-        },
-    })
+   const settings = useQuery({
+      queryKey: ['storesettings'],
+      queryFn: () => getStoreSettings(),
+      onError: (err) => {
+         console.log(err)
+         const msg = err.message
+         toast.error(msg, { autoClose: 5000 })
+      },
+   })
 
-    return (
-        <section>
-            {/* HEADER */}
-            <LandingHeader />
+   return (
+      <section>
+         {/* HEADER */}
+         <LandingHeader />
 
-            {/* Store Closed Message */}
-            {settings && settings.data && !settings.data.storeOpen && (
-                <div
-                    style={{
-                        backgroundColor: '#ECE9E7',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        padding: '2em 0',
-                    }}
-                >
-                    <div className={styles.storeClosedContainer}>
-                        <div className={styles.storeClosedWrapper}>
-                            <div>
-                                <i
-                                    className="pi pi-exclamation-circle"
-                                    style={{ color: 'white', fontSize: '3rem' }}
-                                />
-                            </div>
-                            <div>
-                                {settings &&
-                                    settings.data &&
-                                    !settings.data.storeOpen && (
-                                        <div
-                                            className={
-                                                styles.storeClosedMessage
-                                            }
-                                        >
-                                            {settings.data.storeClosedReason}
-                                        </div>
-                                    )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+         {/* Store Closed Message */}
+         {settings && settings.data && !settings.data.storeOpen && (
+            <div
+               style={{
+                  backgroundColor: '#ECE9E7',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  padding: '2em 0',
+               }}
+            >
+               <div className={styles.storeClosedContainer}>
+                  <div className={styles.storeClosedWrapper}>
+                     <div>
+                        <i
+                           className="pi pi-exclamation-circle"
+                           style={{ color: 'white', fontSize: '3rem' }}
+                        />
+                     </div>
+                     <div>
+                        {settings &&
+                           settings.data &&
+                           !settings.data.storeOpen && (
+                              <div className={styles.storeClosedMessage}>
+                                 {settings.data.storeClosedReason}
+                              </div>
+                           )}
+                     </div>
+                  </div>
+               </div>
+            </div>
+         )}
 
-            <Bulletin />
+         <Bulletin />
 
-            {/* BROWSE MATERIALS */}
-            <MaterialBrowser />
+         {/* BROWSE MATERIALS */}
+         <MaterialBrowser />
 
-            {/* HOW MUCH DO I NEED */}
-            <HowMuch />
+         {/* HOW MUCH DO I NEED */}
+         <HowMuch />
 
-            {/* DELIVERY SECTION */}
+         {/* DELIVERY SECTION */}
+         {settings && settings.data && settings.data.advertiseDeliveries && (
             <Delivery />
+         )}
 
-            {/* EAGLE CARPORTS */}
-            <EagleCarports />
+         {/* EAGLE CARPORTS */}
+         <EagleCarports />
 
-            {/* HELP SECTION */}
-            <Help />
+         {/* HELP SECTION */}
+         <Help />
 
-            {/* Footer */}
-            <Footer />
-        </section>
-    )
+         {/* Footer */}
+         <Footer />
+      </section>
+   )
 }
