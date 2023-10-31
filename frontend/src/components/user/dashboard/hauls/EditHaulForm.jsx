@@ -995,6 +995,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                                         placeholder="Rate"
                                         mode="decimal"
                                         minFractionDigits={2}
+                                        maxFractionDigits={5}
                                         step={0.01}
                                         onChange={onChangeNumber}
                                         style={{ width: '100%' }}
@@ -1016,6 +1017,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                                         placeholder="Pay Rate"
                                         mode="decimal"
                                         minFractionDigits={2}
+                                        maxFractionDigits={5}
                                         step={0.01}
                                         onChange={onChangeNumber}
                                         style={{ width: '100%' }}
@@ -1056,6 +1058,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                                         placeholder="Miles"
                                         mode="decimal"
                                         minFractionDigits={2}
+                                        maxFractionDigits={5}
                                         step={0.01}
                                         onChange={onChangeNumber}
                                         style={{ width: '100%' }}
