@@ -174,9 +174,9 @@ function EditFreightRouteForm({ freightRoute }) {
          return toast.error('Destination is required')
       }
 
-      if (!freightCost) {
-         return toast.error('Freight cost is required (or 0)')
-      }
+      // if (!freightCost) {
+      //    return toast.error('Freight cost is required (or 0)')
+      // }
 
       mutationUpdateRoute.mutate({ formData, token: user.data.token })
       onClose()
