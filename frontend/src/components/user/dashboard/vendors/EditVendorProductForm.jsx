@@ -18,397 +18,386 @@ import { updateVendorProduct } from '../../../../api/vendorProducts/vendorProduc
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 function VendorProductForm({ vendorProduct }) {
-    // #region VARS ------------------------
+   // #region VARS ------------------------
 
-    const queryClient = useQueryClient()
+   const queryClient = useQueryClient()
 
-    const initialState = {
-        _id: undefined,
-        vendorId: undefined,
-        vendorLocationId: undefined,
-        name: '',
-        productCost: undefined,
-        notes: '',
-        isActive: true,
-    }
+   const initialState = {
+      _id: undefined,
+      vendorId: undefined,
+      vendorLocationId: undefined,
+      name: '',
+      productCost: undefined,
+      notes: '',
+      isActive: true,
+   }
 
-    const [sortedVendors, setSortedVendors] = useState([])
-    const [filteredVendorLocations, setFilteredVendorLocations] = useState([])
-    const [formDialog, setFormDialog] = useState(false)
-    const [formData, setFormData] = useState(initialState)
+   const [sortedVendors, setSortedVendors] = useState([])
+   const [filteredVendorLocations, setFilteredVendorLocations] = useState([])
+   const [formDialog, setFormDialog] = useState(false)
+   const [formData, setFormData] = useState(initialState)
 
-    // Destructure form data
-    const { vendorId, vendorLocationId, name, productCost, notes, isActive } =
-        formData
+   // Destructure form data
+   const { vendorId, vendorLocationId, name, productCost, notes, isActive } =
+      formData
 
-    const user = useQuery(['user'], fetchUser)
+   const user = useQuery(['user'], fetchUser)
 
-    const vendors = useQuery({
-        queryKey: ['vendors'],
-        queryFn: () => getVendors(user.data.token),
-        onError: (err) => {
-            const errMsg = 'Error fetching vendors'
-            console.log(errMsg)
-            console.log(err)
+   const vendors = useQuery({
+      queryKey: ['vendors'],
+      queryFn: () => getVendors(user.data.token),
+      onError: (err) => {
+         const errMsg = 'Error fetching vendors'
+         console.log(errMsg)
+         console.log(err)
 
-            if (
-                err &&
-                err.response &&
-                err.response.data &&
-                err.response.data.message
-            ) {
-                toast.error(err.response.data.message, { autoClose: false })
-            } else {
-                toast.error(errMsg, { autoClose: false })
-            }
-        },
-    })
+         if (
+            err &&
+            err.response &&
+            err.response.data &&
+            err.response.data.message
+         ) {
+            toast.error(err.response.data.message, { autoClose: false })
+         } else {
+            toast.error(errMsg, { autoClose: false })
+         }
+      },
+   })
 
-    const vendorLocations = useQuery({
-        queryKey: ['vendorLocations'],
-        queryFn: () => getVendorLocations(user.data.token),
-        onError: (err) => {
-            const errMsg = 'Error fetching vendor locations'
-            console.log(errMsg)
-            console.log(err)
+   const vendorLocations = useQuery({
+      queryKey: ['vendorLocations'],
+      queryFn: () => getVendorLocations(user.data.token),
+      onError: (err) => {
+         const errMsg = 'Error fetching vendor locations'
+         console.log(errMsg)
+         console.log(err)
 
-            if (
-                err &&
-                err.response &&
-                err.response.data &&
-                err.response.data.message
-            ) {
-                toast.error(err.response.data.message, { autoClose: false })
-            } else {
-                toast.error(errMsg, { autoClose: false })
-            }
-        },
-    })
+         if (
+            err &&
+            err.response &&
+            err.response.data &&
+            err.response.data.message
+         ) {
+            toast.error(err.response.data.message, { autoClose: false })
+         } else {
+            toast.error(errMsg, { autoClose: false })
+         }
+      },
+   })
 
-    const mutationUpdateVendorProduct = useMutation({
-        mutationKey: ['vendorProducts'],
-        mutationFn: ({ formData, token }) =>
-            updateVendorProduct(formData, token),
-        onSuccess: (updVendorProduct) => {
-            if (updVendorProduct) {
-                toast.success(`${updVendorProduct.name} updated`, {
-                    autoClose: 1000,
-                })
-                queryClient.invalidateQueries(['vendorProducts'])
-            }
-        },
-        onError: (err) => {
-            const errMsg = 'Error updating vendor product'
-            console.log(errMsg)
-            console.log(err)
+   const mutationUpdateVendorProduct = useMutation({
+      mutationKey: ['vendorProducts'],
+      mutationFn: ({ formData, token }) => updateVendorProduct(formData, token),
+      onSuccess: (updVendorProduct) => {
+         if (updVendorProduct) {
+            toast.success(`${updVendorProduct.name} updated`, {
+               autoClose: 1000,
+            })
+            queryClient.invalidateQueries(['vendorProducts'])
+         }
+      },
+      onError: (err) => {
+         const errMsg = 'Error updating vendor product'
+         console.log(errMsg)
+         console.log(err)
 
-            if (
-                err &&
-                err.response &&
-                err.response.data &&
-                err.response.data.message
-            ) {
-                toast.error(err.response.data.message, { autoClose: false })
-            } else {
-                toast.error(errMsg, { autoClose: false })
-            }
-        },
-    })
+         if (
+            err &&
+            err.response &&
+            err.response.data &&
+            err.response.data.message
+         ) {
+            toast.error(err.response.data.message, { autoClose: false })
+         } else {
+            toast.error(errMsg, { autoClose: false })
+         }
+      },
+   })
 
-    // #endregion
+   // #endregion
 
-    // #region COMPONENT RENDERERS
-    const vendorProductDialogHeader = () => {
-        return (
-            <DialogHeader
-                resourceType="Vendor Product"
-                resourceName={vendorProduct.name}
-                isEdit
-            />
-        )
-    }
+   // #region COMPONENT RENDERERS
+   const vendorProductDialogHeader = () => {
+      return (
+         <DialogHeader
+            resourceType="Vendor Product"
+            resourceName={vendorProduct.name}
+            isEdit
+         />
+      )
+   }
 
-    const vendorProductDialogFooter = () => {
-        return (
-            <DialogFooter_SubmitClose onClose={onClose} onSubmit={onSubmit} />
-        )
-    }
-    // #endregion
+   const vendorProductDialogFooter = () => {
+      return <DialogFooter_SubmitClose onClose={onClose} onSubmit={onSubmit} />
+   }
+   // #endregion
 
-    // #region FORM HANDLERS
-    // Handle form reset
-    const resetForm = () => {
-        if (vendorProduct) {
-            setFormData((prevState) => ({
-                ...prevState,
-                _id: vendorProduct._id,
-                vendorId: vendorProduct.vendorId,
-                vendorLocationId: vendorProduct.vendorLocationId,
-                name: vendorProduct.name,
-                productCost: vendorProduct.productCost,
-                notes: vendorProduct.notes,
-                isActive: vendorProduct.isActive,
-            }))
-        }
-        setFormData(initialState)
-    }
-
-    // Handle form closing
-    const onClose = () => {
-        resetForm()
-        setFormDialog(false)
-    }
-
-    // Handle form text input
-    const onChange = (e) => {
-        if (e.hasOwnProperty('target')) {
-            setFormData((prevState) => ({
-                ...prevState,
-                [e.target.name]: e.target.value,
-            }))
-        }
-    }
-
-    // Handle form number input
-    const onChangeNumber = (e) => {
-        setFormData((prevState) => ({
+   // #region FORM HANDLERS
+   // Handle form reset
+   const resetForm = () => {
+      if (vendorProduct) {
+         setFormData((prevState) => ({
             ...prevState,
-            [e.originalEvent.target.name]: e.value,
-        }))
-    }
+            _id: vendorProduct._id,
+            vendorId: vendorProduct.vendorId,
+            vendorLocationId: vendorProduct.vendorLocationId,
+            name: vendorProduct.name,
+            productCost: vendorProduct.productCost,
+            notes: vendorProduct.notes,
+            isActive: vendorProduct.isActive,
+         }))
+      }
+      setFormData(initialState)
+   }
 
-    // Handle form submit
-    const onSubmit = (e) => {
-        e.preventDefault()
+   // Handle form closing
+   const onClose = () => {
+      resetForm()
+      setFormDialog(false)
+   }
 
-        if (!vendorId) {
-            return toast.error('A vendor is required')
-        }
+   // Handle form text input
+   const onChange = (e) => {
+      if (e.hasOwnProperty('target')) {
+         setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+         }))
+      }
+   }
 
-        if (!vendorLocationId) {
-            return toast.error('A vendor location is required')
-        }
+   // Handle form number input
+   const onChangeNumber = (e) => {
+      setFormData((prevState) => ({
+         ...prevState,
+         [e.originalEvent.target.name]: e.value,
+      }))
+   }
 
-        if (!name) {
-            return toast.error('A product name is required')
-        }
+   // Handle form submit
+   const onSubmit = (e) => {
+      e.preventDefault()
 
-        if (!productCost) {
-            return toast.error('A product cost is required (or 0)')
-        }
+      if (!vendorId) {
+         return toast.error('A vendor is required')
+      }
 
-        mutationUpdateVendorProduct.mutate({ formData, token: user.data.token })
-        onClose()
-    }
-    // #endregion
+      if (!vendorLocationId) {
+         return toast.error('A vendor location is required')
+      }
 
-    // #region TEMPLATES
-    const vendorOptionTemplate = (option) => {
-        return <>{option.name}</>
-    }
+      if (!name) {
+         return toast.error('A product name is required')
+      }
 
-    const vendorLocationOptionTemplate = (option) => {
-        return <>{option.name}</>
-    }
-    // #endregion
+      // if (!productCost) {
+      //     return toast.error('A product cost is required (or 0)')
+      // }
 
-    useEffect(() => {
-        // Sort vendors alphabetically
-        if (vendors.data && vendors.data.length > 1) {
-            setSortedVendors(
-                [...vendors.data].sort((a, b) => a.name.localeCompare(b.name))
-            )
-        }
+      mutationUpdateVendorProduct.mutate({ formData, token: user.data.token })
+      onClose()
+   }
+   // #endregion
 
-        // Get vendor locations according to vendorId selected
-        if (
-            vendorId &&
-            vendorId.length > 0 &&
-            vendorLocations.data &&
-            vendorLocations.data.length > 0
-        ) {
-            const _filteredLocations = vendorLocations.data.filter(
-                (loc) => loc.vendorId === vendorId
-            )
-            setFilteredVendorLocations(_filteredLocations)
-        }
-    }, [vendors.data, vendorId, vendorLocations.data])
+   // #region TEMPLATES
+   const vendorOptionTemplate = (option) => {
+      return <>{option.name}</>
+   }
 
-    // Fill FormData with contents of Material prop
-    useEffect(() => {
-        if (vendorProduct) {
-            setFormData((prevState) => ({
-                ...prevState,
-                _id: vendorProduct._id,
-                vendorId: vendorProduct.vendorId,
-                vendorLocationId: vendorProduct.vendorLocationId,
-                name: vendorProduct.name,
-                productCost: vendorProduct.productCost,
-                notes: vendorProduct.notes,
-                isActive: vendorProduct.isActive,
-            }))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+   const vendorLocationOptionTemplate = (option) => {
+      return <>{option.name}</>
+   }
+   // #endregion
 
-    return (
-        <section>
-            <Button
-                icon="pi pi-pencil"
-                style={{ marginRight: '0.5em' }}
-                onClick={() => setFormDialog(true)}
-            />
+   useEffect(() => {
+      // Sort vendors alphabetically
+      if (vendors.data && vendors.data.length > 1) {
+         setSortedVendors(
+            [...vendors.data].sort((a, b) => a.name.localeCompare(b.name))
+         )
+      }
 
-            <Dialog
-                id="editVendorProductDialog"
-                visible={formDialog}
-                header={vendorProductDialogHeader}
-                footer={vendorProductDialogFooter}
-                onHide={onClose}
-                blockScroll
-            >
-                <form onSubmit={onSubmit}>
-                    {/* VENDOR */}
-                    <div className="formgrid grid">
-                        {/* Vendor ID */}
-                        <div className="field col">
-                            <div className="p-float-label">
-                                <Dropdown
-                                    id="vendorProductVendorId"
-                                    value={vendorId}
-                                    options={sortedVendors}
-                                    onChange={(e) => {
-                                        setFormData((prevState) => ({
-                                            ...prevState,
-                                            vendorId: e.value,
-                                        }))
-                                    }}
-                                    optionLabel="name"
-                                    optionValue="_id"
-                                    placeholder="Choose vendor"
-                                    itemTemplate={vendorOptionTemplate}
-                                    style={{ width: '100%' }}
-                                />
-                                <label htmlFor="vendorProductVendorId">
-                                    Vendor *
-                                </label>
-                            </div>
-                        </div>
+      // Get vendor locations according to vendorId selected
+      if (
+         vendorId &&
+         vendorId.length > 0 &&
+         vendorLocations.data &&
+         vendorLocations.data.length > 0
+      ) {
+         const _filteredLocations = vendorLocations.data.filter(
+            (loc) => loc.vendorId === vendorId
+         )
+         setFilteredVendorLocations(_filteredLocations)
+      }
+   }, [vendors.data, vendorId, vendorLocations.data])
 
-                        {/* Vendor Location ID */}
-                        <div className="field col">
-                            <div className="p-float-label">
-                                <Dropdown
-                                    id="vendorLocationId"
-                                    value={vendorLocationId}
-                                    options={filteredVendorLocations}
-                                    onChange={(e) => {
-                                        setFormData((prevState) => ({
-                                            ...prevState,
-                                            vendorLocationId: e.value,
-                                        }))
-                                    }}
-                                    optionLabel="name"
-                                    optionValue="_id"
-                                    placeholder="Location..."
-                                    itemTemplate={vendorLocationOptionTemplate}
-                                    style={{ width: '100%' }}
-                                    required
-                                    autoFocus
-                                />
-                                <label htmlFor="vendorLocationId">
-                                    Location *
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+   // Fill FormData with contents of Material prop
+   useEffect(() => {
+      if (vendorProduct) {
+         setFormData((prevState) => ({
+            ...prevState,
+            _id: vendorProduct._id,
+            vendorId: vendorProduct.vendorId,
+            vendorLocationId: vendorProduct.vendorLocationId,
+            name: vendorProduct.name,
+            productCost: vendorProduct.productCost,
+            notes: vendorProduct.notes,
+            isActive: vendorProduct.isActive,
+         }))
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [])
 
-                    {/* NAME, PRODUCT COST */}
-                    <div className="formgrid grid">
-                        {/* Name */}
-                        <div className="field col">
-                            <div style={{ margin: '0.8em 0' }}>
-                                <span className="p-float-label">
-                                    <InputText
-                                        id="name"
-                                        name="name"
-                                        value={name}
-                                        placeholder="Name"
-                                        onChange={onChange}
-                                        style={{ width: '100%' }}
-                                        autoFocus
-                                        required
-                                    />
-                                    <label htmlFor="name">Name *</label>
-                                </span>
-                            </div>
-                        </div>
+   return (
+      <section>
+         <Button
+            icon="pi pi-pencil"
+            style={{ marginRight: '0.5em' }}
+            onClick={() => setFormDialog(true)}
+         />
 
-                        {/* Product Cost */}
-                        <div className="field col">
-                            <div style={{ margin: '0.8em 0' }}>
-                                <span className="p-float-label">
-                                    <InputNumber
-                                        id="productCost"
-                                        name="productCost"
-                                        value={productCost}
-                                        placeholder="Product Cost"
-                                        mode="decimal"
-                                        minFractionDigits={2}
-                                        step={0.01}
-                                        onChange={onChangeNumber}
-                                        style={{ width: '100%' }}
-                                        required
-                                    />
-                                    <label htmlFor="productCost">
-                                        Product Cost *
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+         <Dialog
+            id="editVendorProductDialog"
+            visible={formDialog}
+            header={vendorProductDialogHeader}
+            footer={vendorProductDialogFooter}
+            onHide={onClose}
+            blockScroll
+         >
+            <form onSubmit={onSubmit}>
+               {/* VENDOR */}
+               <div className="formgrid grid">
+                  {/* Vendor ID */}
+                  <div className="field col">
+                     <div className="p-float-label">
+                        <Dropdown
+                           id="vendorProductVendorId"
+                           value={vendorId}
+                           options={sortedVendors}
+                           onChange={(e) => {
+                              setFormData((prevState) => ({
+                                 ...prevState,
+                                 vendorId: e.value,
+                              }))
+                           }}
+                           optionLabel="name"
+                           optionValue="_id"
+                           placeholder="Choose vendor"
+                           itemTemplate={vendorOptionTemplate}
+                           style={{ width: '100%' }}
+                        />
+                        <label htmlFor="vendorProductVendorId">Vendor *</label>
+                     </div>
+                  </div>
 
-                    {/* NOTES */}
-                    <div className="formgrid grid">
-                        <div className="field col">
-                            <div style={{ margin: '0.8em 0' }}>
-                                <span className="p-float-label">
-                                    <InputTextarea
-                                        id="notes"
-                                        name="notes"
-                                        value={notes}
-                                        placeholder="Notes"
-                                        onChange={onChange}
-                                        rows={5}
-                                        cols={30}
-                                        style={{ width: '100%' }}
-                                    />
-                                    <label htmlFor="notes">Notes</label>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                  {/* Vendor Location ID */}
+                  <div className="field col">
+                     <div className="p-float-label">
+                        <Dropdown
+                           id="vendorLocationId"
+                           value={vendorLocationId}
+                           options={filteredVendorLocations}
+                           onChange={(e) => {
+                              setFormData((prevState) => ({
+                                 ...prevState,
+                                 vendorLocationId: e.value,
+                              }))
+                           }}
+                           optionLabel="name"
+                           optionValue="_id"
+                           placeholder="Location..."
+                           itemTemplate={vendorLocationOptionTemplate}
+                           style={{ width: '100%' }}
+                           required
+                           autoFocus
+                        />
+                        <label htmlFor="vendorLocationId">Location *</label>
+                     </div>
+                  </div>
+               </div>
 
-                    {/* IS ACTIVE */}
-                    <div className="formgrid grid">
-                        <div className="field col">
-                            <div style={{ margin: '0.8em 0' }}>
-                                <InputSwitch
-                                    id="isActive"
-                                    name="isActive"
-                                    checked={isActive}
-                                    onChange={onChange}
-                                />
-                                <strong style={{ marginLeft: '0.5em' }}>
-                                    Active
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </Dialog>
-        </section>
-    )
+               {/* NAME, PRODUCT COST */}
+               <div className="formgrid grid">
+                  {/* Name */}
+                  <div className="field col">
+                     <div style={{ margin: '0.8em 0' }}>
+                        <span className="p-float-label">
+                           <InputText
+                              id="name"
+                              name="name"
+                              value={name}
+                              placeholder="Name"
+                              onChange={onChange}
+                              style={{ width: '100%' }}
+                              autoFocus
+                              required
+                           />
+                           <label htmlFor="name">Name *</label>
+                        </span>
+                     </div>
+                  </div>
+
+                  {/* Product Cost */}
+                  <div className="field col">
+                     <div style={{ margin: '0.8em 0' }}>
+                        <span className="p-float-label">
+                           <InputNumber
+                              id="productCost"
+                              name="productCost"
+                              value={productCost}
+                              placeholder="Product Cost"
+                              mode="decimal"
+                              minFractionDigits={2}
+                              step={0.01}
+                              onChange={onChangeNumber}
+                              style={{ width: '100%' }}
+                              required
+                           />
+                           <label htmlFor="productCost">Product Cost *</label>
+                        </span>
+                     </div>
+                  </div>
+               </div>
+
+               {/* NOTES */}
+               <div className="formgrid grid">
+                  <div className="field col">
+                     <div style={{ margin: '0.8em 0' }}>
+                        <span className="p-float-label">
+                           <InputTextarea
+                              id="notes"
+                              name="notes"
+                              value={notes}
+                              placeholder="Notes"
+                              onChange={onChange}
+                              rows={5}
+                              cols={30}
+                              style={{ width: '100%' }}
+                           />
+                           <label htmlFor="notes">Notes</label>
+                        </span>
+                     </div>
+                  </div>
+               </div>
+
+               {/* IS ACTIVE */}
+               <div className="formgrid grid">
+                  <div className="field col">
+                     <div style={{ margin: '0.8em 0' }}>
+                        <InputSwitch
+                           id="isActive"
+                           name="isActive"
+                           checked={isActive}
+                           onChange={onChange}
+                        />
+                        <strong style={{ marginLeft: '0.5em' }}>Active</strong>
+                     </div>
+                  </div>
+               </div>
+            </form>
+         </Dialog>
+      </section>
+   )
 }
 
 export default VendorProductForm
