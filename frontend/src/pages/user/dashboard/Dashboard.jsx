@@ -118,7 +118,7 @@ function Dashboard({ user }) {
          <h1>Dashboard</h1>
          <div>
             <strong>Welcome, {user.firstName}</strong>
-            <div style={{ fontSize: '0.8rem' }}>User ID: {user?._id}</div>
+            {/* <div style={{ fontSize: '0.8rem' }}>User ID: {user?._id}</div> */}
          </div>
 
          <br />
