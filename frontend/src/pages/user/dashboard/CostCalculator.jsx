@@ -343,7 +343,7 @@ function CostCalculator() {
                         <span className="p-float-label">
                             <InputNumber
                                 id="cc_tons"
-                                placeholder="Cost Per Ton"
+                                placeholder="Tons"
                                 name="tons"
                                 value={formData.tons}
                                 onChange={onChangeNumber}
