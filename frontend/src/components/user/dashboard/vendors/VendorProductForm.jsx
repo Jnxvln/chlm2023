@@ -48,7 +48,7 @@ function VendorProductForm() {
       onError: (err) => {
          console.log('Error fetching vendors: ')
          console.log(err)
-         toast.error('Error fetching vendors', { autoClose: false })
+         toast.error('Error fetching vendors', { autoClose: false, toastId: 'fswer290fg09u234h' })
       },
    })
 
@@ -58,7 +58,7 @@ function VendorProductForm() {
       onError: (err) => {
          console.log('Error fetching vendor locations: ')
          console.log(err)
-         toast.error('Error fetching vendor locations', { autoClose: false })
+         toast.error('Error fetching vendor locations', { autoClose: false, toastId: 'vfi452090f9' })
       },
    })
 
@@ -66,7 +66,7 @@ function VendorProductForm() {
       mutationKey: ['vendorProducts'],
       mutationFn: ({ formData, token }) => createVendorProduct(formData, token),
       onSuccess: (vendorProduct) => {
-         toast.success(`${vendorProduct.name} created`, { autoClose: 1000 })
+         toast.success(`${vendorProduct.name} created`, { autoClose: 1000, toastId: 'cvvsj9r092' })
          queryClient.invalidateQueries(['vendorProducts'])
       },
       onError: (err) => {
@@ -79,10 +79,11 @@ function VendorProductForm() {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: false })
+            toast.error(err.response.data.message, { autoClose: false, toastId: 'vvjh92sdfer2' })
          } else {
             toast.error('Error creating vendor product', {
                autoClose: false,
+               toastId: 'ffgj2j0900990fg32'
             })
          }
       },
@@ -134,11 +135,11 @@ function VendorProductForm() {
       e.preventDefault()
 
       if (!vendorId) {
-         return toast.error('A vendor is required')
+         return toast.error('A vendor is required', { toastId: 'nfjdoij2ofe045' })
       }
 
       if (!name) {
-         return toast.error('A product name is required')
+         return toast.error('A product name is required', { toastId: 'fssjJFOI256' })
       }
 
       // if (!productCost) {

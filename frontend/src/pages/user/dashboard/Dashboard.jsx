@@ -38,9 +38,9 @@ function Dashboard({ user }) {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: 5000 })
+            toast.error(err.response.data.message, { autoClose: 5000, toastId: 'error-getting-user-message-by-user-id' })
          } else {
-            toast.error(errMsg, { autoClose: 5000 })
+            toast.error(errMsg, { autoClose: 5000, toastId: 'error-getting-user-message-by-user-id-other' })
          }
       },
    })

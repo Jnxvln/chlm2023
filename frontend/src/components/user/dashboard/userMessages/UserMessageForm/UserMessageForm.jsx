@@ -44,7 +44,7 @@ export default function UserMessageForm() {
          // console.log('[mutationCreateUserMessage] onSuccess data: ')
          // console.log(data)
          if (data) {
-            toast.success('Message sent!', { autoClose: 1000 })
+            toast.success('Message sent!', { autoClose: 1000, toastId: 'user-messages-message-sent-success' })
          }
          queryClient.invalidateQueries(['usermessages'])
       },
@@ -56,9 +56,9 @@ export default function UserMessageForm() {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: 5000 })
+            toast.error(err.response.data.message, { autoClose: 5000, toastId: 'user-messages-failed-send' })
          } else {
-            toast.error(err.message)
+            toast.error(err.message, { toastId: 'user-messages-failed-send-other' })
          }
       },
    })

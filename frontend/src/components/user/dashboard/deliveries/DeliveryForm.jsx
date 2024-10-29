@@ -74,7 +74,7 @@ function DeliveryForm({
         mutationFn: ({ formData, token }) => createDelivery(formData, token),
         onSuccess: (delivery) => {
             if (delivery) {
-                toast.success('Delivery created', { autoClose: 1000 })
+                toast.success('Delivery created', { autoClose: 1000, toastId: 'create-dlv-succes-msg' })
                 if (onResetFilteredDeliveries) {
                     onResetFilteredDeliveries()
                 }
@@ -92,9 +92,9 @@ function DeliveryForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'err-create-dlv-form-msg' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'err-create-dlv-form-msg-other' })
             }
         },
     })
@@ -104,7 +104,7 @@ function DeliveryForm({
         mutationFn: ({ clientUpdates, token }) =>
             updateDeliveryClient(clientUpdates, token),
         onSuccess: (data) => {
-            toast.success('Client updated!', { autoClose: 3000 })
+            toast.success('Client updated!', { autoClose: 3000, toastId: 'dlv-client-form-updated-success' })
             setClientUpdates(null)
             queryClient.invalidateQueries(['deliveryClients'])
             // setClientData()
@@ -121,9 +121,9 @@ function DeliveryForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'dlv-client-form-updated-error' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'dlv-client-form-updated-error-other' })
             }
         },
     })
@@ -210,23 +210,23 @@ function DeliveryForm({
         formData.deliveryClient = formData.deliveryClient._id
 
         if (!deliveryClient) {
-            return toast.error('A client is required')
+            return toast.error('A client is required', { toastId: 'dlv-client-req' })
         }
 
         if (!deliveryDate) {
-            return toast.error('The delivery date is required')
+            return toast.error('The delivery date is required', { toastId: 'dlv-date-req' })
         }
 
         if (!contactPhone) {
-            return toast.error('A contact phone number is required')
+            return toast.error('A contact phone number is required', { toastId: 'dlv-phone-num-req' })
         }
 
         if (!productName) {
-            return toast.error('The products field is required')
+            return toast.error('The products field is required', { toastId: 'dlv-products-field-req' })
         }
 
         if (!productQuantity) {
-            return toast.error('The product quantity is required')
+            return toast.error('The product quantity is required', { toastId: 'dlv-product-quantity-req' })
         }
 
         // Check for **BLANK** DeliveryClient fields, ask if want to save --------------------------------------------

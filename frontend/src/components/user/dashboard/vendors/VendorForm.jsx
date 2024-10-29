@@ -35,14 +35,14 @@ function VendorForm() {
         mutationFn: ({ formData, token }) => createVendor(formData, token),
         onSuccess: (vendor) => {
             if (vendor) {
-                toast.success('Vendor created', { autoClose: 1000 })
+                toast.success('Vendor created', { autoClose: 1000, toastId: 'kA929vvfu939' })
                 queryClient.invalidateQueries(['vendors'])
             }
         },
         onError: (err) => {
             console.log('Error creating vendor: ')
             console.log(err)
-            toast.error('Error creating vendor', { autoClose: false })
+            toast.error('Error creating vendor', { autoClose: false, toastId: 'kOA9298f88d' })
         },
     })
 

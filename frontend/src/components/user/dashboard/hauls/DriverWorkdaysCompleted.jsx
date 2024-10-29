@@ -35,9 +35,9 @@ function DriverWorkdaysCompleted({ drivers, currentDriver }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: 'driver-workdays-completed-error-fetch-workdays' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'driver-workdays-completed-error-fetch-workdays-other' })
             }
         },
     })

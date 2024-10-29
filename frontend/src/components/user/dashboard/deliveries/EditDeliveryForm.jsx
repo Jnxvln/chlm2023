@@ -76,7 +76,7 @@ function DeliveryForm({ delivery, onResetFilteredDeliveries }) {
         mutationFn: ({ formData, token }) => updateDelivery(formData, token),
         onSuccess: (updDelivery) => {
             if (updDelivery) {
-                toast.success('Delivery updated', { autoClose: 1000 })
+                toast.success('Delivery updated', { autoClose: 1000, toastId: 'dlv-form-update-success' })
                 queryClient.invalidateQueries(['deliveries'])
                 queryClient.invalidateQueries(['deliveryClients'])
                 onResetFilteredDeliveries()
@@ -93,9 +93,9 @@ function DeliveryForm({ delivery, onResetFilteredDeliveries }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'dlv-form-update-error' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'dlv-form-update-error-other' })
             }
         },
     })
@@ -177,23 +177,23 @@ function DeliveryForm({ delivery, onResetFilteredDeliveries }) {
         formData.deliveryClient = formData.deliveryClient._id
 
         if (!deliveryClient) {
-            return toast.error('A client is required')
+            return toast.error('A client is required', { toastId: 'edit-dlv-client-req' })
         }
 
         if (!deliveryDate) {
-            return toast.error('The delivery date is required')
+            return toast.error('The delivery date is required', { toastId: 'edit-dlv-date-req' })
         }
 
         if (!contactPhone) {
-            return toast.error('A contact phone number is required')
+            return toast.error('A contact phone number is required', { toastId: 'edit-dlv-contact-phone-req' })
         }
 
         if (!productName) {
-            return toast.error('The products field is required')
+            return toast.error('The products field is required', { toastId: 'edit-dlv-products-field-req' })
         }
 
         if (!productQuantity) {
-            return toast.error('The product quantity is required')
+            return toast.error('The product quantity is required', { toastId: 'edit-dlv-product-qty-req' })
         }
 
         mutationUpdateDelivery.mutate({ formData, token: user.data.token })

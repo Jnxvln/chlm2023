@@ -47,14 +47,14 @@ function DriversDashboard() {
         mutationFn: ({ id, token }) => deleteDriver(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Driver deleted')
+                toast.success('Driver deleted', { toastId: 'driver-deleted-conf' })
                 queryClient.invalidateQueries(['drivers'])
             }
         },
         onError: (err) => {
             console.log('Error deleting driver: ')
             console.log(err)
-            toast.error('Error deleting driver', { autoClose: false })
+            toast.error('Error deleting driver', { autoClose: false, toastId: 'delete-driver-err' })
         },
     })
 

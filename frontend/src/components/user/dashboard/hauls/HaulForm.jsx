@@ -75,7 +75,7 @@ function HaulForm({ selectedDriverId }) {
          const errMsg = 'Error fetching hauls'
          console.log(errMsg)
          console.log(err)
-         toast.error(errMsg, { autoClose: false })
+         toast.error(errMsg, { autoClose: false, toastId: 'haul-form-err-fetch-hauls' })
       },
    })
 
@@ -87,7 +87,7 @@ function HaulForm({ selectedDriverId }) {
          const errMsg = 'Error fetching drivers'
          console.log(errMsg)
          console.log(err)
-         toast.error(errMsg, { autoClose: false })
+         toast.error(errMsg, { autoClose: false, toastId: 'haul-form-err-fetch-drivers' })
       },
    })
 
@@ -99,7 +99,7 @@ function HaulForm({ selectedDriverId }) {
          const errMsg = 'Error fetching vendors'
          console.log(errMsg)
          console.log(err)
-         toast.error(errMsg, { autoClose: false })
+         toast.error(errMsg, { autoClose: false, toastId: 'haul-form-err-fetch-vendors' })
       },
    })
 
@@ -111,7 +111,7 @@ function HaulForm({ selectedDriverId }) {
          const errMsg = 'Error fetching vendor products'
          console.log(errMsg)
          console.log(err)
-         toast.error(errMsg, { autoClose: false })
+         toast.error(errMsg, { autoClose: false, toastId: 'haul-form-err-fetch-ven-products' })
       },
    })
 
@@ -123,7 +123,7 @@ function HaulForm({ selectedDriverId }) {
          const errMsg = 'Error fetching vendor locations'
          console.log(errMsg)
          console.log(err)
-         toast.error(errMsg, { autoClose: false })
+         toast.error(errMsg, { autoClose: false, toastId: 'haul-form-err-fetch-ven-locs' })
       },
    })
 
@@ -135,7 +135,7 @@ function HaulForm({ selectedDriverId }) {
          const errMsg = 'Error fetching freightRoutes'
          console.log(errMsg)
          console.log(err)
-         toast.error(errMsg, { autoClose: false })
+         toast.error(errMsg, { autoClose: false, toastId: 'haul-form-err-fetch-fr-routes' })
       },
    })
 
@@ -152,6 +152,7 @@ function HaulForm({ selectedDriverId }) {
          if (haul) {
             toast.success(`Haul invoice ${haul.invoice} created`, {
                autoClose: 3000,
+               toastId: 'haul-form-success-create-invoice'
             })
             queryClient.invalidateQueries(['hauls'])
          }
@@ -167,9 +168,9 @@ function HaulForm({ selectedDriverId }) {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: 8000 })
+            toast.error(err.response.data.message, { autoClose: 8000, toastId: 'haul-form-err-create-haul' })
          } else {
-            toast.error(errMsg, { autoClose: 8000 })
+            toast.error(errMsg, { autoClose: 8000, toastId: 'haul-form-err-create-haul-other' })
          }
       },
    })
@@ -269,31 +270,31 @@ function HaulForm({ selectedDriverId }) {
 
       // #region ERROR CHECKS
       if (!driver) {
-         return toast.error('Driver is required')
+         return toast.error('Driver is required', { toastId: 'haul-form-err-driver-req' })
       }
 
       if (!dateHaul) {
-         return toast.error('Date is required')
+         return toast.error('Date is required', { toastId: 'haul-form-err-date-req' })
       }
 
       if (!loadType) {
-         return toast.error('Load type is required')
+         return toast.error('Load type is required', { toastId: 'haul-form-err-loadType-req' })
       }
 
       if (!invoice) {
-         return toast.error('Load/Ref # is required')
+         return toast.error('Load/Ref # is required', { toastId: 'haul-form-err-invoice-req' })
       }
 
       if (!from) {
-         return toast.error('From field is required')
+         return toast.error('From field is required', { toastId: 'haul-form-err-fromField-req' })
       }
 
       if (!to) {
-         return toast.error('To field is required')
+         return toast.error('To field is required', { toastId: 'haul-form-err-toField-req' })
       }
 
       if (!product) {
-         return toast.error('Material is required')
+         return toast.error('Material is required', { toastId: 'haul-form-err-material-req' })
       }
       // #endregion
 
@@ -404,6 +405,10 @@ function HaulForm({ selectedDriverId }) {
             _from = 'Off Duty'
             _to = prompt('Reason', 'Enter reason, keep it brief')
             break
+         default:
+            _from = 'Off Duty'
+            _to = prompt('Reason', 'Enter reason, keep it brief')
+            break
       }
 
       if (loadType === 'flatbedperc' || loadType === 'flatbedmi') {
@@ -433,7 +438,7 @@ function HaulForm({ selectedDriverId }) {
       } else {
          toast.error(
             "Unknown loadType selected, expecting 'enddump' or 'flatbed'",
-            { autoClose: 8000 }
+            { autoClose: 8000, toastId: 'haul-form-err-load-type-selected' }
          )
       }
    }

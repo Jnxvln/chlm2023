@@ -128,7 +128,7 @@ export default function Help() {
       onError: (err) => {
          console.log('Error fetching FAQs: ')
          console.log(err)
-         toast.error(err.message, { autoClose: 5000 })
+         toast.error(err.message, { autoClose: 5000, toastId: 'err-fetching-faqs' })
       },
    })
 
@@ -138,7 +138,7 @@ export default function Help() {
       onError: (err) => {
          console.log(err)
          const msg = err.message
-         toast.error(msg, { autoClose: 5000 })
+         toast.error(msg, { autoClose: 5000, toastId: 'err-get-store-settings' })
       },
    })
 

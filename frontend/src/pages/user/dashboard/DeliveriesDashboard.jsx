@@ -67,7 +67,7 @@ function DeliveriesDashboard() {
             command: () => {
                 const coords = `${copyCoordinates[0]},${copyCoordinates[1]}`
                 navigator.clipboard.writeText(coords)
-                toast.success('Coordinates copied!')
+                toast.success('Coordinates copied!', { toastId: 'coord-copied' })
             },
         },
     ]
@@ -79,7 +79,7 @@ function DeliveriesDashboard() {
             command: () => {
                 const clientName = `${selectedClientAvatar.firstName} ${selectedClientAvatar.lastName}`
                 navigator.clipboard.writeText(clientName)
-                toast.success(`${clientName} copied!`)
+                toast.success(`${clientName} copied!`, { toastId: 'name-copied' })
             },
         },
         {
@@ -87,7 +87,7 @@ function DeliveriesDashboard() {
             icon: 'pi pi-phone',
             command: () => {
                 navigator.clipboard.writeText(selectedClientAvatar.phone)
-                toast.success(`${selectedClientAvatar.phone} copied!`)
+                toast.success(`${selectedClientAvatar.phone} copied!`, { toastId: 'phone-copied'})
             },
         },
         {
@@ -95,7 +95,7 @@ function DeliveriesDashboard() {
             icon: 'pi pi-map',
             command: () => {
                 navigator.clipboard.writeText(selectedClientAvatar.address)
-                toast.success(`${selectedClientAvatar.address} copied!`)
+                toast.success(`${selectedClientAvatar.address} copied!`, { toastId: 'address-copied' })
             },
         },
         {
@@ -105,7 +105,7 @@ function DeliveriesDashboard() {
                 const copyCoords = selectedClientAvatar.coordinates.split(', ')
                 const coords = `${copyCoords[0]},${copyCoords[1]}`
                 navigator.clipboard.writeText(coords)
-                toast.success(`Coordinates copied!`)
+                toast.success(`Coordinates copied!`, { toastId: 'coords-copied-avatar' })
             },
         },
     ]
@@ -137,7 +137,7 @@ function DeliveriesDashboard() {
         mutationFn: ({ id, token }) => deleteDelivery(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Delivery deleted', { autoClose: 1000 })
+                toast.success('Delivery deleted', { autoClose: 1000, toastId: 'delivery-deleted-conf' })
                 queryClient.invalidateQueries(['deliveries'])
             }
         },
@@ -152,14 +152,14 @@ function DeliveriesDashboard() {
         mutationFn: ({ data, token }) => updateDelivery(data, token),
         onSuccess: (updDelivery) => {
             if (updDelivery) {
-                toast.success('Delivery updated', { autoClose: 1000 })
+                toast.success('Delivery updated', { autoClose: 1000, toastId: 'delivery-updated-conf' })
                 queryClient.invalidateQueries(['deliveries'])
             }
         },
         onError: (err) => {
             console.log('Error updating delivery')
             console.log(err)
-            toast.error('Error updating delivery', { autoClose: 8000 })
+            toast.error('Error updating delivery', { autoClose: 8000, toastId: 'delivery-update-err' })
         },
     })
 
@@ -168,14 +168,14 @@ function DeliveriesDashboard() {
         mutationFn: ({ data, token }) => updateDelivery(data, token),
         onSuccess: (updDelivery) => {
             if (updDelivery) {
-                toast.success('Delivery updated', { autoClose: 1000 })
+                toast.success('Delivery updated', { autoClose: 1000, toastId: 'delivery-updated-toggle-paid' })
                 queryClient.invalidateQueries(['deliveries'])
             }
         },
         onError: (err) => {
             console.log('Error updating delivery')
             console.log(err)
-            toast.error('Error updating delivery', { autoClose: 8000 })
+            toast.error('Error updating delivery', { autoClose: 8000, toastId: 'delivery-update-err' })
         },
     })
     // #endregion
@@ -684,7 +684,7 @@ function DeliveriesDashboard() {
                     // )
                     setFilteredDeliveries(clientDeliveries)
                 } else {
-                    toast.warning('No deliveries for this client')
+                    toast.warning('No deliveries for this client', { toastId: 'no-dlv-for-client' })
                     setFilteredDeliveries([])
                     return []
                 }

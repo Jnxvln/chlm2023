@@ -62,7 +62,7 @@ function EditDeliveryClientForm({
         onSuccess: (updDeliveryClient) => {
             toast.success(
                 `${updDeliveryClient.firstName} ${updDeliveryClient.lastName} updated`,
-                { autoClose: 1000 }
+                { autoClose: 1000, toastId: 'dlv-client-update-success-from-form' }
             )
             queryClient.invalidateQueries(['deliveryClients'])
             queryClient.invalidateQueries(['deliveries'])
@@ -82,9 +82,9 @@ function EditDeliveryClientForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'dlv-client-update-error-from-form' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'dlv-client-update-error-other-from-form' })
             }
         },
     })
@@ -98,7 +98,8 @@ function EditDeliveryClientForm({
             // Invalidate deliveries and deliveryClients
             queryClient.invalidateQueries(['deliveries', 'deliveryClients'])
             toast.success(
-                `Delivery customer and associated deliveries removed!`
+                `Delivery customer and associated deliveries removed!`,
+                { toastId: 'dlv-client-form-update-success' }
             )
             onClose()
             onResetFilteredDeliveries()
@@ -114,9 +115,9 @@ function EditDeliveryClientForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'dlv-client-form-update-error' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'dlv-client-form-update-error-other' })
             }
         },
     })

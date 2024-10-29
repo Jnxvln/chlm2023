@@ -90,6 +90,7 @@ export default function WaitListForm({
             const errMsg = 'Error fetching materials for WaitList'
             toast.error('Error fetching materials for wait list', {
                 autoClose: 5000,
+                toastId: 'dffgj2-435-9492'
             })
         },
     })
@@ -100,7 +101,7 @@ export default function WaitListForm({
         mutationFn: ({ form, token }) => createEntry(form, token),
         onSuccess: (entry) => {
             if (entry) {
-                toast.success(`Entry created`, { autoClose: 1000 })
+                toast.success(`Entry created`, { autoClose: 1000, toastId: 'gwjg2u5kfg80uq2359' })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
@@ -115,9 +116,9 @@ export default function WaitListForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: 'fodijgioje0u234ho09' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'ghsd9002945fg0u8w20duf' })
             }
         },
     })
@@ -127,7 +128,7 @@ export default function WaitListForm({
         mutationFn: ({ form, token }) => updateEntry(form, token),
         onSuccess: (updEntry) => {
             if (updEntry) {
-                toast.success(`Entry updated`, { autoClose: 1000 })
+                toast.success(`Entry updated`, { autoClose: 1000, toastId: 'gja4osdfg0u3409809' })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
@@ -142,9 +143,9 @@ export default function WaitListForm({
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 5000 })
+                toast.error(err.response.data.message, { autoClose: 5000, toastId: 'wejoig24502' })
             } else {
-                toast.error(errMsg, { autoClose: 5000 })
+                toast.error(errMsg, { autoClose: 5000, toastId: 'cojsidfjoir02' })
             }
         },
     })
@@ -190,15 +191,15 @@ export default function WaitListForm({
 
         // #region ERROR CHECKS
         if (!phone) {
-            return toast.error('Phone is required', { autoClose: 5000 })
+            return toast.error('Phone is required', { autoClose: 5000, toastId: 'df920954092093094d' })
         }
 
         if (!material) {
-            return toast.error('Material is required')
+            return toast.error('Material is required', { toastId: 'df9200fgf0gu934095' })
         }
 
         if (!quantity) {
-            return toast.error('Quantity is required')
+            return toast.error('Quantity is required', { toastId: 'aqpsqs90234' })
         }
 
         // console.log('FORM: ')

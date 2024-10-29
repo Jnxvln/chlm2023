@@ -76,7 +76,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             const errMsg = 'Error fetching hauls'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-err-fetch-hauls' })
         },
     })
 
@@ -88,7 +88,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             const errMsg = 'Error fetching drivers'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-err-fetch-drivers' })
         },
     })
 
@@ -100,7 +100,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             const errMsg = 'Error fetching vendors'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-err-fetch-vendors' })
         },
     })
 
@@ -112,7 +112,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             const errMsg = 'Error fetching vendor products'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-err-fetching-vendor-products' })
         },
     })
 
@@ -124,7 +124,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             const errMsg = 'Error fetching vendor locations'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-err-fetch-vendors-locs' })
         },
     })
 
@@ -136,7 +136,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             const errMsg = 'Error fetching freightRoutes'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-err-fetch-freight-routes' })
         },
     })
 
@@ -153,6 +153,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             if (updHaul) {
                 toast.success(`Haul invoice ${updHaul.invoice} updated`, {
                     autoClose: 3000,
+                    toastId: 'edit-haul-form-haul-inv-updated-success'
                 })
                 queryClient.invalidateQueries(['hauls'])
             }
@@ -168,9 +169,9 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'edit-haul-form-haul-inv-updated-error' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'edit-haul-form-haul-inv-updated-error-other' })
             }
         },
     })
@@ -186,6 +187,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
             if (haul) {
                 toast.success(`Haul invoice ${haul.invoice} duplicated`, {
                     autoClose: 1000,
+                    toastId: 'edit-haul-form-haul-inv-duplicated'
                 })
                 queryClient.invalidateQueries(['hauls'])
             }
@@ -201,9 +203,9 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: 'edit-haul-form-err-dupl-haul' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'edit-haul-form-err-dupl-haul-other' })
             }
         },
     })
@@ -492,7 +494,7 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         } else {
             toast.error(
                 "Unknown loadType selected, expecting 'enddump' or 'flatbed'",
-                { autoClose: 8000 }
+                { autoClose: 8000, toastId: 'edit-haul-form-unknown-load-type' },
             )
         }
     }
@@ -502,31 +504,31 @@ function EditHaulForm({ haul, selectedDriverId, isDuplicating }) {
         e.preventDefault()
 
         if (!driver) {
-            return toast.error('Driver is required')
+            return toast.error('Driver is required', { toastId: 'edit-haul-form-driver-req' })
         }
 
         if (!dateHaul) {
-            return toast.error('Date is required')
+            return toast.error('Date is required', { toastId: 'edit-haul-date-req' })
         }
 
         if (!loadType) {
-            return toast.error('Load type is required')
+            return toast.error('Load type is required', { toastId: 'edit-haul-load-type-req' })
         }
 
         if (!invoice) {
-            return toast.error('Load/Ref # is required')
+            return toast.error('Load/Ref # is required', { toastId: 'edit-haul-loadref-req' })
         }
 
         if (!from) {
-            return toast.error('From field is required')
+            return toast.error('From field is required', { toastId: 'edit-haul-fromField-req' })
         }
 
         if (!to) {
-            return toast.error('To field is required')
+            return toast.error('To field is required', { toastId: 'edit-haul-toField-req' })
         }
 
         if (!product) {
-            return toast.error('Material is required')
+            return toast.error('Material is required', { toastId: 'edit-haul-product-req' })
         }
 
         if (isDuplicating) {

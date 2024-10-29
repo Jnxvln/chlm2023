@@ -35,14 +35,14 @@ function EditVendorForm({ vendor }) {
         mutationFn: ({ formData, token }) => updateVendor(formData, token),
         onSuccess: (updVendor) => {
             if (updVendor) {
-                toast.success('Vendor updated', { autoClose: 1000 })
+                toast.success('Vendor updated', { autoClose: 1000, toastId: 'edit-vendor-form-vendor-update-success' })
                 queryClient.invalidateQueries(['vendors'])
             }
         },
         onError: (err) => {
             console.log('Error updating vendor: ')
             console.log(err)
-            toast.error('Error updating vendor', { autoClose: false })
+            toast.error('Error updating vendor', { autoClose: false, toastId: 'edit-vendor-form-vendor-update-error' })
         },
     })
 

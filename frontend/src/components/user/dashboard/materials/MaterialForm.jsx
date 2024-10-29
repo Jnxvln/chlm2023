@@ -90,7 +90,7 @@ function MaterialForm({ keys }) {
             return createMaterial(formData, user.data.token)
         },
         onSuccess: (createdMaterial) => {
-            toast.success(createdMaterial.name + ' created')
+            toast.success(createdMaterial.name + ' created', { toastId: 'material-form-add-material-success' })
             // Invalidate and refetch
             queryClient.invalidateQueries({ queryKey: ['materials'] })
         },
@@ -99,6 +99,7 @@ function MaterialForm({ keys }) {
             console.log(err)
             toast.error('Error creating material, check logs!', {
                 autoClose: false,
+                toastId: 'material-form-add-material-error'
             })
         },
     })
@@ -169,15 +170,15 @@ function MaterialForm({ keys }) {
         e.preventDefault()
 
         if (!name) {
-            return toast.error('Name is required')
+            return toast.error('Name is required', { toastId: 'material-form-submit-err-name-required' })
         }
 
         if (!category) {
-            return toast.error('Category is required')
+            return toast.error('Category is required', { toastId: 'material-form-submit-err-category-required' })
         }
 
         if (!stock) {
-            return toast.error('Stock is required')
+            return toast.error('Stock is required', { toastId: 'material-form-submit-err-stock-required' })
         }
 
         // dispatch(createMaterial(formData));
@@ -206,7 +207,7 @@ function MaterialForm({ keys }) {
                 .then((data) => {
                     setUploading(false)
                     if (data && data.location) {
-                        toast.success('Image uploaded successfully!')
+                        toast.success('Image uploaded successfully!', { toastId: 'material-form-file-upload-form-success' })
                         setFormData((prevState) => ({
                             ...prevState,
                             image: data.location,
@@ -218,7 +219,7 @@ function MaterialForm({ keys }) {
                         console.log(data)
                         toast.error(
                             'Error uploading image to AWS! Check logs',
-                            { autoClose: 8000 }
+                            { autoClose: 8000, toastId: 'mat-err-upl-log-msg' }
                         )
                     } else {
                         console.log(
@@ -226,7 +227,7 @@ function MaterialForm({ keys }) {
                         )
                         toast.error(
                             'Error uploading image to AWS! Check logs',
-                            { autoClose: 8000 }
+                            { autoClose: 8000, toastId: 'material-form-file-upload-err' }
                         )
                     }
                 })

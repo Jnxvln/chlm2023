@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
@@ -8,10 +8,8 @@ import styles from '../../styles/user/Register.module.css'
 import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
 import { Button } from 'primereact/button'
-import { Divider } from 'primereact/divider'
-import Spinner from '../../components/layout/Spinner'
 // Store data
-import { fetchUser, register } from '../../api/users/usersApi'
+import { register } from '../../api/users/usersApi'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 // import { register, reset } from "../../features/auth/authSlice";
 
@@ -42,6 +40,7 @@ function Register() {
                     `${user.firstName} ${user.lastName} registered. Welcome!`,
                     {
                         autoClose: 3000,
+                        toastId: 'user-registered-msg'
                     }
                 )
                 queryClient.invalidateQueries(['user'])
@@ -58,9 +57,9 @@ function Register() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: 'user-error-register' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'user-error-other'})
             }
         },
     })
@@ -104,8 +103,8 @@ function Register() {
             return errors
         },
         onSubmit: (data) => {
-            console.log('FORMIK DATA: ')
-            console.log(data)
+            // console.log('FORMIK DATA: ')
+            // console.log(data)
             setFormData(data)
             mutationRegisterUser.mutate(data)
         },

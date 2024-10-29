@@ -86,7 +86,7 @@ export default function AdminDashboard() {
          const msg = 'Error fetching users for Admin Dashboard'
          console.log(msg)
          console.error(err)
-         toast.error(msg, { autoClose: 5000 })
+         toast.error(msg, { autoClose: 5000, toastId: 'get-users-fetch-err' })
       },
    })
 
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
       onError: (err) => {
          console.log(err)
          const msg = 'Error fetching store settings'
-         toast.error(msg, { autoClose: 5000 })
+         toast.error(msg, { autoClose: 5000, toastId: 'err-fetch-store-settings' })
       },
    })
 
@@ -118,13 +118,13 @@ export default function AdminDashboard() {
       },
       onSuccess: (data) => {
          queryClient.invalidateQueries(['storesettings'])
-         toast.success('Settings updated!', { autoClose: 1000 })
+         toast.success('Settings updated!', { autoClose: 1000, toastId: 'update-store-settings-success' })
          setAllowUpdate(false)
       },
       onError: (err) => {
          console.log(err)
          const msg = 'Error updating store settings'
-         toast.error(msg, { autoClose: 5000 })
+         toast.error(msg, { autoClose: 5000, toastId: 'err-update-store-settings' })
       },
    })
 
@@ -133,13 +133,13 @@ export default function AdminDashboard() {
       mutationFn: () => updateUser(userUpdateInfo, user?.data?.token),
       onSuccess: (data) => {
          queryClient.invalidateQueries(['user'])
-         toast.success('User updated!', { autoClose: 1000 })
+         toast.success('User updated!', { autoClose: 1000, toastId: 'user-update-info-success' })
          setAllowUpdateUser(false)
       },
       onError: (err) => {
          console.log(err)
          const msg = 'Cannot update user profile'
-         toast.error(msg, { autoClose: 5000 })
+         toast.error(msg, { autoClose: 5000, toastId: 'cannot-update-user-profile' })
       },
    })
    // #endregion

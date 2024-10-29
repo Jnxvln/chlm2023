@@ -39,7 +39,7 @@ function EditDriverForm({ driver }) {
     onSuccess: (updDriver) => {
       if (updDriver) {
         queryClient.invalidateQueries(["drivers"]);
-        toast.success(`${updDriver.firstName} ${updDriver.lastName} updated`, { autoClose: 1000 });
+        toast.success(`${updDriver.firstName} ${updDriver.lastName} updated`, { autoClose: 1000, toastId: 'edit-driver-form-drivers-updated' });
       }
     },
     onError: (err) => {

@@ -31,6 +31,7 @@ export default function UserMessages() {
          console.error(err)
          toast.error('Error fetching list of users for UserMessages', {
             autoClose: 5000,
+            toastId: 'err-fetch-users-list'
          })
       },
    })
@@ -47,7 +48,7 @@ export default function UserMessages() {
          console.error(err)
          toast.error(
             'Error fetching user messages for current user. Check logs',
-            { autoClose: 5000 }
+            { autoClose: 5000, toastId: 'err-fetch-user-msg-by-id' }
          )
       },
    })
@@ -65,12 +66,13 @@ export default function UserMessages() {
          // )
          // console.log(data)
          queryClient.invalidateQueries(['usermessages'])
-         toast.success('Message deleted', { autoClose: 1000 })
+         toast.success('Message deleted', { autoClose: 1000, toastId: 'delete-user-msg-success' })
       },
       onError: (err) => {
          console.error(err)
          toast.error('Error deleting message! Check logs', {
             autoClose: 5000,
+            toastId: 'err-del-user-msg'
          })
       },
    })
@@ -96,9 +98,9 @@ export default function UserMessages() {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: 5000 })
+            toast.error(err.response.data.message, { autoClose: 5000, toastId: 'err-view-msg-mutation' })
          } else {
-            toast.error(errMsg, { autoClose: 5000 })
+            toast.error(errMsg, { autoClose: 5000, toastId: 'err-view-msg-mutation-other' })
          }
       },
    })

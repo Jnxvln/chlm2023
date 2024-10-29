@@ -43,14 +43,14 @@ function VendorDataTable() {
         mutationFn: ({ vendorId, token }) => deleteVendor(vendorId, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Vendor deleted', { autoClose: 1000 })
+                toast.success('Vendor deleted', { autoClose: 1000, toastId: '4912909fid' })
                 queryClient.invalidateQueries(['vendors'])
             }
         },
         onError: (err) => {
             console.log('Error deleting vendor: ')
             console.log(err)
-            toast.error('Error deleting vendor', { autoClose: false })
+            toast.error('Error deleting vendor', { autoClose: false, toastId: 'A9402x934' })
         },
     })
     // #endregion

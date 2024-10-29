@@ -49,7 +49,7 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
         mutationFn: ({ formData, token }) => updateWorkday(formData, token),
         onSuccess: (updWorkday) => {
             if (updWorkday) {
-                toast.success('Workday updated', { autoClose: 1000 })
+                toast.success('Workday updated', { autoClose: 1000, toastId: 'fgdojg2349' })
                 queryClient.invalidateQueries(['workdays'])
                 onUpdateWorkdays()
                 setFormDialog(false)
@@ -66,9 +66,9 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: '09fwjfio0943590435' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'jlsdfrtertoui23094' })
             }
         },
     })
@@ -78,7 +78,7 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
         mutationFn: ({ id, token }) => deleteWorkday(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Workday deleted', { autoClose: 1000 })
+                toast.success('Workday deleted', { autoClose: 1000, toastId: 'dfjoirtoui23408j' })
                 queryClient.invalidateQueries(['workdays'])
             }
         },
@@ -95,9 +95,10 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
             ) {
                 return toast.error(err.response.data.message, {
                     autoClose: 8000,
+                    toastId: 'dfj029430293409f09sdfjoi'
                 })
             } else {
-                return toast.error(errMsg, { autoClose: 8000 })
+                return toast.error(errMsg, { autoClose: 8000, toastId: 'dfj2340949dfasdfj' })
             }
         },
     })
@@ -178,20 +179,20 @@ function EditWorkdayForm({ workday, driver, onUpdateWorkdays }) {
         const hasNCOverride = ncRateOverride && parseFloat(ncRateOverride) > 0
 
         if (!hasCHHours && hasCHHours != '0') {
-            return toast.error('CH Hours is required (enter 0 if not needed)')
+            return toast.error('CH Hours is required (enter 0 if not needed)', { toastId: 'dfjsdflj40230uf0g5h' })
         }
 
         if (!hasNCHours && hasNCReasons) {
-            return toast.error('NC Reasons is provided but NC Hours is blank')
+            return toast.error('NC Reasons is provided but NC Hours is blank', { toastId: 'dfjsgh4567kjdf2f0g5h' })
         }
 
         if (hasNCHours && !hasNCReasons) {
-            return toast.error('NC Hours is provided but NC Reasons is blank')
+            return toast.error('NC Hours is provided but NC Reasons is blank', { toastId: 'dfsdfqw234tyhtuf0g5h' })
         }
 
         if (hasNCOverride && (!hasNCHours || !hasNCReasons)) {
             return toast.error(
-                'NC Override requires values for both NC Hours and NC Reasons'
+                'NC Override requires values for both NC Hours and NC Reasons', { toastId: 'dfjsdfjfghyt56dg5h' }
             )
         }
 

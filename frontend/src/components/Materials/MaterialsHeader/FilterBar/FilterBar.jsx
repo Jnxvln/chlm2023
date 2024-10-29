@@ -534,7 +534,7 @@ export default function FilterBar() {
         // },
         onError: (err) => {
             console.log(err)
-            toast.error(err.message, { autoClose: 8000 })
+            toast.error(err.message, { autoClose: 8000, toastId: 'fgjfg540934239' })
         },
     })
 
@@ -543,7 +543,7 @@ export default function FilterBar() {
         queryFn: () => getMaterialCategories(),
         onError: (err) => {
             console.log(err)
-            toast.error(err.message, { autoClose: 8000 })
+            toast.error(err.message, { autoClose: 8000, toastId: 'dfdf2340fdg345' })
         },
     })
 

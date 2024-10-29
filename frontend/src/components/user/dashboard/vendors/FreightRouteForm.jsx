@@ -90,6 +90,7 @@ function FreightRouteForm() {
                `${vendor.name} (${vendorLocation.name}) to ${freightRoute.destination} created`,
                {
                   autoClose: 3000,
+                  toastId: 'g395fos2'
                }
             )
             queryClient.invalidateQueries(['freightRoutes'])
@@ -106,9 +107,9 @@ function FreightRouteForm() {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: false })
+            toast.error(err.response.data.message, { autoClose: false, toastId: 'kD949h98dq' })
          } else {
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'kf94i22094sj' })
          }
       },
    })

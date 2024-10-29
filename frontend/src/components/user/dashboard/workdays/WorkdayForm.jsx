@@ -42,7 +42,7 @@ function WorkdayForm({ workDate, driver }) {
         mutationFn: ({ formData, token }) => createWorkday(formData, token),
         onSuccess: (workday) => {
             if (workday) {
-                toast.success('Workday created', { autoClose: 1000 })
+                toast.success('Workday created', { autoClose: 1000, toastId: 'fgjlsdf02340rfh' })
                 queryClient.invalidateQueries(['workdays'])
             }
         },
@@ -57,9 +57,9 @@ function WorkdayForm({ workDate, driver }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: 'aghdtry345245fg' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'fgjwer2340uff02rfh' })
             }
         },
     })
@@ -119,20 +119,20 @@ function WorkdayForm({ workDate, driver }) {
         // }
 
         if (!hasCHHours && hasCHHours != '0') {
-            return toast.error('CH Hours is required (enter 0 if not needed)')
+            return toast.error('CH Hours is required (enter 0 if not needed)', { toastId: 'adfjlgugg0u934h0fgw23' })
         }
 
         if (!hasNCHours && hasNCReasons) {
-            return toast.error('NC Reasons is provided but NC Hours is blank')
+            return toast.error('NC Reasons is provided but NC Hours is blank', { toastId: 'adfhjj6767844h0fgw23' })
         }
 
         if (hasNCHours && !hasNCReasons) {
-            return toast.error('NC Hours is provided but NC Reasons is blank')
+            return toast.error('NC Hours is provided but NC Reasons is blank', { toastId: 'adfdfadgh345564h0fgw23' })
         }
 
         if (hasNCOverride && (!hasNCHours || !hasNCReasons)) {
             return toast.error(
-                'NC Override requires values for both NC Hours and NC Reasons'
+                'NC Override requires values for both NC Hours and NC Reasons', { toastId: 'adfjlg646787jwsdfg43' }
             )
         }
 

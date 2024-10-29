@@ -67,9 +67,9 @@ function HaulSummary() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 8000 })
+                toast.error(err.response.data.message, { autoClose: 8000, toastId: 'err-fetching-workdays' })
             } else {
-                toast.error(errMsg, { autoClose: 8000 })
+                toast.error(errMsg, { autoClose: 8000, toastId: 'err-fetching-workdays-other' })
             }
         },
     })
@@ -85,7 +85,7 @@ function HaulSummary() {
         enabled: !!driverId,
         onError: (err) => {
             console.log('Error occurred while fetching hauls, check logs!')
-            toast.error('Error occurred while fetching hauls, check logs!')
+            toast.error('Error occurred while fetching hauls, check logs!', { toastId: 'err-fetching-hauls-by-range' })
         },
     })
     // #endregion

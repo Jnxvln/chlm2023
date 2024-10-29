@@ -56,7 +56,7 @@ function VendorProductDataTable() {
         mutationFn: ({ id, token }) => deleteVendorProduct(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Vendor product deleted', { autoClose: 1000 })
+                toast.success('Vendor product deleted', { autoClose: 1000, toastId: 'TGV39290r' })
                 queryClient.invalidateQueries(['vendorProducts'])
             }
         },
@@ -70,10 +70,11 @@ function VendorProductDataTable() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'dGd9r20dua' })
             } else {
                 toast.error('Error deleting vendor product', {
                     autoClose: false,
+                    toastId: 'v009o23ijo08ds0240'
                 })
             }
         },

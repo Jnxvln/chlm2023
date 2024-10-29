@@ -18,7 +18,7 @@ export default function Landing() {
       onError: (err) => {
          console.log(err)
          const msg = err.message
-         toast.error(msg, { autoClose: 5000 })
+         toast.error(msg, { autoClose: 5000, toastId: 'err-get-store-settings' })
       },
    })
 

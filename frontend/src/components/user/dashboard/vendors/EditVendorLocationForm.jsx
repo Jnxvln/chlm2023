@@ -41,13 +41,13 @@ function EditVendorLocationForm({ vendorLocation }) {
         mutationFn: ({ formData, token }) =>
             updateVendorLocation(formData, token),
         onSuccess: (vendorLocation) => {
-            toast.success(`${vendorLocation.name} updated`)
+            toast.success(`${vendorLocation.name} updated`, { toastId: 'edit-vendor-loc-form-loc-updated' })
             queryClient.invalidateQueries(['vendorLocations'])
         },
         onError: (err) => {
             console.log('Error updating vendor location: ')
             console.log(err)
-            toast.error('Error updating vendor location', { autoClose: false })
+            toast.error('Error updating vendor location', { autoClose: false, toastId: 'edit-vendor-loc-form-loc-updated-error' })
         },
     })
 

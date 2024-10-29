@@ -28,13 +28,13 @@ function DeliverySummary() {
             ),
         enabled: !!userId,
         onSuccess: (client) => {
-            console.log('Delivery client loaded...')
-            console.log(client)
+            // console.log('Delivery client loaded...')
+            // console.log(client)
         },
         onError: (err) => {
             console.log('Error fetching delivery clients: ')
             console.log(err)
-            toast.error('Error loading delivery clients, check logs!')
+            toast.error('Error loading delivery clients, check logs!', { toastId: 'error-loading-dlv-clients' })
         },
     })
     // #endregion

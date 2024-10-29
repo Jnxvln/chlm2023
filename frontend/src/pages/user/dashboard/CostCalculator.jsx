@@ -48,7 +48,7 @@ function CostCalculator() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message)
+                toast.error(err.response.data.message, { toastId: 'error-getting-vendors' })
             }
         },
     })
@@ -68,7 +68,7 @@ function CostCalculator() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message)
+                toast.error(err.response.data.message, { toastId: 'error-getting-vendor-products' })
             }
         },
     })
@@ -88,7 +88,7 @@ function CostCalculator() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message)
+                toast.error(err.response.data.message, { toastId: 'error-getting-vendor-locations' })
             }
         },
     })
@@ -108,7 +108,7 @@ function CostCalculator() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message)
+                toast.error(err.response.data.message, { toastId: 'error-fetching-freight-routes' })
             }
         },
     })

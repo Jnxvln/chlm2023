@@ -108,6 +108,7 @@ function HaulsDashboard() {
             if (haul) {
                 toast.success(`Haul invoice ${haul.invoice} created`, {
                     autoClose: 3000,
+                    toastId: 'haul-inv-created'
                 })
                 queryClient.invalidateQueries(['hauls'])
             }
@@ -123,9 +124,9 @@ function HaulsDashboard() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'err-creating-haul' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'err-creating-haul-other' })
             }
         },
     })
@@ -135,7 +136,7 @@ function HaulsDashboard() {
         mutationFn: ({ id, token }) => deleteHaul(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Haul deleted', { autoClose: 1000 })
+                toast.success('Haul deleted', { autoClose: 1000, toastId: 'haul-deleted-conf' })
                 queryClient.invalidateQueries(['hauls'])
             }
         },
@@ -150,9 +151,9 @@ function HaulsDashboard() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'err-delete-haul' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'err-delete-haul-other' })
             }
         },
     })
@@ -168,6 +169,7 @@ function HaulsDashboard() {
             if (workday) {
                 toast.success(`Workday updated`, {
                     autoClose: 1000,
+                    toastId: 'workday-updated-success'
                 })
                 queryClient.invalidateQueries(['workdays'])
             }
@@ -183,9 +185,9 @@ function HaulsDashboard() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'err-update-workday' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'err-update-workday-other' })
             }
         },
     })
@@ -211,7 +213,8 @@ function HaulsDashboard() {
 
         if (_datesMissingWorkday.length > 0) {
             return toast.error(
-                `Workdays are missing for the following dates: \n${datesMissingWorkday}`
+                `Workdays are missing for the following dates: \n${datesMissingWorkday}`,
+                { toastId: 'err-no-workdays' }
             )
         }
 
@@ -485,7 +488,7 @@ function HaulsDashboard() {
     const handleNoWorkdays = () => {
         toast.error(
             '"Workdays" is empty, possibly could not fetch from database?',
-            { autoClose: 8000 }
+            { autoClose: 8000, toastId: 'err-workdays-empty' }
         )
     }
 

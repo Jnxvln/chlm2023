@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-import Spinner from "../../components/layout/Spinner";
 // import { login, resetMessages } from "../../features/auth/authSlice";
 import styles from "../../styles/user/Register.module.css";
 // Data
@@ -29,7 +28,7 @@ function Login() {
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
       localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Welcome!", { autoClose: 1000 });
+      toast.success("Welcome!", { autoClose: 1000, toastId: 'welcome-toast' });
       navigate("/dashboard");
     },
 

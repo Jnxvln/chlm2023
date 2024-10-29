@@ -52,7 +52,7 @@ export default function WaitList() {
             const errMsg = 'Error fetching materials for wait list table'
             console.log(errMsg)
             console.log(err)
-            toast.error(errMsg, { autoClose: 5000 })
+            toast.error(errMsg, { autoClose: 5000, toastId: 'err-fetch-wait-list' })
         },
     })
 
@@ -61,7 +61,7 @@ export default function WaitList() {
         mutationFn: ({ id, token }) => deleteEntry(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Entry deleted', { autoClose: 1000 })
+                toast.success('Entry deleted', { autoClose: 1000, toastId: 'err-del-waitlist-entry' })
                 queryClient.invalidateQueries(['waitlist'])
             }
         },
@@ -76,9 +76,9 @@ export default function WaitList() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: 5000 })
+                toast.error(err.response.data.message, { autoClose: 5000, toastId: 'err-del-waitlist-entry' })
             } else {
-                toast.error(errMsg, { autoClose: 5000 })
+                toast.error(errMsg, { autoClose: 5000, toastId: 'err-del-waitlist-entry-other' })
             }
         },
     })

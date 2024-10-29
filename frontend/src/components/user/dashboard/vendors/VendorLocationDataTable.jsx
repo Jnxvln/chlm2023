@@ -50,7 +50,7 @@ function VendorLocationDataTable() {
         mutationFn: ({ id, token }) => deleteVendorLocation(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Vendor location deleted', { autoClose: 1000 })
+                toast.success('Vendor location deleted', { autoClose: 1000, toastId: 'W9920josddoi' })
                 queryClient.invalidateQueries(['vendorLocations'])
             }
         },
@@ -61,10 +61,11 @@ function VendorLocationDataTable() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'kD94029fis' })
             } else {
                 toast.error('Error deleting vendor location', {
                     autoClose: false,
+                    toastId: 'Ar29f909dfifow'
                 })
             }
         },

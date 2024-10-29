@@ -68,6 +68,7 @@ function MaterialsDashboard() {
         onError: (err) => {
             toast.error('[MaterialsDashboard] Error settings AWS keys', {
                 autoClose: 8000,
+                toastId: 'error-getting-aws-keys'
             })
             console.log(err)
         },
@@ -80,14 +81,14 @@ function MaterialsDashboard() {
         mutationFn: ({ _id, token }) => deleteMaterial(_id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Material deleted')
+                toast.success('Material deleted', { toastId: 'material-deleted-success' })
                 queryClient.invalidateQueries(['materials'])
             }
         },
         onError: (err) => {
             console.log('Error deleting material: ')
             console.log(err)
-            toast.error('Error deleting material', { autoClose: false })
+            toast.error('Error deleting material', { autoClose: false, toastId: 'err-del-material' })
         },
     })
 

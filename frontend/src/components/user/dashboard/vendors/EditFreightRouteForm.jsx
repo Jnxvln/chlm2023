@@ -75,6 +75,7 @@ function EditFreightRouteForm({ freightRoute }) {
                `${vendor.name} (${vendorLocation.name}) to ${freightRoute.destination} updated`,
                {
                   autoClose: 3000,
+                  toastId: 'edit-fr-route-form-update-success'
                }
             )
             queryClient.invalidateQueries(['freightRoutes'])
@@ -91,9 +92,9 @@ function EditFreightRouteForm({ freightRoute }) {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: false })
+            toast.error(err.response.data.message, { autoClose: false, toastId: 'edit-fr-route-form-update-error' })
          } else {
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-fr-route-form-update-error-other' })
          }
       },
    })
@@ -163,15 +164,15 @@ function EditFreightRouteForm({ freightRoute }) {
       e.preventDefault()
 
       if (!vendorId) {
-         return toast.error('A vendor is required')
+         return toast.error('A vendor is required', { toastId: 'edit-fr-route-form-vendor-req' })
       }
 
       if (!vendorLocationId) {
-         return toast.error('A vendor location is required')
+         return toast.error('A vendor location is required', { toastId: 'edit-fr-route-form-vendor-loc-req' })
       }
 
       if (!destination) {
-         return toast.error('Destination is required')
+         return toast.error('Destination is required', { toastId: 'edit-fr-route-form-destination-req' })
       }
 
       // if (!freightCost) {

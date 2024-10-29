@@ -57,9 +57,9 @@ function VendorProductForm({ vendorProduct }) {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: false })
+            toast.error(err.response.data.message, { autoClose: false, toastId: 'edit-vendor-product-form-fail-fetch-vendors' })
          } else {
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'edit-vendor-product-form-fail-fetch-vendors-other' })
          }
       },
    })
@@ -78,9 +78,9 @@ function VendorProductForm({ vendorProduct }) {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: false })
+            toast.error(err.response.data.message, { autoClose: false, toastId: 'sdfh4affg4g' })
          } else {
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'd939f0sd012r' })
          }
       },
    })
@@ -92,6 +92,7 @@ function VendorProductForm({ vendorProduct }) {
          if (updVendorProduct) {
             toast.success(`${updVendorProduct.name} updated`, {
                autoClose: 1000,
+               toastId: 'd9f93doodg32'
             })
             queryClient.invalidateQueries(['vendorProducts'])
          }
@@ -107,9 +108,9 @@ function VendorProductForm({ vendorProduct }) {
             err.response.data &&
             err.response.data.message
          ) {
-            toast.error(err.response.data.message, { autoClose: false })
+            toast.error(err.response.data.message, { autoClose: false, toastId: 'vx9412o09w3d' })
          } else {
-            toast.error(errMsg, { autoClose: false })
+            toast.error(errMsg, { autoClose: false, toastId: 'f929ad30fdfy2' })
          }
       },
    })
@@ -179,15 +180,15 @@ function VendorProductForm({ vendorProduct }) {
       e.preventDefault()
 
       if (!vendorId) {
-         return toast.error('A vendor is required')
+         return toast.error('A vendor is required', { toastId: 'dag46sdtt3t' })
       }
 
       if (!vendorLocationId) {
-         return toast.error('A vendor location is required')
+         return toast.error('A vendor location is required', { toastId: 'jutrws2rt533' })
       }
 
       if (!name) {
-         return toast.error('A product name is required')
+         return toast.error('A product name is required', { toastId: 'pwdav157j' })
       }
 
       // if (!productCost) {

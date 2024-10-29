@@ -40,7 +40,7 @@ function VendorOverview() {
         enabled: !!userId,
         onError: (err) => {
             console.log(err)
-            toast.error(err.message)
+            toast.error(err.message, { toastId: 'k4883rfujwhu289' })
         },
     })
 
@@ -57,7 +57,7 @@ function VendorOverview() {
         refetchOnWindowFocus: false,
         onError: (err) => {
             console.log(err)
-            toast.error(err.message)
+            toast.error(err.message, { toast: 'Dr92if0ucxv094' })
         },
     })
 
@@ -71,7 +71,7 @@ function VendorOverview() {
         refetchOnWindowFocus: false,
         onError: (err) => {
             console.log(err)
-            toast.error(err.message)
+            toast.error(err.message, { toastId: 'fkw04009e898g2894' })
         },
     })
 
@@ -88,7 +88,7 @@ function VendorOverview() {
         refetchOnWindowFocus: false,
         onError: (err) => {
             console.log(err)
-            toast.error(err.message)
+            toast.error(err.message, { toastId: 'a9120fDA942d' })
         },
     })
     // #endregion

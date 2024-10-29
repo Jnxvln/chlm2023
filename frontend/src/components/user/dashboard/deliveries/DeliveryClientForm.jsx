@@ -55,7 +55,7 @@ function DeliveryClientForm({ clientName, iconButton }) {
         onSuccess: (deliveryClient) => {
             toast.success(
                 `${deliveryClient.firstName} ${deliveryClient.lastName} created`,
-                { autoClose: 1000 }
+                { autoClose: 1000, toastId: 'create-dlv-client-success' }
             )
             confirmBookDelivery(deliveryClient)
             queryClient.invalidateQueries(['deliveryClients'])
@@ -71,9 +71,9 @@ function DeliveryClientForm({ clientName, iconButton }) {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'err-create-dlv-client' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'err-create-dlv-client-other' })
             }
         },
     })

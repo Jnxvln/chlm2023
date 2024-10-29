@@ -40,7 +40,7 @@ function VendorLocationForm() {
         mutationFn: ({ formData, token }) =>
             createVendorLocation(formData, token),
         onSuccess: (vendorLocation) => {
-            toast.success(`${vendorLocation.name} created`, { autoClose: 1000 })
+            toast.success(`${vendorLocation.name} created`, { autoClose: 1000, toastId: 'dk094009di2s' })
             queryClient.invalidateQueries(['vendorLocations'])
         },
         onError: (err) => {
@@ -52,10 +52,11 @@ function VendorLocationForm() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'fKA92090' })
             } else {
                 toast.error('Error creating vendor location', {
                     autoClose: false,
+                    toastId: 'IR9303567912'
                 })
             }
         },

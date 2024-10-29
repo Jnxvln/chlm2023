@@ -87,13 +87,13 @@ function EditMaterialForm({ material, keys }) {
         mutationKey: ['materials'],
         mutationFn: ({ formData, token }) => updateMaterial(formData, token),
         onSuccess: (updMaterial) => {
-            toast.success(`${updMaterial.name} updated`, { autoClose: 1000 })
+            toast.success(`${updMaterial.name} updated`, { autoClose: 1000, toastId: 'edit-material-form-update-material-success' })
             queryClient.invalidateQueries(['materials'])
         },
         onError: (err) => {
             console.log('Error updating material: ')
             console.log(err)
-            toast.error('Error updating material', { autoClose: false })
+            toast.error('Error updating material', { autoClose: false, toastId: 'edit-material-form-update-material-error' })
         },
     })
 
@@ -223,7 +223,7 @@ function EditMaterialForm({ material, keys }) {
                 .then((data) => {
                     setUploading(false)
                     if (data && data.location) {
-                        toast.success('Image uploaded successfully!')
+                        toast.success('Image uploaded successfully!', { toastId: 'edit-material-form-upload-file-success' })
                         setFormData((prevState) => ({
                             ...prevState,
                             image: data.location,
@@ -235,7 +235,7 @@ function EditMaterialForm({ material, keys }) {
                         console.log(data)
                         toast.error(
                             'Error uploading image to AWS! Check logs',
-                            { autoClose: 8000 }
+                            { autoClose: 8000, toastId: 'edit-material-form-upload-file-error' }
                         )
                     } else {
                         console.log(
@@ -243,7 +243,7 @@ function EditMaterialForm({ material, keys }) {
                         )
                         toast.error(
                             'Error uploading image to AWS! Check logs',
-                            { autoClose: 8000 }
+                            { autoClose: 8000, toastId: 'edit-material-form-upload-file-error-other' }
                         )
                     }
                 })

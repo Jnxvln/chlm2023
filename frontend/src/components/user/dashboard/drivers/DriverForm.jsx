@@ -39,13 +39,13 @@ function DriverForm() {
         mutationKey: ['drivers'],
         mutationFn: ({ formData, token }) => createDriver(formData, token),
         onSuccess: () => {
-            toast.success('Driver created', { autoClose: 1000 })
+            toast.success('Driver created', { autoClose: 1000, toastId: 'driver-form-driver-update-success' })
             queryClient.invalidateQueries(['drivers'])
         },
         onError: (err) => {
             console.log('Error while creating driver: ')
             console.log(err)
-            toast.error('Error creating driver', { autoClose: false })
+            toast.error('Error creating driver', { autoClose: false, toastId: 'driver-form-driver-update-error' })
         },
     })
 
@@ -108,23 +108,23 @@ function DriverForm() {
         e.preventDefault()
 
         if (!firstName) {
-            return toast.error('First name is required')
+            return toast.error('First name is required', { toastId: 'driver-form-err-first-name-req' })
         }
 
         if (!lastName) {
-            return toast.error('First name is required')
+            return toast.error('Last name is required', { toastId: 'driver-form-err-last-name-req' })
         }
 
         if (!endDumpPayRate) {
-            return toast.error('End dump pay rate is required')
+            return toast.error('End dump pay rate is required', { toastId: 'driver-form-err-enddump-pay-req' })
         }
 
         if (!flatBedPayRate) {
-            return toast.error('Flat bed pay rate is required')
+            return toast.error('Flat bed pay rate is required', { toastId: 'driver-form-err-flatbed-pay-req' })
         }
 
         if (!ncRate) {
-            return toast.error('Non-commission rate is required')
+            return toast.error('Non-commission rate is required', { toastId: 'driver-form-err-noncomm-req' })
         }
 
         // dispatch(createDriver(formData));

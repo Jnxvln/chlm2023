@@ -59,7 +59,7 @@ function FreightRouteDataTable() {
         mutationFn: ({ id, token }) => deleteFreightRoute(id, token),
         onSuccess: (delId) => {
             if (delId) {
-                toast.success('Route deleted', { autoClose: 1000 })
+                toast.success('Route deleted', { autoClose: 1000, toastId: 'g98390893fi' })
                 queryClient.invalidateQueries(['freightRoutes'])
             }
         },
@@ -74,9 +74,9 @@ function FreightRouteDataTable() {
                 err.response.data &&
                 err.response.data.message
             ) {
-                toast.error(err.response.data.message, { autoClose: false })
+                toast.error(err.response.data.message, { autoClose: false, toastId: 'vFA9294026d0' })
             } else {
-                toast.error(errMsg, { autoClose: false })
+                toast.error(errMsg, { autoClose: false, toastId: 'Ae920DVISJ5' })
             }
         },
     })
