@@ -110,17 +110,14 @@ function ClientSearchInput({ onClientSelected }) {
 
     const searchDeliveryClient = (e) => {
         const { query } = e
-        // console.log(query)
         let filteredClients = deliveryClients.data.filter(
             (client) =>
-                client.firstName.toLowerCase().includes(query.toLowerCase()) ||
-                client.lastName.toLowerCase().includes(query.toLowerCase()) ||
-                `${client.firstName.toLowerCase()} ${client.lastName.toLowerCase()}`.includes(
-                    query.toLowerCase()
-                ) ||
-                client.phone.toLowerCase().includes(query.toLowerCase()) ||
-                client.address.toLowerCase().includes(query.toLowerCase()) ||
-                client.companyName.toLowerCase().includes(query.toLowerCase())
+                query.toLowerCase().includes(client.firstName.toLowerCase()) ||
+                query.toLowerCase().includes(client.lastName.toLowerCase()) || 
+                query.toLowerCase().includes(client.firstName.toLowerCase() && client.lastName.toLowerCase()) || 
+                query.toLowerCase().includes(client.phone.toLowerCase()) ||
+                query.toLowerCase().includes(client.address.toLowerCase()) ||
+                query.toLowerCase().includes(client.companyName.toLowerCase())
         )
         setFilteredClients(filteredClients)
     }

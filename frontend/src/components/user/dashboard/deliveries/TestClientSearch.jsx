@@ -29,6 +29,9 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
     const deliveryClients = useQuery({
         queryKey: ['deliveryClients'],
         queryFn: () => getDeliveryClients(user.data.token),
+        onSuccess: (clients) => {
+            clients.map(client => client.clientSearchField = `${client.firstName} ${client.lastName} ${client.companyName} ${client.phone} ${client.coordinates}`)
+        },
         onError: (err) => {
             console.log('Error fetching delivery clients: ')
             console.log(err)
@@ -140,14 +143,12 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
         // console.log(query)
         let filteredClients = deliveryClients.data.filter(
             (client) =>
-                client.firstName.toLowerCase().includes(query.toLowerCase()) ||
-                client.lastName.toLowerCase().includes(query.toLowerCase()) ||
-                `${client.firstName.toLowerCase()} ${client.lastName.toLowerCase()}`.includes(
-                    query.toLowerCase()
-                ) ||
-                client.phone.toLowerCase().includes(query.toLowerCase()) ||
-                client.address.toLowerCase().includes(query.toLowerCase()) ||
-                client.companyName.toLowerCase().includes(query.toLowerCase())
+                query.toLowerCase().includes(client.firstName.toLowerCase()) ||
+                query.toLowerCase().includes(client.lastName.toLowerCase()) || 
+                query.toLowerCase().includes(`${client.firstName} ${client.lastName}`.toLowerCase()) || 
+                query.toLowerCase().includes(client.phone.toLowerCase()) ||
+                query.toLowerCase().includes(client.address.toLowerCase()) ||
+                query.toLowerCase().includes(client.companyName.toLowerCase())
         )
         setFilteredClients(filteredClients)
     }
@@ -212,12 +213,11 @@ function TestClientSearch({ onClientSelected, selectedClient }) {
                         : []
                 }
                 onChange={onChange}
-                optionLabel="firstName"
-                filterBy="firstName,lastName,phone,companyName,address,coordinates"
+                optionLabel="clientSearchField"
+                filter
                 placeholder="Choose Client..."
                 valueTemplate={selectedDeliveryClientTemplate}
                 itemTemplate={deliveryClientTemplate}
-                filter
                 showClear
             />
 
